@@ -1,0 +1,28 @@
+{
+  "name": "empire-logistics-data",
+  "version": "0.0.1",
+  "description": "Mapping North American logistics against the empire. From the National Atlas one million-scale dataset.",
+  "keywords": [
+    "topojson",
+    "geojson",
+    "shapefile"
+  ],
+  "author": [{
+    "name": "Amiri Barksdale",
+    "url": "http://github.com/amiri"
+  },
+  {
+      "name": "Hector Gallegos",
+      "url": ""
+  }],
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/"
+  },
+  "devDependencies": {
+    "canvas": "1",
+    "d3": "3",
+    "shapefile": "0.1",
+    "topojson": "1"
+  }
+}
