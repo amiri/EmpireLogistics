@@ -7,11 +7,7 @@ use Data::Printer;
 use JSON::XS;
 use feature qw/say/;
 
-=head2 tqconv.dat
-
-=head2 qniln.dat
-
-=head2 wconv.dat
+=head2 wconv.txt
 
 #    Railroad company abbreviations (reporting marks, carrier alpha codes)
 #    as used in the CTA Railroad Network for carriers, operators, and track
@@ -44,7 +40,7 @@ use feature qw/say/;
 
 my $format_for_file = {
     "tqconv.dat" => '',
-    "wconv.dat"  => 'A1 A4 A6 A3 A*',
+    "cta-sup/wconv.txt"  => 'A1 A4 A6 A3 A*',
     "qniln.dat"  => '',
 };
 my $families = {
@@ -77,7 +73,7 @@ my $flags = {
     L => "Owner/lessor",
 };
 
-my @files = ( "wconv.dat", );
+my @files = ( "cta-sup/wconv.txt", );
 my @railroads;
 
 sub trim {
@@ -267,7 +263,7 @@ sub parse_owner {
 for my $file (@files) {
     my @lines = io($file)->slurp;
 
-    for my $line ( @lines ) {
+    for my $line (@lines) {
         chomp($line);
         my $format = $format_for_file->{$file};
 
@@ -299,9 +295,8 @@ for my $file (@files) {
     }
 }
 
-my $json = JSON::XS->new->utf8->pretty->encode(\@railroads);
+my $json = JSON::XS->new->utf8->pretty->encode( \@railroads );
 
-io("na-rail-wconv.json")->print($json);
-
+io("na-rail-ownership.json")->print($json);
 
 1;
