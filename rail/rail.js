@@ -1,50 +1,28 @@
 var width = 1000,
-        height = 2000;
+height = 2000;
 
-var svg = d3.select("body").append("svg")
-    .attr("width", width)
-        .attr("height", height);
+var projection = d3.geo.mercator().scale(400).translate([width / 2, height / 2]);
 
-var projection = d3.geo.mercator()
-    .scale(40)
-    .translate([width / 2, height / 2]);
+var path = d3.geo.path().projection(projection);
 
-var path = d3.geo.path()
-    .projection(projection);
+var svg = d3.select("body").append("svg").attr("width", width).attr("height", height).call(d3.behavior.zoom().translate(projection.translate()).scale(projection.scale()).on("zoom", redraw));
 
-d3.json("na-rail-links.json", function(error, links) {
+var axes = svg.append("g").attr("id", "axes"),
+xAxis = axes.append("line").attr("y2", height),
+yAxis = axes.append("line").attr("x2", width);
 
-    console.log(links);
+function redraw() {
+	if (d3.event) {
+		projection.translate(d3.event.translate).scale(d3.event.scale);
+	}
+	svg.selectAll("path").attr("d", path);
+	var t = projection.translate();
+	xAxis.attr("x1", t[0]).attr("x2", t[0]);
+	yAxis.attr("y1", t[1]).attr("y2", t[1]);
+}
 
-    //svg.append("path")
-        //.datum(topojson.mesh(links, links.features))
-        //.attr("class", "lines")
-        //.attr("d", d3.geo.path());
-
-
-    //svg.append("path")
-        //.datum({type: "MultiLineString", features: links.features})
-        //.attr("d", d3.geo.path());
-
-
-    svg.selectAll("path")
-        .data(links.features)
-        .enter()
-        .append("path")
-        //.attr("class", function(d) {
-            ////console.log(d);
-            //return "rail-link";
-        //})
-        .attr("d", d3.geo.path());
-
-
-    //svg.selectAll("path")
-        //.datum(topojson.mesh(links, links))
-        ////.enter().append("path")
-        ////.attr("class", function(d) {
-            //////console.log(d);
-            ////return "rail-link";
-        ////})
-        //.attr("d", path);
-
+d3.json("na-rail-lines.json", function(error, links) {
+	svg.selectAll("path").data(links.features).enter().append("path").attr("class", function(d) {
+		return "rail-line";
+	}).attr("d", path);
 });

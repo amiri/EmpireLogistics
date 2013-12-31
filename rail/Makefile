@@ -1,7 +1,7 @@
 all: \
 	subunits.json \
 	places.json \
-	na-rail-links.json \
+	na-rail-lines.json \
 	na-rail-nodes.json \
 	na-rail-interlines.json \
 	na-rail-ownership.json
@@ -53,8 +53,8 @@ places.json: shp/ne_10m_populated_places.shp
 	places.json \
 	shp/ne_10m_populated_places.shp
 
-na-rail-links.json: shp/qn28l.shp cta-sup/wconv.txt
-	ogr2ogr -f GeoJSON na-rail-links.json shp/qn28l.shp
+na-rail-lines.json: shp/qn28l.shp cta-sup/wconv.txt
+	ogr2ogr -f GeoJSON na-rail-lines.json shp/qn28l.shp
 
 na-rail-nodes.json: shp/qn28l.shp cta-sup/wconv.txt
 	ogr2ogr -f GeoJSON na-rail-nodes.json shp/qn28n.shp
