@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://d3js.org/topojson.v1.min.js"></script>
+  <style>
+    @import url(http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.css);
+    html, body, #map {
+        height:100%;
+        width:100%;
+        padding:0px;
+        margin:0px;
+    }
+    .top {
+        z-index: 100;
+    }
+    #overlay {
+        fill:#f00;
+        stroke:#f00;
+        stroke-width:1px;
+    }
+
+  </style>
+
+  <title></title>
+</head>
+
+<body>
+  <div id="map"></div>
+
+<script>
+    var map = L.map('map').setView([29.7628, -95.3831], 15);
+    var openStreet = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    var baseLayers = {"OpenStreetMap": openStreet};
+    function onEachNode(feature, layer) {
+        if (feature.properties) {
+            layer.bindPopup("<strong>Junction:</strong> "+feature.properties.JNAME);
+        }
+    }
+    function onEachLine(feature, layer) {
+        if (feature.properties) {
+            layer.bindPopup("<strong>RR:</strong> "+feature.properties.W1);
+        }
+    }
+
+    function project(point) {
+        var latlng = new L.LatLng(point[1], point[0]);
+        var layerPoint = map.latLngToLayerPoint(latlng);
+        return [layerPoint.x, layerPoint.y];
+    }
+
+    var overlays = {};
+
+    var svgContainer = d3.select(map.getPanes().overlayPane).append("svg");
+    var group= svgContainer.append("g").attr("class", "leaflet-zoom-hide");
+    var path = d3.geo.path().projection(project);
+
+
+    d3.json("na-rail-nodes.json", function(collection) {
+        console.log(collection);
+        var railNodes = L.geoJson([collection], {
+            onEachFeature: onEachNode
+        });
+        overlays["railNodes"] = railNodes;
+        d3.json("na-rail-lines.json", function(collection) {
+            console.log(collection);
+            var railLines = L.geoJson([collection], {
+                onEachFeature: onEachLine
+            });
+            overlays["railLines"] = railLines;
+            L.control.layers(baseLayers, overlays).addTo(map);
+        });
+    });
+
+
+
+
+
+
+  d3.json("na-rail-nodes.json", function(collection) {
+
+      var feature;
+      setFeature();
+
+      var bounds = d3.geo.bounds(collection);
+
+      reset();
+
+      map.on("viewreset", reset);
+      map.on("drag", reset);
+
+      feature.on("mousedown",function(d){
+        var coordinates = d3.mouse(this);
+
+
+        L.popup()
+        .setLatLng(map.layerPointToLatLng(coordinates))
+        .setContent("Popup")
+        .openOn(map);
+      });
+
+      //var transition_destination = -1;
+      //feature.on("mousemove",function(d){
+      //  d3.select(this).transition().duration(2500).ease('bounce')
+      //    .style("stroke","#0f0")
+      //    .attr("transform", "translate(0,"+transition_destination*50+")");
+      //  transition_destination=transition_destination*(-1);
+      //});
+
+      function reset() {
+        bounds = [[map.getBounds()._southWest.lng, map.getBounds()._southWest.lat],[map.getBounds()._northEast.lng, map.getBounds()._northEast.lat]]
+        var bottomLeft = project(bounds[0]),
+            topRight = project(bounds[1]);
+
+        svgContainer.attr("width", topRight[0] - bottomLeft[0])
+            .attr("height", bottomLeft[1] - topRight[1])
+            .style("margin-left", bottomLeft[0] + "px")
+            .style("margin-top", topRight[1] + "px");
+
+        group.attr("transform", "translate(" + -bottomLeft[0] + "," + -topRight[1] + ")");
+
+        feature.attr("d", path);
+
+      }
+
+      //******Additional: hide/show overlay ******
+      var content = "hide overlay", color='#070';
+      svgContainer.append("text").text(content)
+          .attr("x", 50).attr("y", 50)
+          .style("font-size","30px").style("stroke",color)
+          .on("mouseover",function(d){
+              if(content=='hide overlay'){
+                content='show overlay';color='#f70';
+                group.selectAll('path').remove();
+              }
+              else {
+               content='hide overlay';color='#070';
+               setFeature();
+               reset();
+              }
+              d3.select(this).text(content).style("stroke",color)
+      });
+
+      //this is just a function from the existing code...as I need it to restore the removed paths
+      function setFeature(){
+        feature = group.selectAll("path")
+          .data(collection.features)
+          .enter()
+          .append("path")
+          .attr("id","overlay");
+      }
+      //***************************
+
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    d3.json("na-rail-lines.json", function(collection) {
+//        console.log(collection);
+//        var feature = group.selectAll("path")
+//            .data(collection.features)
+//            .enter()
+//            .append("path")
+//            .attr("id","overlay");
+//    });
+    //d3.json("na-rail-nodes.json", function(error, collection) {
+    //    console.log(collection);
+    //    var collection2 = topojson.feature(collection, collection.objects["na-rail-nodes"]);
+
+    //    var railNodes = L.geoJson([collection2], {
+    //        onEachFeature: onEachNode
+    //    });
+ 
+    //    overlays["railNodes"] = railNodes;
+    //    L.control.layers(overlays).addTo(map);
+    //});
+    //d3.json("na-rail-lines.json", function(error, collection) {
+    //    console.log(collection);
+    //    var collection2 = topojson.feature(collection, collection.objects["na-rail-lines"]);
+    //    var railLines = L.geoJson([collection2], {
+    //        onEachFeature: onEachLine
+    //    });
+ 
+    //    overlays["railLines"] = railLines;
+    //    L.control.layers(overlays).addTo(map);
+    //});
+
+</script>
+</body>
+</html>
+
+

@@ -78,12 +78,14 @@ my @railroads;
 
 sub trim {
     my ($string) = @_;
+    return "" unless $string;
     $string =~ s/^\s+|\s+$//g;
     return $string;
 }
 
 sub parsedate {
     my ($date) = @_;
+    return "" unless $date;
     if ( $date == "0" ) {
         $date = "Indefinite past";
     } elsif ( $date =~ /(\d+)\.(\d+)/ ) {
@@ -152,7 +154,6 @@ sub parse_owner {
         my $additional = $2;
         $additional = trim($additional);
         if ($additional) {
-            warn $additional;
             my @additional;
             if ( $additional =~ /\w/ ) {
                 @additional = split( / /, $additional );
@@ -206,7 +207,6 @@ sub parse_owner {
      #   %0 1984 LSMS%    Acquired or leased by ZZZ from unknown time to 1984.
     } elsif ( $owner =~ /%0 (\d{1,4}(?:\.\d+)?) ([\w\p{PosixPunct}]+)\s*?%/ )
     {
-        warn $owner;
         my $date1 = "Indefinite past";
         my $date2 = parsedate($1);
         $owner = "Aquired or leased by $2";

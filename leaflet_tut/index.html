@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+  <style>
+    @import url(http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.css);
+    html, body, #map {
+        height:100%;
+        width:100%;
+        padding:0px;
+        margin:0px;
+    }
+    .top {
+        z-index: 100;
+    }
+
+  </style>
+
+  <title></title>
+</head>
+
+<body>
+  <div id="map"></div>
+<script>
+    // Set up leaflet tile layers and control
+    var map = L.map('map').setView([29.7628, -95.3831], 15);
+    //var toolserver = L.tileLayer('http://{s}.www.toolserver.org/tiles/bw-mapnik/{z}/{x}/{y}.png').addTo(map);
+    var openStreetMap = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    var stamen = L.tileLayer('http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png');
+    var baseLayers = {"stamen": stamen, "openstreet":openStreetMap};
+    L.control.layers(baseLayers).addTo(map);
+
+
+    // Set up zoombar
+    var size = 20;
+    var container = d3.select("#map").append("div").attr("id","#container");
+    var svgContainer = container.append("svg").attr("width","100%").attr("height", 200).attr("class", "top");
+
+    var zoomIn = svgContainer.append("rect")  
+        .attr("x", 0)   .attr("y", size)  
+        .attr("width", size)  
+        .attr("height", size)  
+        .style("fill","#0f0")  
+        .on("mouseup",zoomInAction);
+
+    var zoomOut = svgContainer.append("rect")   
+        .attr("x", size+10)   
+        .attr("y", size)   
+        .attr("width", size)   
+        .attr("height", size)   
+        .style("fill","#f00")   
+        .on("mouseup",zoomOutAction);
+
+    var zoomText = svgContainer.append("text")   
+        .text("Zoomlevel: "+map.getZoom())   
+        .attr("x", (size * 2)+20)   
+        .attr("y", size * 2)   
+        .style("fill","#444")   
+        .style("font-size","20");
+
+    function zoomOutAction(){ 
+        anotherFunction(-1);
+    }
+     
+    function zoomInAction(){ 
+        anotherFunction(1);
+    }
+     
+    function anotherFunction(value){ 
+        var newZoomlevel = map.getZoom() + value 
+        map.setZoom(newZoomlevel) 
+        zoomText.text("Zoomlevel: "+newZoomlevel)
+    }
+</script>
+</body>
+</html>
