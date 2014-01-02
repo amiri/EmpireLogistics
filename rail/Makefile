@@ -26,8 +26,14 @@ cta-sup/wconv.txt:
 qc28R.zip:
 	test -s qc28R.zip || curl -o qc28R.zip 'http://cta.ornl.gov/transnet/qc28R.zip'
 
+QNdata.zip:
+	test -s QNdata.zip || curl -o QNdata.zip 'http://cta.ornl.gov/transnet/QNdata.zip'
+
 cta-sup/qc28.%: qc28R.zip cta-sup/wconv.txt
 	unzip -o -d cta-sup qc28R.zip
+
+cta-sup/subdiv.txt: QNdata.zip
+	unzip -o -d cta-sup QNdata.zip
 
 shp/qn28%.shp: na-rail.zip
 	unzip -o -d shp na-rail.zip
@@ -62,5 +68,7 @@ na-rail-nodes.json: shp/qn28l.shp cta-sup/wconv.txt
 na-rail-interlines.json: cta-sup/qc28.iln
 	perl interlinkparser.pl
 
-na-rail-ownership.json: cta-sup/wconv.txt
+na-rail-ownership.json: cta-sup/wconv.txt cta-sup/subdiv.txt
 	perl ownershipparser.pl
+	perl subdivisionparser.pl
+	perl postprocess-rail-lines.pl

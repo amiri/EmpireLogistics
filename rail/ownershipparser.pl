@@ -6,6 +6,7 @@ use IO::All;
 use Data::Printer;
 use JSON::XS;
 use feature qw/say/;
+#no warnings qw/uninitialized/;
 
 =head2 wconv.txt
 
@@ -78,14 +79,14 @@ my @railroads;
 
 sub trim {
     my ($string) = @_;
-    return "" unless $string;
+    return "" unless defined $string;
     $string =~ s/^\s+|\s+$//g;
     return $string;
 }
 
 sub parsedate {
     my ($date) = @_;
-    return "" unless $date;
+    return "" unless defined $date;
     if ( $date == "0" ) {
         $date = "Indefinite past";
     } elsif ( $date =~ /(\d+)\.(\d+)/ ) {
@@ -263,7 +264,7 @@ sub parse_owner {
 for my $file (@files) {
     my @lines = io($file)->slurp;
 
-    for my $line (@lines) {
+    for my $line (@lines[42 .. $#lines]) {
         chomp($line);
         my $format = $format_for_file->{$file};
 

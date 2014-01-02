@@ -45,7 +45,7 @@ sub trim {
 
 sub parselatlon {
     my ($string) = @_;
-    my ($lon,$lat) = split(/ /, $string);
+    my ($lon,$lat) = split(/\s+?/, $string);
     return { lat => $lat, lon => $lon};
 }
 
@@ -70,25 +70,39 @@ for my $file (@files) {
             = map { trim($_) }
         ( $iidnam, $iidq, $wa, $namea, $za, $ija, $alias, $imped, $wb, $nameb, $zb, $ijb, $ityp, $wtrm );
 
+        $za = parselatlon($za);
+        $zb = parselatlon($zb);
+
         # save the original line too, which might be useful later
         push @railroads, {
-            iidname => $iidnam,
-            iidq => $iidq,
-            wa => $wa,
-            namea => $namea,
-            za => parselatlon($za),
-            ija => $ija,
-            alias => $alias,
-            impedance => $imped,
-            wb => $wb,
-            nameb => $nameb,
-            zb => parselatlon($zb),
-            ijb => $ijb,
-            ityp => $ityp,
-            wtrm => $wtrm,
+            type => "LineString",
+            geometry => {
+                coordinates => [
+                    [ $za->{lon}, $za->{lat}],
+                    [ $zb->{lon}, $zb->{lat}],
+                ],
+            },
+            properties => {
+                iidname => $iidnam,
+                iidq => $iidq,
+                wa => $wa,
+                namea => $namea,
+                ija => $ija,
+                alias => $alias,
+                impedance => $imped,
+                wb => $wb,
+                nameb => $nameb,
+                ijb => $ijb,
+                ityp => $ityp,
+                wtrm => $wtrm,
+                name => $namea."-".$nameb,
+                id => $ija."-".$ijb,
+            },
         };
     }
 }
+
+my $feature_collection = { type => "FeatureCollection", features => \@railroads };
 
 my $json = JSON::XS->new->utf8->pretty->encode( \@railroads );
 
