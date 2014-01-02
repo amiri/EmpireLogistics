@@ -61,9 +61,11 @@ places.json: shp/ne_10m_populated_places.shp
 
 na-rail-lines.json: shp/qn28l.shp cta-sup/wconv.txt
 	ogr2ogr -f GeoJSON na-rail-lines.json shp/qn28l.shp
+	#ogr2ogr -f PostgreSQL PG:"dbname='empirelogistics' host='localhost' port='5432' user='postgres'" shp/qn28l.shp
 
 na-rail-nodes.json: shp/qn28l.shp cta-sup/wconv.txt
 	ogr2ogr -f GeoJSON na-rail-nodes.json shp/qn28n.shp
+	#ogr2ogr -f PostgreSQL PG:"dbname='empirelogistics' host='localhost' port='5432' user='postgres'" shp/qn28n.shp
 
 na-rail-interlines.json: cta-sup/qc28.iln
 	perl interlinkparser.pl
