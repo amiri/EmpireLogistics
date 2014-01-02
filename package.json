@@ -20,9 +20,11 @@
     "url": "http://github.com/"
   },
   "devDependencies": {
-    "canvas": "1",
-    "d3": "3",
-    "shapefile": "0.1",
-    "topojson": "1"
+    "canvas": "*"
+  , "d3": "*"
+  , "shapefile": "*"
+  , "topojson": "*"
+  , "express": "*"
+  , "pg": "*"
   }
 }
