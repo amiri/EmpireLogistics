@@ -221,6 +221,14 @@ sub parse_owner {
         $owner = "Aquired or leased by $1";
         $owner .= " ($date1-$date2)";
 
+        # %0 OE PRTD 1994%
+    } elsif ( $owner =~ /%0 ([\w\p{PosixPunct}]+) ([\w\p{PosixPunct}]+) (\d{1,4}(?:\.\d+)?)\s*?%/ )
+    {
+        my $date1 = "Indefinite past";
+        my $date2 = parsedate($3);
+        $owner = "Aquired or leased by $1 and $2";
+        $owner .= " ($date1-$date2)";
+
         #   %1970 ZZZ ABC %    Acquired or leased by ZZZ and ABC.
     } elsif ( $owner
         =~ /%(\d{1,4}(?:\.\d+)?) ([\w\p{PosixPunct}]+)\s*?([\w\p{PosixPunct}]+)?\s*?%/
@@ -240,7 +248,7 @@ sub parse_owner {
         $owner = "Merger of $1 and $2 (no unique ancestor) ($date1)";
 
         #   ^ CR ^             Associated with (for billing).
-    } elsif ( $owner =~ /\^ ([\w\p{PosixPunct}]+)\s*?\^/ ) {
+    } elsif ( $owner =~ /\^\s*?([\w\p{PosixPunct}]+)\s*?\^/ ) {
         $owner = "Associated with $1 for billing purposes";
 
         #   #                  Comment follows.
@@ -277,7 +285,7 @@ for my $file (@files) {
             = map { trim($_) }
             ( $flag, $aar_code, $reporting_mark, $family, $name );
 
-        if ( $name =~ /^(.+?)([@\[%\^#\*].+)$/ ) {
+        if ( $name =~ /^(.*?)([@\[%\^#\*].+)$/ ) {
             $name  = trim($1);
             $owner = $2;
             $owner = parse_owner($owner);
@@ -291,7 +299,7 @@ for my $file (@files) {
             reporting_mark => $reporting_mark,
             family         => $families->{$family},
             name           => $name,
-            owner          => $owner,
+            history => $owner,
             };
     }
 }

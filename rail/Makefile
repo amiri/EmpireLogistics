@@ -1,6 +1,4 @@
 all: \
-	subunits.json \
-	places.json \
 	na-rail-lines.json \
 	na-rail-nodes.json \
 	na-rail-interlines.json \
@@ -12,12 +10,6 @@ clean:
 na-rail.zip:
 	test -d shp || mkdir shp
 	curl -o na-rail.zip 'http://cta.ornl.gov/transnet/qn28V.zip'
-
-subunits.zip:
-	test -s subunits.zip || curl -o subunits.zip 'http://www.nacis.org/naturalearth/10m/cultural/ne_10m_admin_0_map_subunits.zip'
-
-populated.zip:
-	curl -o populated.zip 'http://www.nacis.org/naturalearth/10m/cultural/ne_10m_populated_places.zip'
 
 cta-sup/wconv.txt:
 	test -d cta-sup || mkdir cta-sup
@@ -38,27 +30,6 @@ cta-sup/subdiv.txt: QNdata.zip
 shp/qn28%.shp: na-rail.zip
 	unzip -o -d shp na-rail.zip
 
-shp/ne_10m_admin_0_map_subunits.shp: subunits.zip
-	unzip -o -d shp subunits.zip
-
-shp/ne_10m_populated_places.shp: populated.zip
-	unzip -o -d shp populated.zip
-
-subunits.json: shp/ne_10m_admin_0_map_subunits.shp
-	ogr2ogr \
-	-f GeoJSON \
-	-where "adm0_a3 IN ('USA','MEX','CAN')" \
-	subunits.json \
-	shp/ne_10m_admin_0_map_subunits.shp
-
-places.json: shp/ne_10m_populated_places.shp
-	ogr2ogr \
-	-f GeoJSON \
-	-where "iso_a2 IN ('CA','US','MX') \
-	AND scalerank < 8" \
-	places.json \
-	shp/ne_10m_populated_places.shp
-
 na-rail-lines.json: shp/qn28l.shp cta-sup/wconv.txt
 	ogr2ogr -f GeoJSON na-rail-lines.json shp/qn28l.shp
 	#ogr2ogr -f PostgreSQL PG:"dbname='empirelogistics' host='localhost' port='5432' user='postgres'" shp/qn28l.shp
@@ -68,9 +39,9 @@ na-rail-nodes.json: shp/qn28l.shp cta-sup/wconv.txt
 	#ogr2ogr -f PostgreSQL PG:"dbname='empirelogistics' host='localhost' port='5432' user='postgres'" shp/qn28n.shp
 
 na-rail-interlines.json: cta-sup/qc28.iln
-	perl interlinkparser.pl
+	perl interlineparser.pl
 
-na-rail-ownership.json: cta-sup/wconv.txt cta-sup/subdiv.txt
+na-rail-ownership.json: cta-sup/wconv.txt cta-sup/subdiv.txt na-rail-lines.json
 	perl ownershipparser.pl
 	perl subdivisionparser.pl
 	perl postprocess-rail-lines.pl
