@@ -17,7 +17,8 @@
             overflow: hidden;
             background-color: #ddd;
         }
-        .rail-line {
+        path { stroke-linejoin; round; stroke-linecap: round; fill: none; }
+        path.rail-line {
             fill: none;
             stroke: black;
             stroke-linejoin: round;
@@ -34,6 +35,9 @@
     <script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="http://d3js.org/topojson.v1.min.js"></script>
-    <script src="rail2.js"></script>
+    <script src="lib/leaflet-hash.js"></script>
+    <script src="lib/TileLayer.d3_geoJSON.js"></script>
+    <script src="http://d3js.org/d3.geo.tile.v0.min.js"></script>
+    <script src="rail3.js"></script>
 </body>
 </html>
