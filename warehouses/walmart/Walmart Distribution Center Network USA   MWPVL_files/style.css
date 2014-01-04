@@ -1,0 +1,155 @@
+BODY
+{
+	font-size : 10px
+}
+
+.nof_WorkspaceKeyLimeBanners2-Default
+{
+	font-family : arial;
+	font-size: 20px;
+	font-weight : 700;
+	font-style : normal;
+	color : #000000
+}
+
+.nof_WorkspaceKeyLimeNavbar4-Regular
+{
+	font-family : Arial CE ;
+	font-size: 12px;
+	font-weight : bold;
+	font-style : normal;
+	color : rgb(0,0,128)
+}
+
+.nof_WorkspaceKeyLimeNavbar5-Rollover
+{
+	font-family : Arial CE ;
+	font-size: 11px;
+	font-weight : bold;
+	font-style : normal;
+	color : rgb(208,0,0)
+}
+
+.nof_WorkspaceKeyLimeNavbar6-Highlighted
+{
+	font-family : Arial CE ;
+	font-size: 12px;
+	font-weight : bold;
+	font-style : normal;
+	color : rgb(0,0,128)
+}
+
+.nof_WorkspaceKeyLimeNavbar7-HighlightedRollover
+{
+	font-family : Arial CE ;
+	font-size: 11px;
+	font-weight : bold;
+	font-style : normal;
+	color : rgb(208,0,0)
+}
+
+.nof_WorkspaceKeyLimeNavbar9-Regular
+{
+	font-family : Arial CE ;
+	font-size: 12px;
+	font-weight : 700;
+	font-style : normal;
+	color : rgb(0,0,128)
+}
+
+.nof_WorkspaceKeyLimeNavbar10-Rollover
+{
+	font-family : Arial CE ;
+	font-size: 11px;
+	font-weight : 700;
+	font-style : normal;
+	color : rgb(208,0,0)
+}
+
+.nof_WorkspaceKeyLimeNavbar11-Highlighted
+{
+	font-family : Arial CE ;
+	font-size: 12px;
+	font-weight : 700;
+	font-style : normal;
+	color : rgb(0,0,128)
+}
+
+.nof_WorkspaceKeyLimeNavbar12-HighlightedRollover
+{
+	font-family : Arial CE ;
+	font-size: 11px;
+	font-weight : 700;
+	font-style : normal;
+	color : rgb(208,0,0)
+}
+
+.nof_WorkspaceKeyLimeTableStyles18-row1cell1
+{
+	font-size : medium;
+	color : rgb(0,0,0);
+	font-weight : bold;
+	background-color : rgb(255,255,255)
+}
+
+.nof_WorkspaceKeyLimeTableStyles18-row2cell1
+{
+	color : rgb(255,255,255);
+	font-weight : bold;
+	background-color : rgb(0,0,0)
+}
+
+.nof_WorkspaceKeyLimeTableStyles18-row3cell1
+{
+	color : rgb(0,0,0);
+	background-color : rgb(255,255,255)
+}
+
+.nof_WorkspaceKeyLimeTableStyles20-row1cell1
+{
+	font-size : small;
+	color : rgb(255,255,255);
+	font-weight : bold;
+	background-color : rgb(0,0,0)
+}
+
+.nof_WorkspaceKeyLimeTableStyles20-row2cell1
+{
+	color : rgb(0,0,0);
+	font-weight : normal;
+	font-style : normal;
+	background-color : rgb(192,192,192);
+	border-bottom : 1pt solid rgb(0,0,0)
+}
+
+.nof_WorkspaceKeyLimeTableStyles20-row3cell1
+{
+	color : rgb(0,0,0);
+	background-color : rgb(160,160,164);
+	border-bottom : 1pt solid rgb(0,0,0)
+}
+
+.nof_WorkspaceKeyLimeTableStyles22-row1cell1
+{
+	color : rgb(0,0,0);
+	background-color : rgb(108,161,51)
+}
+
+.nof_WorkspaceKeyLimeTableStyles22-row1cell2
+{
+	color : rgb(0,0,0);
+	background-color : rgb(190,232,143)
+}
+
+.nof_WorkspaceKeyLimeTableStyles22-row2cell1
+{
+	color : rgb(0,0,0);
+	background-color : rgb(190,232,143)
+}
+
+.nof_WorkspaceKeyLimeTableStyles22-row2cell2
+{
+	color : rgb(0,0,0);
+	background-color : rgb(190,232,143)
+}
+

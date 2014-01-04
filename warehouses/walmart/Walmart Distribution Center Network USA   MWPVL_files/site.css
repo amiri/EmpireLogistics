@@ -1,0 +1,13 @@
+/* CSS definition file containing site wide stylesheets */
+
+.TextObject {
+	font-family: Arial,  Helvetica,  Geneva,  Sans-serif;
+ 	font-size: 14px;
+ 	color: rgb(0,0,0);
+ 	font-weight: normal;
+ 	font-style: normal;
+ 	text-decoration: none ;
+ 	text-align: left;
+ 	margin-top: 0px;
+ 	margin-bottom: 0px
+}
