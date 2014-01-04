@@ -5,6 +5,10 @@ if (!window.location.hash) {
 }
 var openStreet = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 16}).addTo(map);
 openStreet.addTo(map);
+var baseLayers = {
+	"OpenStreetMap": openStreet
+};
+var overlays = {};
 
 function lineStyle(feature) {
     return "stroke-width: " + (((feature.properties.miles > 10) ? 10 : feature.properties.miles < 1 ? 4 : feature.properties.miles) * map.getZoom()/16) + "px;";
@@ -17,3 +21,6 @@ var lineLayer = new L.TileLayer.d3_geoJSON(geojsonURL, {
   style: lineStyle,
 });
 map.addLayer(lineLayer);
+overlays["Rail Lines"] = lineLayer;
+
+L.control.layers(baseLayers, overlays).addTo(map);
