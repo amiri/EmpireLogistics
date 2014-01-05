@@ -26,9 +26,9 @@ make-data-directories:
 download-data: download-port-data download-rail-data download-warehouse-data
 
 download-port-data: make-data-directories
-	test -s $(ports_dir)/ne_10m_ports.zip || curl -o $(ports_dir)/ne_10m_ports.zip 'http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_ports.zip'
+	test -s $(ports_dir)/WPI_Shapefile.zip || curl -o $(ports_dir)/WPI_Shapefile.zip 'http://msi.nga.mil/MSISiteContent/StaticFiles/NAV_PUBS/WPI/WPI_Shapefile.zip'
 
-download-rail-data: make-data-directories $(rail_dir)/na-rail.zip $(rail_dir)/cta-sup/wconv.txt $(rail_dir)/qc28R.zip $(rail_dir)/QNdata.zip $(rail_dir)/cta-sup/subdiv.txt $(rail_dir)/shp/qn28n.shp $(rail_dir)/shp/qn28l.shp $(rail_dir)/na-rail-interlines.json $(rail_dir)/na-rail-ownership.json
+download-rail-data: make-data-directories $(rail_dir)/na-rail.zip $(rail_dir)/cta-sup/wconv.txt $(rail_dir)/qc28R.zip $(rail_dir)/QNdata.zip $(rail_dir)/cta-sup/subdiv.txt $(rail_dir)/shp/qn28n.shp $(rail_dir)/shp/qn28l.shp $(rail_dir)/na-rail-interlines.geojson $(rail_dir)/na-rail-ownership.json
 
 download-warehouse-data: make-data-directories
 
@@ -42,42 +42,54 @@ ports: download-port-data
 
 ########## Rail data download pieces
 
+	# Current raw network for rail line shapefiles
 $(rail_dir)/na-rail.zip: $(rail_dir)/shp
 	test -s $(rail_dir)/na-rail.zip || curl -o $(rail_dir)/na-rail.zip 'http://cta.ornl.gov/transnet/qn28V.zip'
 
+	# Text file for ancestry/ownership
 $(rail_dir)/cta-sup/wconv.txt: $(rail_dir)/cta-sup
 	test -s $(rail_dir)/cta-sup/wconv.txt || curl -o $(rail_dir)/cta-sup/wconv.txt 'http://cta.ornl.gov/transnet/wconv.txt'
 
+	# Current operational network archive for interlines
 $(rail_dir)/qc28R.zip:
 	test -s $(rail_dir)/qc28R.zip || curl -o $(rail_dir)/qc28R.zip 'http://cta.ornl.gov/transnet/qc28R.zip'
 
+	# Supplemental data archive for subdivisions
 $(rail_dir)/QNdata.zip:
 	test -s $(rail_dir)/QNdata.zip || curl -o $(rail_dir)/QNdata.zip 'http://cta.ornl.gov/transnet/QNdata.zip'
 
+	# Unzip operational network
 $(rail_dir)/cta-sup/qc28.%: $(rail_dir)/qc28R.zip $(rail_dir)/cta-sup/wconv.txt
 	unzip -o -d $(rail_dir)/cta-sup $(rail_dir)/qc28R.zip
 
+	# Unzip supplemental data archive
 $(rail_dir)/cta-sup/subdiv.txt: $(rail_dir)/QNdata.zip
 	unzip -o -d $(rail_dir)/cta-sup $(rail_dir)/QNdata.zip
 
+	# Unzip raw network
 $(rail_dir)/shp/qn28%.shp: $(rail_dir)/na-rail.zip
 	unzip -o -d $(rail_dir)/shp $(rail_dir)/na-rail.zip
 
-$(rail_dir)/na-rail-lines.json: $(rail_dir)/shp/qn28l.shp $(rail_dir)/cta-sup/wconv.txt
-	ogr2ogr -f GeoJSON $(rail_dir)/na-rail-lines.json $(rail_dir)/shp/qn28l.shp
+	# Create rail lines geojson
+$(rail_dir)/na-rail-lines.geojson: $(rail_dir)/shp/qn28l.shp $(rail_dir)/cta-sup/wconv.txt
+	ogr2ogr -f GeoJSON $(rail_dir)/na-rail-lines.geojson $(rail_dir)/shp/qn28l.shp
 
-$(rail_dir)/na-rail-interlines.json: $(rail_dir)/cta-sup/qc28.iln
-	test -s $(rail_dir)/na-rail-interlines.json || perl bin/interlineparser.pl
+	# Create interlines geojson
+$(rail_dir)/na-rail-interlines.geojson: $(rail_dir)/cta-sup/qc28.iln
+	test -s $(rail_dir)/na-rail-interlines.geojson || perl bin/interlineparser.pl
 
-$(rail_dir)/na-rail-ownership.json: $(rail_dir)/cta-sup/wconv.txt $(rail_dir)/cta-sup/subdiv.txt $(rail_dir)/na-rail-lines.json
+	# Create ancestry/ownership json
+$(rail_dir)/na-rail-ownership.json: $(rail_dir)/cta-sup/wconv.txt
 	test -s $(rail_dir)/na-rail-ownership.json || perl bin/ownershipparser.pl
+
+	# Create subdivisions json
+$(rail_dir)/na-rail-subdivisions.json: $(rail_dir)/cta-sup/subdiv.txt $(rail_dir)/na-rail-ownership.json
 	test -s $(rail_dir)/na-rail-subdivisions.json || perl bin/subdivisionparser.pl
-	perl bin/postprocess-rail-lines.pl
 
 ########## Port data download pieces
 
-$(ports_dir)/ne_10m_ports.shp: download-port-data
-	unzip -o -d $(ports_dir)/ $(ports_dir)/ne_10m_ports.zip
+$(ports_dir)/WPI.shp: download-port-data
+	unzip -o -d $(ports_dir)/ $(ports_dir)/WPI_Shapefile.zip
 
 ########## Warehouse data download pieces
 

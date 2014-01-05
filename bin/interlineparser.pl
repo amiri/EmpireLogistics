@@ -48,7 +48,7 @@ sub trim {
 sub parselatlon {
     my ($string) = @_;
     my ($lon,$lat) = split(/\s+?/, $string);
-    return { lat => $lat, lon => $lon};
+    return { lat => $lat+0, lon => $lon+0};
 }
 
 for my $file (@files) {
@@ -77,8 +77,9 @@ for my $file (@files) {
 
         # save the original line too, which might be useful later
         push @railroads, {
-            type => "LineString",
+            type => "Feature",
             geometry => {
+                type => "LineString",
                 coordinates => [
                     [ $za->{lon}, $za->{lat}],
                     [ $zb->{lon}, $zb->{lat}],
@@ -106,9 +107,9 @@ for my $file (@files) {
 
 my $feature_collection = { type => "FeatureCollection", features => \@railroads };
 
-my $json = JSON::XS->new->utf8->pretty->encode( \@railroads );
+my $json = JSON::XS->new->utf8->pretty->encode( $feature_collection );
 
-io("$directory/na-rail-interlines.json")->print($json);
+io("$directory/na-rail-interlines.geojson")->print($json);
 
 1;
 

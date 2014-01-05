@@ -7,4 +7,5 @@ node_modules
 *.zip
 ne_10*
 cta-sup
+na-rail-*.geojson
 na-rail-*.json

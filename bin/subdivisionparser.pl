@@ -92,11 +92,11 @@ for my $file (@files) {
 
         my ($states, $comment) = parsestates($sbstat);
 
-        my ($owner) = grep { $_->{reporting_mark} eq $wmark } @$ownership;
+        #my ($owner) = grep { $_->{reporting_mark} eq $wmark } @$ownership;
 
         # save the original line too, which might be useful later
         $subdivisions{$sb} = {
-            ($owner ? (owner => $owner) : ()),
+            #($owner ? (owner => $owner) : ()),
             wmark => $wmark,
             type     => $sbtypes->{$sbtyp},
             name     => $sbname,

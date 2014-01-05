@@ -1,5 +1,3 @@
-Here is where we are working out how to get the data together.
-
 We have four major data layers we want:
 
     - rail
@@ -13,43 +11,29 @@ And we want them in North America:
     - Mexico
     - Canada
 
-The visualization will eventually be done in d3 using
-topojson to render each layer. So this means that we have to
-find the data for each layer and normalize it, make it
-convertible into json, for merging into a json file that we
-can use with d3.
+North American port data comes from:
 
-So, for the rail, for example, we have a basic mesh of lines available
-from Natural Earth:
+    - http://msi.nga.mil/MSISiteContent/StaticFiles/NAV_PUBS/WPI/WPI_Shapefile.zip
 
-    http://www.naturalearthdata.com/downloads/10m-cultural-vectors/
+North American rail data comes from:
 
-But this does not have the interchanges, the names of the roads,
-or any other useful data. Just the shapes.
+    - http://cta.ornl.gov/transnet/qc28R.zip
+    - http://cta.ornl.gov/transnet/qn28V.zip
+    - http://cta.ornl.gov/transnet/wconv.txt
+    - http://cta.ornl.gov/transnet/QNdata.zip
 
-We can get names and interchanges, and even historical ownership
-data from
+North American warehouse data is currently restricted only to Target and Walmart
+distribution centers, and it comes from:
 
-    http://cta.ornl.gov/transnet/RailRoads.html
+    - http://www.mwpvl.com/html/walmart.html
+    - https://corporate.target.com/_ui/js/main.comb.xml
 
-But this is definitely not in topojson format. It takes some work,
-and juggling of cta's file formats to even get into basic json
-format. And then we still have to figure out how to inject that new
-data into the gigantic bit of json can extract, using Mike Bostock's
-tools, from the Natural Earth dataset. It's a matter of finding either
-and ID to tie the data, or a name to tie the data to.
+The shapefiles are imported directly into a PostGIS-enabled
+database. Other data sources are imported into the same database
+after being prepared/mangled/reformatted. Once all the data is in
+the database, we make new tables in that database by joining and
+selecting from the raw data tables. This produces the set of tables
+that our application, finally, consumes.
 
-Except in the case of things like interchange nodes and railyards,
-which are simply points, and not line segments. If there are simply
-points, they can form another layer, and we don't need to worry any
-further.
-
-Roads are mostly public, so those will be no problem.
-
-Warehouses are points, so those should be no problem, once we have the
-data.
-
-Ports are obviously points/areas, and no problem.
-
-So, step 1 is getting this data, and getting it to the point where
-we can work with it in d3 and leaflet.
+The visualization will be done in d3 or leaflet using GeoJSON to render
+each layer.
