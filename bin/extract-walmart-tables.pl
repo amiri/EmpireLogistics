@@ -6,12 +6,14 @@ use warnings;
 use Web::Scraper;
 use IO::All;
 use Data::Printer;
+use JSON::XS;
 use feature qw/say/;
 use utf8;
 binmode( STDOUT, ":utf8" );
 
+my $directory = "data/warehouses/";
 my $file
-    = "data/seed_data/warehouses/walmart/Walmart Distribution Center Network USA   MWPVL.html";
+    = "data/warehouses/walmart.html";
 
 sub trim {
     my ($string) = @_;
@@ -57,5 +59,9 @@ for my $table (@tables) {
     my $type       = $header_row->{walmart_id};
     $tables{$type} = $table->{rows};
 }
+
+my $json = JSON::XS->new->utf8->pretty->encode( \%tables );
+
+io("$directory/walmart-distribution-centers.json")->print($json);
 
 1;
