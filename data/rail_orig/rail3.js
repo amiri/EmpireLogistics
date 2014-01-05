@@ -11,7 +11,30 @@ var baseLayers = {
 var overlays = {};
 
 function lineStyle(feature) {
-    return "stroke-width: " + (((feature.properties.miles > 10) ? 10 : feature.properties.miles < 1 ? 4 : feature.properties.miles) * map.getZoom()/16) + "px;";
+    var lineWidth;
+
+    switch (feature.properties.densty) {
+        case 7:
+            lineWidth = 18;
+        case 6:
+            lineWidth = 14;
+        case 5:
+            lineWidth = 12;
+        case 4:
+            lineWidth = 10;
+        case 3:
+            lineWidth = 8;
+        case 2:
+            lineWidth = 6;
+        case 1:
+            lineWidth = 4;
+        case 0:
+            lineWidth = 4;
+        default:
+            lineWidth = 4;
+    }
+    return "stroke-width: " + (lineWidth * map.getZoom()/16) + "px;";
+    //return "stroke-width: " + lineWidth + "px;";
 }
 
 new L.geoJson({"type":"LineString","coordinates":[[0,0],[0,0]]}).addTo(map);
