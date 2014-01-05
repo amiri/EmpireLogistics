@@ -6,7 +6,8 @@
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="na-rail-nodes.js"></script>
+    <!--<script src="na-rail-nodes.js"></script>-->
+    <script src="world-ports.js"></script>
   <style>
     @import url(http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.css);
     html, body, #map {
@@ -34,11 +35,11 @@
 
     function onEachFeature(feature, layer) {
         if (feature.properties) {
-            layer.bindPopup("<strong>"+feature.properties.JNAME+"</strong>");
+                layer.bindPopup("<strong>Name</strong>: "+feature.properties.PORT_NAME+"<br /><strong>Country</strong>: "+feature.properties.COUNTRY);
         }
     }
 
-    var nodes = new L.geoJson(nodes, {
+    var ports = new L.geoJson(ports, {
         onEachFeature: onEachFeature
     }).addTo(map);
 </script>
