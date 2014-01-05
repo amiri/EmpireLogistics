@@ -7,15 +7,16 @@ use Data::Printer;
 use JSON::XS;
 use feature qw/say/;
 
+my $directory = "data/rail/";
 
-my $subdiv = io("na-rail-subdivisions.json")->all;
+my $subdiv = io("$directory/na-rail-subdivisions.json")->all;
 my $subdivisions = JSON::XS->new->utf8->decode($subdiv);
 
-my $owners = io("na-rail-ownership.json")->all;
+my $owners = io("$directory/na-rail-ownership.json")->all;
 my $ownership = JSON::XS->new->utf8->decode($owners);
 
 
-my $lines = io("na-rail-lines.json")->all;
+my $lines = io("$directory/na-rail-lines.json")->all;
 my $lines_js = JSON::XS->new->utf8->decode($lines);
 
 for my $feature (@{$lines_js->{features}}) {
@@ -28,6 +29,6 @@ for my $feature (@{$lines_js->{features}}) {
 
 my $json = JSON::XS->new->utf8->pretty->encode( $lines_js );
 
-io("na-rail-lines.json")->print($json);
+io("$directory/na-rail-lines.json")->print($json);
 
 1;

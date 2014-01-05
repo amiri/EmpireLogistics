@@ -28,12 +28,14 @@ Fields:
 
 =cut
 
+my $directory = "data/rail/";
+
 my $format_for_file = {
 #WRWCK 1 CSXT OHWARWICK                -81.64383 40.92256 3900182            300 RJCL OHWARWICK                -81.64383 40.92256 3900182
-    "cta-sup/qc28.iln"  => 'A5 A2 A5 A25 A19 A8 A7 A9 A4 A25 A19 A8 A1 A5',
+    "$directory/cta-sup/qc28.iln"  => 'A5 A2 A5 A25 A19 A8 A7 A9 A4 A25 A19 A8 A1 A5',
 };
 
-my @files = ( "cta-sup/qc28.iln", );
+my @files = ( "$directory/cta-sup/qc28.iln", );
 
 my @railroads;
 
@@ -106,7 +108,7 @@ my $feature_collection = { type => "FeatureCollection", features => \@railroads 
 
 my $json = JSON::XS->new->utf8->pretty->encode( \@railroads );
 
-io("na-rail-interlines.json")->print($json);
+io("$directory/na-rail-interlines.json")->print($json);
 
 1;
 

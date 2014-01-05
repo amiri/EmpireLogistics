@@ -34,13 +34,15 @@ SLSF  ThaS s Thayer South {MO AR TN}  Thayer > Tennessee Yd
 
 =cut
 
+my $directory = "data/rail/";
+
 my $format_for_file = {
 
 #CSXT   AAD   s Atlanta Terminal {GA}  Jones Av WA1.0 s> Spring S294.3 s> S291.5 Oakland Jct s> S288.2 East Point XXB6.4 s> XXB16.4 Stonewall
-    "cta-sup/subdiv.txt" => 'A4 A7 A3 A18 A*'
+    "$directory/cta-sup/subdiv.txt" => 'A4 A7 A3 A18 A*'
 };
 
-my @files = ( "cta-sup/subdiv.txt", );
+my @files = ( "$directory/cta-sup/subdiv.txt", );
 
 my $sbtypes = {
     d => "Lead",
@@ -69,7 +71,7 @@ sub parsestates {
     return (\@states,$comments);
 }
 
-my $owners = io("na-rail-ownership.json")->all;
+my $owners = io("$directory/na-rail-ownership.json")->all;
 my $ownership = JSON::XS->new->utf8->decode($owners);
 
 for my $file (@files) {
@@ -106,7 +108,7 @@ for my $file (@files) {
 
 my $json = JSON::XS->new->utf8->pretty->encode( \%subdivisions);
 
-io("na-rail-subdivisions.json")->print($json);
+io("$directory/na-rail-subdivisions.json")->print($json);
 
 1;
 

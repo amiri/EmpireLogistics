@@ -39,10 +39,10 @@ use feature qw/say/;
 
 =cut
 
+my $directory = "data/rail/";
+
 my $format_for_file = {
-    "tqconv.dat" => '',
-    "cta-sup/wconv.txt"  => 'A1 A4 A6 A3 A*',
-    "qniln.dat"  => '',
+    "$directory/cta-sup/wconv.txt"  => 'A1 A4 A6 A3 A*',
 };
 my $families = {
     BN => "BN",
@@ -74,7 +74,7 @@ my $flags = {
     L => "Owner/lessor",
 };
 
-my @files = ( "cta-sup/wconv.txt", );
+my @files = ( "$directory/cta-sup/wconv.txt", );
 my @railroads;
 
 sub trim {
@@ -306,6 +306,6 @@ for my $file (@files) {
 
 my $json = JSON::XS->new->utf8->pretty->encode( \@railroads );
 
-io("na-rail-ownership.json")->print($json);
+io("$directory/na-rail-ownership.json")->print($json);
 
 1;
