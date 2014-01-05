@@ -11,7 +11,10 @@ all: data database
 
 data: download-data rail warehouses ports
 
-database: download-data rail warehouses ports
+database: data create-database import-rail-data import-ports-data import-warehouse-data
+
+create-database:
+	bin/create-database
 
 clean:
 	rm -rf data/{rail,ports,warehouses}
@@ -34,11 +37,19 @@ download-warehouse-data: make-data-directories $(warehouses_dir)/walmart-distrib
 
 ########## Process data
 
-rail: download-rail-data
+rail: download-rail-data create-rail-owner-sql
 
 warehouses: download-warehouse-data
 
 ports: download-port-data
+
+########## Import data
+
+import-rail-data: rail
+	perl bin/import-ownership
+	perl bin/import-interlines
+	perl bin/import-shapefiles
+	perl bin/postprocess-database
 
 ########## Rail data download pieces
 

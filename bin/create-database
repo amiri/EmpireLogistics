@@ -1,0 +1,27 @@
+#!/bin/bash
+
+DB=empirelogistics
+
+# Drop user
+echo "Dropping user"
+dropuser el
+
+# Create role el
+echo "Creating password"
+mkpasswd 3mp1r3 > etc/passwords/el-pgsql
+password=`cat etc/passwords/el-pgsql`
+echo "Creating user"
+psql -c "create role el WITH NOSUPERUSER CREATEDB LOGIN REPLICATION PASSWORD '$password';"
+
+FAIL=0; createdb $DB || FAIL=1 && true
+if [ "$FAIL" -ne 0 ]; then
+    echo "Dropping $DB"
+    dropdb $DB 
+fi
+echo "Creating $DB"
+createdb $DB
+echo "Enabling PostGIS"
+psql -q -d $DB -c "create extension postgis"
+psql -q -d $DB -c "create extension postgis_topology"
+echo "Granting privileges to el"
+psql -q -c "grant all privileges on database $DB to el"
