@@ -2,8 +2,13 @@
 
 DB=empirelogistics
 
+# Drop db
+echo "Dropping $DB"
+dropdb $DB 
+
 # Drop user
 echo "Dropping user"
+psql -c "DROP OWNED BY el CASCADE"
 dropuser el
 
 # Create role el
@@ -13,11 +18,6 @@ password=`cat etc/passwords/el-pgsql`
 echo "Creating user"
 psql -c "create role el WITH NOSUPERUSER CREATEDB LOGIN REPLICATION PASSWORD '$password';"
 
-FAIL=0; createdb $DB || FAIL=1 && true
-if [ "$FAIL" -ne 0 ]; then
-    echo "Dropping $DB"
-    dropdb $DB 
-fi
 echo "Creating $DB"
 createdb $DB
 echo "Enabling PostGIS"
@@ -25,3 +25,12 @@ psql -q -d $DB -c "create extension postgis"
 psql -q -d $DB -c "create extension postgis_topology"
 echo "Granting privileges to el"
 psql -q -c "grant all privileges on database $DB to el"
+echo "Importing ownership schema"
+psql -U el -q -d $DB < etc/schema/ownership.sql
+echo "Importing states schema"
+psql -U el -q -d $DB < etc/schema/states.sql
+echo "Importing subdivisions schema"
+psql -U el -q -d $DB < etc/schema/subdivisions.sql
+echo "Importing subdivisions_states schema"
+psql -U el -q -d $DB < etc/schema/subdivisions_states.sql
+

@@ -31,13 +31,13 @@ download-data: download-port-data download-rail-data download-warehouse-data
 download-port-data: make-data-directories $(ports_dir)/WPI.shp
 	test -s $(ports_dir)/WPI_Shapefile.zip || curl -o $(ports_dir)/WPI_Shapefile.zip 'http://msi.nga.mil/MSISiteContent/StaticFiles/NAV_PUBS/WPI/WPI_Shapefile.zip'
 
-download-rail-data: make-data-directories $(rail_dir)/na-rail.zip $(rail_dir)/cta-sup/wconv.txt $(rail_dir)/qc28R.zip $(rail_dir)/QNdata.zip $(rail_dir)/cta-sup/subdiv.txt $(rail_dir)/shp/qn28n.shp $(rail_dir)/shp/qn28l.shp $(rail_dir)/na-rail-interlines.geojson $(rail_dir)/na-rail-ownership.json
+download-rail-data: make-data-directories $(rail_dir)/na-rail.zip $(rail_dir)/cta-sup/wconv.txt $(rail_dir)/qc28R.zip $(rail_dir)/QNdata.zip $(rail_dir)/cta-sup/subdiv.txt $(rail_dir)/shp/qn28n.shp $(rail_dir)/shp/qn28l.shp $(rail_dir)/na-rail-interlines.geojson $(rail_dir)/na-rail-ownership.json $(rail_dir)/na-rail-subdivisions.json
 
 download-warehouse-data: make-data-directories $(warehouses_dir)/walmart-distribution-centers.json $(warehouses_dir)/target-distribution-centers.json
 
 ########## Process data
 
-rail: download-rail-data create-rail-owner-sql
+rail: download-rail-data
 
 warehouses: download-warehouse-data
 
@@ -46,10 +46,11 @@ ports: download-port-data
 ########## Import data
 
 import-rail-data: rail
-	perl bin/import-ownership
-	perl bin/import-interlines
-	perl bin/import-shapefiles
-	perl bin/postprocess-database
+	perl bin/import-ownership.pl
+	perl bin/import-subdivisions-states-and-rels.pl
+	perl bin/import-interlines.pl
+	perl bin/import-shapefiles.pl
+	perl bin/postprocess-database.pl
 
 ########## Rail data download pieces
 
