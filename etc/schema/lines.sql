@@ -27,8 +27,8 @@ create table lines (
 drop table if exists track_type cascade;
 create table track_type (
     id serial primary key not null,
-    name text,
-    detail text
+    name text not null,
+    detail text not null
 );
 insert into track_type (name,detail) values
     ("A", "Main"),
@@ -44,8 +44,8 @@ insert into track_type (name,detail) values
 drop table if exists track_grade cascade;
 create table track_grade_cascade (
     id serial primary key not null,
-    name text,
-    detail text
+    name text not null,
+    detail text not null
 );
 insert into track_grade (name,detail) values
     ("G", "At Grade"),
@@ -61,8 +61,8 @@ insert into track_grade (name,detail) values
 drop table if exists track_gauge cascade;
 create table track_gauge_cascade (
     id serial primary key not null,
-    name text,
-    detail text
+    name text not null,
+    detail text not null
 );
 insert into track_gauge (name,detail) values
     ("_", "Standard"),
@@ -74,8 +74,8 @@ insert into track_gauge (name,detail) values
 drop table if exists rail_status cascade;
 create table rail_status_cascade (
     id serial primary key not null,
-    name text,
-    detail text
+    name text not null,
+    detail text not null
 );
 insert into rail_status (name,detail) values
     ("K", "Active"),
@@ -83,4 +83,19 @@ insert into rail_status (name,detail) values
     ("M", "Embargoed (Rails Exist)"),
     ("P", "Suspended (Out Of Service, But Reopenable)");
 
+    drop table if exists rail_density cascade;
+create table rail_density (
+    id serial primary key not null,
+    name integer not null,
+    detail text not null
+);
+insert into rail_density (name,detail) values
+    (0,"Unknown"),
+    (1,"≥ 5m tons/year"),
+    (2,"≥ 10m tons/year"),
+    (3,"≥ 20m tons/year"),
+    (4,"≥ 40m tons/year"),
+    (5,"≥ 60m tons/year"),
+    (6,"≥ 100m tons/year"),
+    (7,"> 100m tons/year");
 
