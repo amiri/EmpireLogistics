@@ -2,8 +2,8 @@
 
 SHELL=/bin/bash
 rail_dir := data/rail
-ports_dir := data/ports
-warehouses_dir := data/warehouses
+port_dir := data/ports
+warehouse_dir := data/warehouses
 
 ########## Meta commands
 
@@ -11,7 +11,7 @@ all: data database
 
 data: download-data rail warehouses ports
 
-database: data create-database import-rail-data import-ports-data import-warehouse-data
+database: data create-database import-rail-data import-port-data import-warehouse-data
 
 create-database:
 	bin/create-database
@@ -23,17 +23,17 @@ clean:
 
 make-data-directories:
 	test -d $(rail_dir) || mkdir -p $(rail_dir)/{cta-sup,shp}
-	test -d $(warehouses_dir) || mkdir -p $(warehouses_dir)
-	test -d $(ports_dir) || mkdir -p $(ports_dir)
+	test -d $(warehouse_dir) || mkdir -p $(warehouse_dir)
+	test -d $(port_dir) || mkdir -p $(port_dir)
 
 download-data: download-port-data download-rail-data download-warehouse-data
 
-download-port-data: make-data-directories $(ports_dir)/WPI.shp
-	test -s $(ports_dir)/WPI_Shapefile.zip || curl -o $(ports_dir)/WPI_Shapefile.zip 'http://msi.nga.mil/MSISiteContent/StaticFiles/NAV_PUBS/WPI/WPI_Shapefile.zip'
+download-port-data: make-data-directories $(port_dir)/WPI.shp
+	test -s $(port_dir)/WPI_Shapefile.zip || curl -o $(port_dir)/WPI_Shapefile.zip 'http://msi.nga.mil/MSISiteContent/StaticFiles/NAV_PUBS/WPI/WPI_Shapefile.zip'
 
 download-rail-data: make-data-directories $(rail_dir)/na-rail.zip $(rail_dir)/cta-sup/wconv.txt $(rail_dir)/qc28R.zip $(rail_dir)/QNdata.zip $(rail_dir)/cta-sup/subdiv.txt $(rail_dir)/shp/qn28n.shp $(rail_dir)/shp/qn28l.shp $(rail_dir)/na-rail-interlines.geojson $(rail_dir)/na-rail-ownership.json $(rail_dir)/na-rail-subdivisions.json
 
-download-warehouse-data: make-data-directories $(warehouses_dir)/walmart-distribution-centers.json $(warehouses_dir)/target-distribution-centers.json
+download-warehouse-data: make-data-directories $(warehouse_dir)/walmart-distribution-centers.json $(warehouse_dir)/target-distribution-centers.json
 
 ########## Process data
 
@@ -52,6 +52,9 @@ import-rail-data: rail
 	shp2pgsql -s 3857 -I $(rail_dir)/shp/qn28l raw_rail_line | psql -q -U el -d empirelogistics
 	shp2pgsql -s 3857 -I $(rail_dir)/shp/qn28n raw_rail_node | psql -q -U el -d empirelogistics
 	bin/postprocess-rail
+
+import-port-data: ports
+
 
 ########## Rail data download pieces
 
@@ -101,16 +104,16 @@ $(rail_dir)/na-rail-subdivisions.json: $(rail_dir)/cta-sup/subdiv.txt $(rail_dir
 
 ########## Port data download pieces
 
-$(ports_dir)/WPI.shp: download-port-data
-	unzip -o -d $(ports_dir)/ $(ports_dir)/WPI_Shapefile.zip
+$(port_dir)/WPI.shp: download-port-data
+	unzip -o -d $(port_dir)/ $(port_dir)/WPI_Shapefile.zip
 
 ########## Warehouse data download pieces
 
-$(warehouses_dir)/walmart.html:
-	test -s $(warehouses_dir)/walmart.html || cp 'data/seed_data/warehouses/walmart/Walmart Distribution Center Network USA   MWPVL.html' $(warehouses_dir)/walmart.html
+$(warehouse_dir)/walmart.html:
+	test -s $(warehouse_dir)/walmart.html || cp 'etc/data/warehouses/walmart/Walmart Distribution Center Network USA   MWPVL.html' $(warehouse_dir)/walmart.html
 
-$(warehouses_dir)/walmart-distribution-centers.json: $(warehouses_dir)/walmart.html
-	test -s $(warehouses_dir)/walmart-distribution-centers.json || perl bin/extract-walmart-tables.pl
+$(warehouse_dir)/walmart-distribution-centers.json: $(warehouse_dir)/walmart.html
+	test -s $(warehouse_dir)/walmart-distribution-centers.json || perl bin/extract-walmart-tables.pl
 
-$(warehouses_dir)/target-distribution-centers.json:
-	test -s $(warehouses_dir)/target-distribution-centers.json || cp 'data/seed_data/warehouses/target/target-distribution-centers.json' $(warehouses_dir)/target-distribution-centers.json
+$(warehouse_dir)/target-distribution-centers.json:
+	test -s $(warehouse_dir)/target-distribution-centers.json || cp 'etc/data/warehouses/target/target-distribution-centers.json' $(warehouse_dir)/target-distribution-centers.json

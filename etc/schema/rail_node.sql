@@ -9,6 +9,7 @@ create table rail_node (
     junction_id integer,
     name text,
     incident_links integer,
+    description text,
     geometry geometry
 );
 insert into rail_node (

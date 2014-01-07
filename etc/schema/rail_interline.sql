@@ -11,6 +11,7 @@ create table rail_interline (
     receiving_node_owner text,
     junction_code text,
     impedance integer,
+    description text,
     geometry geometry
 );
 insert into rail_interline (
