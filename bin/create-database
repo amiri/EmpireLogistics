@@ -25,12 +25,17 @@ psql -q -d $DB -c "create extension postgis"
 psql -q -d $DB -c "create extension postgis_topology"
 echo "Granting privileges to el"
 psql -q -c "grant all privileges on database $DB to el"
-echo "Importing ownership schema"
-psql -U el -q -d $DB < etc/schema/ownership.sql
-echo "Importing states schema"
-psql -U el -q -d $DB < etc/schema/states.sql
-echo "Importing subdivisions schema"
-psql -U el -q -d $DB < etc/schema/subdivisions.sql
-echo "Importing subdivisions_states schema"
-psql -U el -q -d $DB < etc/schema/subdivisions_states.sql
-
+echo "Importing rail_ownership schema"
+psql -U el -q -d $DB < etc/schema/rail_ownership.sql
+echo "Importing state schema"
+psql -U el -q -d $DB < etc/schema/state.sql
+echo "Importing rail_subdivision schema"
+psql -U el -q -d $DB < etc/schema/rail_subdivision.sql
+echo "Importing rail_subdivision_state join table schema"
+psql -U el -q -d $DB < etc/schema/rail_subdivision_state.sql
+echo "Importing rail line attribute lookup tables"
+psql -U el -q -d $DB < etc/schema/rail_track_type.sql
+psql -U el -q -d $DB < etc/schema/rail_track_grade.sql
+psql -U el -q -d $DB < etc/schema/rail_track_gauge.sql
+psql -U el -q -d $DB < etc/schema/rail_status.sql
+psql -U el -q -d $DB < etc/schema/rail_density.sql

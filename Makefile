@@ -48,9 +48,9 @@ ports: download-port-data
 import-rail-data: rail
 	perl bin/import-ownership.pl
 	perl bin/import-subdivisions-states-and-rels.pl
-	ogr2ogr -f PostgreSQL PG:"dbname='empirelogistics' host='localhost' port='5432'" $(rail_dir)/na-rail-interlines.geojson -t_srs EPSG:3857 -nln raw_interlines
-	shp2pgsql -s 3857 -I $(rail_dir)/shp/qn28l.shp | psql -q -U el -d empirelogistics
-	shp2pgsql -s 3857 -I $(rail_dir)/shp/qn28n.shp | psql -q -U el -d empirelogistics
+	ogr2ogr -f PostgreSQL PG:"dbname='empirelogistics' host='localhost' port='5432'" $(rail_dir)/na-rail-interlines.geojson -t_srs EPSG:3857 -nln raw_rail_interline
+	shp2pgsql -s 3857 -I $(rail_dir)/shp/qn28l raw_rail_line | psql -q -U el -d empirelogistics
+	shp2pgsql -s 3857 -I $(rail_dir)/shp/qn28n raw_rail_node | psql -q -U el -d empirelogistics
 	perl bin/postprocess-database.pl
 
 ########## Rail data download pieces

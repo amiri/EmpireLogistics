@@ -21,7 +21,7 @@ my $dbh
     || die "Error connecting to the database: $DBI::errstr\n";
 
 
-my $truncate = "truncate ownership restart identity cascade";
+my $truncate = "truncate rail_ownership restart identity cascade";
 
 my $sth = $dbh->prepare($truncate);
 $sth->execute or die $sth->errstr;
@@ -36,7 +36,7 @@ my $ownership = JSON::XS->new->utf8->decode($owners_io);
 my @owners = @$ownership;
 
 my $sql_command
-    = "insert into ownership (aar_code,name,family,history,flag,reporting_mark) values (?,?,?,?,?,?)";
+    = "insert into rail_ownership (aar_code,name,family,history,flag,reporting_mark) values (?,?,?,?,?,?)";
 
 $sth = $dbh->prepare($sql_command);
 for my $owner (@$ownership) {

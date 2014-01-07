@@ -1,0 +1,25 @@
+drop table if exists rail_line cascade;
+create table rail_line (
+    id integer not null,
+    link_id text,
+    route_id text text,
+    miles double precision,
+    direction text,
+    track_type text,
+    grade text,
+    gauge text,
+    status text,
+    passenger boolean not null,
+    military_subsystem text,
+    signal_system text,
+    traffic_density integer,
+    a_junction integer,
+    b_junction integer,
+    subdivision integer,
+    owner1 integer,
+    owner2 integer,
+    trackage_rights1 integer,
+    trackage_rights2 integer,
+    trackage_rights3 integer,
+    geometry geometry
+);

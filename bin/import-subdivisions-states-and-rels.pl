@@ -22,7 +22,7 @@ my $dbh
     || die "Error connecting to the database: $DBI::errstr\n";
 
 # Truncate subdivisions
-my $truncate_subdiv = "truncate subdivisions restart identity cascade";
+my $truncate_subdiv = "truncate rail_subdivision restart identity cascade";
 
 my $sth = $dbh->prepare($truncate_subdiv);
 $sth->execute or die $sth->errstr;
@@ -42,7 +42,7 @@ my %subdivisions_states = map { $_ => $subdivs{$_}->{states} } grep {
 
 # Populate subdivisions
 my $sql_command
-    = "insert into subdivisions (name,full_name,wmark,subdivision_type,comments) values (?,?,?,?,?)";
+    = "insert into rail_subdivision (name,full_name,wmark,subdivision_type,comments) values (?,?,?,?,?)";
 
 $sth = $dbh->prepare($sql_command);
 
@@ -58,12 +58,12 @@ while ( my ( $name, $subdiv ) = each %subdivs ) {
 }
 
 # Truncate states
-my $truncate_states = "truncate states restart identity cascade";
+my $truncate_states = "truncate state restart identity cascade";
 $sth = $dbh->prepare($truncate_states);
 $sth->execute or die $sth->errstr;
 
 # Populate states
-my $states_command = "insert into states (abbreviation) values (?)";
+my $states_command = "insert into state (abbreviation) values (?)";
 
 my @states;
 for my $sub_name ( keys %subdivisions_states ) {
@@ -77,13 +77,13 @@ $sth = $dbh->prepare($states_command);
 $sth->execute($_) for @states;
 
 # Truncate rels
-my $truncate_rels = "truncate subdivisions_states cascade";
+my $truncate_rels = "truncate rail_subdivision_state cascade";
 $sth = $dbh->prepare($truncate_rels);
 $sth->execute or die $sth->errstr;
 
 # Populate rels
 my $rels_command
-    = "insert into subdivisions_states (subdivision, state) values ((select id from subdivisions where name = ?),(select id from states where abbreviation = ?))";
+    = "insert into rail_subdivision_state (subdivision, state) values ((select id from rail_subdivision where name = ?),(select id from state where abbreviation = ?))";
 $sth = $dbh->prepare($rels_command);
 
 for my $sub_name ( keys %subdivisions_states ) {
