@@ -44,4 +44,3 @@ from raw_rail_interline ri
     left join rail_ownership rob
         on ri.wb = rob.reporting_mark
 ;
-    
