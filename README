@@ -12,6 +12,10 @@ Debian, e.g., Ubuntu, you need to install:
     node
     npm
 
+So you should do something like
+
+    sudo apt-get install postgresql postgis-scripts gdal node npm
+
 Then you need to run the following two commands:
 
     npm install -g topojson
@@ -20,10 +24,8 @@ Then you need to run the following two commands:
 Now you should have a mostly populated PostgreSQL database with
 a lot of data in place.
 
-We have all the rail-line data importing now. Remaining are:
+We have all the rail data importing now. Remaining are:
 
-    - rail nodes
-    - rail interlines
     - ports
     - warehouses
 
