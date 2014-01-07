@@ -5,7 +5,7 @@ create table rail_track_gauge (
     detail text not null
 );
 insert into rail_track_gauge (name,detail) values
-    ('_', 'Standard'),
+    ('S', 'Standard'),
     ('E', 'Electrified, Standard'),
     ('C', 'Cog'),
     ('N', 'Narrow'),

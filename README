@@ -1,3 +1,39 @@
+INSTALLATION
+
+These instructions will change as we build the data and the server.
+
+Because we have not yet begun to script the deployment, you need to
+handle the prereqs yourself. Assuming you are running some sort of
+Debian, e.g., Ubuntu, you need to install:
+
+    postgresql
+    postgis-scripts
+    gdal
+    node
+    npm
+
+Then you need to run the following two commands:
+
+    npm install -g topojson
+    make all
+
+Now you should have a mostly populated PostgreSQL database with
+a lot of data in place.
+
+We have all the rail-line data importing now. Remaining are:
+
+    - rail nodes
+    - rail interlines
+    - ports
+    - warehouses
+
+The "all" target in the Makefile does all the hard work. It imports
+and populates all the data, and it will overwrite existing data if
+you run it again. This is dangerous in production, of course,
+but it's OK for the moment.
+
+OVERVIEW
+
 We have four major data layers we want:
 
     - rail

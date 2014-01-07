@@ -25,7 +25,7 @@ for my $feature (@{$lines_js->{features}}) {
     }
     my ($owner) = grep { $_->{reporting_mark} eq $feature->{properties}{W1} } @$ownership;
     $feature->{properties}{owner} = $owner if $owner;
-} 
+}
 
 my $json = JSON::XS->new->utf8->pretty->encode( $lines_js );
 

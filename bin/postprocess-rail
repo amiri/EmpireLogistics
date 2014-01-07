@@ -1,0 +1,6 @@
+#!/bin/bash
+
+DB=empirelogistics
+
+echo "Postprocessing rail data - select into new table"
+psql -U el -q -d $DB < etc/schema/rail_line.sql

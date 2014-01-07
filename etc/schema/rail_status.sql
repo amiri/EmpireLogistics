@@ -9,4 +9,3 @@ insert into rail_status (name,detail) values
     ('A', 'Abandoned'),
     ('M', 'Embargoed (Rails Exist)'),
     ('P', 'Suspended (Out Of Service, But Reopenable)');
-

@@ -51,7 +51,7 @@ import-rail-data: rail
 	ogr2ogr -f PostgreSQL PG:"dbname='empirelogistics' host='localhost' port='5432'" $(rail_dir)/na-rail-interlines.geojson -t_srs EPSG:3857 -nln raw_rail_interline
 	shp2pgsql -s 3857 -I $(rail_dir)/shp/qn28l raw_rail_line | psql -q -U el -d empirelogistics
 	shp2pgsql -s 3857 -I $(rail_dir)/shp/qn28n raw_rail_node | psql -q -U el -d empirelogistics
-	perl bin/postprocess-database.pl
+	bin/postprocess-rail
 
 ########## Rail data download pieces
 

@@ -39,3 +39,7 @@ psql -U el -q -d $DB < etc/schema/rail_track_grade.sql
 psql -U el -q -d $DB < etc/schema/rail_track_gauge.sql
 psql -U el -q -d $DB < etc/schema/rail_status.sql
 psql -U el -q -d $DB < etc/schema/rail_density.sql
+psql -U el -q -d $DB < etc/schema/rail_signal.sql
+psql -U el -q -d $DB < etc/schema/rail_passenger.sql
+psql -U el -q -d $DB < etc/schema/rail_military.sql
+psql -U el -q -d $DB < etc/schema/rail_line_class.sql
