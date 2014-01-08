@@ -43,3 +43,13 @@ psql -U el -q -d $DB < etc/schema/rail_signal.sql
 psql -U el -q -d $DB < etc/schema/rail_passenger.sql
 psql -U el -q -d $DB < etc/schema/rail_military.sql
 psql -U el -q -d $DB < etc/schema/rail_line_class.sql
+echo "Importing port attribute lookup tables"
+psql -U el -q -d $DB < etc/schema/port_depth.sql
+psql -U el -q -d $DB < etc/schema/port_depth_feet.sql
+psql -U el -q -d $DB < etc/schema/port_depth_meters.sql
+psql -U el -q -d $DB < etc/schema/port_drydock.sql
+psql -U el -q -d $DB < etc/schema/port_harbor_size.sql
+psql -U el -q -d $DB < etc/schema/port_harbor_type.sql
+psql -U el -q -d $DB < etc/schema/port_repair.sql
+psql -U el -q -d $DB < etc/schema/port_shelter.sql
+psql -U el -q -d $DB < etc/schema/port_vessel_size.sql

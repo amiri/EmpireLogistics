@@ -55,6 +55,7 @@ import-rail-data: rail
 
 import-port-data: ports
 	shp2pgsql -s 3857 -I $(port_dir)/WPI raw_port | psql -q -U el -d empirelogistics
+	bin/postprocess-port
 
 ########## Rail data download pieces
 

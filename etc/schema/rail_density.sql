@@ -13,4 +13,3 @@ insert into rail_density (name,detail) values
     (5,'≥ 60m tons/year'),
     (6,'≥ 100m tons/year'),
     (7,'> 100m tons/year');
-

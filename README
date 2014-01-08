@@ -24,10 +24,10 @@ Then you need to run the following two commands:
 Now you should have a mostly populated PostgreSQL database with
 a lot of data in place.
 
-We have all the rail data importing now. Remaining are:
+We have all the rail and port data importing now. Remaining are:
 
-    - ports
     - warehouses
+    - original data
 
 The "all" target in the Makefile does all the hard work. It imports
 and populates all the data, and it will overwrite existing data if
