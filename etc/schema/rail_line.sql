@@ -38,7 +38,6 @@ create table rail_line (
     trackage_rights1 text,
     trackage_rights2 text,
     trackage_rights3 text,
-    description text,
     geometry geometry
 );
 insert into rail_line (

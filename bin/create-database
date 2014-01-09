@@ -53,3 +53,10 @@ psql -U el -q -d $DB < etc/schema/port_harbor_type.sql
 psql -U el -q -d $DB < etc/schema/port_repair.sql
 psql -U el -q -d $DB < etc/schema/port_shelter.sql
 psql -U el -q -d $DB < etc/schema/port_vessel_size.sql
+echo "Importing warehouse and warehouse attribute lookup tables"
+psql -U el -q -d $DB < etc/schema/warehouse_status.sql
+psql -U el -q -d $DB < etc/schema/warehouse_type.sql
+psql -U el -q -d $DB < etc/schema/warehouse_owner.sql
+psql -U el -q -d $DB < etc/schema/walmart.sql
+psql -U el -q -d $DB < etc/schema/warehouse.sql
+psql -U el -q -d $DB < etc/schema/warehouse_walmart.sql

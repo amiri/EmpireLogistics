@@ -1,7 +1,7 @@
 update raw_rail_interline set iidq = null where iidq = '';
 update raw_rail_interline set impedance = null where impedance = '';
 
-drop table rail_interline cascade;
+drop table if exists rail_interline cascade;
 create table rail_interline (
     id integer not null primary key,
     interline_id_number integer,

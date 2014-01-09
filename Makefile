@@ -57,6 +57,10 @@ import-port-data: ports
 	shp2pgsql -s 3857 -I $(port_dir)/WPI raw_port | psql -q -U el -d empirelogistics
 	bin/postprocess-port
 
+import-warehouse-data: warehouses
+	perl bin/import-walmart.pl
+	perl bin/import-target.pl
+
 ########## Rail data download pieces
 
 # Current raw network for rail line shapefiles
