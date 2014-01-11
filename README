@@ -14,7 +14,9 @@ Debian, e.g., Ubuntu, you need to install:
 
 So you should do something like
 
-    sudo apt-get install postgresql postgis-scripts gdal node npm
+    sudo apt-get install postgresql postgis-scripts gdal node npm ruby1.9.1-dev
+    sudo gem install rdoc
+    sudo gem install librarian-chef
 
 Then you need to run the following two commands:
 

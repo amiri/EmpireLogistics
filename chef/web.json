@@ -1,0 +1,8 @@
+{
+  "postgresql": {"password": {"postgres" : "24d919ec880e72174eb3e4ceb28a827b"}, "server": {"packages":["postgresql-server-dev-all","libxml2","libxml2-dev","xsltproc", "libxml2-utils","imagemagick"]} },
+  "el": {"db_password": "3mp1r3"},
+  "gdal": {"version": "1.10.1", "download_url": "http://download.osgeo.org/gdal/1.10.1/gdal-1.10.1.tar.gz"},
+  "geos": {"version": "3.4.2"},
+  "proj": {"version": "4.8.0"},
+  "run_list": [ "recipe[apt]", "recipe[el]" ]
+}

@@ -9,6 +9,7 @@ ne_10*
 cta-sup
 na-rail-*.geojson
 na-rail-*.json
-data/rail/
-data/ports/
-data/warehouses/
+/data/rail/
+/data/ports/
+/data/warehouses/
+/chef/tmp

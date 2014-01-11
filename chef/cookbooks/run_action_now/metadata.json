@@ -1,0 +1,29 @@
+{
+  "name": "run_action_now",
+  "description": "Provides helper function for easier immediate execution of Chef resources without bulky syntax.",
+  "long_description": "# run_action_now cookbook\n\nCookbook for Opscode Chef.\n\nhttp://community.opscode.com/cookbooks/run_action_now\n\n\n# Description\n\nAllows for immediate one-time execution of Chef resources without bulky syntax. Traditionally to run a resource\nduring convergence you would have to set the action to :nothing, and then use the `.run_action` method with the\nreal action you wanted. This cookbook adds the `.run_action_now` method which looks up the desired action(s) from\nthe resource itself, and then sets the action to :nothing automatically.\n\n**PLEASE NOTE**\n\nWhen appropriate you should consider the `use_inline_resources` to perform this functionality globally within a\nLWRP. Please see the [Chef docs here](http://docs.opscode.com/lwrp_custom_provider.html#use-inline-resources) for\nmore information.\n\n\n# Usage\n\nDirectly on a resource block:\n\n    directory \"/tmp/alpha\" do\n      action :create\n      mode 0777\n    end.run_action_now\n\n    (directory \"/tmp/beta\").run_action_now    # without a block\n\n    service \"sshd\" do\n      action [ :enable, :start ]              # with multiple actions\n    end.run_action_now\n\nAs a mixin function:\n\n    include Chef::Provider::ServiceFactory::Mixin::Unix\n\n    run_action_now((\n      directory \"/tmp/charlie\" do\n        action :create\n      end\n    ))  # note the double parenthesis above and below\n\n\n# Recipes\n\nThis cookbook only provides library enhancements, no recipes are included.\n\n\n# Development and Maintenance\n\n* Found a bug?\n* Need some help?\n* Have a suggestion?\n* Want to contribute?\n\nPlease visit: [code.binbab.org](http://code.binbab.org)\n\n\n# Authors and License\n\n  * Author:: BinaryBabel OSS (<projects@binarybabel.org>)\n  * Copyright:: 2013 `sha1(OWNER) = df334a7237f10846a0ca302bd323e35ee1463931`\n  * License:: Apache License, Version 2.0\n\n----\n\n    Licensed under the Apache License, Version 2.0 (the \"License\");\n    you may not use this file except in compliance with the License.\n    You may obtain a copy of the License at\n\n        http://www.apache.org/licenses/LICENSE-2.0\n\n    Unless required by applicable law or agreed to in writing, software\n    distributed under the License is distributed on an \"AS IS\" BASIS,\n    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n    See the License for the specific language governing permissions and\n    limitations under the License.\n",
+  "maintainer": "BinaryBabel OSS",
+  "maintainer_email": "projects@binarybabel.org",
+  "license": "Apache License, Version 2.0",
+  "platforms": {
+  },
+  "dependencies": {
+  },
+  "recommendations": {
+  },
+  "suggestions": {
+  },
+  "conflicting": {
+  },
+  "providing": {
+  },
+  "replacing": {
+  },
+  "attributes": {
+  },
+  "groupings": {
+  },
+  "recipes": {
+  },
+  "version": "0.1.0"
+}
