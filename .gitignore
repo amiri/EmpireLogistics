@@ -13,3 +13,4 @@ na-rail-*.json
 /data/ports/
 /data/warehouses/
 /chef/tmp
+/chef-cache
