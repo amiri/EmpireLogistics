@@ -2,28 +2,28 @@
 
 DB=empirelogistics
 
-## Drop db
-#echo "Dropping $DB"
-#dropdb $DB 
+# Drop db
+echo "Dropping $DB"
+dropdb $DB 
 
-## Drop user
-#echo "Dropping user"
-#psql -c "DROP OWNED BY el CASCADE"
-#dropuser el
+# Drop user
+echo "Dropping user"
+psql -c "DROP OWNED BY el CASCADE"
+dropuser el
 
-## Create role el
-#echo "Creating password"
-#mkpasswd 3mp1r3 > etc/passwords/el-pgsql
-#password=`cat etc/passwords/el-pgsql`
-#echo "Creating user"
-#psql -c "create role el WITH NOSUPERUSER CREATEDB LOGIN REPLICATION PASSWORD '$password';"
+# Create role el
+echo "Creating password"
+mkpasswd 3mp1r3 > etc/passwords/el-pgsql
+password=`cat etc/passwords/el-pgsql`
+echo "Creating user"
+psql -c "create role el WITH NOSUPERUSER CREATEDB LOGIN REPLICATION PASSWORD '$password';"
 
-#echo "Creating $DB"
-#createdb $DB
-#echo "Enabling PostGIS"
-#psql -q -d $DB -c "create extension if not exists postgis"
-#psql -q -d $DB -c "create extension if not exists postgis_topology"
-#psql -q -d $DB -c "create language  if not exists plpgsql"
+echo "Creating $DB"
+createdb $DB
+echo "Enabling PostGIS"
+psql -q -d $DB -c "create extension if not exists postgis"
+psql -q -d $DB -c "create extension if not exists postgis_topology"
+psql -q -d $DB -c "create or replace language plpgsql"
 echo "Granting privileges to el"
 psql -U postgres -q -c "grant all privileges on database $DB to el"
 echo "Importing rail_ownership schema"

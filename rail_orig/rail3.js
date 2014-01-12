@@ -38,7 +38,7 @@ function lineStyle(feature) {
 }
 
 new L.geoJson({"type":"LineString","coordinates":[[0,0],[0,0]]}).addTo(map);
-var geojsonURL = "http://localhost:8080/lines/{z}/{x}/{y}.json";
+var geojsonURL = "http://localhost:8888/lines/{z}/{x}/{y}.json";
 var lineLayer = new L.TileLayer.d3_geoJSON(geojsonURL, {
   class: "rail-line",
   style: lineStyle,

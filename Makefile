@@ -25,7 +25,6 @@ prereqs:
 	sudo apt-get -y install git ruby1.9.1-dev
 	sudo gem install rdoc
 	sudo gem install librarian-chef
-	npm install -g topojson
 
 chef:
 	bin/install-empirelogistics
@@ -39,7 +38,7 @@ make-data-directories:
 
 download-data: download-port-data download-rail-data download-warehouse-data
 
-download-port-data: make-data-directories $(port_dir)/WPI.shp
+download-port-data: make-data-directories
 	test -s $(port_dir)/WPI_Shapefile.zip || curl -o $(port_dir)/WPI_Shapefile.zip 'http://msi.nga.mil/MSISiteContent/StaticFiles/NAV_PUBS/WPI/WPI_Shapefile.zip'
 
 download-rail-data: make-data-directories $(rail_dir)/na-rail.zip $(rail_dir)/cta-sup/wconv.txt $(rail_dir)/qc28R.zip $(rail_dir)/QNdata.zip $(rail_dir)/cta-sup/subdiv.txt $(rail_dir)/shp/qn28n.shp $(rail_dir)/shp/qn28l.shp $(rail_dir)/na-rail-interlines.geojson $(rail_dir)/na-rail-ownership.json $(rail_dir)/na-rail-subdivisions.json
@@ -59,9 +58,11 @@ ports: download-port-data
 import-rail-data: rail
 	perl bin/import-ownership.pl
 	perl bin/import-subdivisions-states-and-rels.pl
-	ogr2ogr -f PostgreSQL PG:"dbname='empirelogistics' host='localhost' port='5432' user='el'" $(rail_dir)/na-rail-interlines.geojson -t_srs EPSG:3857 -nln raw_rail_interline
-	shp2pgsql -s 3857 -I $(rail_dir)/shp/qn28l raw_rail_line | psql -q -U el -d empirelogistics
-	shp2pgsql -s 3857 -I $(rail_dir)/shp/qn28n raw_rail_node | psql -q -U el -d empirelogistics
+	ogr2ogr -f PostgreSQL PG:"dbname='empirelogistics' host='localhost' port='5432' user='el'" $(rail_dir)/na-rail-interlines.geojson -t_srs EPSG:3857 -overwrite -nln raw_rail_interline
+	shp2pgsql -I $(rail_dir)/shp/qn28l raw_rail_line | psql -q -U el -d empirelogistics
+	shp2pgsql -I $(rail_dir)/shp/qn28n raw_rail_node | psql -q -U el -d empirelogistics
+	#shp2pgsql -s 3857 -I $(rail_dir)/shp/qn28l raw_rail_line | psql -q -U el -d empirelogistics
+	#shp2pgsql -s 3857 -I $(rail_dir)/shp/qn28n raw_rail_node | psql -q -U el -d empirelogistics
 	bin/postprocess-rail
 
 import-port-data: ports
