@@ -1,4 +1,4 @@
-drop sequence if exists state_id_seq;
+drop sequence if exists state_id_seq cascade;
 drop table if exists state cascade;
 create table state (
     id serial primary key not null,

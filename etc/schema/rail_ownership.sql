@@ -1,4 +1,4 @@
-drop sequence if exists rail_ownership_id_seq;
+drop sequence if exists rail_ownership_id_seq cascade;
 drop table if exists rail_ownership cascade;
 create table rail_ownership (
     id serial primary key not null,

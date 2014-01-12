@@ -3,27 +3,12 @@
 
 site 'http://community.opscode.com/api/v1'
 
-# cookbook 'chef-client'
-
-# cookbook 'apache2', '>= 1.0.0'
-
-# cookbook 'rvm',
-#   :git => 'https://github.com/fnichol/chef-rvm'
-
-# cookbook 'postgresql',
-#   :git => 'https://github.com/findsyou/cookbooks',
-#   :ref => 'postgresql-improvements'
-
-
 cookbook "nginx"
 cookbook "uwsgi"
-cookbook "postgresql"
-cookbook "gdal",
-    :git => "https://github.com/pjungwir/chef-gdal",
-    :ref => "HEAD"
+cookbook "postgresql",
+    :git => "https://github.com/phlipper/chef-postgresql"
 cookbook "nodejs"
-cookbook "postgis",
-    :git => "https://github.com/pjungwir/chef-postgis",
-    :ref => "HEAD"
 cookbook "el",
     :path => "site/el"
+cookbook "users"
+cookbook "sudo"

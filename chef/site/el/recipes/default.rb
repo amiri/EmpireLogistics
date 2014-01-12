@@ -6,49 +6,35 @@
 #
 # All rights reserved - Do Not Redistribute
 #
-node.override['locale']['lang'] = 'en_US.UTF-8'
-include_recipe 'locale::default'
+#node.override['locale']['lang'] = 'en_US.UTF-8'
+#include_recipe 'locale::default'
 
 include_recipe "nginx"
 include_recipe "uwsgi"
+include_recipe "postgresql"
+include_recipe "postgresql::apt_repository"
 include_recipe "postgresql::client"
+include_recipe "postgresql::configuration"
+include_recipe "postgresql::contrib"
+include_recipe "postgresql::data_directory"
+include_recipe "postgresql::dbg"
+include_recipe "postgresql::libpq"
+include_recipe "postgresql::postgis"
 include_recipe "postgresql::server"
-include_recipe "database::postgresql"
+include_recipe "postgresql::server_dev"
+include_recipe "postgresql::service"
+include_recipe "postgresql::pg_user"
+include_recipe "postgresql::pg_database"
 include_recipe "nodejs"
 include_recipe "nodejs::npm"
-include_recipe "geos"
-include_recipe "gdal"
-include_recipe "proj"
-include_recipe "postgis"
 
-postgresql_database node['el']['database'] do
-  connection(
-    :host      => '127.0.0.1',
-    :port      => 5432,
-    :username  => 'postgres',
-    :password  => node['postgresql']['password']['postgres']
-  )
-  template 'template_postgis'
-  encoding 'UTF8'
-  action :create
+user "el" do
+  supports :manage_home => true
+  comment "Empire Logistics"
+  uid 1917
+  gid "admin"
+  home "/home/el"
+  shell "/bin/bash"
+  password "3mp1r3"
 end
 
-postgresql_connection_info = {
-  :host     => 'localhost',
-  :port     => 5432,
-  :username => 'postgres',
-  :password => node['postgresql']['password']['postgres']
-}
-
-postgresql_database_user node['el']['db_username'] do
-  connection postgresql_connection_info
-  password   node['el']['db_password']
-  action     :create
-end
-
-postgresql_database_user node['el']['db_username'] do
-  connection    postgresql_connection_info
-  database_name node['el']['database'] 
-  privileges    [:all]
-  action        :grant
-end

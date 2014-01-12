@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd chef
+librarian-chef install --clean --verbose
+cd ..
+sudo chef-solo -c chef/solo.rb -j chef/web.json

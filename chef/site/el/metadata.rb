@@ -9,8 +9,4 @@ version          '0.1.0'
 depends "nginx"
 depends "uwsgi"
 depends "postgresql"
-depends "database"
-depends "gdal"
 depends "nodejs"
-depends "postgis"
-depends "locale"
