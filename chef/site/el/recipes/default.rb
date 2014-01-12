@@ -13,18 +13,17 @@ include_recipe "nginx"
 include_recipe "uwsgi"
 include_recipe "postgresql"
 include_recipe "postgresql::apt_repository"
-include_recipe "postgresql::client"
-include_recipe "postgresql::configuration"
-include_recipe "postgresql::contrib"
 include_recipe "postgresql::data_directory"
-include_recipe "postgresql::dbg"
-include_recipe "postgresql::libpq"
 include_recipe "postgresql::postgis"
 include_recipe "postgresql::server"
 include_recipe "postgresql::server_dev"
-include_recipe "postgresql::service"
+include_recipe "postgresql::contrib"
+include_recipe "postgresql::configuration"
+include_recipe "postgresql::libpq"
+include_recipe "postgresql::client"
 include_recipe "postgresql::pg_user"
 include_recipe "postgresql::pg_database"
+include_recipe "postgresql::service"
 include_recipe "nodejs"
 include_recipe "nodejs::npm"
 
@@ -38,3 +37,8 @@ user "el" do
   password "3mp1r3"
 end
 
+node['el']['npm_packages'].each do |package|
+  execute "install_npm_#{package}" do
+    command "npm install -g #{package}"
+  end
+end

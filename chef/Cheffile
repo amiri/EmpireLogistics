@@ -8,6 +8,7 @@ cookbook "uwsgi"
 cookbook "postgresql",
     :git => "https://github.com/phlipper/chef-postgresql"
 cookbook "nodejs"
+cookbook "npm"
 cookbook "el",
     :path => "site/el"
 cookbook "users"
