@@ -25,6 +25,7 @@ prereqs:
 	sudo apt-get -y install git ruby1.9.1-dev
 	sudo gem install rdoc
 	sudo gem install librarian-chef
+	npm install -g topojson
 
 chef:
 	bin/install-empirelogistics

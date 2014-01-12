@@ -2,25 +2,16 @@ INSTALLATION
 
 These instructions will change as we build the data and the server.
 
+If you are running a Debian-derived distribution, preferably Ubuntu 13.10,
+Saucy Salamander, you can run the following:
+
+
+
 Because we have not yet begun to script the deployment, you need to
 handle the prereqs yourself. Assuming you are running some sort of
-Debian, e.g., Ubuntu, you need to install:
+Debian, e.g., Ubuntu, you need to run the following on the command line:
 
-    postgresql
-    postgis-scripts
-    gdal
-    node
-    npm
-
-So you should do something like
-
-    sudo apt-get install postgresql postgis-scripts gdal node npm ruby1.9.1-dev
-    sudo gem install rdoc
-    sudo gem install librarian-chef
-
-Then you need to run the following two commands:
-
-    npm install -g topojson
+    make prereqs
     make all
 
 Now you should have a mostly populated PostgreSQL database with
