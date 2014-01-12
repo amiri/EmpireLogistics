@@ -3,29 +3,24 @@ INSTALLATION
 These instructions will change as we build the data and the server.
 
 If you are running a Debian-derived distribution, preferably Ubuntu 13.10,
-Saucy Salamander, you can run the following:
-
-
-
-Because we have not yet begun to script the deployment, you need to
-handle the prereqs yourself. Assuming you are running some sort of
-Debian, e.g., Ubuntu, you need to run the following on the command line:
+Saucy Salamander, you can run the following on the command line:
 
     make prereqs
     make all
-
-Now you should have a mostly populated PostgreSQL database with
-a lot of data in place.
-
-We have all the rail and port data importing now. Remaining are:
-
-    - warehouses
-    - original data
 
 The "all" target in the Makefile does all the hard work. It imports
 and populates all the data, and it will overwrite existing data if
 you run it again. This is dangerous in production, of course,
 but it's OK for the moment.
+
+Now you should have a mostly populated PostgreSQL database with
+a lot of data in place. You also have nginx, PostgreSQL, and uwsgi
+installed, but unconfigured.
+
+We have all the rail and port data importing now. Remaining are:
+
+    - Target warehouses
+    - original data
 
 OVERVIEW
 
@@ -68,3 +63,17 @@ that our application, finally, consumes.
 
 The visualization will be done in d3 or leaflet using GeoJSON to render
 each layer.
+
+
+ARCHITECTURE
+
+We will be running two uwsgi app servers behind nginx:
+
+    - TileStache (http://tilestache.org/)
+        uwsgi will serve a TileStache app for the vector tiles.
+    - EmpireLogistics
+        uwsgi will serve a PSGI app for the main application.
+
+The database server is PostgreSQL 9.3 with PostGIS extensions.
+
+We will cache vector tiles in redis.
