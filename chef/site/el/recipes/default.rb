@@ -55,6 +55,13 @@ group "el" do
   append true
 end
 
+directory "/var/uwsgi" do
+  owner "el"
+  group "el"
+  mode 00774
+  action :create
+end
+
 include_recipe "nginx"
 include_recipe "uwsgi"
 include_recipe "uwsgi::emperor"
