@@ -13,7 +13,6 @@ dropuser el
 
 # Create role el
 echo "Creating password"
-mkpasswd 3mp1r3 > etc/passwords/el-pgsql
 password=`cat etc/passwords/el-pgsql`
 echo "Creating user"
 psql -c "create role el WITH NOSUPERUSER CREATEDB LOGIN REPLICATION PASSWORD '$password';"
