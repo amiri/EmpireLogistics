@@ -1,0 +1,10 @@
+{
+  "id": "el",
+  "groups": [ "admin", "sysadmin" ],
+  "uid": 1917,
+  "home": "/home/el",
+  "shell": "/bin/bash",
+  "comment": "Empire Logistics",
+  "action": "create"
+}
+

@@ -7,7 +7,7 @@ warehouse_dir := data/warehouses
 
 ########## Meta commands
 
-all: prereqs chef data database
+all: chef data database
 
 data: download-data rail warehouses ports
 
@@ -22,7 +22,7 @@ clean:
 prereqs:
 	sudo perl -pi.orig -e "s/%admin ALL=\(ALL\) ALL/%admin ALL=(ALL) NOPASSWD: ALL/" /etc/sudoers
 	curl -L https://www.opscode.com/chef/install.sh | sudo bash
-	sudo apt-get -y install git ruby1.9.1-dev
+	sudo apt-get -y install git ruby1.9.1-dev build-essential unzip
 	sudo gem install rdoc
 	sudo gem install librarian-chef
 

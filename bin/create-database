@@ -2,23 +2,23 @@
 
 DB=empirelogistics
 
-# Drop db
-echo "Dropping $DB"
-dropdb $DB 
+## Drop db
+#echo "Dropping $DB"
+#dropdb $DB 
 
-# Drop user
-echo "Dropping user"
-psql -c "DROP OWNED BY el CASCADE"
-dropuser el
+## Drop user
+#echo "Dropping user"
+#psql -c "DROP OWNED BY el CASCADE"
+#dropuser el
 
-# Create role el
-echo "Creating password"
-password=`cat etc/passwords/el-pgsql`
-echo "Creating user"
-psql -c "create role el WITH NOSUPERUSER CREATEDB LOGIN REPLICATION PASSWORD '$password';"
+## Create role el
+#echo "Creating password"
+#password=`cat etc/passwords/el-pgsql`
+#echo "Creating user"
+#psql -c "create role el WITH NOSUPERUSER CREATEDB LOGIN REPLICATION PASSWORD '$password';"
 
-echo "Creating $DB"
-createdb $DB
+#echo "Creating $DB"
+#createdb $DB
 echo "Enabling PostGIS"
 psql -q -d $DB -c "create extension if not exists postgis"
 psql -q -d $DB -c "create extension if not exists postgis_topology"

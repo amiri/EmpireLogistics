@@ -11,5 +11,4 @@ cookbook "nodejs"
 cookbook "npm"
 cookbook "el",
     :path => "site/el"
-cookbook "users"
 cookbook "sudo"

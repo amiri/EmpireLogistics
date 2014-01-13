@@ -14,8 +14,9 @@
       {
         "username": "el",
         "password": "3mp1r3",
-        "createdb": false,
-        "login": true
+        "createdb": true,
+        "login": true,
+        "replication": true
       }
     ],
     "ssl_cert_file": "/etc/ssl/certs/ssl-cert-snakeoil.pem",
@@ -88,6 +89,17 @@
   "el": {
     "db_password": "3mp1r3",
     "npm_packages": ["topojson"]
+  },
+  "authorization": {
+    "sudo": {
+      "groups": ["admin", "sysadmin", "vagrant"],
+      "users": ["el", "amiri"],
+      "passwordless": "true",
+      "sudoers_defaults": [
+        "env_reset",
+        "secure_path='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'"
+      ]
+    }
   },
   "run_list": [
     "recipe[apt]",

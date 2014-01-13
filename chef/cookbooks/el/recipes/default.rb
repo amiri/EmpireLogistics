@@ -26,6 +26,7 @@ include_recipe "postgresql::pg_database"
 include_recipe "postgresql::service"
 include_recipe "nodejs"
 include_recipe "nodejs::npm"
+include_recipe "sudo"
 
 user "el" do
   supports :manage_home => true
@@ -34,7 +35,15 @@ user "el" do
   gid "admin"
   home "/home/el"
   shell "/bin/bash"
-  password "3mp1r3"
+end
+
+user "amiri" do
+  supports :manage_home => true
+  comment "Amiri Barksdale"
+  uid 1918
+  gid "admin"
+  home "/home/amiri"
+  shell "/bin/bash"
 end
 
 node['el']['npm_packages'].each do |package|
