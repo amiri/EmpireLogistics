@@ -62,8 +62,13 @@ directory "/var/uwsgi" do
   action :create
 end
 
+%w{uwsgi uwsgi-app-integration-plugins uwsgi-core uwsgi-emperor uwsgi-extra uwsgi-infrastructure-plugins uwsgi-plugins-all}.each do |package|
+  apt_package package do
+    action :install
+  end
+end
+
 include_recipe "nginx"
-include_recipe "uwsgi"
 include_recipe "uwsgi::emperor"
 include_recipe "postgresql"
 include_recipe "postgresql::apt_repository"

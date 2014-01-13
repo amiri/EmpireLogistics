@@ -58,12 +58,17 @@ end
 directory "/var/uwsgi" do
   owner "el"
   group "el"
-  mode 00777
+  mode 00774
   action :create
 end
 
+%w{uwsgi uwsgi-app-integration-plugins uwsgi-core uwsgi-emperor uwsgi-extra uwsgi-infrastructure-plugins uwsgi-plugins-all}.each do |package|
+  apt_package package do
+    action :install
+  end
+end
+
 include_recipe "nginx"
-include_recipe "uwsgi"
 include_recipe "uwsgi::emperor"
 include_recipe "postgresql"
 include_recipe "postgresql::apt_repository"
