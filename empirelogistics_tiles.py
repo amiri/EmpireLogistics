@@ -4,6 +4,5 @@ sys.path.append('/usr/local/lib/python2.7/dist-packages') # cautionary to load d
 sys.path.append('/usr/lib/python2.7') # to load os
 import os
 
-import PIL
 import TileStache
-application = TileStache.WSGITileServer('/home/amiri/EmpireLogistics/rail_orig/tilestache.cfg')
+application = TileStache.WSGITileServer('/var/local/EmpireLogistics/etc/empirelogistics_tiles.cfg')

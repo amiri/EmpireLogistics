@@ -94,12 +94,19 @@
     "sudo": {
       "groups": ["admin", "sysadmin", "vagrant"],
       "users": ["el", "amiri"],
-      "passwordless": "true",
-      "sudoers_defaults": [
-        "env_reset",
-        "secure_path='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'"
-      ]
+      "passwordless": "true"
     }
+  },
+  "uwsgi": {
+    "emperor": {
+      "conf_dir": "/var/local/EmpireLogistics/current/etc/uwsgi_emperor",
+      "service": "upstart"
+    }
+  },
+  "nginx": {
+    "user": "www-data",
+    "group": "el",
+    "gzip": "on"
   },
   "run_list": [
     "recipe[apt]",

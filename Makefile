@@ -26,6 +26,8 @@ prereqs:
 	sudo gem install rdoc
 	sudo gem install librarian-chef
 
+.PHONY: chef 
+
 chef:
 	bin/install-empirelogistics
 
