@@ -25,7 +25,7 @@ deploy_revision "empirelogistics" do
   symlink_before_migrate nil
   create_dirs_before_symlink   []
   purge_before_symlink         []
-  symlinks                      {"python" => "python", "perl" => "perl", "logs" => "logs"}
+  symlinks                      ({"python" => "python", "perl" => "perl", "logs" => "logs"})
   scm_provider Chef::Provider::Git # is the default, for svn: Chef::Provider::Subversion
   notifies :restart, "service[uwsgi]"
 end
@@ -75,14 +75,15 @@ python_virtualenv "/var/local/EmpireLogistics/python" do
   action :create
 end
 
-%w{PIL modestmaps simplejson werkzeug tilestache}.each do |package|
+%w{PIL https://github.com/migurski/modestmaps-py/archive/master.tar.gz simplejson werkzeug https://github.com/migurski/TileStache/archive/master.tar.gz datetime}.each do |package|
     python_pip package do
       virtualenv "/var/local/EmpireLogistics/python"
       action :install
-      options '--allow-external'
+      options "-U --allow-all-external --process-dependency-links --allow-unverified ModestMaps --allow-unverified PIL --allow-unverified simplejson --allow-unverified werkzeug --allow-unverified #{package}"
     end
 end
 
+include_recipe "python"
 include_recipe "nginx"
 include_recipe "uwsgi::emperor"
 include_recipe "postgresql"
@@ -99,12 +100,12 @@ include_recipe "postgresql::pg_user"
 include_recipe "postgresql::pg_database"
 include_recipe "postgresql::service"
 include_recipe "nodejs"
-include_recipe "nodejs::npm"
+include_recipe "npm"
 include_recipe "sudo"
 
 node['el']['npm_packages'].each do |package|
-  execute "install_npm_#{package}" do
-    command "npm install -g #{package}"
+  npm_package package do
+    action :install
   end
 end
 

@@ -3,12 +3,14 @@
 
 site 'http://community.opscode.com/api/v1'
 
+cookbook "python"
 cookbook "nginx"
 cookbook "uwsgi"
 cookbook "postgresql",
     :git => "https://github.com/phlipper/chef-postgresql"
 cookbook "nodejs"
-cookbook "npm"
+cookbook "npm",
+    :git => "https://github.com/balbeko/chef-npm"
 cookbook "el",
     :path => "site/el"
 cookbook "sudo"
