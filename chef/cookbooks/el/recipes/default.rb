@@ -72,6 +72,7 @@ python_virtualenv "/var/local/EmpireLogistics/python" do
   interpreter "python2.7"
   owner "el"
   group "el"
+  options "--system-site-packages"
   action :create
 end
 

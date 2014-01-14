@@ -72,10 +72,11 @@ python_virtualenv "/var/local/EmpireLogistics/python" do
   interpreter "python2.7"
   owner "el"
   group "el"
+  options "--system-site-packages"
   action :create
 end
 
-%w{PIL https://github.com/migurski/modestmaps-py/archive/master.tar.gz simplejson werkzeug https://github.com/migurski/TileStache/archive/master.tar.gz datetime}.each do |package|
+%w{PIL https://github.com/migurski/modestmaps-py/archive/master.tar.gz simplejson werkzeug https://github.com/migurski/TileStache/archive/master.tar.gz}.each do |package|
     python_pip package do
       virtualenv "/var/local/EmpireLogistics/python"
       action :install
