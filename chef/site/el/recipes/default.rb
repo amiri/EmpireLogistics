@@ -9,26 +9,6 @@
 #node.override['locale']['lang'] = 'en_US.UTF-8'
 #include_recipe 'locale::default'
 
-deploy_revision "empirelogistics" do
-  repo "http://github.com/amiri/EmpireLogistics.git"
-  deploy_to "/var/local/EmpireLogistics"
-  revision "HEAD" # or "HEAD" or "TAG_for_1.0" or (subversion) "1234"
-  user "el"
-  enable_submodules true
-  environment "production"
-  shallow_clone true
-  keep_releases 10
-  symlink_before_migrate.clear
-  create_dirs_before_symlink.clear
-  purge_before_symlink.clear
-  symlinks.clear
-  symlink_before_migrate nil
-  create_dirs_before_symlink   []
-  purge_before_symlink         []
-  symlinks                      ({"python" => "python", "perl" => "perl", "logs" => "logs"})
-  scm_provider Chef::Provider::Git # is the default, for svn: Chef::Provider::Subversion
-  notifies :restart, "service[uwsgi]"
-end
 
 user "el" do
   supports :manage_home => true
@@ -62,11 +42,32 @@ directory "/var/uwsgi" do
   action :create
 end
 
-%w{uwsgi uwsgi-app-integration-plugins uwsgi-core uwsgi-emperor uwsgi-extra uwsgi-infrastructure-plugins uwsgi-plugins-all}.each do |package|
-  apt_package package do
-    action :install
-  end
+deploy_revision "empirelogistics" do
+  repo "http://github.com/amiri/EmpireLogistics.git"
+  deploy_to "/var/local/EmpireLogistics"
+  revision "HEAD" # or "HEAD" or "TAG_for_1.0" or (subversion) "1234"
+  user "el"
+  enable_submodules true
+  environment "production"
+  shallow_clone true
+  keep_releases 10
+  symlink_before_migrate.clear
+  create_dirs_before_symlink.clear
+  purge_before_symlink.clear
+  symlinks.clear
+  symlink_before_migrate nil
+  create_dirs_before_symlink   []
+  purge_before_symlink         []
+  symlinks                      ({"python" => "python", "perl" => "perl", "logs" => "logs"})
+  scm_provider Chef::Provider::Git # is the default, for svn: Chef::Provider::Subversion
+  #notifies :restart, "service[uwsgi]"
 end
+
+#%w{uwsgi uwsgi-app-integration-plugins uwsgi-core uwsgi-emperor uwsgi-extra uwsgi-infrastructure-plugins uwsgi-plugins-all}.each do |package|
+  #apt_package package do
+    #action :install
+  #end
+#end
 
 python_virtualenv "/var/local/EmpireLogistics/python" do
   interpreter "python2.7"
@@ -76,7 +77,7 @@ python_virtualenv "/var/local/EmpireLogistics/python" do
   action :create
 end
 
-%w{PIL https://github.com/migurski/modestmaps-py/archive/master.tar.gz simplejson werkzeug https://github.com/migurski/TileStache/archive/master.tar.gz}.each do |package|
+%w{uwsgi PIL https://github.com/migurski/modestmaps-py/archive/master.tar.gz simplejson werkzeug https://github.com/migurski/TileStache/archive/master.tar.gz}.each do |package|
     python_pip package do
       virtualenv "/var/local/EmpireLogistics/python"
       action :install

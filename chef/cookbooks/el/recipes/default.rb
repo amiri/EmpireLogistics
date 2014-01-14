@@ -27,7 +27,7 @@ deploy_revision "empirelogistics" do
   purge_before_symlink         []
   symlinks                      ({"python" => "python", "perl" => "perl", "logs" => "logs"})
   scm_provider Chef::Provider::Git # is the default, for svn: Chef::Provider::Subversion
-  notifies :restart, "service[uwsgi]"
+  #notifies :restart, "service[uwsgi]"
 end
 
 user "el" do
@@ -62,11 +62,11 @@ directory "/var/uwsgi" do
   action :create
 end
 
-%w{uwsgi uwsgi-app-integration-plugins uwsgi-core uwsgi-emperor uwsgi-extra uwsgi-infrastructure-plugins uwsgi-plugins-all}.each do |package|
-  apt_package package do
-    action :install
-  end
-end
+#%w{uwsgi uwsgi-app-integration-plugins uwsgi-core uwsgi-emperor uwsgi-extra uwsgi-infrastructure-plugins uwsgi-plugins-all}.each do |package|
+  #apt_package package do
+    #action :install
+  #end
+#end
 
 python_virtualenv "/var/local/EmpireLogistics/python" do
   interpreter "python2.7"
@@ -76,7 +76,7 @@ python_virtualenv "/var/local/EmpireLogistics/python" do
   action :create
 end
 
-%w{PIL https://github.com/migurski/modestmaps-py/archive/master.tar.gz simplejson werkzeug https://github.com/migurski/TileStache/archive/master.tar.gz}.each do |package|
+%w{uwsgi PIL https://github.com/migurski/modestmaps-py/archive/master.tar.gz simplejson werkzeug https://github.com/migurski/TileStache/archive/master.tar.gz}.each do |package|
     python_pip package do
       virtualenv "/var/local/EmpireLogistics/python"
       action :install
