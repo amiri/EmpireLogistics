@@ -68,8 +68,16 @@ end
   end
 end
 
+python_virtualenv "/var/local/EmpireLogistics/python" do
+  interpreter "python2.7"
+  owner "el"
+  group "el"
+  action :create
+end
+
 %w{PIL modestmaps simplejson werkzeug tilestache}.each do |package|
     python_pip package do
+      virtualenv "/var/local/EmpireLogistics/python"
       action :install
       options '--allow-external'
     end
