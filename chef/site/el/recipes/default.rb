@@ -68,6 +68,13 @@ end
   end
 end
 
+%w{PIL modestmaps simplejson werkzeug tilestache}.each do |package|
+    python_pip package do
+      action :install
+      options '--allow-external'
+    end
+end
+
 include_recipe "nginx"
 include_recipe "uwsgi::emperor"
 include_recipe "postgresql"

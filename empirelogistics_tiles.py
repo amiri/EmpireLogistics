@@ -5,4 +5,4 @@ sys.path.append('/usr/lib/python2.7') # to load os
 import os
 
 import TileStache
-application = TileStache.WSGITileServer('/var/local/EmpireLogistics/etc/empirelogistics_tiles.cfg')
+application = TileStache.WSGITileServer('/var/local/EmpireLogistics/current/etc/empirelogistics_tiles.cfg')

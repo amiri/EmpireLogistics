@@ -3,7 +3,7 @@
 use Plack::Builder;
 use Plack::App::File;
 
-my $app = Plack::App::File->new(root => "root/")->to_app;
+my $app = Plack::App::File->new(root => "/var/local/EmpireLogistics/current/root/")->to_app;
 
 $app;
 
