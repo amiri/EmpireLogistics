@@ -60,7 +60,7 @@ deploy_revision "empirelogistics" do
   symlink_before_migrate nil
   create_dirs_before_symlink   []
   purge_before_symlink         []
-  symlinks                     ({"perl" => "perl", "python" => "python"})
+  symlinks                     nil
   scm_provider Chef::Provider::Git
   notifies :restart, "service[uwsgi]"
 end
