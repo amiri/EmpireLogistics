@@ -5,10 +5,6 @@
 # Copyright 2014, YOUR_COMPANY_NAME
 #
 # All rights reserved - Do Not Redistribute
-#
-#node.override['locale']['lang'] = 'en_US.UTF-8'
-#include_recipe 'locale::default'
-
 
 user "el" do
   supports :manage_home => true
@@ -51,7 +47,7 @@ end
 deploy_revision "empirelogistics" do
   repo "http://github.com/amiri/EmpireLogistics.git"
   deploy_to "/var/local/EmpireLogistics"
-  revision "HEAD" # or "HEAD" or "TAG_for_1.0" or (subversion) "1234"
+  revision "HEAD"
   user "el"
   enable_submodules true
   environment "production"
@@ -64,10 +60,32 @@ deploy_revision "empirelogistics" do
   symlink_before_migrate nil
   create_dirs_before_symlink   []
   purge_before_symlink         []
-  symlinks                      ({"python" => "python", "perl" => "perl", "logs" => "logs"})
-  scm_provider Chef::Provider::Git # is the default, for svn: Chef::Provider::Subversion
+  symlinks                     nil
+  scm_provider Chef::Provider::Git
   notifies :restart, "service[uwsgi]"
 end
+
+#include_recipe "perlbrew"
+
+#perlbrew_perl "5.18.2" do
+  #version 'perl-5.18.2'
+  #action :install
+#end
+
+#perlbrew_lib "perl-5.18.2@extlib" do
+  #action :create
+#end
+
+#include_recipe "carton"
+
+#carton_app "hello-world" do
+  #perlbrew node['hello-world']['perl_version']
+  #command "starman -p #{node['hello-world']['port']} app.psgi"
+  #cwd node['hello-world']['deploy_dir']
+  #user node['hello-world']['user']
+  #group node['hello-world']['group']
+#end
+
 
 include_recipe "python"
 
@@ -84,11 +102,11 @@ end
   #action :create
 #end
 
-%w{PIL https://github.com/migurski/modestmaps-py/archive/master.tar.gz simplejson werkzeug https://github.com/migurski/TileStache/archive/master.tar.gz}.each do |package|
+%w{PIL Shapely https://github.com/migurski/modestmaps-py/archive/master.tar.gz simplejson werkzeug https://github.com/migurski/TileStache/archive/master.tar.gz}.each do |package|
     python_pip package do
       virtualenv "/var/local/EmpireLogistics/python"
       action :install
-      options "-U --allow-all-external --process-dependency-links --allow-unverified ModestMaps --allow-unverified PIL --allow-unverified simplejson --allow-unverified werkzeug --allow-unverified #{package}"
+      options "-U --allow-all-external --process-dependency-links --allow-unverified PIL --allow-unverified Shapely --allow-unverified ModestMaps --allow-unverified simplejson --allow-unverified werkzeug --allow-unverified #{package}"
     end
 end
 

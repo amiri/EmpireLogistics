@@ -1,0 +1,32 @@
+{
+  "name": "perlbrew",
+  "providing": {
+  },
+  "description": "Installs/Configures perlbrew",
+  "groupings": {
+  },
+  "suggestions": {
+  },
+  "attributes": {
+  },
+  "maintainer_email": "dagolden@cpan.org",
+  "maintainer": "David Golden",
+  "version": "0.1.0",
+  "conflicting": {
+  },
+  "replacing": {
+  },
+  "license": "Apache 2.0",
+  "long_description": "Description\n===========\n\nInstalls perlbrew and provides resource/provider types for managing\nperls with perlbrew.\n\nTo date, this cookbook has only been designed and tested on the\nUbuntu and Debian platforms.\n\nRequirements\n============\n\nPerlbrew components are downloaded from the web and requires a system-installed\nperl to run.  Perlbrew managed perls are built from source and require a\nstandard compiler toolchain. The following packages are required (and will be\ninstalled if missing)\n\n* curl\n* perl\n* build-essential\n\nAttributes\n==========\n\n* `node['perlbrew']['perlbrew_root'] = \"/opt/perlbrew\"` - Sets the `PERLBREW_ROOT` environment variable\n* `node['perlbrew']['perls'] = []` - An array of perls to install, e.g. `[\"perl-5.14.2\", \"perl-5.12.3\"]`\n* `node['perlbrew']['install_options'] = ''` - A string of command line options for `perlbrew install`, e.g. `-D usethreads` for building all perls with threads\n\nRecipes\n=======\n\nperlbrew\n----------\n\nInstalls/updates perlbrew along with patchperl and cpanm.  This is required for\nuse of the LWRP.  Optionally installs perls specified in the\n`node['perlbrew']['perls']` attribute list.\n\nResources/Providers\n===================\n\nperlbrew_perl\n-------------\n\nThis LWRP installs perls into `node['perlbrew']['perlbrew_root']` using\nperlbrew.\n\n    # option 1\n    perlbrew_perl perl-VERSION do\n      action :install\n    end\n\n    # option 2\n    perlbrew_perl NICKNAME do\n      version perl-VERSION\n      action :install\n    end\n\nExample:\n\n    perlbrew_perl '5.14.2' do\n      version 'perl-5.14.2'\n      action :install\n    end\n\nThis is equivalent to `perlbrew install perl-5.14.2 --as 5.14.2`.\n\nActions:\n\n* :install - install the specified perl (default action)\n* :remove - uninstall the specified perl\n\nAttributes:\n\n* :version - the version of perl to install, in the \"perl-X.Y.Z\" format that perlbrew expects\nThis is based on the perlbrew_perl name if not provided.\n* :install_options - overrides the default install options on the node. (Not recommended.)\n\nperlbrew_lib\n------------\n\nThis LWRP creates a perlbrew-based local::lib library for a particular perlbrew\nperl.\n\nExample:\n\n    perlbrew_lib 'perl-5.14.2@mylib' do\n      action :create\n    end\n\nThis is equivalent to `perlbrew lib create perl-5.14.2@mylib`\n\nAction:\n\n* :create - creates the local::lib (default action)\n* :delete - removes the local::lib\n\nAttributes:\n\n* :perlbrew - the perlbrew perl to attach the library to (e.g. 'perl-5.14.2').\nIt will be derived from the perlbrew_lib name if not provided.  The\nperlbrew perl will be installed using the perlbrew_perl LRWP if it has not already\nbeen installed.\n\nperlbrew_cpanm\n--------------\n\nThis LWRP installs CPAN modules to a given perlbrew perl or local::lib using\ncpanm (App::cpanminus).\n\nExample:\n\n    perlbrew_cpanm 'Modern Perl modules' do\n      perlbrew 'perl-5.14.2@mylib'\n      modules ['Modern::Perl', 'Task::Kensho']\n    end\n\nThis is equivalent to\n\n    $ perlbrew use perl-5.14.2@mylib\n    $ cpanm Modern::Perl Task::Kensho\n\nNote that the resource name \"Modern Perl modules\" will be associated with a set of\nmodules only once.  The name should be unique for any particular chef run.\n\nAction:\n\n* :install - install the list of modules (default action) \n\nAttributes:\n\n* :perlbrew - the perlbrew perl (and optional library) to use for installing\nmodules (REQUIRED)\n* :modules - an array of module names to pass to cpanm.  Any legal input\nto cpanm is allowed.\n\nperlbrew_run\n------------\n\nThis LWRP runs a bash command in the context of a given perlbrew perl or local::lib.\n\nExample 1:\n\n    perlbrew_run 'Perl hello world' do\n      perlbrew 'perl-5.14.2@mylib'\n      command \"perl -wE 'say q{Hello World}'\"\n    end\n\nThis is equivalent to\n\n    $ perlbrew use perl-5.14.2@mylib\n    $ perl -wE 'say q{Hello World}'\n\nExample 2:\n\n    perlbrew_run 'hello-world.pl' do\n      perlbrew 'perl-5.14.2@mylib'\n    end\n\nThis is equivalent to\n\n    $ perlbrew use perl-5.14.2@mylib\n    $ hello-world.pl\n\nNote that the resource name will only be executed once for a given chef run.\n\nAction:\n\n* :run - runs the command (default action) \n\nAttributes:\n\n* :perlbrew - the perlbrew perl (and optional library) to be enabled prior\nto running the command (REQUIRED)\n* :command - the bash command to run; taken from the resource name if not\nprovided\n* :cwd - directory to enter prior to running the command, just like the `bash`\nresource attribute\n* :environment - hash of environment variables to set prior to running the\ncommand, just like the `bash` resource attribute\n\nUsage\n=====\n\nIf you wish to use the LWRP, be sure to include the `perlbrew` recipe, which\nensures that perlbrew is ready for use.\n\n",
+  "recipes": {
+    "perlbrew::default": "Installs/updates perlbrew"
+  },
+  "recommendations": {
+  },
+  "platforms": {
+    "ubuntu": ">= 0.0.0",
+    "debian": ">= 0.0.0"
+  },
+  "dependencies": {
+  }
+}
