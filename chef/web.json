@@ -4,12 +4,12 @@
     "recipe[el]"
   ],
   "python": {
-    "prefix_dir": "/var/local/EmpireLogistics/current/python",
+    "prefix_dir": "/var/local/EmpireLogistics/python",
     "install_method": "source",
     "configure_options": ["--enable-unicode=ucs2"]
   },
   "perlbrew": {
-    "perlbrew_root": "/var/local/EmpireLogistics/current/perl",
+    "perlbrew_root": "/var/local/EmpireLogistics/perl",
     "perls": ["perl-5.18.2"],
     "install_options": "-Dusethreads",
     "self_upgrade": true
