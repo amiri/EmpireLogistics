@@ -4,7 +4,7 @@
     "recipe[el]"
   ],
   "python": {
-    "prefix_dir": "/var/local/EmpireLogistics/python",
+    "prefix_dir": "/var/local/EmpireLogistics/current/python",
     "install_method": "source",
     "configure_options": ["--enable-unicode=ucs2"]
   },
