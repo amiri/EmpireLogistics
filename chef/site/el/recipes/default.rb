@@ -95,11 +95,11 @@ end
 include_recipe "python"
 
 execute "chown-python" do
-  command "chown -Rf el:el /var/local/EmpireLogistics/python"
+  command "chown -Rf el:el /var/local/EmpireLogistics/shared/python"
   action :run
 end
 
-#python_virtualenv "/var/local/EmpireLogistics/python" do
+#python_virtualenv "/var/local/EmpireLogistics/shared/python" do
   #interpreter "python2.7"
   #owner "el"
   #group "el"
@@ -109,14 +109,14 @@ end
 
 %w{PIL Shapely https://github.com/migurski/modestmaps-py/archive/master.tar.gz simplejson werkzeug https://github.com/migurski/TileStache/archive/master.tar.gz}.each do |package|
     python_pip package do
-      virtualenv "/var/local/EmpireLogistics/python"
+      virtualenv "/var/local/EmpireLogistics/shared/python"
       action :install
       options "-U --allow-all-external --process-dependency-links --allow-unverified PIL --allow-unverified Shapely --allow-unverified ModestMaps --allow-unverified simplejson --allow-unverified werkzeug --allow-unverified #{package}"
     end
 end
 
 #execute "chown-python" do
-  #command "chown -Rf el:el /var/local/EmpireLogistics/python"
+  #command "chown -Rf el:el /var/local/EmpireLogistics/shared/python"
   #action :run
 #end
 
