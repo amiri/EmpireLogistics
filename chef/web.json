@@ -6,7 +6,7 @@
   "python": {
     "prefix_dir": "/var/local/EmpireLogistics/python",
     "install_method": "source",
-    "configure_options": ["--enable-unicode"]
+    "configure_options": ["--enable-unicode=ucs2"]
   },
   "perlbrew": {
     "perlbrew_root": "/var/local/EmpireLogistics/perl",

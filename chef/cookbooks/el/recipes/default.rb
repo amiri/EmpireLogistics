@@ -76,6 +76,8 @@ end
   #action :create
 #end
 
+# execute script to install extlib
+
 #include_recipe "carton"
 
 #carton_app "hello-world" do
@@ -86,6 +88,9 @@ end
   #group node['hello-world']['group']
 #end
 
+execute "python_dev_packages" do
+  command "sudo apt-get -y build-dep python2.7 python-stdlib-extensions python-bsddb3"
+end
 
 include_recipe "python"
 
