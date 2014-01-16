@@ -53,7 +53,8 @@
       "List::MoreUtils",
       "Geo::Coder::Google",
       "Try::Tiny",
-      "Text::CSV_XS"
+      "Text::CSV_XS",
+      "local::lib"
     ],
     "perl_version": "perl-5.18.2",
     "deploy_dir": "/var/local/perl",

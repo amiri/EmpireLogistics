@@ -10,8 +10,8 @@ use Plack::App::File;
 
 my $path = `which perl`;
 warn "Perl interp path: $path";
+warn map { "$_ " } @INC;
 
-my $app = Plack::App::File->new(root => "/var/local/EmpireLogistics/current/root/")->to_app;
+my $app = Plack::App::File->new(root => "./root/")->to_app;
 
 $app;
-
