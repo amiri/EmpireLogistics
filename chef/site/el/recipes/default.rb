@@ -78,7 +78,7 @@ include_recipe "perlbrew"
 
 perlbrew_cpanm "el" do
   perlbrew "perl-5.18.2"
-  modules "carton"
+  modules ["carton","local::lib"]
 end
 
 perlbrew_run 'install_app_local_lib' do
