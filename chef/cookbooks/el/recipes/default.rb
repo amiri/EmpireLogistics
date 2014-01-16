@@ -121,7 +121,7 @@ end
 
 node["el"]["pip_packages"].each do |package|
     python_pip package do
-      virtualenv "/var/local/EmpireLogistics/current/python"
+      virtualenv "/var/local/python"
       action :install
       options "-U --allow-all-external --process-dependency-links --allow-unverified psycopg2 --allow-unverified PIL --allow-unverified Shapely --allow-unverified ModestMaps --allow-unverified simplejson --allow-unverified werkzeug --allow-unverified #{package}"
     end

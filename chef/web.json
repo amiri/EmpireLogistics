@@ -56,7 +56,7 @@
       "Text::CSV_XS"
     ],
     "perl_version": "perl-5.18.2",
-    "deploy_dir": "/var/local/EmpireLogistics/current/perl",
+    "deploy_dir": "/var/local/perl",
     "user": "el",
     "group": "el"
   },
@@ -169,15 +169,15 @@
     "recipe[el]"
   ],
   "python": {
-    "prefix_dir": "/var/local/EmpireLogistics/current/python",
+    "prefix_dir": "/var/local/python",
     "install_method": "source",
     "configure_options": [
       "--enable-unicode=ucs4",
-      "--prefix=/var/local/EmpireLogistics/current/python"
+      "--prefix=/var/local/python"
     ]
   },
   "perlbrew": {
-    "perlbrew_root": "/var/local/EmpireLogistics/current/perl",
+    "perlbrew_root": "/var/local/perl",
     "perls": [
       "perl-5.18.2"
     ],

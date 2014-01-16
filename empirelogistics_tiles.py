@@ -1,9 +1,8 @@
 import sys
-sys.path.append('/var/local/EmpireLogistics/current/python/lib/python2.7') # cautionary to load django
-sys.path.append('/var/local/EmpireLogistics/current/python/lib/python2.7/site-packages') # to load django
-sys.path.append('/var/local/EmpireLogistics/current/python/lib/python2.7/dist-packages') # to load django
-sys.path.append('/var/local/EmpireLogistics/current/python/lib/python2.7/distutils') # to load django
-sys.path.append('/usr/lib/python2.7') # to load os
+sys.path.append('/var/local/python/lib/python2.7')
+sys.path.append('/var/local/python/lib/python2.7/site-packages')
+sys.path.append('/var/local/python/lib/python2.7/dist-packages')
+sys.path.append('/var/local/python/lib/python2.7/distutils')
 import os
 
 import TileStache
