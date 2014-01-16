@@ -1,10 +1,8 @@
-gz
 geo
 png
 shp
 topo
 node_modules
-*.zip
 ne_10*
 cta-sup
 na-rail-*.geojson
@@ -15,3 +13,4 @@ na-rail-*.json
 /chef/tmp
 /chef-cache
 chef-cache
+/local

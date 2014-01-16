@@ -54,7 +54,11 @@
       "Geo::Coder::Google",
       "Try::Tiny",
       "Text::CSV_XS"
-    ]
+    ],
+    "perl_version": "perl-5.18.2",
+    "deploy_dir": "/var/local/EmpireLogistics/current/perl",
+    "user": "el",
+    "group": "el"
   },
   "postgresql": {
     "pg_hba": [

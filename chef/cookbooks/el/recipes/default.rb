@@ -49,7 +49,7 @@ deploy_revision "empirelogistics" do
   deploy_to "/var/local/EmpireLogistics"
   revision "HEAD"
   user "el"
-  enable_submodules true
+  enable_submodules false
   environment "production"
   shallow_clone true
   keep_releases 10
@@ -60,7 +60,7 @@ deploy_revision "empirelogistics" do
   symlink_before_migrate nil
   create_dirs_before_symlink   []
   purge_before_symlink         []
-  symlinks                     ({"logs"=>"logs"}) 
+  symlinks                     ({"logs"=>"logs"})
   scm_provider Chef::Provider::Git
   notifies :restart, "service[uwsgi]"
 end

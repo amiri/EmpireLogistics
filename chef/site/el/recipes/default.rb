@@ -76,20 +76,33 @@ perlbrew_lib "perl-5.18.2@extlib" do
   action :create
 end
 
+#perlbrew_cpanm "el" do
+  #perlbrew "perl-5.18.2@extlib"
+  #modules "carton"
+#end
+
+#execute "el_perl_env" do
+  #user el
+  #command "echo 'source \"/var/local/EmpireLogistics/current/perl/etc/bashrc\"' >> /home/el/.bashrc && source /home/el/.bashrc && perlbrew switch perl-5.18.2"
+  #command
+#end
+
 # execute script to install extlib
 
 include_recipe "carton"
 
-#carton_app "hello-world" do
-  #perlbrew node['hello-world']['perl_version']
-  #command "starman -p #{node['hello-world']['port']} app.psgi"
-  #cwd node['hello-world']['deploy_dir']
-  #user node['hello-world']['user']
-  #group node['hello-world']['group']
-#end
+carton_app "el" do
+  perlbrew node['el']['perl_version']
+  cwd node['el']['deploy_dir']
+  user node['el']['user']
+  group node['el']['group']
+end
+
+carton_app "el" do
+  action :enable
+end
 
 execute "python_dev_packages" do
-  #command "sudo apt-get -y build-dep python2.7 python-stdlib-extensions python-bsddb3"
   command "sudo apt-get -y build-dep python2.7 python-stdlib-extensions"
 end
 
@@ -115,6 +128,7 @@ include_recipe "npm"
 include_recipe "sudo"
 
 include_recipe "perl"
+
 node["el"]["system_perl_packages"].each do |package|
   cpan_module package
 end

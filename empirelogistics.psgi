@@ -1,5 +1,8 @@
 #!/usr/bin/env perl
 
+my $path = `which perl`;
+warn "Perl interp path: $path";
+
 use Plack::Builder;
 use Plack::App::File;
 
