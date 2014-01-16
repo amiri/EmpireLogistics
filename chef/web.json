@@ -181,8 +181,9 @@
     "perls": [
       "perl-5.18.2"
     ],
-    "install_options": "-Dusethreads",
-    "self_upgrade": true
+    "install_options": "--thread --notest --noman -j 4 --64all --multi",
+    "self_upgrade": true,
+    "cpanm_options": "--notest"
   },
   "carton": {
     "perlbrew": "perl-5.18.2"

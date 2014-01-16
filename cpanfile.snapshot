@@ -896,6 +896,47 @@ DISTRIBUTIONS
       File::Spec 0
       strict 0
       warnings 0
+  ExtUtils-MakeMaker-6.86
+    pathname: B/BI/BINGOS/ExtUtils-MakeMaker-6.86.tar.gz
+    provides:
+      DynaLoader 6.86
+      ExtUtils::Command::MM 6.86
+      ExtUtils::Liblist 6.86
+      ExtUtils::Liblist::Kid 6.86
+      ExtUtils::MM 6.86
+      ExtUtils::MM_AIX 6.86
+      ExtUtils::MM_Any 6.86
+      ExtUtils::MM_BeOS 6.86
+      ExtUtils::MM_Cygwin 6.86
+      ExtUtils::MM_DOS 6.86
+      ExtUtils::MM_Darwin 6.86
+      ExtUtils::MM_MacOS 6.86
+      ExtUtils::MM_NW5 6.86
+      ExtUtils::MM_OS2 6.86
+      ExtUtils::MM_QNX 6.86
+      ExtUtils::MM_UWIN 6.86
+      ExtUtils::MM_Unix 6.86
+      ExtUtils::MM_VMS 6.86
+      ExtUtils::MM_VOS 6.86
+      ExtUtils::MM_Win32 6.86
+      ExtUtils::MM_Win95 6.86
+      ExtUtils::MY 6.86
+      ExtUtils::MakeMaker 6.86
+      ExtUtils::MakeMaker::Config 6.86
+      ExtUtils::MakeMaker::_version 6.86
+      ExtUtils::Mkbootstrap 6.86
+      ExtUtils::Mksymlists 6.86
+      ExtUtils::testlib 6.86
+      MM 6.86
+      MY 6.86
+      in 6.86
+    requirements:
+      Data::Dumper 0
+      DirHandle 0
+      File::Basename 0
+      File::Spec 0.8
+      Pod::Man 0
+      perl 5.006
   File-Find-Rule-0.33
     pathname: R/RC/RCLAMP/File-Find-Rule-0.33.tar.gz
     provides:
@@ -3184,6 +3225,15 @@ DISTRIBUTIONS
       URI::Escape 0
       WWW::RobotRules 6
       perl 5.008001
+  local-lib-2.000004
+    pathname: H/HA/HAARG/local-lib-2.000004.tar.gz
+    provides:
+      lib::core::only undef
+      local::lib 2.000004
+    requirements:
+      ExtUtils::Install 1.43
+      ExtUtils::MakeMaker 6.74
+      Module::Build 0.36
   multidimensional-0.011
     pathname: I/IL/ILMARI/multidimensional-0.011.tar.gz
     provides:

@@ -1,3 +1,4 @@
+requires "local::lib";
 requires "Data::Printer";
 requires "DBI";
 requires "DBD::Pg";
