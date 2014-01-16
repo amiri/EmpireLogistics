@@ -57,7 +57,7 @@ deploy_revision "empirelogistics" do
   create_dirs_before_symlink.clear
   purge_before_symlink.clear
   symlinks.clear
-  symlink_before_migrate ({ "logs" => "logs" }) 
+  symlink_before_migrate       nil
   create_dirs_before_symlink   []
   purge_before_symlink         []
   symlinks                     nil
@@ -78,7 +78,7 @@ include_recipe "perlbrew"
 
 perlbrew_cpanm "el" do
   perlbrew "perl-5.18.2"
-  modules ["carton","local::lib"]
+  modules ["Carton","local::lib"]
 end
 
 perlbrew_run 'install_app_local_lib' do

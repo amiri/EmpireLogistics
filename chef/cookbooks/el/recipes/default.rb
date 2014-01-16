@@ -57,29 +57,35 @@ deploy_revision "empirelogistics" do
   create_dirs_before_symlink.clear
   purge_before_symlink.clear
   symlinks.clear
-  symlink_before_migrate nil
+  symlink_before_migrate       nil
   create_dirs_before_symlink   []
   purge_before_symlink         []
-  symlinks                     ({"logs"=>"logs"})
+  symlinks                     nil
   scm_provider Chef::Provider::Git
   notifies :restart, "service[uwsgi]"
 end
 
 include_recipe "perlbrew"
 
-perlbrew_perl "5.18.2" do
-  version 'perl-5.18.2'
-  action :install
-end
-
-perlbrew_lib "perl-5.18.2@extlib" do
-  action :create
-end
-
-#perlbrew_cpanm "el" do
-  #perlbrew "perl-5.18.2@extlib"
-  #modules "carton"
+#perlbrew_perl "5.18.2" do
+  #version 'perl-5.18.2'
+  #action :install
 #end
+
+#perlbrew_lib "perl-5.18.2@bootstrap" do
+  #action :create
+#end
+
+perlbrew_cpanm "el" do
+  perlbrew "perl-5.18.2"
+  modules ["Carton","local::lib"]
+end
+
+perlbrew_run 'install_app_local_lib' do
+  perlbrew 'perl-5.18.2'
+  cwd "/var/local/EmpireLogistics/current/"
+  command "carton install --deployment"
+end
 
 #execute "el_perl_env" do
   #user el
@@ -89,18 +95,18 @@ end
 
 # execute script to install extlib
 
-include_recipe "carton"
+#include_recipe "carton"
 
-carton_app "el" do
-  perlbrew node['el']['perl_version']
-  cwd node['el']['deploy_dir']
-  user node['el']['user']
-  group node['el']['group']
-end
+#carton_app "el" do
+  #perlbrew node['el']['perl_version']
+  #cwd node['el']['deploy_dir']
+  #user node['el']['user']
+  #group node['el']['group']
+#end
 
-carton_app "el" do
-  action :enable
-end
+#carton_app "el" do
+  #action :enable
+#end
 
 execute "python_dev_packages" do
   command "sudo apt-get -y build-dep python2.7 python-stdlib-extensions"
