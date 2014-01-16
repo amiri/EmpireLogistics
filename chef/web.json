@@ -1,48 +1,62 @@
 {
-  "run_list": [
-    "recipe[apt]",
-    "recipe[el]"
-  ],
-  "python": {
-    "prefix_dir": "/var/local/EmpireLogistics/current/python",
-    "install_method": "source",
-    "configure_options": ["--enable-unicode=ucs2"]
+  "authorization": {
+    "sudo": {
+      "passwordless": "true",
+      "users": [
+        "el",
+        "amiri"
+      ],
+      "groups": [
+        "admin",
+        "sysadmin",
+        "vagrant"
+      ]
+    }
   },
-  "perlbrew": {
-    "perlbrew_root": "/var/local/EmpireLogistics/perl",
-    "perls": ["perl-5.18.2"],
-    "install_options": "-Dusethreads",
-    "self_upgrade": true
-  },
-  "carton": {
-    "perlbrew": "perl-5.18.2"
-  },
-  "postgis": {
-    "version": "2.1"
+  "el": {
+    "pip_packages": [
+      "psycopg2",
+      "PIL",
+      "Shapely",
+      "https://github.com/migurski/modestmaps-py/archive/master.tar.gz",
+      "simplejson",
+      "werkzeug",
+      "https://github.com/migurski/TileStache/archive/master.tar.gz"
+    ],
+    "npm_packages": [
+      "topojson"
+    ],
+    "db_password": "3mp1r3",
+    "apt_packages": [
+      "uwsgi",
+      "uwsgi-app-integration-plugins",
+      "uwsgi-core",
+      "uwsgi-emperor",
+      "uwsgi-extra",
+      "uwsgi-infrastructure-plugins",
+      "uwsgi-plugins-all",
+      "libgeos-dev",
+      "libgeos++-dev",
+      "gdal-bin",
+      "libgdal-dev",
+      "libgdal1",
+      "libgdal1-dev",
+      "dans-gdal-scripts"
+    ],
+    "system_perl_packages": [
+      "IO::All",
+      "Data::Printer",
+      "JSON::XS",
+      "Web::Scraper",
+      "DBI",
+      "DBD::Pg",
+      "List::MoreUtils",
+      "Geo::Coder::Google",
+      "Try::Tiny",
+      "Text::CSV_XS"
+    ]
   },
   "postgresql": {
-    "external_pid_file": "/var/run/postgresql/9.3-main.pid",
-    "ident_file": "/etc/postgresql/9.3/main/pg_ident.conf",
-    "hba_file": "/etc/postgresql/9.3/main/pg_hba.conf",
-    "users": [
-      {
-        "login": true,
-        "createdb": true,
-        "superuser": true,
-        "password": "24d919ec880e72174eb3e4ceb28a827b",
-        "username": "postgres"
-      },
-      {
-        "replication": true,
-        "login": true,
-        "createdb": true,
-        "password": "3mp1r3",
-        "username": "el"
-      }
-    ],
-    "ssl_cert_file": "/etc/ssl/certs/ssl-cert-snakeoil.pem",
-    "ssl_key_file": "/etc/ssl/private/ssl-cert-snakeoil.key",
-    "version": "9.3",
     "pg_hba": [
       {
         "method": "trust",
@@ -87,6 +101,10 @@
         "method": "trust"
       }
     ],
+    "version": "9.3",
+    "ssl_key_file": "/etc/ssl/private/ssl-cert-snakeoil.key",
+    "data_directory": "/var/lib/postgresql/9.3/main",
+    "apt_distribution": "precise",
     "databases": [
       {
         "extensions": [
@@ -101,28 +119,40 @@
         "name": "empirelogistics"
       }
     ],
-    "apt_distribution": "precise",
-    "data_directory": "/var/lib/postgresql/9.3/main"
-  },
-  "el": {
-    "npm_packages": [
-      "topojson"
+    "external_pid_file": "/var/run/postgresql/9.3-main.pid",
+    "ident_file": "/etc/postgresql/9.3/main/pg_ident.conf",
+    "hba_file": "/etc/postgresql/9.3/main/pg_hba.conf",
+    "users": [
+      {
+        "login": true,
+        "createdb": true,
+        "superuser": true,
+        "password": "24d919ec880e72174eb3e4ceb28a827b",
+        "username": "postgres"
+      },
+      {
+        "replication": true,
+        "login": true,
+        "createdb": true,
+        "password": "3mp1r3",
+        "username": "el"
+      }
     ],
-    "db_password": "3mp1r3"
+    "ssl_cert_file": "/etc/ssl/certs/ssl-cert-snakeoil.pem"
   },
-  "authorization": {
-    "sudo": {
-      "passwordless": "true",
-      "users": [
-        "el",
-        "amiri"
-      ],
-      "groups": [
-        "admin",
-        "sysadmin",
-        "vagrant"
-      ]
-    }
+  "postgis": {
+    "version": "2.1"
+  },
+  "npm": {
+    "version": "1.3.23"
+  },
+  "nodejs": {
+    "install_method": "package"
+  },
+  "nginx": {
+    "gzip": "on",
+    "group": "el",
+    "user": "www-data"
   },
   "uwsgi": {
     "emperor": {
@@ -130,15 +160,27 @@
       "conf_dir": "/var/local/EmpireLogistics/current/etc/uwsgi_emperor"
     }
   },
-  "nginx": {
-    "gzip": "on",
-    "group": "el",
-    "user": "www-data"
+  "run_list": [
+    "recipe[apt]",
+    "recipe[el]"
+  ],
+  "python": {
+    "prefix_dir": "/var/local/EmpireLogistics/current/python",
+    "install_method": "source",
+    "configure_options": [
+      "--enable-unicode=ucs4",
+      "--prefix=/var/local/EmpireLogistics/current/python"
+    ]
   },
-  "nodejs": {
-    "install_method": "package"
+  "perlbrew": {
+    "perlbrew_root": "/var/local/EmpireLogistics/current/perl",
+    "perls": [
+      "perl-5.18.2"
+    ],
+    "install_options": "-Dusethreads",
+    "self_upgrade": true
   },
-  "npm": {
-    "version": "1.3.23"
+  "carton": {
+    "perlbrew": "perl-5.18.2"
   }
 }

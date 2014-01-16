@@ -1,0 +1,34 @@
+{
+  "groupings": {
+  },
+  "attributes": {
+  },
+  "version": "0.1.0",
+  "suggestions": {
+  },
+  "maintainer_email": "dagolden@cpan.org",
+  "replacing": {
+  },
+  "license": "Apache 2.0",
+  "maintainer": "David Golden",
+  "long_description": "Description\n===========\n\nTo date, this cookbook has only been designed and tested on the\nUbuntu and Debian platforms.\n\nRequirements\n============\n\nThe carton cookbook depends on 'perlbrew' and on a development version of\nthe 'runit' cookbook.\n\nThe 'perlbrew' cookbook is available from the\n[Opscode Community site](http://community.opscode.com/cookbooks/perlbrew) or from\nthe [perl-chef](http://github.com/dagolden/perl-chef) git repository.\n\nThe required development version of 'runit' uses a LWRP instead of a definition\nfile.  See [CHEF-154](http://tickets.opscode.com/browse/CHEF-154).  This\ncookbook requires the CHEF-154 branch of my clone of the Opscode runit repository,\navailable here: [https://github.com/dagolden/runit/tree/CHEF-154](https://github.com/dagolden/runit/tree/CHEF-154).\nHopefully, these changes will be merged upstream soon.\n\nAttributes\n==========\n\n* `node['carton']['perlbrew'] = 'perl-5.14.2'` - Sets default perl for carton apps if not specified by user\n\nRecipes\n=======\n\ncarton\n----------\n\nLoads the 'perlbrew' and 'runit' recipes to ensure those LWRPs are ready for use.  This *must* be loaded\nbefore using the 'carton_app' LWRP.\n\nResources/Providers\n===================\n\ncarton_app\n-------------\n\nThis LWRP sets up a [carton](https://metacpan.org/module/carton) application as\na runit service and passes through runit commands to start/stop or otherwise\ncontrol the service.\n\nExample:\n\n    carton_app \"hello-world\" do\n      perlbrew node['hello-world']['perl_version']\n      command \"starman -p #{node['hello-world']['port']} app.psgi\"\n      cwd node['hello-world']['deploy_dir']\n      user node['hello-world']['user']\n      group node['hello-world']['group']\n    end\n\n    carton_app \"hello-world\" do\n      action :start\n    end\n\nThis installs all dependencies of a carton app in a deployment directory using\na particular perl, sets up a runit service using the given command, and\nstarts the service.\n\nActions:\n\n* :enable - ensure carton dependencies are installed and set up the runit service (default action)\n* :disable - disables the runit service\n* :start - start the service\n* :stop - stop the service\n* :restart - restart the service\n\nAttributes:\n\n* :perlbrew - name of a perlbrew perl to use to run the application. This\nwill be installed using the perlbrew LWRP if not already availble\n* :command - shell command to launch the application.  This must launch the\napplication in the foreground; runit will ensure it is properly daemonized\n* :cwd - directory containing the application.  The service will also be\nlaunched in this directory (via \"carton exec -I lib -- $command\").\n* :user - user under which the service will run\n* :group - group under which the service will run\n* :environment - a hash of environment variables that will be set prior\nto running the service\n\nUsage\n=====\n\nIf you wish to use the LWRP, be sure to include the `carton` recipe, which\nensures that carton is ready for use.\n\n",
+  "conflicting": {
+  },
+  "description": "Installs/Configures carton and provides a LWP",
+  "dependencies": {
+    "perlbrew": ">= 0.1.0",
+    "runit": ">= 0.15.0"
+  },
+  "name": "carton",
+  "recipes": {
+    "carton::default": "Installs carton LWRP dependencies"
+  },
+  "providing": {
+  },
+  "recommendations": {
+  },
+  "platforms": {
+    "debian": ">= 0.0.0",
+    "ubuntu": ">= 0.0.0"
+  }
+}

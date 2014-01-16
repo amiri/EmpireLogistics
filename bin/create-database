@@ -20,11 +20,13 @@ DB=empirelogistics
 #echo "Creating $DB"
 #createdb $DB
 echo "Enabling PostGIS"
-psql -q -d $DB -c "create extension if not exists postgis"
-psql -q -d $DB -c "create extension if not exists postgis_topology"
-psql -q -d $DB -c "create or replace language plpgsql"
+psql -U postgres -q -d $DB -c "create extension if not exists postgis"
+psql -U postgres -q -d $DB -c "create extension if not exists postgis_topology"
+psql -U postgres -q -d $DB -c "create or replace language plpgsql"
 echo "Granting privileges to el"
 psql -U postgres -q -c "grant all privileges on database $DB to el"
+psql -U postgres -q -c "alter database $DB owner to el"
+for tbl in `psql -U postgres -qAt -c "select tablename from pg_tables where schemaname = 'public';" $DB` ; do  psql -U postgres -q -c "alter table $tbl owner to el" $DB ; done
 echo "Importing rail_ownership schema"
 psql -U el -q -d $DB < etc/schema/rail_ownership.sql
 echo "Importing state schema"

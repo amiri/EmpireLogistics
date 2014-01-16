@@ -50,6 +50,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #
   #   # Use VBoxManage to customize the VM. For example to change memory:
   #   vb.customize ["modifyvm", :id, "--memory", "1024"]
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--memory", "9216"]
+  end
   # end
   #
   # View the documentation for the provider you're using for more

@@ -3,4 +3,4 @@
 cd chef
 librarian-chef install --verbose
 cd ..
-sudo chef-solo -c chef/solo.rb -j chef/web.json
+sudo chef-solo --log_level debug -c chef/solo.rb -j chef/web.json

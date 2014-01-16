@@ -4,6 +4,7 @@
 site 'http://community.opscode.com/api/v1'
 
 cookbook "python"
+cookbook "perl"
 cookbook "perlbrew"
 cookbook "carton"
 cookbook "nginx"
