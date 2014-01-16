@@ -12,6 +12,6 @@ my $path = `which perl`;
 warn "Perl interp path: $path";
 warn map { "$_ " } @INC;
 
-my $app = Plack::App::File->new(root => "./root/")->to_app;
+my $app = Plack::App::File->new(root => catpath((splitpath(abs_path $0))[0, 1], './root'))->to_app;
 
 $app;
