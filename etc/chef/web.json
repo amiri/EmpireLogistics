@@ -155,9 +155,18 @@
     "install_method": "package"
   },
   "nginx": {
+    "source":{"version": "1.4.4","prefix":"/usr/local/nginx", "conf_path":"/usr/local/nginx/nginx.conf","modules":[
+    "nginx::http_gzip_static_module",
+    "nginx::http_ssl_module",
+    "nginx::http_geoip_module"
+    ], "default_configure_flags": ["--with-http_ssl_module",  "--with-http_gzip_static_module", "--with-http_geoip_module"]},
+    "init_style":"upstart",
     "gzip": "on",
     "group": "el",
-    "user": "www-data"
+    "user": "nginx",
+    "log_dir":"/var/local/EmpireLogistics/current/log/",
+    "default_site_enabled":false,
+
   },
   "uwsgi": {
     "emperor": {
