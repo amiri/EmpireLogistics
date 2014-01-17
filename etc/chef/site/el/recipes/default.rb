@@ -58,9 +58,9 @@ deploy_revision "empirelogistics" do
   purge_before_symlink.clear
   symlinks.clear
   symlink_before_migrate       nil
-  create_dirs_before_symlink   []
-  purge_before_symlink         ["log"]
-  symlinks                     ({"log" => "log"})
+  create_dirs_before_symlink   ["log","local","perl","python"]
+  purge_before_symlink         []
+  symlinks                     ({"log" => "log","local" => "local"})
   scm_provider Chef::Provider::Git
   #notifies :restart, "service[uwsgi]"
 end
@@ -84,13 +84,17 @@ end
 perlbrew_run 'install_app_local_lib' do
   perlbrew 'perl-5.18.2'
   cwd "/var/local/EmpireLogistics/current/"
-  command "carton install --deployment"
+  command "carton install --deployment --cached"
 end
 
-execute "el_perl_env" do
-  user el
-  command "echo 'source \"/var/local/perl/etc/bashrc\"' >> /home/el/.bashrc && source /home/el/.bashrc && perlbrew switch perl-5.18.2"
-  command
+bash "el_perl_env" do
+  user "el"
+  cwd "/home/el"
+  code <<-EOH
+  echo 'source "/var/local/perl/etc/bashrc"' >> .bashrc
+  source /home/el/.bashrc
+  perlbrew switch perl-5.18.2
+  EOH
 end
 
 # execute script to install extlib

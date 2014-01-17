@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd chef
+cd etc/chef
 librarian-chef install --verbose
 cd ..
-sudo chef-solo -c etc/chef/solo.rb -j etc/chef/web.json
+sudo chef-solo -c chef/solo.rb -j chef/web.json

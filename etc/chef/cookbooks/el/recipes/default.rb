@@ -59,18 +59,18 @@ deploy_revision "empirelogistics" do
   symlinks.clear
   symlink_before_migrate       nil
   create_dirs_before_symlink   []
-  purge_before_symlink         []
-  symlinks                     nil
+  purge_before_symlink         ["log"]
+  symlinks                     ({"log" => "log"})
   scm_provider Chef::Provider::Git
-  notifies :restart, "service[uwsgi]"
+  #notifies :restart, "service[uwsgi]"
 end
 
 include_recipe "perlbrew"
 
-#perlbrew_perl "5.18.2" do
-  #version 'perl-5.18.2'
-  #action :install
-#end
+perlbrew_perl "5.18.2" do
+  version 'perl-5.18.2'
+  action :install
+end
 
 #perlbrew_lib "perl-5.18.2@bootstrap" do
   #action :create
@@ -87,11 +87,11 @@ perlbrew_run 'install_app_local_lib' do
   command "carton install --deployment"
 end
 
-#execute "el_perl_env" do
-  #user el
-  #command "echo 'source \"/var/local/perl/etc/bashrc\"' >> /home/el/.bashrc && source /home/el/.bashrc && perlbrew switch perl-5.18.2"
-  #command
-#end
+execute "el_perl_env" do
+  user "el"
+  command "echo 'source \"/var/local/perl/etc/bashrc\"' >> /home/el/.bashrc && source /home/el/.bashrc && perlbrew switch perl-5.18.2"
+  command
+end
 
 # execute script to install extlib
 
@@ -127,7 +127,7 @@ include_recipe "postgresql::client"
 include_recipe "postgresql::pg_user"
 include_recipe "postgresql::pg_database"
 include_recipe "postgresql::service"
-include_recipe "nginx"
+include_recipe "nginx::source"
 include_recipe "uwsgi::emperor"
 include_recipe "nodejs"
 include_recipe "npm"

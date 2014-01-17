@@ -185,6 +185,7 @@
     "group": "el",
     "gzip": "on",
     "init_style": "upstart",
+    "geoip": { "enable_city": true },
     "source": {
       "default_configure_flags": [
         "--with-http_ssl_module",
