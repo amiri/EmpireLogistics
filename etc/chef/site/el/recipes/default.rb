@@ -59,10 +59,10 @@ deploy_revision "empirelogistics" do
   symlinks.clear
   symlink_before_migrate       nil
   create_dirs_before_symlink   []
-  purge_before_symlink         []
-  symlinks                     nil
+  purge_before_symlink         ["log"]
+  symlinks                     ({"log" => "log"})
   scm_provider Chef::Provider::Git
-  notifies :restart, "service[uwsgi]"
+  #notifies :restart, "service[uwsgi]"
 end
 
 include_recipe "perlbrew"
