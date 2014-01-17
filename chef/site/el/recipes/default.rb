@@ -67,10 +67,10 @@ end
 
 include_recipe "perlbrew"
 
-#perlbrew_perl "5.18.2" do
-  #version 'perl-5.18.2'
-  #action :install
-#end
+perlbrew_perl "5.18.2" do
+  version 'perl-5.18.2'
+  action :install
+end
 
 #perlbrew_lib "perl-5.18.2@bootstrap" do
   #action :create
@@ -87,11 +87,11 @@ perlbrew_run 'install_app_local_lib' do
   command "carton install --deployment"
 end
 
-#execute "el_perl_env" do
-  #user el
-  #command "echo 'source \"/var/local/perl/etc/bashrc\"' >> /home/el/.bashrc && source /home/el/.bashrc && perlbrew switch perl-5.18.2"
-  #command
-#end
+execute "el_perl_env" do
+  user el
+  command "echo 'source \"/var/local/perl/etc/bashrc\"' >> /home/el/.bashrc && source /home/el/.bashrc && perlbrew switch perl-5.18.2"
+  command
+end
 
 # execute script to install extlib
 
