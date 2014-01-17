@@ -1,19 +1,44 @@
 {
+  "carton": {
+    "perlbrew": "perl-5.18.2"
+  },
+  "perlbrew": {
+    "cpanm_options": "--notest",
+    "self_upgrade": true,
+    "install_options": "--thread --notest --noman -j 4 --64all --multi",
+    "perls": [
+      "perl-5.18.2"
+    ],
+    "perlbrew_root": "/var/local/perl"
+  },
+  "python": {
+    "configure_options": [
+      "--enable-unicode=ucs4",
+      "--prefix=/var/local/python"
+    ],
+    "install_method": "source",
+    "prefix_dir": "/var/local/python"
+  },
+  "run_list": [
+    "recipe[apt]",
+    "recipe[el]"
+  ],
   "authorization": {
     "sudo": {
-      "passwordless": "true",
-      "users": [
-        "el",
-        "amiri"
-      ],
       "groups": [
         "admin",
         "sysadmin",
         "vagrant"
-      ]
+      ],
+      "users": [
+        "el",
+        "amiri"
+      ],
+      "passwordless": "true"
     }
   },
   "el": {
+    "group": "el",
     "pip_packages": [
       "psycopg2",
       "PIL",
@@ -58,52 +83,69 @@
     ],
     "perl_version": "perl-5.18.2",
     "deploy_dir": "/var/local/perl",
-    "user": "el",
-    "group": "el"
+    "user": "el"
   },
   "postgresql": {
+    "ssl_cert_file": "/etc/ssl/certs/ssl-cert-snakeoil.pem",
+    "users": [
+      {
+        "username": "postgres",
+        "password": "24d919ec880e72174eb3e4ceb28a827b",
+        "superuser": true,
+        "createdb": true,
+        "login": true
+      },
+      {
+        "username": "el",
+        "password": "3mp1r3",
+        "createdb": true,
+        "login": true,
+        "replication": true
+      }
+    ],
+    "hba_file": "/etc/postgresql/9.3/main/pg_hba.conf",
     "pg_hba": [
       {
-        "method": "trust",
-        "addr": null,
+        "type": "local",
+        "db": "all",
         "user": "all",
+        "addr": null,
+        "method": "trust"
+      },
+      {
+        "type": "host",
+        "db": "all",
+        "user": "all",
+        "addr": "127.0.0.1/32",
+        "method": "trust"
+      },
+      {
+        "method": "ident",
+        "addr": "",
+        "user": "postgres",
         "db": "all",
         "type": "local"
       },
       {
         "method": "trust",
         "addr": "127.0.0.1/32",
-        "user": "all",
+        "user": "postgres",
         "db": "all",
         "type": "host"
       },
       {
-        "type": "local",
-        "db": "all",
-        "user": "postgres",
-        "addr": "",
-        "method": "ident"
-      },
-      {
         "type": "host",
         "db": "all",
-        "user": "postgres",
-        "addr": "127.0.0.1/32",
+        "user": "all",
+        "addr": "::1/128",
         "method": "trust"
       },
       {
         "method": "trust",
-        "addr": "::1/128",
-        "user": "all",
-        "db": "all",
-        "type": "host"
-      },
-      {
-        "type": "host",
-        "db": "empirelogistics",
-        "user": "el",
         "addr": "127.0.0.1/32",
-        "method": "trust"
+        "user": "el",
+        "db": "empirelogistics",
+        "type": "host"
       }
     ],
     "version": "9.3",
@@ -112,38 +154,20 @@
     "apt_distribution": "precise",
     "databases": [
       {
+        "name": "empirelogistics",
+        "owner": "el",
+        "encoding": "utf8",
+        "locale": "en_US.UTF-8",
+        "languages": "plpgsql",
+        "postgis": true,
         "extensions": [
           "postgis",
           "postgis_topology"
-        ],
-        "postgis": true,
-        "languages": "plpgsql",
-        "locale": "en_US.UTF-8",
-        "encoding": "utf8",
-        "owner": "el",
-        "name": "empirelogistics"
+        ]
       }
     ],
     "external_pid_file": "/var/run/postgresql/9.3-main.pid",
-    "ident_file": "/etc/postgresql/9.3/main/pg_ident.conf",
-    "hba_file": "/etc/postgresql/9.3/main/pg_hba.conf",
-    "users": [
-      {
-        "login": true,
-        "createdb": true,
-        "superuser": true,
-        "password": "24d919ec880e72174eb3e4ceb28a827b",
-        "username": "postgres"
-      },
-      {
-        "replication": true,
-        "login": true,
-        "createdb": true,
-        "password": "3mp1r3",
-        "username": "el"
-      }
-    ],
-    "ssl_cert_file": "/etc/ssl/certs/ssl-cert-snakeoil.pem"
+    "ident_file": "/etc/postgresql/9.3/main/pg_ident.conf"
   },
   "postgis": {
     "version": "2.1"
@@ -155,47 +179,32 @@
     "install_method": "package"
   },
   "nginx": {
-    "source":{"version": "1.4.4","prefix":"/usr/local/nginx", "conf_path":"/usr/local/nginx/nginx.conf","modules":[
-    "nginx::http_gzip_static_module",
-    "nginx::http_ssl_module",
-    "nginx::http_geoip_module"
-    ], "default_configure_flags": ["--with-http_ssl_module",  "--with-http_gzip_static_module", "--with-http_geoip_module"]},
-    "init_style":"upstart",
-    "gzip": "on",
-    "group": "el",
+    "default_site_enabled": false,
+    "log_dir": "/var/local/EmpireLogistics/current/log/",
     "user": "nginx",
-    "log_dir":"/var/local/EmpireLogistics/current/log/",
-    "default_site_enabled":false,
-
+    "group": "el",
+    "gzip": "on",
+    "init_style": "upstart",
+    "source": {
+      "default_configure_flags": [
+        "--with-http_ssl_module",
+        "--with-http_gzip_static_module",
+        "--with-http_geoip_module"
+      ],
+      "modules": [
+        "nginx::http_gzip_static_module",
+        "nginx::http_ssl_module",
+        "nginx::http_geoip_module"
+      ],
+      "conf_path": "/usr/local/nginx/nginx.conf",
+      "prefix": "/usr/local/nginx",
+      "version": "1.4.4"
+    }
   },
   "uwsgi": {
     "emperor": {
-      "service": "upstart",
-      "conf_dir": "/var/local/EmpireLogistics/current/etc/uwsgi_emperor"
+      "conf_dir": "/var/local/EmpireLogistics/current/etc/uwsgi_emperor",
+      "service": "upstart"
     }
-  },
-  "run_list": [
-    "recipe[apt]",
-    "recipe[el]"
-  ],
-  "python": {
-    "prefix_dir": "/var/local/python",
-    "install_method": "source",
-    "configure_options": [
-      "--enable-unicode=ucs4",
-      "--prefix=/var/local/python"
-    ]
-  },
-  "perlbrew": {
-    "perlbrew_root": "/var/local/perl",
-    "perls": [
-      "perl-5.18.2"
-    ],
-    "install_options": "--thread --notest --noman -j 4 --64all --multi",
-    "self_upgrade": true,
-    "cpanm_options": "--notest"
-  },
-  "carton": {
-    "perlbrew": "perl-5.18.2"
   }
 }
