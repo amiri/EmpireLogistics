@@ -58,9 +58,9 @@ deploy_revision "empirelogistics" do
   purge_before_symlink.clear
   symlinks.clear
   symlink_before_migrate       nil
-  create_dirs_before_symlink   []
-  purge_before_symlink         ["log","local","perl","python"]
-  symlinks                     ({"log" => "log","local" => "local","perl" => "perl", "python" => "python"})
+  create_dirs_before_symlink   ["logs","local","perl","python"]
+  purge_before_symlink         []
+  symlinks                     ({"logs" => "logs","local" => "local","perl" => "perl", "python" => "python"})
   scm_provider Chef::Provider::Git
   #notifies :restart, "service[uwsgi]"
 end
@@ -190,7 +190,7 @@ node["el"]["npm_packages"].each do |package|
 end
 
 cookbook_file "nginx.conf" do
-  path "/etc/nginx/sites-enabled/empirelogistics"
+  path "#{node["nginx"]["dir"]}/sites-enabled/empirelogistics"
   action :create_if_missing
 end
 
