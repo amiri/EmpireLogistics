@@ -72,7 +72,6 @@ deploy_revision "empirelogistics" do
   purge_before_symlink         []
   symlinks                     ({"logs" => "logs","local" => "local","perl" => "perl", "python" => "python", "tiles" => "tiles"})
   scm_provider Chef::Provider::Git
-  #notifies :restart, "service[uwsgi]"
 end
 
 include_recipe "perlbrew"
@@ -179,4 +178,25 @@ end
   service service do
     action :restart
   end
+end
+
+cron "compress_tiles" do
+  minute "0"
+  hour "*"
+  user "el"
+  mailto "amiribarksdale@gmail.com"
+  home "/home/el"
+  command %Q{
+    cd /var/local/EmpireLogistics/shared/tiles
+    find . -type f -name "*.json" -print0 | xargs -0r gzip -k
+  }
+end
+
+script "tilestache-seed" do
+  interpreter "bash"
+  user "el"
+  cwd "/var/local/EmpireLogistics/current"
+  code <<-EOH
+  ./python/bin/tilestache-seed.py -c /var/local/EmpireLogistics/current/etc/empirelogistics_tiles.cfg -l lines -b 71.130988 -169.359741 13.068777 -53.695679 -e json 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
+  EOH
 end

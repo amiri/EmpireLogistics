@@ -1,3 +1,6 @@
+Tiles
+    Make a cron job to gzip every json file in the cache
+    Use tilestache-seed to create cache for all layers in whole area
 Tables
     user
     union
