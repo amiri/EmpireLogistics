@@ -47,11 +47,20 @@ end
 remote_directory "/var/local/EmpireLogistics" do
   owner "el"
   group "el"
+  files_owner "el"
+  files_group "el"
   files_mode 0774
   recursive true
   source "EmpireLogistics"
   cookbook "el"
   action :create_if_missing
+end
+
+# This is stupid, because chef won't change perms of parent directories
+# in recipe above
+execute "chmod" do
+  cwd '/var/local/EmpireLogistics'
+  command "chown -Rf el:el /var/local/EmpireLogistics"
 end
 
 deploy_revision "empirelogistics" do
@@ -93,10 +102,14 @@ perlbrew_run 'install_app_local_lib' do
   command "carton install --deployment --cached"
 end
 
-execute "el_perl_env" do
-  command "su el -l -c 'cd /home/el/ && echo 'source \"/var/local/EmpireLogistics/shared/perl/etc/bashrc\"' >> /home/el/.bashrc && source /home/el/.bashrc && perlbrew switch perl-5.18.2'"
+bash "el_perl_env" do
   action :run
- end
+  user "el"
+  user "el"
+  code <<-EOH
+  cd /home/el/ && echo 'source "/var/local/EmpireLogistics/shared/perl/etc/bashrc"' >> /home/el/.bashrc && source /home/el/.bashrc
+  EOH
+end
 
 # Install libGeoIP.so.1.4.8 so nginx::source doesn't have to.
 node.default['nginx']['geoip']['lib_url'] = "http://geolite.maxmind.com/download/geoip/api/c/GeoIP-#{node['nginx']['geoip']['lib_version']}.tar.gz"
@@ -186,17 +199,5 @@ cron "compress_tiles" do
   user "el"
   mailto "amiribarksdale@gmail.com"
   home "/home/el"
-  command %Q{
-    cd /var/local/EmpireLogistics/shared/tiles
-    find . -type f -name "*.json" -print0 | xargs -0r gzip -k
-  }
-end
-
-script "tilestache-seed" do
-  interpreter "bash"
-  user "el"
-  cwd "/var/local/EmpireLogistics/current"
-  code <<-EOH
-  ./python/bin/tilestache-seed.py -c /var/local/EmpireLogistics/current/etc/empirelogistics_tiles.cfg -l lines -b 71.130988 -169.359741 13.068777 -53.695679 -e json 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
-  EOH
+  command %Q{find /var/local/EmpireLogistics/shared/tiles -type f -name "*.json" -print0 | xargs -0r gzip -k}
 end

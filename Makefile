@@ -31,6 +31,11 @@ prereqs:
 chef:
 	bin/install-empirelogistics
 
+.PHONY: tilestache-cache
+
+tilestache-cache:
+	sudo -u el /var/local/EmpireLogistics/current/python/bin/tilestache-seed.py -c /var/local/EmpireLogistics/current/etc/empirelogistics_tiles.cfg -l lines -b 71.130988 -169.359741 13.068777 -53.695679 -e json 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 &
+
 ########## Download data
 
 make-data-directories:

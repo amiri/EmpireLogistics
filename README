@@ -8,10 +8,17 @@ Saucy Salamander, you can run the following on the command line:
     make prereqs
     make all
 
-The "all" target in the Makefile does all the hard work. It imports
-and populates all the data, and it will overwrite existing data if
-you run it again. This is dangerous in production, of course,
-but it's OK for the moment.
+The "all" target in the Makefile does all the hard work. It configures
+the server, imports and populates all the data, and it will overwrite
+existing data if you run it again. This is dangerous in production, of
+course, but it's OK for the moment.
+
+If you want to break it down, you can build the parts individually:
+
+    make prereqs
+    make chef
+    make database
+    make tilestache-cache
 
 Now you should have a mostly populated PostgreSQL database with
 a lot of data in place. You also have nginx, PostgreSQL, and uwsgi
@@ -76,4 +83,5 @@ We will be running two uwsgi app servers behind nginx:
 
 The database server is PostgreSQL 9.3 with PostGIS extensions.
 
-We will cache vector tiles in redis.
+We will cache vector tiles on disk, where they will be served
+directly, speedily, from nginx.
