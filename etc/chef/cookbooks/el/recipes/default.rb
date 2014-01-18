@@ -58,7 +58,7 @@ deploy_revision "empirelogistics" do
   purge_before_symlink.clear
   symlinks.clear
   symlink_before_migrate       nil
-  create_dirs_before_symlink   ["logs","local","perl","python"]
+  create_dirs_before_symlink   []
   purge_before_symlink         []
   symlinks                     ({"logs" => "logs","local" => "local","perl" => "perl", "python" => "python"})
   scm_provider Chef::Provider::Git
