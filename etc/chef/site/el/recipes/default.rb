@@ -44,6 +44,16 @@ node["el"]["apt_packages"].each do |package|
   end
 end
 
+remote_directory "/var/local/EmpireLogistics" do
+  files_group "el"
+  files_owner "el"
+  files_mode 0774
+  recursive true
+  source "EmpireLogistics"
+  cookbook "el"
+  action :create_if_missing
+end
+
 deploy_revision "empirelogistics" do
   repo "http://github.com/amiri/EmpireLogistics.git"
   deploy_to "/var/local/EmpireLogistics"
@@ -60,7 +70,7 @@ deploy_revision "empirelogistics" do
   symlink_before_migrate       nil
   create_dirs_before_symlink   []
   purge_before_symlink         []
-  symlinks                     ({"logs" => "logs","local" => "local","perl" => "perl", "python" => "python"})
+  symlinks                     ({"logs" => "logs","local" => "local","perl" => "perl", "python" => "python", "tiles" => "tiles"})
   scm_provider Chef::Provider::Git
   #notifies :restart, "service[uwsgi]"
 end
@@ -88,7 +98,7 @@ perlbrew_run 'install_app_local_lib' do
 end
 
 execute "el_perl_env" do
-  command "su el -l -c 'cd /home/el/ && echo 'source \"/var/local/perl/etc/bashrc\"' >> /home/el/.bashrc && source /home/el/.bashrc && perlbrew switch perl-5.18.2'"
+  command "su el -l -c 'cd /home/el/ && echo 'source \"/var/local/EmpireLogistics/shared/perl/etc/bashrc\"' >> /home/el/.bashrc && source /home/el/.bashrc && perlbrew switch perl-5.18.2'"
   action :run
  end
 
@@ -97,7 +107,7 @@ execute "el_perl_env" do
   #user "el"
   #cwd "/home/el"
   #code <<-EOH
-  #echo 'source \"/var/local/perl/etc/bashrc\"' >> .bashrc && source /home/el/.bashrc && /var/local/perl/bin/perlbrew switch perl-5.18.2
+  #echo 'source \"/var/local/EmpireLogistics/shared/perl/etc/bashrc\"' >> .bashrc && source /home/el/.bashrc && /var/local/EmpireLogistics/shared/perl/bin/perlbrew switch perl-5.18.2
   #EOH
 #end
 
@@ -177,7 +187,7 @@ end
 
 node["el"]["pip_packages"].each do |package|
     python_pip package do
-      virtualenv "/var/local/python"
+      virtualenv "/var/local/EmpireLogistics/shared/python"
       action :install
       options "-U --allow-all-external --process-dependency-links --allow-unverified psycopg2 --allow-unverified PIL --allow-unverified Shapely --allow-unverified ModestMaps --allow-unverified simplejson --allow-unverified werkzeug --allow-unverified #{package}"
     end

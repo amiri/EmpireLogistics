@@ -11,5 +11,6 @@ na-rail-*.json
 /data/ports/
 /data/warehouses/
 /etc/chef/tmp
+/etc/chef/cookbooks/el
 /etc/chef-cache
 /local
