@@ -45,8 +45,8 @@ node["el"]["apt_packages"].each do |package|
 end
 
 remote_directory "/var/local/EmpireLogistics" do
-  files_group "el"
-  files_owner "el"
+  owner "el"
+  group "el"
   files_mode 0774
   recursive true
   source "EmpireLogistics"
