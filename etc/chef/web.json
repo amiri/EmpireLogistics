@@ -204,7 +204,7 @@
         "nginx::http_ssl_module",
         "nginx::http_geoip_module"
       ],
-      "conf_path": "/usr/local/nginx/conf",
+      "conf_path": "/usr/local/nginx/conf/nginx.conf",
       "prefix": "/usr/local/nginx",
       "version": "1.4.4"
     }
