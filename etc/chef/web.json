@@ -191,13 +191,16 @@
     "group": "el",
     "gzip": "on",
     "init_style": "upstart",
+    "error_log_options": "debug",
     "geoip": { "enable_city": true, "lib_version": "1.4.8", "lib_checksum": "cf0f6b2bac1153e34d6ef55ee3851479b347d2b5c191fda8ff6a51fab5291ff4" },
     "source": {
       "sbin_path": "/usr/local/nginx/sbin/nginx",
       "default_configure_flags": [
         "--with-http_ssl_module",
         "--with-http_gzip_static_module",
-        "--with-http_geoip_module"
+        "--with-http_geoip_module",
+        "--with-debug",
+        "--with-http_gunzip_module"
       ],
       "modules": [
         "nginx::http_gzip_static_module",
