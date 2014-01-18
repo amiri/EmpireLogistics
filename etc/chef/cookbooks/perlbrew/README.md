@@ -4,8 +4,11 @@ Description
 Installs perlbrew and provides resource/provider types for managing
 perls with perlbrew.
 
-To date, this cookbook has only been designed and tested on the
-Ubuntu and Debian platforms.
+To date, this cookbook has been designed and tested on the following platforms:
+* Ubuntu
+* Debian
+* CentOS 6
+* Amazon Linux
 
 Requirements
 ============
@@ -17,7 +20,9 @@ installed if missing)
 
 * curl
 * perl
-* build-essential
+* patch
+
+The ```build-essential``` <https://github.com/opscode-cookbooks/build-essential> cookbook will install the packages required for compiling Perl.
 
 Attributes
 ==========
@@ -25,6 +30,8 @@ Attributes
 * `node['perlbrew']['perlbrew_root'] = "/opt/perlbrew"` - Sets the `PERLBREW_ROOT` environment variable
 * `node['perlbrew']['perls'] = []` - An array of perls to install, e.g. `["perl-5.14.2", "perl-5.12.3"]`
 * `node['perlbrew']['install_options'] = ''` - A string of command line options for `perlbrew install`, e.g. `-D usethreads` for building all perls with threads
+* `node['perlbrew']['cpanm_options'] = ''` - A string of command line options for `cpanm`, e.g. `--notest` for installing modules without running tests
+* `node['perlbrew']['self_upgrade'] = true` - Set to false if you don't want perlbrew upgraded to the latest version automatically
 
 Recipes
 =======
@@ -133,6 +140,8 @@ Attributes:
 modules (REQUIRED)
 * :modules - an array of module names to pass to cpanm.  Any legal input
 to cpanm is allowed.
+* :options - a string of options to pass to cpanm.  Any legal options to
+cpanm is allowed.
 
 perlbrew_run
 ------------

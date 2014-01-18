@@ -5,8 +5,12 @@ site 'http://community.opscode.com/api/v1'
 
 cookbook "python"
 cookbook "perl"
-cookbook "perlbrew"
-cookbook "carton"
+cookbook "perlbrew",
+    :git => "https://github.com/classmarkets/perl-chef",
+    :path => "cookbooks/perlbrew"
+cookbook "carton",
+    :git => "https://github.com/classmarkets/perl-chef",
+    :path => "cookbooks/carton"
 cookbook "nginx"
 cookbook "uwsgi"
 cookbook "postgresql",

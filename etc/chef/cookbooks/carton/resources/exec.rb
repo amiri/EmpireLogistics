@@ -1,7 +1,7 @@
 #
 # Author:: David A. Golden
 # Cookbook Name:: perlbrew
-# Resource:: perlbrew_run
+# Resource:: perlbrew_service
 #
 # Copyright:: 2012, David A. Golden <dagolden@cpan.org>
 #
@@ -18,9 +18,15 @@
 # limitations under the License.
 #
 
-actions :install, :run
-default_action :install
+actions :run
 
-attribute :options, :kind_of => String
+attribute :command, :name_attribute => true, :kind_of => String
 attribute :perlbrew, :kind_of => String, :required => true
-attribute :modules, :kind_of => Array, :default => []
+attribute :cwd, :kind_of => String, :required => true
+attribute :environment, :kind_of => Hash, :default => {}
+
+def initialize(*args)
+  super
+  @action = :run
+end
+

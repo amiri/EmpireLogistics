@@ -82,13 +82,10 @@ perlbrew_perl "5.18.2" do
   action :install
 end
 
-#perlbrew_lib "perl-5.18.2@bootstrap" do
-  #action :create
-#end
-
 perlbrew_cpanm "el" do
   perlbrew "perl-5.18.2"
   modules ["Carton","local::lib"]
+  options "-n"
 end
 
 perlbrew_run 'install_app_local_lib' do
@@ -101,31 +98,6 @@ execute "el_perl_env" do
   command "su el -l -c 'cd /home/el/ && echo 'source \"/var/local/EmpireLogistics/shared/perl/etc/bashrc\"' >> /home/el/.bashrc && source /home/el/.bashrc && perlbrew switch perl-5.18.2'"
   action :run
  end
-
-
-#bash "el_perl_env" do
-  #user "el"
-  #cwd "/home/el"
-  #code <<-EOH
-  #echo 'source \"/var/local/EmpireLogistics/shared/perl/etc/bashrc\"' >> .bashrc && source /home/el/.bashrc && /var/local/EmpireLogistics/shared/perl/bin/perlbrew switch perl-5.18.2
-  #EOH
-#end
-
-# execute script to install extlib
-
-#include_recipe "carton"
-
-#carton_app "el" do
-  #perlbrew node['el']['perl_version']
-  #cwd node['el']['deploy_dir']
-  #user node['el']['user']
-  #group node['el']['group']
-#end
-
-#carton_app "el" do
-  #action :enable
-#end
-
 
 # Install libGeoIP.so.1.4.8 so nginx::source doesn't have to.
 node.default['nginx']['geoip']['lib_url'] = "http://geolite.maxmind.com/download/geoip/api/c/GeoIP-#{node['nginx']['geoip']['lib_version']}.tar.gz"
