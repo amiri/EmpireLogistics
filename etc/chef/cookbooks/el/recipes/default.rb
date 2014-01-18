@@ -59,8 +59,8 @@ deploy_revision "empirelogistics" do
   symlinks.clear
   symlink_before_migrate       nil
   create_dirs_before_symlink   []
-  purge_before_symlink         ["log"]
-  symlinks                     ({"log" => "log"})
+  purge_before_symlink         ["log","local","perl","python"]
+  symlinks                     ({"log" => "log","local" => "local","perl" => "perl", "python" => "python"})
   scm_provider Chef::Provider::Git
   #notifies :restart, "service[uwsgi]"
 end
@@ -84,14 +84,22 @@ end
 perlbrew_run 'install_app_local_lib' do
   perlbrew 'perl-5.18.2'
   cwd "/var/local/EmpireLogistics/current/"
-  command "carton install --deployment"
+  command "carton install --deployment --cached"
 end
 
 execute "el_perl_env" do
-  user "el"
-  command "echo 'source \"/var/local/perl/etc/bashrc\"' >> /home/el/.bashrc && source /home/el/.bashrc && perlbrew switch perl-5.18.2"
-  command
-end
+  command "su el -l -c 'cd /home/el/ && echo 'source \"/var/local/perl/etc/bashrc\"' >> /home/el/.bashrc && source /home/el/.bashrc && perlbrew switch perl-5.18.2'"
+  action :run
+ end
+
+
+#bash "el_perl_env" do
+  #user "el"
+  #cwd "/home/el"
+  #code <<-EOH
+  #echo 'source \"/var/local/perl/etc/bashrc\"' >> .bashrc && source /home/el/.bashrc && /var/local/perl/bin/perlbrew switch perl-5.18.2
+  #EOH
+#end
 
 # execute script to install extlib
 
@@ -107,6 +115,34 @@ end
 #carton_app "el" do
   #action :enable
 #end
+
+
+# Install libGeoIP.so.1.4.8 so nginx::source doesn't have to.
+node.default['nginx']['geoip']['lib_url'] = "http://geolite.maxmind.com/download/geoip/api/c/GeoIP-#{node['nginx']['geoip']['lib_version']}.tar.gz"
+geolib_filename = ::File.basename(node['nginx']['geoip']['lib_url'])
+geolib_filepath = "#{Chef::Config['file_cache_path']}/#{geolib_filename}"
+
+remote_file geolib_filepath do
+  source   "http://geolite.maxmind.com/download/geoip/api/c/GeoIP-#{node['nginx']['geoip']['lib_version']}.tar.gz"
+  checksum node['nginx']['geoip']['lib_checksum']
+  owner    'root'
+  group    'root'
+  mode     '0644'
+end
+
+bash "extract_geolib" do
+  action "run"
+  code <<-EOH
+    tar xzvf #{geolib_filepath} -C #{::File.dirname(geolib_filepath)}
+    cd GeoIP-#{node['nginx']['geoip']['lib_version']}
+    autoreconf --force --install
+    which libtoolize && libtoolize -f
+    ./configure
+    make && make install
+  EOH
+  creates "/usr/local/lib/libGeoIP.so.1.4.8"
+  cwd ::File.dirname(geolib_filepath)
+end
 
 execute "python_dev_packages" do
   command "sudo apt-get -y build-dep python2.7 python-stdlib-extensions"

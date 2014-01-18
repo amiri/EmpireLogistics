@@ -10,7 +10,6 @@ na-rail-*.json
 /data/rail/
 /data/ports/
 /data/warehouses/
-/chef/tmp
-/chef-cache
-chef-cache
+/etc/chef/tmp
+/etc/chef-cache
 /local

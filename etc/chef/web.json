@@ -66,7 +66,11 @@
       "libgdal-dev",
       "libgdal1",
       "libgdal1-dev",
-      "dans-gdal-scripts"
+      "dans-gdal-scripts",
+      "automake",
+      "libtool",
+      "autotools-dev",
+      "autoconf"
     ],
     "system_perl_packages": [
       "IO::All",
@@ -180,13 +184,16 @@
   },
   "nginx": {
     "default_site_enabled": false,
-    "log_dir": "/var/local/EmpireLogistics/current/log/",
+    "dir": "/usr/local/nginx",
+    "daemon_disable": true,
+    "log_dir": "/var/local/EmpireLogistics/shared/logs",
     "user": "nginx",
     "group": "el",
     "gzip": "on",
     "init_style": "upstart",
-    "geoip": { "enable_city": true },
+    "geoip": { "enable_city": true, "lib_version": "1.4.8", "lib_checksum": "cf0f6b2bac1153e34d6ef55ee3851479b347d2b5c191fda8ff6a51fab5291ff4" },
     "source": {
+      "sbin_path": "/usr/local/nginx/sbin/",
       "default_configure_flags": [
         "--with-http_ssl_module",
         "--with-http_gzip_static_module",
@@ -197,7 +204,7 @@
         "nginx::http_ssl_module",
         "nginx::http_geoip_module"
       ],
-      "conf_path": "/usr/local/nginx/nginx.conf",
+      "conf_path": "/usr/local/nginx/conf",
       "prefix": "/usr/local/nginx",
       "version": "1.4.4"
     }
