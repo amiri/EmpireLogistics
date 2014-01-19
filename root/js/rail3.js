@@ -3,7 +3,7 @@ var hash = new L.Hash(map);
 if (!window.location.hash) {
     map.setView([29.7628, - 95.3831], 16);
 }
-var openStreet = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 16}).addTo(map);
+var openStreet = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 16}, attribution: "© <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>").addTo(map);
 openStreet.addTo(map);
 var baseLayers = {
 	"OpenStreetMap": openStreet
@@ -13,7 +13,7 @@ var overlays = {};
 function lineStyle(feature) {
     var lineWidth;
 
-    switch (feature.properties.densty) {
+    switch (feature.properties.traffic_density) {
         case 7:
             lineWidth = 18;
         case 6:
@@ -34,14 +34,26 @@ function lineStyle(feature) {
             lineWidth = 4;
     }
     return "stroke-width: " + (lineWidth * map.getZoom()/16) + "px;";
-    //return "stroke-width: " + lineWidth + "px;";
+}
+
+function calculateClass(feature) {
+    var class = "rail-line";
+    if (feature.properties && feature.properties.reporting_mark) {
+    }
+    return class;
+}
+
+function onEachFeature(feature, layer) {
+    var popup = "<strong>Route:</strong> " + (feature.properties.name ? feature.properties.name : "Unknown") + "<br /><strong>Operator:</strong> " + (feature.properties.owner ? feature.properties.owner : "Unknown") + (feature.properties.reporting_mark ? "(" + feature.properties.reporting_mark + ")" : "");
+    layer.bindPopup(popup);
 }
 
 new L.geoJson({"type":"LineString","coordinates":[[0,0],[0,0]]}).addTo(map);
 var geojsonURL = "http://50.116.5.25/tiles/lines/{z}/{x}/{y}.json";
 var lineLayer = new L.TileLayer.d3_geoJSON(geojsonURL, {
-  class: "rail-line",
+  class: calculateClass,
   style: lineStyle,
+  onEachFeature: onEachFeature
 });
 map.addLayer(lineLayer);
 overlays["Rail Lines"] = lineLayer;

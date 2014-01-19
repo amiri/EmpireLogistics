@@ -3,7 +3,7 @@ var hash = new L.Hash(map);
 if (!window.location.hash) {
     map.setView([29.7628, - 95.3831], 16);
 }
-var openStreet = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 16}).addTo(map);
+var openStreet = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 16, attribution: "© <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>"}).addTo(map);
 openStreet.addTo(map);
 var baseLayers = {
 	"OpenStreetMap": openStreet
