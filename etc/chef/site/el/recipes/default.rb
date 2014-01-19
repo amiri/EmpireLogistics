@@ -6,6 +6,12 @@
 #
 # All rights reserved - Do Not Redistribute
 
+node["authorization"]["sudo"]["groups"].each do |group|
+  group group do
+    action :create
+  end
+end
+
 user "el" do
   supports :manage_home => true
   comment "Empire Logistics"

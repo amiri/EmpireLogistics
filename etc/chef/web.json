@@ -28,6 +28,7 @@
       "groups": [
         "admin",
         "sysadmin",
+        "sudo",
         "vagrant"
       ],
       "users": [
