@@ -44,8 +44,10 @@ function calculateClass(feature) {
 }
 
 function onEachFeature(feature, layer) {
-    var popup = "<strong>Route:</strong> " + (feature.properties.name ? feature.properties.name : "Unknown") + "<br /><strong>Operator:</strong> " + (feature.properties.owner ? feature.properties.owner : "Unknown") + (feature.properties.reporting_mark ? "(" + feature.properties.reporting_mark + ")" : "");
-    layer.bindPopup(popup);
+    if (feature.properties) {
+        var popup = "<strong>Route:</strong> " + (feature.properties.name ? feature.properties.name : "Unknown") + "<br /><strong>Operator:</strong> " + (feature.properties.owner ? feature.properties.owner : "Unknown") + (feature.properties.reporting_mark ? "(" + feature.properties.reporting_mark + ")" : "");
+        layer.bindPopup(popup);
+    }
 }
 
 new L.geoJson({"type":"LineString","coordinates":[[0,0],[0,0]]}).addTo(map);
