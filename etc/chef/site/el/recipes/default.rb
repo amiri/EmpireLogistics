@@ -205,5 +205,5 @@ cron "compress_tiles" do
   user "el"
   mailto "amiribarksdale@gmail.com"
   home "/home/el"
-  command %Q{find /var/local/EmpireLogistics/shared/tiles -type f -name "*.json" -print0 | xargs -0r gzip -k}
+  command %Q{find /var/local/EmpireLogistics/shared/tiles -type f -name "*.json" -print0 | xargs -0r gzip -q -k}
 end
