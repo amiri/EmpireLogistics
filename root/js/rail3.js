@@ -37,10 +37,10 @@ function lineStyle(feature) {
 }
 
 function calculateClass(feature) {
-    var class = "rail-line";
+    var className = "rail-line";
     if (feature.properties && feature.properties.reporting_mark) {
     }
-    return class;
+    return className;
 }
 
 function onEachFeature(feature, layer) {
