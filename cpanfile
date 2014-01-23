@@ -14,3 +14,4 @@ requires "Plack::Builder";
 requires "Text::CSV_XS";
 requires "Try::Tiny";
 requires "Web::Scraper";
+requires "DateTimeX::Easy";
