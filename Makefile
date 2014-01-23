@@ -135,7 +135,7 @@ $(warehouse_dir)/walmart.html:
 	test -s $(warehouse_dir)/walmart.html || cp 'etc/data/warehouses/walmart/Walmart Distribution Center Network USA   MWPVL.html' $(warehouse_dir)/walmart.html
 
 $(warehouse_dir)/walmart-distribution-centers.json: $(warehouse_dir)/walmart.html
-	test -s $(warehouse_dir)/walmart-distribution-centers.json || perl bin/extract-walmart-tables.pl
+	perl bin/extract-walmart-tables.pl
 
 $(warehouse_dir)/target-distribution-centers.json:
 	test -s $(warehouse_dir)/target-distribution-centers.json || cp 'etc/data/warehouses/target/target-distribution-centers.json' $(warehouse_dir)/target-distribution-centers.json
