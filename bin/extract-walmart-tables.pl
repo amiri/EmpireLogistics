@@ -34,7 +34,7 @@ my $scraper = scraper {
             process "//td[1]", walmart_id => "TEXT",
             process "//td[2]", address => "TEXT",
             process "//td[3]", square_feet => "TEXT",
-            process "//td[4]", year_opened => "TEXT",
+            process "//td[4]", date_opened => "TEXT",
             process "//td[5]/ul/li", "descriptions[]" => { text => "TEXT", };
         };
     };
@@ -45,9 +45,9 @@ my @tables = @{ $tables->{tables} };
 
 for my $table (@tables) {
     for my $row (@{$table->{rows}}) {
-        @{$row}{qw/address square_feet walmart_id year_opened/} =
+        @{$row}{qw/address square_feet walmart_id date_opened/} =
             map {trim($_)}
-            @{$row}{qw/address square_feet walmart_id year_opened/};
+            @{$row}{qw/address square_feet walmart_id date_opened/};
         $row->{descriptions} = [map {trim($_->{text})} @{$row->{descriptions}}];
     }
 }

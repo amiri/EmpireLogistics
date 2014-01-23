@@ -11,6 +11,6 @@ create table warehouse (
     status text,
     area text,
     owner warehouse_owner,
-    year_opened text,
+    date_opened date,
     geometry geometry
 );

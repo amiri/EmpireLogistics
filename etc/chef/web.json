@@ -84,6 +84,7 @@
       "Geo::Coder::Google",
       "Try::Tiny",
       "Text::CSV_XS",
+      "DateTimeX::Easy",
       "local::lib"
     ],
     "perl_version": "perl-5.18.2",

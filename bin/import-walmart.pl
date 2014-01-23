@@ -9,6 +9,7 @@ use Data::Printer;
 use Geo::Coder::Google;
 use List::MoreUtils qw/any/;
 use Try::Tiny;
+use DateTimeX::Easy;
 use feature qw/say/;
 no warnings qw/uninitialized/;
 
@@ -95,13 +96,15 @@ for my $key ( keys %$dcs ) {
         }
         my $area = $dc->{square_feet};
         $area =~ tr/0-9//cd;
-        my $year_opened = $dc->{year_opened};
-        $year_opened = tr/0-9//cd;
+        my $date_opened = $dc->{date_opened};
+        $date_opened = length($date_opened) ? DateTimeX::Easy->new($date_opened) : undef;
+        warn p $date_opened;
+        #$date_opened = tr/0-9//cd;
         my $geom = "$lon $lat";
         my $warehouse = [
             $street_address, $city,        $state,  $postal_code,
             $country,        $description, $status, $area,
-            $owner,          $year_opened, $geom,
+            $owner,          $date_opened, $geom,
         ];
         push @warehouses, $warehouse;
         say "    Processed Walmart warehouse ", $dc->{address};
@@ -121,7 +124,7 @@ for my $warehouse_type (@warehouse_types) {
 # lon     lat
 #ST_GeomFromText('POINT (-6.2222 53.307)',4326)
 my $warehouse_command
-    = "insert into warehouse (street_address,city,state,postal_code,country,description,status,area,owner,year_opened) values (?,?,?,?,?,?,?,?,?,?)";
+    = "insert into warehouse (street_address,city,state,postal_code,country,description,status,area,owner,date_opened) values (?,?,?,?,?,?,?,?,?,?)";
 $sth = $dbh->prepare($warehouse_command);
 
 my @geom_commands;
