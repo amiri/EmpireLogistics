@@ -12,7 +12,7 @@ var overlays = {};
 
 function railNodeStyle(feature) {
     var radius;
-    return "r: " + (feature.properties.incident_links ? ((feature.properties.incident_links * map.getZoom()/16)*10) : "10" ) + "px; fill: 'red';";
+    return "stroke-width: " + (feature.properties.incident_links ? ((feature.properties.incident_links * map.getZoom()/16)*10) : "10" ) + "px; fill: red;";
 }
 
 function railLineStyle(feature) {
