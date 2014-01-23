@@ -150,6 +150,10 @@ end
 
 include_recipe "python"
 
+pg_database "empirelogistics" do
+  action :drop
+end
+
 include_recipe "postgresql"
 include_recipe "postgresql::apt_repository"
 include_recipe "postgresql::postgis"
