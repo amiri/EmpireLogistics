@@ -12,7 +12,7 @@ var overlays = {};
 
 function railInterlineStyle(feature) {
     var radius;
-    return "r: " + (feature.properties.impedance ? ((feature.properties.impedance/1000 * map.getZoom()/16)*20) : "10" ) + "px; fill: 'red';";
+    return "r: " + (feature.properties.impedance ? ((feature.properties.impedance/1000 * map.getZoom()/16)*50) : "10" ) + "px; fill: 'red';";
 }
 
 function railLineStyle(feature) {
