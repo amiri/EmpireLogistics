@@ -65,7 +65,7 @@ ports: download-port-data
 import-rail-data: rail
 	perl bin/import-ownership.pl
 	perl bin/import-subdivisions-states-and-rels.pl
-	ogr2ogr -f PostgreSQL PG:"dbname='empirelogistics' host='localhost' port='5432' user='el'" $(rail_dir)/na-rail-interlines.geojson -t_srs EPSG:900913 -overwrite -nln raw_rail_interline
+	ogr2ogr -f PostgreSQL PG:"dbname='empirelogistics' host='localhost' port='5432' user='el'" $(rail_dir)/na-rail-interlines.geojson -s_srs EPSG:4326 -t_srs EPSG:900913 -overwrite -nln raw_rail_interline
 	shp2pgsql -s 4326:900913 -t 2d -I $(rail_dir)/shp/qn28l raw_rail_line | psql -q -U el -d empirelogistics
 	shp2pgsql -s 4326:900913 -t 2d -I $(rail_dir)/shp/qn28n raw_rail_node | psql -q -U el -d empirelogistics
 	bin/postprocess-rail

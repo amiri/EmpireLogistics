@@ -98,8 +98,6 @@ for my $key ( keys %$dcs ) {
         $area =~ tr/0-9//cd;
         my $date_opened = $dc->{date_opened};
         $date_opened = length($date_opened) ? DateTimeX::Easy->new($date_opened) : undef;
-        warn p $date_opened;
-        #$date_opened = tr/0-9//cd;
         my $geom = "$lon $lat";
         my $warehouse = [
             $street_address, $city,        $state,  $postal_code,

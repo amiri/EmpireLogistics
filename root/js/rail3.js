@@ -69,11 +69,11 @@ overlays["Rail Lines"] = lineLayer;
 new L.geoJson({"type":"Point","coordinates":[[0,0],[0,0]]}).addTo(map);
 var geojsonURL = "http://50.116.5.25/tiles/rail_interlines/{z}/{x}/{y}.json";
 var interlinesLayer = new L.TileLayer.d3_geoJSON(geojsonURL, {
-  class: calculateClass,
+  class: "rail-interline",
   style: railInterlineStyle
 });
 map.addLayer(interlinesLayer);
-overlays["Rail Lines"] = interlinesLayer;
+overlays["Rail Interlines"] = interlinesLayer;
 
 
 L.control.layers(baseLayers, overlays).addTo(map);
