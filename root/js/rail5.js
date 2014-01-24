@@ -10,7 +10,12 @@ var baseLayers = {
 };
 var overlays = {};
 
-function lineStyle(feature) {
+function railNodeStyle(feature) {
+    var radius;
+    return "stroke-width: " + (feature.properties.incident_links ? ((feature.properties.incident_links * map.getZoom()/16)*10) : "10" ) + "px; fill: red;";
+}
+
+function railLineStyle(feature) {
     var lineWidth;
 
     switch (feature.properties.traffic_density) {
@@ -50,14 +55,39 @@ function onEachFeature(feature, layer) {
     }
 }
 
+// Rail lines
 new L.geoJson({"type":"LineString","coordinates":[[0,0],[0,0]]}).addTo(map);
-var geojsonURL = "http://50.116.5.25/tiles/lines/{z}/{x}/{y}.json";
-var lineLayer = new L.TileLayer.d3_geoJSON(geojsonURL, {
+var geojsonURL = "http://50.116.5.25/tiles/rail_lines/{z}/{x}/{y}.json";
+var lineLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
   class: calculateClass,
-  style: lineStyle,
-  onEachFeature: onEachFeature
+  style: railLineStyle
 });
 map.addLayer(lineLayer);
 overlays["Rail Lines"] = lineLayer;
 
+// Rail interlines
+new L.geoJson({"type":"LineString","coordinates":[[0,0],[0,0]]}).addTo(map);
+var geojsonURL = "http://50.116.5.25/tiles/rail_interlines/{z}/{x}/{y}.json";
+var interlinesLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
+  class: "rail-interline",
+  style: railLineStyle
+});
+map.addLayer(interlinesLayer);
+overlays["Rail Interlines"] = interlinesLayer;
+
+
+// Rail nodes
+new L.geoJson({"type":"Point","coordinates":[[0,0],[0,0]]}).addTo(map);
+var geojsonURL = "http://50.116.5.25/tiles/rail_nodes/{z}/{x}/{y}.json";
+var nodesLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
+  class: "rail-node",
+  style: railNodeStyle
+});
+map.addLayer(nodesLayer);
+overlays["Rail Nodes"] = nodesLayer;
+
+
+
+
 L.control.layers(baseLayers, overlays).addTo(map);
+
