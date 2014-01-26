@@ -17,7 +17,7 @@ var overlays = {};
 
 function railNodeRadius(feature) {
     var radius;
-    radius = (feature.properties.incident_links ? ((feature.properties.incident_links * map.getZoom() / 16) * 5) : "5");
+    radius = (feature.properties.incident_links ? ((feature.properties.incident_links * map.getZoom() / 16) * 2) : "2");
     return radius;
 }
 

@@ -15,3 +15,4 @@ na-rail-*.json
 /etc/chef-cache
 /local
 /.vagrant
+*.swp
