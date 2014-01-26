@@ -1,0 +1,48 @@
+@import url(http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.css);
+
+html,body,#map
+{
+    height:100%;
+    margin:0;
+    padding:0;
+    width:100%;
+}
+
+body
+{
+    background-color:#ddd;
+    font-family:Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size:12px;
+    margin:0;
+    overflow:hidden;
+}
+
+path
+{
+    fill:none;
+    stroke-linecap:round;
+}
+
+path.rail-line
+{
+    fill:none;
+    stroke:#000;
+    stroke-linejoin:round;
+    stroke-width:4.0;
+}
+
+path.rail-interline
+{
+    fill:orange;
+    stroke:orange;
+    stroke-linejoin:round;
+    stroke-width:4.0;
+}
+
+path.rail-node
+{
+    fill:red;
+    stroke:red;
+    stroke-linejoin:round;
+    stroke-width:4.0;
+}
