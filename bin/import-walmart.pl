@@ -135,7 +135,7 @@ for my $warehouse (@warehouses) {
     my $geom_command;
     my ($lon,$lat) = split(" ",$geom);
     #$geom_command = "update warehouse set geometry = ST_GeomFromText('POINT($geom)',900913) where id = $newid" if $geom =~ /\d/;
-    $geom_command = "update warehouse set geometry = ST_SetSRID(ST_MakePoint($lon, $lat),900913) where id = $newid" if $geom =~ /\d/;
+    $geom_command = "update warehouse set geometry = ST_SetSRID(ST_MakePoint($lon, $lat),4326) where id = $newid" if $geom =~ /\d/;
     push @geom_commands, $geom_command if $geom_command;
 }
 
