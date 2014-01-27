@@ -21,6 +21,12 @@ function railNodeRadius(feature) {
     return radius;
 }
 
+function warehouseRadius(feature) {
+    var radius;
+    radius = 4;
+    return radius;
+}
+
 function railLineStyle(feature) {
     var lineWidth;
 
@@ -109,4 +115,40 @@ var nodesLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
 });
 map.addLayer(nodesLayer);
 overlays["Rail Nodes"] = nodesLayer;
+
+// Warehouses
+new L.geoJson({
+    "type": "Point",
+    "coordinates": [0, 0]
+}).addTo(map);
+var geojsonURL = "http://50.116.5.25/tiles/warehouses/{z}/{x}/{y}.json";
+var warehouseLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
+    class: "warehouse",
+    type: "circle",
+    radius: warehouseRadius,
+    fill: "orange"
+});
+map.addLayer(warehouseLayer);
+overlays["Warehouses"] = warehouseLayer;
+
+
+// Ports 
+new L.geoJson({
+    "type": "Point",
+    "coordinates": [0, 0]
+}).addTo(map);
+var geojsonURL = "http://50.116.5.25/tiles/ports/{z}/{x}/{y}.json";
+var portLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
+    class: "port",
+    type: "circle",
+    radius: portRadius,
+    fill: "blue"
+});
+map.addLayer(portLayer);
+overlays["Ports"] = portLayer;
+
+
+
+
+
 L.control.layers(baseLayers, overlays).addTo(map);
