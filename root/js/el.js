@@ -148,7 +148,7 @@ var portLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     class: "port",
     type: "circle",
     radius: portRadius,
-    fill: "aqua"
+    fill: "dodgerblue"
 });
 map.addLayer(portLayer);
 overlays["Ports"] = portLayer;
