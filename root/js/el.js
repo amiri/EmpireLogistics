@@ -27,6 +27,12 @@ function warehouseRadius(feature) {
     return radius;
 }
 
+function portRadius(feature) {
+    var radius;
+    radius = 4;
+    return radius;
+}
+
 function railLineStyle(feature) {
     var lineWidth;
 
