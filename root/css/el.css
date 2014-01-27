@@ -33,16 +33,16 @@ path.rail-line
 
 path.rail-interline
 {
-    fill:orange;
-    stroke:orange;
+    fill:goldenrod;
+    stroke:goldenrod;
     stroke-linejoin:round;
     stroke-width:4.0;
 }
 
 path.rail-node
 {
-    fill:red;
-    stroke:red;
+    fill:darkred;
+    stroke:darkred;
     stroke-linejoin:round;
     stroke-width:4.0;
 }

@@ -17,13 +17,13 @@ var overlays = {};
 
 function railNodeRadius(feature) {
     var radius;
-    radius = (feature.properties.incident_links ? ((feature.properties.incident_links * map.getZoom() / 16) * 2) : "2");
+    radius = (feature.properties.incident_links ? ((feature.properties.incident_links * map.getZoom() / 16) * 2) : "4");
     return radius;
 }
 
 function warehouseRadius(feature) {
     var radius;
-    radius = 4;
+    radius = (feature.properties.area ? (((feature.properties.area* map.getZoom() / 16) / 500000) * 4) : "6");
     return radius;
 }
 
@@ -117,7 +117,7 @@ var nodesLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     class: "rail-node",
     type: "circle",
     radius: railNodeRadius,
-    fill: "red"
+    fill: "darkred"
 });
 map.addLayer(nodesLayer);
 overlays["Rail Nodes"] = nodesLayer;
@@ -132,7 +132,7 @@ var warehouseLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     class: "warehouse",
     type: "circle",
     radius: warehouseRadius,
-    fill: "green"
+    fill: "orange"
 });
 map.addLayer(warehouseLayer);
 overlays["Warehouses"] = warehouseLayer;
@@ -148,7 +148,7 @@ var portLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     class: "port",
     type: "circle",
     radius: portRadius,
-    fill: "blue"
+    fill: "aquamarine"
 });
 map.addLayer(portLayer);
 overlays["Ports"] = portLayer;
