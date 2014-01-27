@@ -133,7 +133,7 @@ for my $warehouse (@warehouses) {
     my $newid = $dbh->last_insert_id( undef, undef, "warehouse", undef );
     push @geoms, { geometry => $geom, warehouse => $newid };
     my $geom_command;
-    $geom_command = "update warehouse set geometry = ST_GeomFromText('POINT($geom)',3857) where id = $newid" if $geom =~ /\d/;
+    $geom_command = "update warehouse set geometry = ST_GeomFromText('POINT($geom)',900913) where id = $newid" if $geom =~ /\d/;
     push @geom_commands, $geom_command if $geom_command;
 }
 
