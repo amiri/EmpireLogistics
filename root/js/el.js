@@ -132,7 +132,7 @@ var warehouseLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     class: "warehouse",
     type: "circle",
     radius: warehouseRadius,
-    fill: "orange"
+    fill: "green"
 });
 map.addLayer(warehouseLayer);
 overlays["Warehouses"] = warehouseLayer;
