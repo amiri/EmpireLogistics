@@ -117,7 +117,7 @@ var nodesLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     class: "rail-node",
     type: "circle",
     radius: railNodeRadius,
-    fill: "darkred"
+    fill: "red"
 });
 map.addLayer(nodesLayer);
 overlays["Rail Nodes"] = nodesLayer;
@@ -148,7 +148,7 @@ var portLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     class: "port",
     type: "circle",
     radius: portRadius,
-    fill: "aquamarine"
+    fill: "aqua"
 });
 map.addLayer(portLayer);
 overlays["Ports"] = portLayer;
