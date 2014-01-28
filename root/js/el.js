@@ -138,7 +138,7 @@ var nodesLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     class: "rail-node",
     type: "circle",
     radius: railNodeRadius,
-    fill: "darkred"
+    fill: "red"
 });
 map.addLayer(nodesLayer);
 overlays["Rail Nodes"] = nodesLayer;
