@@ -122,8 +122,8 @@ new L.geoJson({
 var geojsonURL = "http://50.116.5.25/tiles/warehouses/{z}/{x}/{y}.json";
 var warehouseLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     class: "warehouse"
-  , type: "circle",
-  , radius: warehouseRadius,
+  , type: "circle"
+  , radius: warehouseRadius
   , fill: "orange"
   , attribution: 'Wal-Mart: <a href="http://www.mwpvl.com/">© MWPVL International Inc.</a>; Target: <a href="https://corporate.target.com/careers/global-locations/distribution-center-locations">© Target</a>'
 });
