@@ -124,7 +124,7 @@ var warehouseLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     class: "warehouse"
   , type: "circle"
   , radius: warehouseRadius
-  , fill: "orange"
+  , fill: "darkorange"
   , attribution: 'Wal-Mart: <a href="http://www.mwpvl.com/">© MWPVL International Inc.</a>; Target: <a href="https://corporate.target.com/careers/global-locations/distribution-center-locations">© Target</a>'
 });
 map.addLayer(warehouseLayer);
@@ -168,8 +168,8 @@ var legend = L.control({position: 'bottomright'});
 legend.onAdd = function (map) {
 
     var div = L.DomUtil.create('div', 'info legend'),
-        elType = ["Rail Line", "Rail Node", "Rail Interline", "Port", "Warehouse" ],
-        color = [ "black", "red", "goldenrod", "dodgerblue", "orange"];
+        elType = ["Rail Line", "Rail Node", "Rail Interline", "Warehouse", "Port" ],
+        color = [ "black", "red", "goldenrod", "darkorange", "dodgerblue"];
 
     for (var i = 0; i < 5; i++) {
         div.innerHTML +=
