@@ -107,7 +107,7 @@ new L.geoJson({
 }).addTo(map);
 var geojsonURL = "http://50.116.5.25/tiles/rail_interlines/{z}/{x}/{y}.json";
 var interlinesLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
-    class: "rail-interline",
+    class: "rail-interline"
   , type: "path"
   , style: railLineStyle
 });
@@ -152,10 +152,10 @@ new L.geoJson({
 }).addTo(map);
 var geojsonURL = "http://50.116.5.25/tiles/ports/{z}/{x}/{y}.json";
 var portLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
-    class: "port",
-    type: "circle",
-    radius: portRadius,
-    fill: "dodgerblue"
+    class: "port"
+  , type: "circle"
+  , radius: portRadius
+  , fill: "dodgerblue"
   , attribution: 'Ports: <a href="http://msi.nga.mil/NGAPortal/MSI.portal?_nfpb=true&_pageLabel=msi_portal_page_62&pubCode=0015">National Geospatial-Intelligence Agency</a>'
 });
 map.addLayer(portLayer);
