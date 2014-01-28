@@ -92,7 +92,8 @@ var lineLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     type: "path",
     style: railLineStyle
 });
-map.addLayer(lineLayer);
+// Put this one on the bottom with "true"
+map.addLayer(lineLayer, true);
 overlays["Rail Lines"] = lineLayer;
 
 // Rail interlines
@@ -112,22 +113,6 @@ var interlinesLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
 map.addLayer(interlinesLayer);
 overlays["Rail Interlines"] = interlinesLayer;
 
-
-// Rail nodes
-new L.geoJson({
-    "type": "Point",
-    "coordinates": [0, 0]
-}).addTo(map);
-var geojsonURL = "http://50.116.5.25/tiles/rail_nodes/{z}/{x}/{y}.json";
-var nodesLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
-    class: "rail-node",
-    type: "circle",
-    radius: railNodeRadius,
-    fill: "red"
-});
-map.addLayer(nodesLayer);
-overlays["Rail Nodes"] = nodesLayer;
-
 // Warehouses
 new L.geoJson({
     "type": "Point",
@@ -143,6 +128,20 @@ var warehouseLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
 map.addLayer(warehouseLayer);
 overlays["Warehouses"] = warehouseLayer;
 
+// Rail nodes
+new L.geoJson({
+    "type": "Point",
+    "coordinates": [0, 0]
+}).addTo(map);
+var geojsonURL = "http://50.116.5.25/tiles/rail_nodes/{z}/{x}/{y}.json";
+var nodesLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
+    class: "rail-node",
+    type: "circle",
+    radius: railNodeRadius,
+    fill: "darkred"
+});
+map.addLayer(nodesLayer);
+overlays["Rail Nodes"] = nodesLayer;
 
 // Ports 
 new L.geoJson({
@@ -158,9 +157,5 @@ var portLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
 });
 map.addLayer(portLayer);
 overlays["Ports"] = portLayer;
-
-
-
-
 
 L.control.layers(baseLayers, overlays).addTo(map);

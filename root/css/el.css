@@ -38,11 +38,18 @@ path.rail-interline
     stroke-linejoin:round;
     stroke-width:4.0;
 }
-
-path.rail-node
-{
-    fill:darkred;
-    stroke:darkred;
-    stroke-linejoin:round;
-    stroke-width:4.0;
+.rail-line {
+    z-index: 0;
+}
+.rail-interline {
+    z-index: 1;
+}
+.port {
+    z-index: 2;
+}
+.warehouse {
+    z-index: 3;
+}
+.rail-node {
+    z-index: 4;
 }
