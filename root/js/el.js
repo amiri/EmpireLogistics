@@ -168,8 +168,8 @@ var legend = L.control({position: 'bottomright'});
 legend.onAdd = function (map) {
 
     var div = L.DomUtil.create('div', 'info legend'),
-        elType = ["Rail Line", "Rail Node", "Rail Interline", "Warehouse", "Port"],
-        color = [ "black", "red", "goldenrod", "orange", "dodgerblue"];
+        elType = ["Rail Line", "Rail Node", "Rail Interline", "Port", "Warehouse" ],
+        color = [ "black", "red", "goldenrod", "dodgerblue", "orange"];
 
     for (var i = 0; i < 5; i++) {
         div.innerHTML +=
