@@ -7,7 +7,7 @@ if (!window.location.hash) {
 }
 var openStreet = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 16,
-    attribution: "© <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>"
+    attribution: "© <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap contributors</a>"
 }).addTo(map);
 openStreet.addTo(map);
 var baseLayers = {
@@ -88,9 +88,10 @@ new L.geoJson({
 }).addTo(map);
 var geojsonURL = "http://50.116.5.25/tiles/rail_lines/{z}/{x}/{y}.json";
 var lineLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
-    class: calculateClass,
-    type: "path",
-    style: railLineStyle
+    class: calculateClass
+  , type: "path"
+  , style: railLineStyle
+  , attribution: 'Rail: <a href="http://cta.ornl.gov/transnet/index.html">CTA Transportation Networks</a>'
 });
 // Put this one on the bottom with "true"
 map.addLayer(lineLayer, true);
@@ -107,8 +108,8 @@ new L.geoJson({
 var geojsonURL = "http://50.116.5.25/tiles/rail_interlines/{z}/{x}/{y}.json";
 var interlinesLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     class: "rail-interline",
-    type: "path",
-    style: railLineStyle
+  , type: "path"
+  , style: railLineStyle
 });
 map.addLayer(interlinesLayer);
 overlays["Rail Interlines"] = interlinesLayer;
@@ -120,10 +121,11 @@ new L.geoJson({
 }).addTo(map);
 var geojsonURL = "http://50.116.5.25/tiles/warehouses/{z}/{x}/{y}.json";
 var warehouseLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
-    class: "warehouse",
-    type: "circle",
-    radius: warehouseRadius,
-    fill: "orange"
+    class: "warehouse"
+  , type: "circle",
+  , radius: warehouseRadius,
+  , fill: "orange"
+  , attribution: 'Wal-Mart: <a href="http://www.mwpvl.com/">© MWPVL International Inc.</a>; Target: <a href="https://corporate.target.com/careers/global-locations/distribution-center-locations">© Target</a>'
 });
 map.addLayer(warehouseLayer);
 overlays["Warehouses"] = warehouseLayer;
@@ -135,10 +137,10 @@ new L.geoJson({
 }).addTo(map);
 var geojsonURL = "http://50.116.5.25/tiles/rail_nodes/{z}/{x}/{y}.json";
 var nodesLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
-    class: "rail-node",
-    type: "circle",
-    radius: railNodeRadius,
-    fill: "red"
+    class: "rail-node"
+  , type: "circle"
+  , radius: railNodeRadius
+  , fill: "red"
 });
 map.addLayer(nodesLayer);
 overlays["Rail Nodes"] = nodesLayer;
@@ -154,6 +156,7 @@ var portLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     type: "circle",
     radius: portRadius,
     fill: "dodgerblue"
+  , attribution: 'Ports: <a href="http://msi.nga.mil/NGAPortal/MSI.portal?_nfpb=true&_pageLabel=msi_portal_page_62&pubCode=0015">National Geospatial-Intelligence Agency</a>'
 });
 map.addLayer(portLayer);
 overlays["Ports"] = portLayer;
