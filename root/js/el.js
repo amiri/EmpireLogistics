@@ -161,4 +161,26 @@ var portLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
 map.addLayer(portLayer);
 overlays["Ports"] = portLayer;
 
+
+// Legend
+var legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function (map) {
+
+    var div = L.DomUtil.create('div', 'info legend'),
+        elType = ["Rail Line", "Rail Node", "Rail Interline", "Warehouse", "Port"],
+        color = [ "black", "red", "goldenrod", "orange", "dodgerblue"];
+
+    for (var i = 0; i < 5; i++) {
+        div.innerHTML +=
+            '<i style="background:' + color[i] + '"></i> ' + elType[i] + '<br>';
+    }
+
+    return div;
+};
+
+legend.addTo(map);,
+
+
+
 L.control.layers(baseLayers, overlays).addTo(map);
