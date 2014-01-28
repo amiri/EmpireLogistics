@@ -1,3 +1,8 @@
+function isFunction(functionToCheck) {
+ var getType = {};
+ return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+}
+
 L.TileLayer.custom_d3_geoJSON = L.TileLayer.extend({
     onAdd: function (map) {
         L.TileLayer.prototype.onAdd.call(this, map);
@@ -12,7 +17,14 @@ L.TileLayer.custom_d3_geoJSON = L.TileLayer.extend({
             d.tile.xhr = null;
         });
     },
-
+    onRemove: function (map) {
+        var layerClass = this.options.class;
+        if (isFunction(layerClass)) {
+	    layerClass = layerClass();
+	}
+        L.TileLayer.prototype.onRemove.call(this, map);
+	d3.select(map._container).select("svg").selectAll("."+layerClass).remove();
+    },
     _loadTile: function (tile, tilePoint) {
         var self = this;
         this._adjustTilePoint(tilePoint);

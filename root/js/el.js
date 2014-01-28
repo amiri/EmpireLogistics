@@ -61,7 +61,13 @@ function railLineStyle(feature) {
 
 function calculateClass(feature) {
     var className = "rail-line";
-    if (feature.properties && feature.properties.reporting_mark) {}
+    if (feature && feature.properties && feature.properties.reporting_mark) {
+        var subClass = feature.properties.reporting_mark;
+        subClass = subClass.replace(/[^\w]|_|\s/g, "");
+        if (subClass.length > 0) {
+            className += " " + subClass;
+        }
+    }
     return className;
 }
 
