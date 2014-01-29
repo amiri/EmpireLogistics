@@ -30,7 +30,7 @@ my $geocoder = Geo::Coder::Google->new( apiver => 3 );
 my $dir  = "data/warehouses";
 my $file = "$dir/costco.txt";
 
-my @io  = io($file)->all;
+my @io  = io($file)->slurp;
 
 my @warehouse_types = ("Costco Distribution Center");
 my @warehouses;
