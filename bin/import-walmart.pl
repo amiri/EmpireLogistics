@@ -48,6 +48,7 @@ for my $key ( keys %$dcs ) {
     my $warehouse_type = $key;
     push @warehouse_types, $warehouse_type;
     my $owner = 'walmart';
+    my $name = "Walmart Distribution Center";
     my $status;
     $status = 'closed' if $warehouse_type =~ /Closed/;
     my @dc_set = @{ $dcs->{$key} };
@@ -100,7 +101,7 @@ for my $key ( keys %$dcs ) {
         $date_opened = length($date_opened) ? DateTimeX::Easy->new($date_opened) : undef;
         my $geom = "$lon $lat";
         my $warehouse = [
-            $street_address, $city,        $state,  $postal_code,
+            $name, $street_address, $city,        $state,  $postal_code,
             $country,        $description, $status, $area,
             $owner,          $date_opened, $geom,
         ];
@@ -122,7 +123,7 @@ for my $warehouse_type (@warehouse_types) {
 # lon     lat
 #ST_GeomFromText('POINT (-6.2222 53.307)',4326)
 my $warehouse_command
-    = "insert into warehouse (street_address,city,state,postal_code,country,description,status,area,owner,date_opened) values (?,?,?,?,?,?,?,?,?,?)";
+    = "insert into warehouse (name,street_address,city,state,postal_code,country,description,status,area,owner,date_opened) values (?,?,?,?,?,?,?,?,?,?,?)";
 $sth = $dbh->prepare($warehouse_command);
 
 my @geom_commands;

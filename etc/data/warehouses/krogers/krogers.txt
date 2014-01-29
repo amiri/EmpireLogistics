@@ -1,23 +1,23 @@
-The Kroger Company, Great Lakes Distribution Center, 2000 Nutter Farms Lane, Delaware, OH 43015
-Kroger Distribution Center, 701 Gellhorn, Houston, TX 77029
-Kroger Distribution Center, 5079 Bledsoe Road, Memphis, TN 38141
-Kroger Distribution Center, 4524 Delp St., Memphis, TN 38118
-Kroger Northern Floral Distribution Center, 6893 County Rd. 14, West Liberty, OH 43357
-Kroger Southeastern Floral Distribution Center, 136 Blakely Rd., Simpsonville, SC 29680
-Central Bakery, 2516 East 4th Street, Hutchinson, KS 67501
-Dillons Distribution Center, 2700 East 4th, Hutchinson, KS 67501
-Dillons Distribution Center, 21999 West Highway 54, Goddard, KS 67052
-Fred Meyer Distribution Center, 11506 SE Highway 212, Clackamas, OR 97015
-Fred Meyer Distribution Center, 2200 N Meridan, Puyallup, WA 98371
-Fred Meyer Distribution Center, 222 S. Maurin Road, Chehalis, WA 98532
-Ralphs Distribution Center, 2201 South Wilmington Ave, Compton CA 90220
-Ralphs Distribution Center, 4841 San Fernando Road-West, Los Angeles CA 90039
-Ralphs Distribution Center, 1500 Eastridge Ave, Riverside CA 92507
-Ralphs Distribution Center, 14900 Garfield Avenue, Paramount CA 90723
-Peyton's Midsouth Distribution Center, 120 Kirby Drive, Portland TN 37148
-Peyton's Southeastern Distribution Center, 153 Refreshment Lane, Cleveland TN 37311
-Peyton's Northern Distribution Center, 1111 S. Adams Street, Bluffton IN 46714
-Smith's Layton Distribution Center, 500 N. Sugar Street, Layton UT 84041
-Kroger Distribution Center, 5305 W. Buckeye Road, Phoenix, AZ 85043
-Kroger Distribution Center, 500 South 99th Avenue, Tolleson, AZ 85353
-Kroger Distribution Center, 7770 E. McDowell Road, Scottsdale, AZ 85257
+"Great Lakes Distribution Center","2000 Nutter Farms Lane, Delaware, OH 43015"
+"Kroger Distribution Center","701 Gellhorn, Houston, TX 77029"
+"Kroger Distribution Center","5079 Bledsoe Road, Memphis, TN 38141"
+"Kroger Distribution Center","4524 Delp St., Memphis, TN 38118"
+"Kroger Northern Floral Distribution Center","6893 County Rd. 14, West Liberty, OH 43357"
+"Kroger Southeastern Floral Distribution Center","136 Blakely Rd., Simpsonville, SC 29680"
+"Central Bakery","2516 East 4th Street, Hutchinson, KS 67501"
+"Dillons Distribution Center","2700 East 4th, Hutchinson, KS 67501"
+"Dillons Distribution Center","21999 West Highway 54, Goddard, KS 67052"
+"Fred Meyer Distribution Center","11506 SE Highway 212, Clackamas, OR 97015"
+"Fred Meyer Distribution Center","2200 N Meridan, Puyallup, WA 98371"
+"Fred Meyer Distribution Center","222 S. Maurin Road, Chehalis, WA 98532"
+"Ralphs Distribution Center","2201 South Wilmington Ave, Compton CA 90220"
+"Ralphs Distribution Center","4841 San Fernando Road-West, Los Angeles CA 90039"
+"Ralphs Distribution Center","1500 Eastridge Ave, Riverside CA 92507"
+"Ralphs Distribution Center","14900 Garfield Avenue, Paramount CA 90723"
+"Peyton's Midsouth Distribution Center","120 Kirby Drive, Portland TN 37148"
+"Peyton's Southeastern Distribution Center","153 Refreshment Lane, Cleveland TN 37311"
+"Peyton's Northern Distribution Center","1111 S. Adams Street, Bluffton IN 46714"
+"Smith's Layton Distribution Center","500 N. Sugar Street, Layton UT 84041"
+"Kroger Distribution Center","5305 W. Buckeye Road, Phoenix, AZ 85043"
+"Kroger Distribution Center","500 South 99th Avenue, Tolleson, AZ 85353"
+"Kroger Distribution Center","7770 E. McDowell Road, Scottsdale, AZ 85257"
