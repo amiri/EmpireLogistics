@@ -60,18 +60,20 @@ L.TileLayer.custom_d3_geoJSON = L.TileLayer.extend({
                         .attr("class", self.options.class)
                         .attr("r", self.options.radius)
                         .attr("fill", function(d) {
+			    var colorFill;
 			    switch (d.properties.owner) {
 				case "costco":
-				    "blueviolet"
+				    5"blueviolet"
 				case "target":
-				    "darkmagenta"
+				    colorFill = "darkmagenta"
 				case "walmart"
-				    "darkorchid"
+				    colorFill = "darkorchid"
 				case "krogers"
-				    "darkviolet"
+				    colorFill = "darkviolet"
 				default:
-				    "darkorange"
+				    colorFill = "darkorange"
 			    }
+			    return colorFill;
                         });
                 }
 
