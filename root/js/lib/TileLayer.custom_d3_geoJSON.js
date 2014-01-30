@@ -63,12 +63,12 @@ L.TileLayer.custom_d3_geoJSON = L.TileLayer.extend({
 			    var colorFill;
 			    switch (d.properties.owner) {
 				case "costco":
-				    5"blueviolet"
+				    colorFill = "blueviolet"
 				case "target":
 				    colorFill = "darkmagenta"
-				case "walmart"
+				case "walmart":
 				    colorFill = "darkorchid"
-				case "krogers"
+				case "krogers":
 				    colorFill = "darkviolet"
 				default:
 				    colorFill = "darkorange"
