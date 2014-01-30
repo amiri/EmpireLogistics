@@ -59,7 +59,20 @@ L.TileLayer.custom_d3_geoJSON = L.TileLayer.extend({
                         })
                         .attr("class", self.options.class)
                         .attr("r", self.options.radius)
-                        .attr("fill", self.options.fill);
+                        .attr("fill", function(d) {
+			    switch (d.properties.owner) {
+				case "costco":
+				    "blueviolet"
+				case "target":
+				    "darkmagenta"
+				case "walmart"
+				    "darkorchid"
+				case "krogers"
+				    "darkviolet"
+				default:
+				    "darkorange"
+			    }
+                        });
                 }
 
             });

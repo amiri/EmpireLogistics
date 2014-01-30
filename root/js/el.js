@@ -124,8 +124,7 @@ var warehouseLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     class: "warehouse"
   , type: "circle"
   , radius: warehouseRadius
-  , fill: "darkorange"
-  , attribution: 'Wal-Mart: <a href="http://www.mwpvl.com/">© MWPVL International Inc.</a>; Target: <a href="https://corporate.target.com/careers/global-locations/distribution-center-locations">© Target</a>'
+  , attribution: 'Wal-Mart: <a href="http://www.mwpvl.com/">© MWPVL International Inc.</a>, Target: <a href="https://corporate.target.com/careers/global-locations/distribution-center-locations">© Target</a>'
 });
 map.addLayer(warehouseLayer);
 overlays["Warehouses"] = warehouseLayer;
@@ -168,10 +167,10 @@ var legend = L.control({position: 'bottomright'});
 legend.onAdd = function (map) {
 
     var div = L.DomUtil.create('div', 'info legend'),
-        elType = ["Rail Line", "Rail Node", "Rail Interline", "Warehouse", "Port" ],
-        color = [ "black", "red", "goldenrod", "darkorange", "dodgerblue"];
+        elType = ["Rail Line", "Rail Node", "Rail Interline", "Port", "Costco", "Target", "Walmart", "Krogers" ],
+        color = [ "black", "red", "goldenrod", "dodgerblue", "blueviolet", "darkmagenta", "darkorchid", "darkviolet" ];
 
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < 8; i++) {
         div.innerHTML +=
             '<i style="background:' + color[i] + '"></i> ' + elType[i] + '<br>';
     }
