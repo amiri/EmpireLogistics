@@ -60,20 +60,31 @@ L.TileLayer.custom_d3_geoJSON = L.TileLayer.extend({
                         .attr("class", self.options.class)
                         .attr("r", self.options.radius)
                         .attr("fill", function(d) {
-			    var colorFill;
-			    switch (d.properties.owner) {
-				case "costco":
-				    colorFill = "blueviolet"
-				case "target":
-				    colorFill = "darkmagenta"
-				case "walmart":
-				    colorFill = "darkorchid"
-				case "krogers":
-				    colorFill = "darkviolet"
-				default:
-				    colorFill = "darkorange"
+			    if (self.options.class === "warehouse") {
+			        var colorFill;
+				console.log(d.properties.owner);
+			        switch (""+d.properties.owner) {
+			            case "costco":
+			                colorFill = "blueviolet";
+					break;
+			            case "target":
+			                colorFill = "fuchsia";
+					break;
+			            case "walmart":
+			                colorFill = "olive";
+					break;
+			            case "krogers":
+			                colorFill = "mediumslateblue";
+					break;
+			            default:
+			                colorFill = "darkorange";
+					break;
+			        }
+				console.log(colorFill);
+			        return colorFill;
+                            } else {
+				return self.options.fill;
 			    }
-			    return colorFill;
                         });
                 }
 
