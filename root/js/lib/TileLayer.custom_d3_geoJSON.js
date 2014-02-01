@@ -77,6 +77,7 @@ L.TileLayer.custom_d3_geoJSON = L.TileLayer.extend({
 					break;
 			            case "walgreens":
 			                colorFill = "limegreen";
+					break;
 			            default:
 			                colorFill = "darkorange";
 					break;
