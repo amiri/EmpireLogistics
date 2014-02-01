@@ -27,26 +27,29 @@ my $dbh
 
 my $geocoder = Geo::Coder::Google->new( apiver => 3 );
 
-my $dir  = "data/warehouses/krogers";
-my $file = "$dir/krogers.txt";
+my $dir  = "etc/data/warehouses/walgreens";
+my $file = "$dir/walgreens.csv";
 
 my $io  = io($file);
 
 my $csv = Text::CSV_XS->new( { allow_loose_quotes => 1, binary => 1, auto_diag => 1 } );
-my $cols = $csv->column_names("name","address");
+my $cols = $csv->column_names("address","city","state","zip","type","type2");
 
-my @warehouse_types = ("Kroger Distribution Center");
+my @warehouse_types = ("Walgreens Distribution Center");
 my @warehouses;
 
 while ( my $row = $csv->getline_hr($io) ) {
-    my $owner = 'krogers';
-    my $name = $row->{name};
+    warn p $row;
+    my $owner = 'walgreens';
     my $location;
+    my $address = $row->{address}, ", ", $row->{city}, ", ", $row->{state}, " ", $row->{zip};
+    my @types = @{$row}{qw/type type2/};
+    my $description = join("; ", @types);
     try {
-        $location = $geocoder->geocode( $row->{address} );
+        $location = $geocoder->geocode( $address );
     }
     catch {
-        say "Couldn't geocode ", $row->{address}, ": $_";
+        say "Couldn't geocode ", $address, ": $_";
     };
     my ($street_number) = map { $_->{long_name} } grep {
         any {/street_number/}
@@ -75,14 +78,13 @@ while ( my $row = $csv->getline_hr($io) ) {
     } @{ $location->{address_components} };
     my $lat         = $location->{geometry}{location}{lat};
     my $lon         = $location->{geometry}{location}{lng};
-    my $description;
     my $geom = "$lon $lat";
     my $warehouse = [
-        $name, $street_address, $city,        $state,  $postal_code,
-        $country,        $owner,       $geom,
+        $street_address, $city,        $state,  $postal_code,
+        $country,        $owner,       $description, $geom,
     ];
     push @warehouses, $warehouse;
-    say "    Processed Kroger warehouse ", $street_address;
+    say "    Processed Walgreens warehouse ", $street_address;
 
     # Sleep for google.
     sleep 1;
@@ -99,7 +101,7 @@ for my $warehouse_type (@warehouse_types) {
 # lon     lat
 #ST_GeomFromText('POINT (-6.2222 53.307)',4326)
 my $warehouse_command
-    = "insert into warehouse (name,street_address,city,state,postal_code,country,owner) values (?,?,?,?,?,?,?)";
+    = "insert into warehouse (street_address,city,state,postal_code,country,owner,description) values (?,?,?,?,?,?,?)";
 $sth = $dbh->prepare($warehouse_command);
 
 my @geom_commands;

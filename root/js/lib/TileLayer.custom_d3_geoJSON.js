@@ -62,7 +62,6 @@ L.TileLayer.custom_d3_geoJSON = L.TileLayer.extend({
                         .attr("fill", function(d) {
 			    if (self.options.class === "warehouse") {
 			        var colorFill;
-				console.log(d.properties.owner);
 			        switch (""+d.properties.owner) {
 			            case "costco":
 			                colorFill = "blueviolet";
@@ -80,7 +79,6 @@ L.TileLayer.custom_d3_geoJSON = L.TileLayer.extend({
 			                colorFill = "darkorange";
 					break;
 			        }
-				console.log(colorFill);
 			        return colorFill;
                             } else {
 				return self.options.fill;
