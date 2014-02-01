@@ -170,7 +170,7 @@ legend.onAdd = function (map) {
         elType = ["Rail Line", "Rail Node", "Rail Interline", "Port", "Costco", "Target", "Walmart", "Krogers", "Walgreens" ],
         color = [ "black", "red", "goldenrod", "dodgerblue", "blueviolet", "fuchsia", "darkorange", "mediumslateblue", "limegreen" ];
 
-    for (var i = 0; i < 8; i++) {
+    for (var i = 0; i < 9; i++) {
         div.innerHTML +=
             '<i style="background:' + color[i] + '"></i> ' + elType[i] + '<br>';
     }
