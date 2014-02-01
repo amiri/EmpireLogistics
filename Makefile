@@ -50,7 +50,7 @@ download-port-data: make-data-directories
 
 download-rail-data: make-data-directories $(rail_dir)/na-rail.zip $(rail_dir)/cta-sup/wconv.txt $(rail_dir)/qc28R.zip $(rail_dir)/QNdata.zip $(rail_dir)/cta-sup/subdiv.txt $(rail_dir)/shp/qn28n.shp $(rail_dir)/shp/qn28l.shp $(rail_dir)/na-rail-interlines.geojson $(rail_dir)/na-rail-ownership.json $(rail_dir)/na-rail-subdivisions.json
 
-download-warehouse-data: make-data-directories $(warehouse_dir)/walmart-distribution-centers.json $(warehouse_dir)/target-distribution-centers.json $(warehouse_dir)/costco.txt $(warehouse_dir)/krogers.txt
+download-warehouse-data: make-data-directories $(warehouse_dir)/walmart-distribution-centers.json $(warehouse_dir)/target-distribution-centers.json $(warehouse_dir)/costco.txt $(warehouse_dir)/krogers.txt $(warehouse_dir)/walgreens.csv
 
 ########## Process data
 
@@ -79,6 +79,7 @@ import-warehouse-data: warehouses
 	perl bin/import-target.pl
 	perl bin/import-krogers.pl
 	perl bin/import-costco.pl
+	perl bin/import-walgreens.pl
 
 ########## Rail data download pieces
 
@@ -147,3 +148,6 @@ $(warehouse_dir)/costco.txt:
 
 $(warehouse_dir)/krogers.txt:
 	test -s $(warehouse_dir)/krogers.txt || cp 'etc/data/warehouses/krogers/krogers.txt' $(warehouse_dir)/krogers.txt
+
+$(warehouse_dir)/walgreens.csv:
+	test -s $(warehouse_dir)/walgreens.csv || cp 'etc/data/warehouses/walgreens/walgreens.csv' $(warehouse_dir)/walgreens.csv

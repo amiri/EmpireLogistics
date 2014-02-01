@@ -27,7 +27,7 @@ my $dbh
 
 my $geocoder = Geo::Coder::Google->new( apiver => 3 );
 
-my $dir  = "etc/data/warehouses/walgreens";
+my $dir  = "data/warehouses";
 my $file = "$dir/walgreens.csv";
 
 my $io  = io($file);
