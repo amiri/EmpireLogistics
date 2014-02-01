@@ -167,8 +167,8 @@ var legend = L.control({position: 'bottomright'});
 legend.onAdd = function (map) {
 
     var div = L.DomUtil.create('div', 'info legend'),
-        elType = ["Rail Line", "Rail Node", "Rail Interline", "Port", "Costco", "Target", "Walmart", "Krogers" ],
-        color = [ "black", "red", "goldenrod", "dodgerblue", "blueviolet", "fuchsia", "darkorange", "mediumslateblue" ];
+        elType = ["Rail Line", "Rail Node", "Rail Interline", "Port", "Costco", "Target", "Walmart", "Krogers", "Walgreens" ],
+        color = [ "black", "red", "goldenrod", "dodgerblue", "blueviolet", "fuchsia", "darkorange", "mediumslateblue", "limegreen" ];
 
     for (var i = 0; i < 8; i++) {
         div.innerHTML +=
