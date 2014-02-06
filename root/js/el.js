@@ -23,7 +23,7 @@ function railNodeRadius(feature) {
 
 function warehouseRadius(feature) {
     var radius;
-    radius = (feature.properties.area ? (((feature.properties.area* map.getZoom() / 16) / 500000) * 4) : "6");
+    radius = (feature.properties.area ? (((feature.properties.area * map.getZoom() / 16) / 500000) * 4) : "6");
     return radius;
 }
 
@@ -73,7 +73,7 @@ function calculateClass(feature) {
 
 function onEachFeature(feature, layer) {
     if (feature.properties) {
-        var popup = "<strong>Route:</strong> " + (feature.properties.name ? feature.properties.name : "Unknown") + "<br /><strong>Operator:</strong> " + (feature.properties.owner ? feature.properties.owner : "Unknown") + (feature.properties.reporting_mark ? "(" + feature.properties.reporting_mark + ")" : "");
+        var popup = "<strong>Route:</strong> " + (feature.properties.name ? feature.properties.name: "Unknown") + "<br /><strong>Operator:</strong> " + (feature.properties.owner ? feature.properties.owner: "Unknown") + (feature.properties.reporting_mark ? "(" + feature.properties.reporting_mark + ")": "");
         layer.bindPopup(popup);
     }
 }
@@ -81,17 +81,14 @@ function onEachFeature(feature, layer) {
 // Rail lines
 new L.geoJson({
     "type": "LineString",
-    "coordinates": [
-        [0, 0],
-        [0, 0]
-    ]
+    "coordinates": [[0, 0], [0, 0]]
 }).addTo(map);
-var geojsonURL = "http://50.116.5.25/tiles/rail_lines/{z}/{x}/{y}.json";
+var geojsonURL = "http://localhost/tiles/rail_lines/{z}/{x}/{y}.json";
 var lineLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
-    class: calculateClass
-  , type: "path"
-  , style: railLineStyle
-  , attribution: 'Rail: <a href="http://cta.ornl.gov/transnet/index.html">CTA Transportation Networks</a>'
+    class: calculateClass,
+    type: "path",
+    style: railLineStyle,
+    attribution: 'Rail: <a href="http://cta.ornl.gov/transnet/index.html">CTA Transportation Networks</a>'
 });
 // Put this one on the bottom with "true"
 map.addLayer(lineLayer, true);
@@ -100,16 +97,13 @@ overlays["Rail Lines"] = lineLayer;
 // Rail interlines
 new L.geoJson({
     "type": "LineString",
-    "coordinates": [
-        [0, 0],
-        [0, 0]
-    ]
+    "coordinates": [[0, 0], [0, 0]]
 }).addTo(map);
-var geojsonURL = "http://50.116.5.25/tiles/rail_interlines/{z}/{x}/{y}.json";
+var geojsonURL = "http://localhost/tiles/rail_interlines/{z}/{x}/{y}.json";
 var interlinesLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
-    class: "rail-interline"
-  , type: "path"
-  , style: railLineStyle
+    class: "rail-interline",
+    type: "path",
+    style: railLineStyle
 });
 map.addLayer(interlinesLayer);
 overlays["Rail Interlines"] = interlinesLayer;
@@ -119,12 +113,12 @@ new L.geoJson({
     "type": "Point",
     "coordinates": [0, 0]
 }).addTo(map);
-var geojsonURL = "http://50.116.5.25/tiles/warehouses/{z}/{x}/{y}.json";
+var geojsonURL = "http://localhost/tiles/warehouses/{z}/{x}/{y}.json";
 var warehouseLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
-    class: "warehouse"
-  , type: "circle"
-  , radius: warehouseRadius
-  , attribution: 'Wal-Mart: <a href="http://www.mwpvl.com/">© MWPVL International Inc.</a>, Target: <a href="https://corporate.target.com/careers/global-locations/distribution-center-locations">© Target</a>'
+    class: "warehouse",
+    type: "circle",
+    radius: warehouseRadius,
+    attribution: 'Wal-Mart: <a href="http://www.mwpvl.com/">© MWPVL International Inc.</a>, Target: <a href="https://corporate.target.com/careers/global-locations/distribution-center-locations">© Target</a>'
 });
 map.addLayer(warehouseLayer);
 overlays["Warehouses"] = warehouseLayer;
@@ -134,52 +128,50 @@ new L.geoJson({
     "type": "Point",
     "coordinates": [0, 0]
 }).addTo(map);
-var geojsonURL = "http://50.116.5.25/tiles/rail_nodes/{z}/{x}/{y}.json";
+var geojsonURL = "http://localhost/tiles/rail_nodes/{z}/{x}/{y}.json";
 var nodesLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
-    class: "rail-node"
-  , type: "circle"
-  , radius: railNodeRadius
-  , fill: "red"
+    class: "rail-node",
+    type: "circle",
+    radius: railNodeRadius,
+    fill: "red"
 });
 map.addLayer(nodesLayer);
 overlays["Rail Nodes"] = nodesLayer;
 
-// Ports 
+// Ports
 new L.geoJson({
     "type": "Point",
     "coordinates": [0, 0]
 }).addTo(map);
-var geojsonURL = "http://50.116.5.25/tiles/ports/{z}/{x}/{y}.json";
+var geojsonURL = "http://localhost/tiles/ports/{z}/{x}/{y}.json";
 var portLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
-    class: "port"
-  , type: "circle"
-  , radius: portRadius
-  , fill: "dodgerblue"
-  , attribution: 'Ports: <a href="http://msi.nga.mil/NGAPortal/MSI.portal?_nfpb=true&_pageLabel=msi_portal_page_62&pubCode=0015">National Geospatial-Intelligence Agency</a>'
+    class: "port",
+    type: "circle",
+    radius: portRadius,
+    fill: "dodgerblue",
+    attribution: 'Ports: <a href="http://msi.nga.mil/NGAPortal/MSI.portal?_nfpb=true&_pageLabel=msi_portal_page_62&pubCode=0015">National Geospatial-Intelligence Agency</a>'
 });
 map.addLayer(portLayer);
 overlays["Ports"] = portLayer;
 
-
 // Legend
-var legend = L.control({position: 'bottomright'});
+var legend = L.control({
+    position: 'bottomright'
+});
 
-legend.onAdd = function (map) {
+legend.onAdd = function(map) {
 
     var div = L.DomUtil.create('div', 'info legend'),
-        elType = ["Rail Line", "Rail Node", "Rail Interline", "Port", "Costco", "Target", "Walmart", "Krogers", "Walgreens" ],
-        color = [ "black", "red", "goldenrod", "dodgerblue", "blueviolet", "fuchsia", "darkorange", "mediumslateblue", "limegreen" ];
+    elType = ["Rail Line", "Rail Node", "Rail Interline", "Port", "Costco", "Target", "Walmart", "Krogers", "Walgreens"],
+    color = ["black", "red", "goldenrod", "dodgerblue", "blueviolet", "fuchsia", "darkorange", "mediumslateblue", "limegreen"];
 
     for (var i = 0; i < 9; i++) {
-        div.innerHTML +=
-            '<i style="background:' + color[i] + '"></i> ' + elType[i] + '<br>';
+        div.innerHTML += '<i style="background:' + color[i] + '"></i> ' + elType[i] + '<br>';
     }
 
     return div;
 };
 
 legend.addTo(map);
-
-
 
 L.control.layers(baseLayers, overlays).addTo(map);
