@@ -57,7 +57,7 @@ function onEachFeature(feature, layer) {
 
 // Rail lines
 new L.geoJson({"type":"LineString","coordinates":[[0,0],[0,0]]}).addTo(map);
-var geojsonURL = "http://localhost/tiles/rail_lines/{z}/{x}/{y}.json";
+var geojsonURL = "http://50.116.5.25/tiles/rail_lines/{z}/{x}/{y}.json";
 var lineLayer = new L.TileLayer.d3_geoJSON(geojsonURL, {
   class: calculateClass,
   style: railLineStyle
@@ -67,7 +67,7 @@ overlays["Rail Lines"] = lineLayer;
 
 // Rail interlines
 new L.geoJson({"type":"LineString","coordinates":[[0,0],[0,0]]}).addTo(map);
-var geojsonURL = "http://localhost/tiles/rail_interlines/{z}/{x}/{y}.json";
+var geojsonURL = "http://50.116.5.25/tiles/rail_interlines/{z}/{x}/{y}.json";
 var interlinesLayer = new L.TileLayer.d3_geoJSON(geojsonURL, {
   class: "rail-interline",
   style: railLineStyle
@@ -78,7 +78,7 @@ overlays["Rail Interlines"] = interlinesLayer;
 
 // Rail nodes
 new L.geoJson({"type":"Point","coordinates":[[0,0],[0,0]]}).addTo(map);
-var geojsonURL = "http://localhost/tiles/rail_nodes/{z}/{x}/{y}.json";
+var geojsonURL = "http://50.116.5.25/tiles/rail_nodes/{z}/{x}/{y}.json";
 var nodesLayer = new L.TileLayer.d3_geoJSON(geojsonURL, {
   class: "rail-node",
   style: railNodeStyle

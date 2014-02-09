@@ -39,7 +39,6 @@ my @warehouse_types = ("Walgreens Distribution Center");
 my @warehouses;
 
 while ( my $row = $csv->getline_hr($io) ) {
-    warn p $row;
     my $owner = 'walgreens';
     my $location;
     my $address = $row->{address}, ", ", $row->{city}, ", ", $row->{state}, " ", $row->{zip};

@@ -23,35 +23,17 @@ path
     stroke-linecap:round;
 }
 
-path.rail-line
-{
+.rail-line {
     fill:none;
     stroke:#000;
     stroke-linejoin:round;
     stroke-width:4.0;
 }
-
-path.rail-interline
-{
-    fill:goldenrod;
+.rail-interline {
+    fill:none;
     stroke:goldenrod;
     stroke-linejoin:round;
     stroke-width:4.0;
-}
-.rail-line {
-    z-index: 0;
-}
-.rail-interline {
-    z-index: 1;
-}
-.port {
-    z-index: 2;
-}
-.warehouse {
-    z-index: 3;
-}
-.rail-node {
-    z-index: 4;
 }
 .info {
     padding: 6px 8px;
@@ -70,4 +52,10 @@ path.rail-interline
     float: left;
     margin-right: 8px;
     opacity: 1.0;
+}
+.stroke-highlight {
+    stroke:#5bc0de;
+}
+.fill-highlight {
+    fill:#5bc0de;
 }

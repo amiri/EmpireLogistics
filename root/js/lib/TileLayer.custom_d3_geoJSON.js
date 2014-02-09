@@ -41,7 +41,15 @@ L.TileLayer.custom_d3_geoJSON = L.TileLayer.extend({
                         .attr("d", self._path)
                         .attr("class", self.options.class)
                         .attr("style", self.options.style)
+                        .attr("title", self.options.tip)
+                        .on('mouseover', self.options.mouseover)
+                        .on('mouseout', self.options.mouseout)
                         ;
+                        $("path").tooltip({
+                            "html":true,
+                            "animation":false,
+                            "container":"body"
+                        });
                 }
                 if (self.options.type === "circle") {
                     tile.nodes.selectAll("path").data(geoJson.features)
@@ -86,7 +94,15 @@ L.TileLayer.custom_d3_geoJSON = L.TileLayer.extend({
                                 return self.options.fill;
                             }
                         })
+                        .attr("title", self.options.tip)
+                        .on('mouseover', self.options.mouseover)
+                        .on('mouseout', self.options.mouseout)
                         ;
+                        $("circle").tooltip({
+                            "html":true,
+                            "animation":false,
+                            "container":"body"
+                        });
                 }
             });
         }
