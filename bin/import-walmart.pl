@@ -97,6 +97,7 @@ for my $key ( keys %$dcs ) {
         }
         my $area = $dc->{square_feet};
         $area =~ tr/0-9//cd;
+        $area = undef if !$area;
         my $date_opened = $dc->{date_opened};
         $date_opened = length($date_opened) ? DateTimeX::Easy->new($date_opened) : undef;
         my $geom = "$lon $lat";
