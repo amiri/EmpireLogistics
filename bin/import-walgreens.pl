@@ -79,7 +79,7 @@ while ( my $row = $csv->getline_hr($io) ) {
     my $lon         = $location->{geometry}{location}{lng};
     my $geom = "$lon $lat";
     my $warehouse = [
-        $street_address, $city,        $state,  $postal_code,
+        "Walgreen's Distribution Center", $street_address, $city,        $state,  $postal_code,
         $country,        $owner,       $description, $geom,
     ];
     push @warehouses, $warehouse;
@@ -100,7 +100,7 @@ for my $warehouse_type (@warehouse_types) {
 # lon     lat
 #ST_GeomFromText('POINT (-6.2222 53.307)',4326)
 my $warehouse_command
-    = "insert into warehouse (street_address,city,state,postal_code,country,owner,description) values (?,?,?,?,?,?,?)";
+    = "insert into warehouse (name,street_address,city,state,postal_code,country,owner,description) values (?,?,?,?,?,?,?,?)";
 $sth = $dbh->prepare($warehouse_command);
 
 my @geom_commands;

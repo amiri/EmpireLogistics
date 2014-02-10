@@ -9,7 +9,7 @@ create table warehouse (
     country text,
     description text,
     status text,
-    area text,
+    area integer,
     owner warehouse_owner,
     date_opened date,
     geometry geometry

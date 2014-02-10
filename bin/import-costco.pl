@@ -37,7 +37,7 @@ my @warehouses;
 
 for my $dc ( @io ) {
     my $owner = 'costco';
-    my $name = "Costco Distribution Centers";
+    my $name = "Costco Distribution Center";
     my $location;
     try {
         $location = $geocoder->geocode( $dc );
