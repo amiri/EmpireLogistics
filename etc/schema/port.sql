@@ -67,7 +67,12 @@ create table port (
     repairs text,
     drydock text,
     railway text,
-    geometry geometry
+    geometry geometry,
+    domestic_tonnage integer,
+    foreign_tonnage integer,
+    import_tonnage integer,
+    export_tonnage integer,
+    total_tonnage integer
 );
 insert into port (
     id,
