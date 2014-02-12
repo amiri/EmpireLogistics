@@ -11,7 +11,7 @@ all: chef data database
 
 data: download-data rail warehouses ports
 
-database: data create-database import-rail-data import-port-data import-warehouse-data
+database: data create-database import-rail-data import-port-data import-port-teu import-warehouse-data
 
 create-database:
 	bin/create-database
@@ -47,10 +47,12 @@ download-data: download-port-data download-rail-data download-warehouse-data
 
 download-port-data: make-data-directories
 	test -s $(port_dir)/WPI_Shapefile.zip || curl -o $(port_dir)/WPI_Shapefile.zip 'http://msi.nga.mil/MSISiteContent/StaticFiles/NAV_PUBS/WPI/WPI_Shapefile.zip'
+	test -s $(port_dir)/ports_major.zip || curl -o $(port_dir)/ports_major.zip 'http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/national_transportation_atlas_database/2013/zip/ports_major.zip'
+
 
 download-rail-data: make-data-directories $(rail_dir)/na-rail.zip $(rail_dir)/cta-sup/wconv.txt $(rail_dir)/qc28R.zip $(rail_dir)/QNdata.zip $(rail_dir)/cta-sup/subdiv.txt $(rail_dir)/shp/qn28n.shp $(rail_dir)/shp/qn28l.shp $(rail_dir)/na-rail-interlines.geojson $(rail_dir)/na-rail-ownership.json $(rail_dir)/na-rail-subdivisions.json
 
-download-warehouse-data: make-data-directories $(warehouse_dir)/walmart-distribution-centers.json $(warehouse_dir)/target-distribution-centers.json $(warehouse_dir)/costco.txt $(warehouse_dir)/krogers.txt $(warehouse_dir)/walgreens.csv
+download-warehouse-data: make-data-directories $(warehouse_dir)/walmart-distribution-centers.json $(warehouse_dir)/target-distribution-centers.json $(warehouse_dir)/costco.txt $(warehouse_dir)/krogers.txt $(warehouse_dir)/walgreens.csv $(warehouse_dir)/amazon.tsv $(warehouse_dir)/homedepot.csv
 
 ########## Process data
 
@@ -73,6 +75,10 @@ import-rail-data: rail
 import-port-data: ports $(port_dir)/WPI.shp
 	shp2pgsql -s 4326:900913 -t 2d -I $(port_dir)/WPI raw_port | psql -q -U el -d empirelogistics
 	bin/postprocess-port
+
+import-port-teu: ports $(port_dir)/ports_major.shp
+	test -s $(port_dir)/ports_major.json || ogr2ogr -f GeoJSON $(port_dir)/ports_major.json $(port_dir)/ports_major.shp
+	bin/import-major-port-teu.pl
 
 import-warehouse-data: warehouses
 	perl bin/import-walmart.pl
@@ -132,6 +138,9 @@ $(rail_dir)/na-rail-subdivisions.json: $(rail_dir)/cta-sup/subdiv.txt $(rail_dir
 $(port_dir)/WPI.shp: download-port-data
 	unzip -o -d $(port_dir)/ $(port_dir)/WPI_Shapefile.zip
 
+$(port_dir)/ports_major.shp: download-port-data
+	unzip -o -d $(port_dir)/ $(port_dir)/ports_major.zip
+
 ########## Warehouse data download pieces
 
 $(warehouse_dir)/walmart.html:
@@ -151,3 +160,9 @@ $(warehouse_dir)/krogers.txt:
 
 $(warehouse_dir)/walgreens.csv:
 	test -s $(warehouse_dir)/walgreens.csv || cp 'etc/data/warehouses/walgreens/walgreens.csv' $(warehouse_dir)/walgreens.csv
+
+$(warehouse_dir)/amazon.tsv:
+	test -s $(warehouse_dir)/amazon.tsv || cp 'etc/data/warehouses/amazon/amazon.tsv' $(warehouse_dir)/amazon.tsv
+
+$(warehouse_dir)/homedepot.csv:
+	test -s $(warehouse_dir)/homedepot.csv || cp 'etc/data/warehouses/homedepot/homedepot.csv' $(warehouse_dir)/homedepot.csv
