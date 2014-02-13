@@ -81,15 +81,15 @@ for my $port_name ( keys %major_ports ) {
     my $port = $sth->fetchall_arrayref( {} );
     next unless $port->[0]->{id};
 
-    say "Updating ", $port->[0]->{port_name};
+    say "Inserting 2013 tonnage record for ", $port->[0]->{port_name};
 
-    my $update_command
-        = "update port set domestic_tonnage = ?, foreign_tonnage = ?, import_tonnage = ?, export_tonnage = ?, total_tonnage = ? where id = ?";
-    $sth = $dbh->prepare($update_command);
-    $sth->execute(
+    my $insert_command = "insert into port_tonnage (port,year,domestic_tonnage,foreign_tonnage,import_tonnage,export_tonnage,total_tonnage) values (?,?,?,?,?,?,?)";
+    #my $update_command
+        #= "update port set domestic_tonnage = ?, foreign_tonnage = ?, import_tonnage = ?, export_tonnage = ?, total_tonnage = ? where id = ?";
+    $sth = $dbh->prepare($insert_command);
+    $sth->execute( $port->[0]->{id}, 2013,
         @{ $major_ports{$port_name}{properties} }
-            {qw/DOMESTIC FOREIGN IMPORTS EXPORTS TOTAL/},
-        $port->[0]->{id}
+            {qw/DOMESTIC FOREIGN IMPORTS EXPORTS TOTAL/}
     ) or die $sth->errstr;
 }
 

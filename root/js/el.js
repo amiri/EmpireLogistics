@@ -160,6 +160,11 @@ function portTip(d) {
     if (d.properties.cargo_pier_depth) { html += "<li>Cargo Pier Depth: "+ d.properties.cargo_pier_depth+"</li>";}
     if (d.properties.oil_terminal_depth) { html += "<li>Oil Terminal Depth: "+ d.properties.oil_terminal_depth+"</li>";}
     if (d.properties.max_vessel_size_from_port) { html += "<li>Max Vessel Size: "+ d.properties.max_vessel_size_from_port+"</li>";}
+    if (d.properties.domestic_tonnage) { html += "<li>Domestic Tonnage: "+ d.properties.domestic_tonnage+" ("+ d.properties.year +")</li>";}
+    if (d.properties.foreign_tonnage) { html += "<li>Foreign Tonnage: "+ d.properties.foreign_tonnage+" ("+ d.properties.year +")</li>";}
+    if (d.properties.import_tonnage) { html += "<li>Import Tonnage: "+ d.properties.import_tonnage+" ("+ d.properties.year +")</li>";}
+    if (d.properties.export_tonnage) { html += "<li>Export Tonnage: "+ d.properties.export_tonnage+" ("+ d.properties.year +")</li>";}
+    if (d.properties.total_tonnage) { html += "<li>Total Tonnage: "+ d.properties.total_tonnage+" ("+ d.properties.year +")</li>";}
     html += "</ul></div></div>";
     return html;
 }
@@ -169,7 +174,7 @@ new L.geoJson({
     "type": "LineString",
     "coordinates": [[0, 0], [0, 0]]
 }).addTo(map);
-var geojsonURL = "http://50.116.5.25/tiles/rail_lines/{z}/{x}/{y}.json";
+var geojsonURL = "http://localhost/tiles/rail_lines/{z}/{x}/{y}.json";
 var lineLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     class: railLineClass,
     type: "path",
@@ -188,7 +193,7 @@ new L.geoJson({
     "type": "LineString",
     "coordinates": [[0, 0], [0, 0]]
 }).addTo(map);
-var geojsonURL = "http://50.116.5.25/tiles/rail_interlines/{z}/{x}/{y}.json";
+var geojsonURL = "http://localhost/tiles/rail_interlines/{z}/{x}/{y}.json";
 var interlinesLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     class: "rail-interline",
     type: "path",
@@ -205,7 +210,7 @@ new L.geoJson({
     "type": "Point",
     "coordinates": [0, 0]
 }).addTo(map);
-var geojsonURL = "http://50.116.5.25/tiles/warehouses/{z}/{x}/{y}.json";
+var geojsonURL = "http://localhost/tiles/warehouses/{z}/{x}/{y}.json";
 var warehouseLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     class: "warehouse",
     type: "circle",
@@ -223,7 +228,7 @@ new L.geoJson({
     "type": "Point",
     "coordinates": [0, 0]
 }).addTo(map);
-var geojsonURL = "http://50.116.5.25/tiles/rail_nodes/{z}/{x}/{y}.json";
+var geojsonURL = "http://localhost/tiles/rail_nodes/{z}/{x}/{y}.json";
 var nodesLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     class: "rail-node",
     type: "circle",
@@ -241,7 +246,7 @@ new L.geoJson({
     "type": "Point",
     "coordinates": [0, 0]
 }).addTo(map);
-var geojsonURL = "http://50.116.5.25/tiles/ports/{z}/{x}/{y}.json";
+var geojsonURL = "http://localhost/tiles/ports/{z}/{x}/{y}.json";
 var portLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     class: "port",
     type: "circle",

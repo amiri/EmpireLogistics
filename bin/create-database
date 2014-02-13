@@ -4,7 +4,7 @@ DB=empirelogistics
 
 ## Drop db
 #echo "Dropping $DB"
-#dropdb $DB 
+#dropdb $DB
 
 ## Drop user
 #echo "Dropping user"
