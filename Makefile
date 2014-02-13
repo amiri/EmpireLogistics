@@ -86,6 +86,8 @@ import-warehouse-data: warehouses
 	perl bin/import-krogers.pl
 	perl bin/import-costco.pl
 	perl bin/import-walgreens.pl
+	perl bin/import-amazon.pl
+	perl bin/import-homedepot.pl
 
 ########## Rail data download pieces
 

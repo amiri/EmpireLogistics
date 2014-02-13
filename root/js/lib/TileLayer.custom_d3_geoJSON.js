@@ -86,10 +86,10 @@ L.TileLayer.custom_d3_geoJSON = L.TileLayer.extend({
                                     colorFill = "limegreen";
                                     break;
                                 case "Amazon":
-                                    colorFill = "ferngreen";
+                                    colorFill = "forestgreen";
                                     break;
                                 case "Home Depot":
-                                    colorFill = "sangria";
+                                    colorFill = "maroon";
                                     break;
                                 default:
                                     colorFill = "darkorange";
