@@ -38,9 +38,19 @@ function warehouseRadius(feature) {
 }
 
 function portRadius(feature) {
-    var radius;
-    radius = 4;
-    return radius;
+    var radius = 6;
+    if (feature.properties.area) {
+        var tonnage = feature.properties.total_tonnage;
+        tonnage = tonnage.replace(/\D/g,'');
+        if (tonnage.length == 0) {
+            return radius;
+        } else {
+            radius = (((tonnage * map.getZoom() / 16) / 500000) * 4);
+            return radius;
+        }
+    } else {
+        return radius;
+    }
 }
 
 function railLineStyle(feature) {
