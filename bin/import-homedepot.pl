@@ -41,7 +41,7 @@ my @warehouse_types = ( "Home Depot Rapid Deployment Center",
 my @warehouses;
 
 while ( my $row = $csv->getline_hr($io) ) {
-    my $owner = 'homedepot';
+    my $owner = 'home depot';
     my $name  = $row->{name};
     my $address
         = $row->{street_address} . ", "
