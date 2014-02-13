@@ -252,7 +252,7 @@ var portLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     type: "circle",
     radius: portRadius,
     fill: "dodgerblue",
-    attribution: 'Ports: <a href="http://msi.nga.mil/NGAPortal/MSI.portal?_nfpb=true&_pageLabel=msi_portal_page_62&pubCode=0015">National Geospatial-Intelligence Agency</a>',
+    attribution: 'Ports: <a href="http://msi.nga.mil/NGAPortal/MSI.portal?_nfpb=true&_pageLabel=msi_portal_page_62&pubCode=0015">National Geospatial-Intelligence Agency</a>; TEU data: <a href="http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/national_transportation_atlas_database/2013/points.html">USDOT Bureau of Transportation Statistics</a>',
     tip: portTip,
     mouseover: portMouseover,
     mouseout: portMouseout
