@@ -1,69 +1,69 @@
-"name"	"street_address"	"city"	"county"
-"#PHX5"	"16920 W. Commerce Dr."	"Goodyear, Arizona  85338"	"Maricopa County"
-"#PHX6"	"4750 W. Mohave Rd."	"Phoenix, AZ"	"Maricopa County"
-"#PHX3"	"6835 W. Buckeye Rd."	"Phoenix, AZ"	"Maricopa County"
-"#PHX7"	"800 N. 75th Ave"	"Phoenix, Arizona, 85043"	"Maricopa County"
-"#ONT2"	"1910 E Central Ave."	"San Bernardino, CA"	"San Bernardino County"
-"#OAK3"	"255 Park Center Drive"	"Patterson City, CA 95363"
-	"1909 Zephyr St"	"Stockton, CA 95206"
-"#OAK4"	"1555 N. Chrisman Rd."	"Tracy, California, 95304"
-"#PHL1"	"1 Centerpoint Blvd."	"New Castle, DE 19720"	"New Castle County"
-"#PHL3"	"1600 Johnson Way"	"New Castle, DE 19720"
-"#PHL7"	"560 Merrimac Ave"	"Middletown, DE 19709"
-"#PHL8"	"727 N. Broad Street"	"Middletown, DE"	"New Castle County"
-"#IND6"	"1453 10th Street"	"Jeffersonville, IN 47130"	"Clark County"
-"#IND1"	"4255 Anson Blvd."	"Whitestown, IN 46075"	"Boone County"
-"#XUSE"	"5100 S Indianapolis Rd"	"Whitestown, IN 46075"
-"#IND4"	"710 South Girls School Rd"	"Indianapolis, IN 46214"	"Marion County"
-"#IND2"	"715 Airtech Pkwy"	"Plainfield, IN 46168"	"Hendricks County"
-"#IND5"	"800 S Perry Rd"	"Plainfield, IN 46168"	"Hendricks County"
-"#SDF8"	"900 Patrol Rd."	"Jeffersonville, IN 47130"
-"#TUL1"	"2654 N US Highway 169"	"Coffeyville, KS 67337"	"Montgomery County"
-"#SDF1"	"1105 S Columbia Ave"	"Campbellsville, KY 42718"	"Taylor County"
-"#SDF2"	"4360 Robards Ln"	"Louisville, KY 40218"
-"#CVG1"	"1155 Worldwide Blvd."	"Hebron, KY 41048"
-"#CVG2"	"1600 Worldwide Blvd."	"Hebron, KY 41048"
-"#CVG3"	"3680 Langley Dr."	"Hebron, KY 41048"
-"#CVG5"	"2285 Litton Lane"	"Hebron, KY 41048"
-"#LEX1"	"1850 Mercer Rd"	"Lexington, KY 40511"
-"#LEX2"	"172 Trade St."	"Lexington, Kentucky, 40511"
-"#SDF4"	"376 Zappos.com Blvd"	"Shepherdesville, KY 40165"
-"#SDF6"	"271 Omega Pkwy"	"Shepherdsville, KY 40165"
-"#SDF7"	"300 Omicron Court"	"Shepherdsville, KY 40165"
-"#SDF9"	"100 W. Thomas P. Echols Lane"	"Shepherdsville, KY 40165"
-"#RNO1"	"1600 East Newlands Dr."	"Fernley, NV 89408"	"Lyon County"
-"#LAS2"	"3837 Bay Lake Trail"	"Suite 113"	"North Las Vegas, NV 89030-4434"
-"#BOS1"	"10 State St"	"Nashua, NH 03063"	"Hillsborough County"
-"#EWR5"	"301 Blair Rd."	"Avenel, NJ 07001"
-"#AVP1"	"550 Oak Ridge Road"	"Hazleton, PA 18202"	"Luzerne County"
-"#ABE2"	"705 Boulder Dr"	"Breinigsville, PA 18031"	"Lehigh County"
-"#ABE3"	"650 Boulder Drive"	"Breinigsville, PA 18031"
-"#ABE5"	"6455 Allentown Boulevard"	"Harrisburg, PA 17112"
-"#PHL5"	"500 McCarthy Dr"	"Lewisberry, PA 17339"	"York County"
-"#PHL6"	"675 Allen Rd."	"Carlisle, PA 17015"
-"#PHL4"	"21 Roadway Drive"	"Carlisle, PA 17015"
-"#VUBA"	"1000 Keystone Industrial Park"	"Scranton, PA 18512"
-"#VUGA"	"508 Delaware Avenue"	"West Pittston, PA 18643"
-"#XUSC"	"40 Logistics Drive"	"Carlisle, PA 17013"
-"#GSP1"	"402 John Dodd Rd."	"Spartanburg, SC 29303"	"Spartanburg County"
-	"4400 12 Street Extension"	"Cayce, SC 29172"	"Lexington County"
-"#CAE1"	"4400 12th Street Extension"	"West Columbia, SC 29172"	"Lexington County"
-"#CHA1"	"7200 Discovery Dr"	"Chattanooga, TN 37421"	"Hamilton County"
-"#BNA3"	"2020 Joe B Jackson Pkwy"	"Murfreesboro, TN 37127"	"Rutherford County"
-"#BNA1"	"14840 Central Pike"	"Lebanon, TN 37090"
-"#CHA2"	"225 Infinity Dr NW"	"Charleston, TN 37310"
-"#BNA2"	"500 Duke Drive"	"Lebanon, TN 37090"
-"#SAT1"	"6000 Enterprise Avenue"	"Schertz, TX 78154"
-"#DFW6"	"940 W Bethel Road"	"Coppell, TX 75019"
-"#DFW7"	"700 Westport Parkway"	"Fort Worth, TX 76177"
-"#XUSB"	"14900 Frey Rd"	"Fort Worth, TX 76155"
-"#DFW1"	"2700 Regent Blvd"	"DFW Airport, TX 75261"
-"#RIC1"	"9827 Chester Rd."	"Petersburg, VA"	"Independent City (Doesn’t reside in a county)"
-"#RIC2"	"1901 Meadowville Technology Parkway"	"Chester, VA 23836"	"Chesterfield County"
-"#BFI1"	"1800 140th Ave. E"	"Sumner, WA"	"Pierce County"
-"#SEA6 & #SEA8"	"1227 124th Avenue Northeast"	"Bellevue, WA, 98005"
-"#BFI3"	"2700 Center Drive"	"Dupont, WA 98327"
-"#SEA6"	"2646 Rainier Ave South"	"Seattle, WA 98144"
-"#YVR2"	"450 Derwent PL"	"Delta, British Columbia V3M 5Y9"
-"#YYZ1"	"6363 Millcreek Drive"	"Mississauga, Ontario L5N 1L8"
-"#PRTO"	"6110 Cantay Rd."	"Mississauga, Ontario L5R 3W"
+name	street_address	city	county
+#PHX5	16920 W. Commerce Dr.	Goodyear, Arizona  85338	Maricopa County
+#PHX6	4750 W. Mohave Rd.	Phoenix, AZ	Maricopa County
+#PHX3	6835 W. Buckeye Rd.	Phoenix, AZ	Maricopa County
+#PHX7	800 N. 75th Ave	Phoenix, Arizona, 85043	Maricopa County
+#ONT2	1910 E Central Ave.	San Bernardino, CA	San Bernardino County
+#OAK3	255 Park Center Drive	Patterson City, CA 95363
+	1909 Zephyr St	Stockton, CA 95206
+#OAK4	1555 N. Chrisman Rd.	Tracy, California, 95304
+#PHL1	1 Centerpoint Blvd.	New Castle, DE 19720	New Castle County
+#PHL3	1600 Johnson Way	New Castle, DE 19720
+#PHL7	560 Merrimac Ave	Middletown, DE 19709
+#PHL8	727 N. Broad Street	Middletown, DE	New Castle County
+#IND6	1453 10th Street	Jeffersonville, IN 47130	Clark County
+#IND1	4255 Anson Blvd.	Whitestown, IN 46075	Boone County
+#XUSE	5100 S Indianapolis Rd	Whitestown, IN 46075
+#IND4	710 South Girls School Rd	Indianapolis, IN 46214	Marion County
+#IND2	715 Airtech Pkwy	Plainfield, IN 46168	Hendricks County
+#IND5	800 S Perry Rd	Plainfield, IN 46168	Hendricks County
+#SDF8	900 Patrol Rd.	Jeffersonville, IN 47130
+#TUL1	2654 N US Highway 169	Coffeyville, KS 67337	Montgomery County
+#SDF1	1105 S Columbia Ave	Campbellsville, KY 42718	Taylor County
+#SDF2	4360 Robards Ln	Louisville, KY 40218
+#CVG1	1155 Worldwide Blvd.	Hebron, KY 41048
+#CVG2	1600 Worldwide Blvd.	Hebron, KY 41048
+#CVG3	3680 Langley Dr.	Hebron, KY 41048
+#CVG5	2285 Litton Lane	Hebron, KY 41048
+#LEX1	1850 Mercer Rd	Lexington, KY 40511
+#LEX2	172 Trade St.	Lexington, Kentucky, 40511
+#SDF4	376 Zappos.com Blvd	Shepherdesville, KY 40165
+#SDF6	271 Omega Pkwy	Shepherdsville, KY 40165
+#SDF7	300 Omicron Court	Shepherdsville, KY 40165
+#SDF9	100 W. Thomas P. Echols Lane	Shepherdsville, KY 40165
+#RNO1	1600 East Newlands Dr.	Fernley, NV 89408	Lyon County
+#LAS2	3837 Bay Lake Trail	Suite 113	North Las Vegas, NV 89030-4434
+#BOS1	10 State St	Nashua, NH 03063	Hillsborough County
+#EWR5	301 Blair Rd.	Avenel, NJ 07001
+#AVP1	550 Oak Ridge Road	Hazleton, PA 18202	Luzerne County
+#ABE2	705 Boulder Dr	Breinigsville, PA 18031	Lehigh County
+#ABE3	650 Boulder Drive	Breinigsville, PA 18031
+#ABE5	6455 Allentown Boulevard	Harrisburg, PA 17112
+#PHL5	500 McCarthy Dr	Lewisberry, PA 17339	York County
+#PHL6	675 Allen Rd.	Carlisle, PA 17015
+#PHL4	21 Roadway Drive	Carlisle, PA 17015
+#VUBA	1000 Keystone Industrial Park	Scranton, PA 18512
+#VUGA	508 Delaware Avenue	West Pittston, PA 18643
+#XUSC	40 Logistics Drive	Carlisle, PA 17013
+#GSP1	402 John Dodd Rd.	Spartanburg, SC 29303	Spartanburg County
+	4400 12 Street Extension	Cayce, SC 29172	Lexington County
+#CAE1	4400 12th Street Extension	West Columbia, SC 29172	Lexington County
+#CHA1	7200 Discovery Dr	Chattanooga, TN 37421	Hamilton County
+#BNA3	2020 Joe B Jackson Pkwy	Murfreesboro, TN 37127	Rutherford County
+#BNA1	14840 Central Pike	Lebanon, TN 37090
+#CHA2	225 Infinity Dr NW	Charleston, TN 37310
+#BNA2	500 Duke Drive	Lebanon, TN 37090
+#SAT1	6000 Enterprise Avenue	Schertz, TX 78154
+#DFW6	940 W Bethel Road	Coppell, TX 75019
+#DFW7	700 Westport Parkway	Fort Worth, TX 76177
+#XUSB	14900 Frey Rd	Fort Worth, TX 76155
+#DFW1	2700 Regent Blvd	DFW Airport, TX 75261
+#RIC1	9827 Chester Rd.	Petersburg, VA	Independent City (Doesn’t reside in a county)
+#RIC2	1901 Meadowville Technology Parkway	Chester, VA 23836	Chesterfield County
+#BFI1	1800 140th Ave. E	Sumner, WA	Pierce County
+#SEA6 & #SEA8	1227 124th Avenue Northeast	Bellevue, WA, 98005
+#BFI3	2700 Center Drive	Dupont, WA 98327
+#SEA6	2646 Rainier Ave South	Seattle, WA 98144
+#YVR2	450 Derwent PL	Delta, British Columbia V3M 5Y9
+#YYZ1	6363 Millcreek Drive	Mississauga, Ontario L5N 1L8
+#PRTO	6110 Cantay Rd.	Mississauga, Ontario L5R 3W

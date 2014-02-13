@@ -33,7 +33,7 @@ my $file = "$dir/amazon.tsv";
 my $io = io($file);
 
 my $csv = Text::CSV_XS->new(
-    { allow_loose_quotes => 1, binary => 1, auto_diag => 1 } );
+    { allow_loose_quotes => 1, binary => 1, auto_diag => 1, sep_char => "\t" } );
 my $cols = $csv->column_names( $csv->getline($io) );
 
 my @warehouse_types = ( "Amazon Distribution Center");
@@ -41,7 +41,7 @@ my @warehouses;
 
 while ( my $row = $csv->getline_hr($io) ) {
     my $owner = 'amazon';
-    my $name  = $row->{name};
+    my $name  = "Amazon Distribution Center ".$row->{name};
     my $address = $row->{street_address} . ", " . $row->{city} . ", ";
     my $location;
     try {
