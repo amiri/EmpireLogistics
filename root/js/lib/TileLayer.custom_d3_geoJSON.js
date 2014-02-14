@@ -41,14 +41,16 @@ L.TileLayer.custom_d3_geoJSON = L.TileLayer.extend({
                         .attr("d", self._path)
                         .attr("class", self.options.class)
                         .attr("style", self.options.style)
-                        .attr("title", self.options.tip)
+                        .attr("title", self.options.title)
+                        .attr("data-content", self.options.content)
                         .on('mouseover', self.options.mouseover)
                         .on('mouseout', self.options.mouseout)
                         ;
-                        $("path").tooltip({
+                        $("path").popover({
                             "html":true,
                             "animation":false,
-                            "container":"body"
+                            "container":"body",
+                            "trigger":"hover"
                         });
                 }
                 if (self.options.type === "circle") {
@@ -100,14 +102,16 @@ L.TileLayer.custom_d3_geoJSON = L.TileLayer.extend({
                                 return self.options.fill;
                             }
                         })
-                        .attr("title", self.options.tip)
+                        .attr("title", self.options.title)
+                        .attr("data-content", self.options.content)
                         .on('mouseover', self.options.mouseover)
                         .on('mouseout', self.options.mouseout)
                         ;
-                        $("circle").tooltip({
+                        $("circle").popover({
                             "html":true,
                             "animation":false,
-                            "container":"body"
+                            "container":"body",
+                            "trigger":"hover"
                         });
                 }
             });

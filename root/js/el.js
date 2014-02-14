@@ -21,15 +21,17 @@ function railNodeRadius(feature) {
     return radius;
 }
 
+// Minimum radius of 4 px
 function warehouseRadius(feature) {
-    var radius = 6;
+    var defaultRadius = ((map.getZoom()/16) * 8);
+    var radius = (defaultRadius > 4) ? ((map.getZoom()/16) * 8) : 4;
     if (feature.properties.area) {
         var area = feature.properties.area;
         area = area.replace(/\D/g,'');
         if (area.length == 0) {
             return radius;
         } else {
-            radius = (((area * map.getZoom() / 16) / 500000) * 4);
+            radius = ((((area * map.getZoom() / 16) / 75000) * 1) > defaultRadius) ? (((area * map.getZoom() / 16) / 75000) * 1) : defaultRadius;
             return radius;
         }
     } else {
@@ -37,15 +39,17 @@ function warehouseRadius(feature) {
     }
 }
 
+// Minimum radius of 3 px
 function portRadius(feature) {
-    var radius = 6;
-    if (feature.properties.area) {
+    var defaultRadius = ((map.getZoom()/16) * 8);
+    var radius = (defaultRadius > 3) ? defaultRadius : 3;
+    if (feature.properties.total_tonnage) {
         var tonnage = feature.properties.total_tonnage;
         tonnage = tonnage.replace(/\D/g,'');
         if (tonnage.length == 0) {
             return radius;
         } else {
-            radius = (((tonnage * map.getZoom() / 16) / 500000) * 4);
+            radius = ((((tonnage * map.getZoom() / 16) / 2000000)) > defaultRadius) ? (((tonnage * map.getZoom() / 16) / 2000000)) : defaultRadius;
             return radius;
         }
     } else {
@@ -124,58 +128,78 @@ function warehouseMouseout(d) {
 }
 
 // Tooltip functions for each layer
-function railLineTip(d) {
-    var html = "<div class='container-fluid'><div class='row'><p><h5>"+d.properties.name+"</h5></p><p><ul class='list-unstyled'>";
-    if (d.properties.owner) { html += "<li>Owner: "+ d.properties.owner+"</li>";}
-    if (d.properties.subdivision) { html += "<li>Subdivision: "+ d.properties.subdivision+"</li>";}
-    if (d.properties.reporting_mark) { html += "<li>Reporting Mark: "+ d.properties.reporting_mark+"</li>";}
-    if (d.properties.miles) { html += "<li>Length: "+ d.properties.miles+" miles</li>";}
-    if (d.properties.density_detail) { html += "<li>Freight Volume: "+ d.properties.density_detail+"</li>";}
-    html += "</ul></div></div>";
+function railLineTitle(d) {
+    var html = "<span class='rail-line-bug'></span>"+d.properties.name;
+    return html;
+}
+function railLinePopoverContent(d) {
+    var html = "<dl class='dl-horizontal'>";
+    if (d.properties.owner) { html += "<dt>Owner</dt><dd>"+ d.properties.owner+"</dd>";}
+    if (d.properties.subdivision) { html += "<dt>Subdivision</dt><dd>"+ d.properties.subdivision+"</dd>";}
+    if (d.properties.reporting_mark) { html += "<dt>Reporting Mark</dt><dd>"+ d.properties.reporting_mark+"</dd>";}
+    if (d.properties.miles) { html += "<dt>Length</dt><dd>"+ d.properties.miles+" miles</dd>";}
+    if (d.properties.density_detail) { html += "<dt>Freight Volume</dt><dd>"+ d.properties.density_detail+"</dd>";}
+    html += "</dl>";
     return html;
 }
 
-function railInterlineTip(d) {
-    var html = "<div class='container-fluid'><div class='row'><p><h5>"+d.properties.junction_code+"</h5></p><p><ul class='list-unstyled'>";
-    if (d.properties.forwarding_node) { html += "<li>Forwarding Node: "+ d.properties.forwarding_node+"</li>";}
-    if (d.properties.forwarding_node_owner) { html += "<li>Forwarding Node Owner: "+ d.properties.forwarding_node_owner+"</li>";}
-    if (d.properties.receiving_node) { html += "<li>Receiving Node: "+ d.properties.receiving_node+"</li>";}
-    if (d.properties.receiving_node_owner) { html += "<li>Receiving Node Owner: "+ d.properties.receiving_node_owner+"</li>";}
-    if (d.properties.impedance) { html += "<li>Impedance/Expense: "+ d.properties.impedance+"</li>";}
-    html += "</ul></div></div>";
+function railInterlineTitle(d) {
+    var html = "<span class='rail-interline-bug'><span>"+d.properties.junction_code;
+    return html;
+}
+function railInterlinePopoverContent(d) {
+    var html = "<dl class='dl-horizontal'>";
+    if (d.properties.forwarding_node) { html += "<dt>Forwarding Node</dt><dd>"+ d.properties.forwarding_node+"</dd>";}
+    if (d.properties.forwarding_node_owner) { html += "<dt>Forwarding Node Owner</dt><dd>"+ d.properties.forwarding_node_owner+"</dd>";}
+    if (d.properties.receiving_node) { html += "<dt>Receiving Node</dt><dd>"+ d.properties.receiving_node+"</dd>";}
+    if (d.properties.receiving_node_owner) { html += "<dt>Receiving Node Owner</dt><dd>"+ d.properties.receiving_node_owner+"</dd>";}
+    if (d.properties.impedance) { html += "<dt>Impedance/Expense</dt><dd>"+ d.properties.impedance+"</dd>";}
+    html += "</dl>";
     return html;
 }
 
-function railNodeTip(d) {
-    var html = "<div class='container-fluid'><div class='row'><p><h5>"+d.properties.name+"</h5></p><p><ul class='list-unstyled'>";
-    if (d.properties.forwarding_node) { html += "<li>Inbound links: "+ d.properties.incident_links+"</li>";}
-    html += "</ul></div></div>";
+function railNodeTitle(d) {
+    var html = "<span class='rail-node-bug'></span>"+d.properties.name;
+    return html;
+}
+function railNodePopoverContent(d) {
+    var html = "<dl class='dl-horizontal'>";
+    if (d.properties.incident_links) { html += "<dt>Inbound links</dt><dd>"+ d.properties.incident_links+"</dd>";}
+    html += "</dl>";
     return html;
 }
 
-function warehouseTip(d) {
-    var html = "<div class='container-fluid'><div class='row'><p><h5>"+d.properties.name+"</h5></p><p><ul class='list-unstyled'>";
-    if (d.properties.owner) { html += "<li>Owner: "+ d.properties.owner+"</li>";}
-    if (d.properties.description) { html += "<li>Description: "+ d.properties.description+"</li>";}
-    if (d.properties.area) { html += "<li>Square Footage: "+ d.properties.area+"</li>";}
-    if (d.properties.year_opened) { html += "<li>Year Opened: "+ d.properties.year_opened+"</li>";}
-    html += "</ul></div></div>";
+function warehouseTitle(d) {
+    var html = "<span class='warehouse-bug'></span>"+d.properties.name;
+    return html;
+}
+function warehousePopoverContent(d) {
+    var html = "<dl class='dl-horizontal'>";
+    if (d.properties.owner) { html += "<dt>Owner</dt><dd>"+ d.properties.owner+"</dd>";}
+    if (d.properties.description) { html += "<dt>Description</dt><dd>"+ d.properties.description+"</dd>";}
+    if (d.properties.area) { html += "<dt>Square Footage</dt><dd>"+ d.properties.area+"</dd>";}
+    if (d.properties.year_opened) { html += "<dt>Year Opened</dt><dd>"+ d.properties.year_opened+"</dd>";}
+    html += "</dl>";
     return html;
 }
 
-function portTip(d) {
-    var html = "<div class='container-fluid'><div class='row'><p><h5>"+d.properties.name+"</h5></p><p><ul class='list-unstyled'>";
-    if (d.properties.harbor_size) { html += "<li>Harbor Size: "+ d.properties.harbor_size+"</li>";}
-    if (d.properties.shelter) { html += "<li>Shelter: "+ d.properties.shelter+"</li>";}
-    if (d.properties.cargo_pier_depth) { html += "<li>Cargo Pier Depth: "+ d.properties.cargo_pier_depth+"</li>";}
-    if (d.properties.oil_terminal_depth) { html += "<li>Oil Terminal Depth: "+ d.properties.oil_terminal_depth+"</li>";}
-    if (d.properties.max_vessel_size_from_port) { html += "<li>Max Vessel Size: "+ d.properties.max_vessel_size_from_port+"</li>";}
-    if (d.properties.domestic_tonnage) { html += "<li>Domestic Tonnage: "+ d.properties.domestic_tonnage+" ("+ d.properties.year +")</li>";}
-    if (d.properties.foreign_tonnage) { html += "<li>Foreign Tonnage: "+ d.properties.foreign_tonnage+" ("+ d.properties.year +")</li>";}
-    if (d.properties.import_tonnage) { html += "<li>Import Tonnage: "+ d.properties.import_tonnage+" ("+ d.properties.year +")</li>";}
-    if (d.properties.export_tonnage) { html += "<li>Export Tonnage: "+ d.properties.export_tonnage+" ("+ d.properties.year +")</li>";}
-    if (d.properties.total_tonnage) { html += "<li>Total Tonnage: "+ d.properties.total_tonnage+" ("+ d.properties.year +")</li>";}
-    html += "</ul></div></div>";
+function portTitle(d) {
+    var html = "<span class='port-bug'></span>"+d.properties.name;
+    return html;
+}
+function portPopoverContent(d) {
+    var html = "<dl class='dl-horizontal'>";
+    if (d.properties.harbor_size) { html += "<dt>Harbor Size</dt><dd>"+ d.properties.harbor_size+"</dd>";}
+    if (d.properties.shelter) { html += "<dt>Shelter</dt><dd>"+ d.properties.shelter+"</dd>";}
+    if (d.properties.cargo_pier_depth) { html += "<dt>Cargo Pier Depth</dt><dd>"+ d.properties.cargo_pier_depth+"</dd>";}
+    if (d.properties.oil_terminal_depth) { html += "<dt>Oil Terminal Depth</dt><dd>"+ d.properties.oil_terminal_depth+"</dd>";}
+    if (d.properties.max_vessel_size_from_port) { html += "<dt>Max Vessel Size</dt><dd>"+ d.properties.max_vessel_size_from_port+"</dd>";}
+    if (d.properties.domestic_tonnage !== "Unknown") { html += "<dt>Domestic Tonnage</dt><dd>"+ d.properties.domestic_tonnage+" ("+ d.properties.year +")</dd>";}
+    if (d.properties.foreign_tonnage !== "Unknown") { html += "<dt>Foreign Tonnage</dt><dd>"+ d.properties.foreign_tonnage+" ("+ d.properties.year +")</dd>";}
+    if (d.properties.import_tonnage !== "Unknown") { html += "<dt>Import Tonnage</dt><dd>"+ d.properties.import_tonnage+" ("+ d.properties.year +")</dd>";}
+    if (d.properties.export_tonnage !== "Unknown") { html += "<dt>Export Tonnage</dt><dd>"+ d.properties.export_tonnage+" ("+ d.properties.year +")</dd>";}
+    if (d.properties.total_tonnage !== "Unknown") { html += "<dt>Total Tonnage</dt><dd>"+ d.properties.total_tonnage+" ("+ d.properties.year +")</dd>";}
+    html += "</dl>";
     return html;
 }
 
@@ -190,7 +214,8 @@ var lineLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     type: "path",
     style: railLineStyle,
     attribution: 'Rail: <a href="http://cta.ornl.gov/transnet/index.html">CTA Transportation Networks</a>',
-    tip: railLineTip,
+    title: railLineTitle,
+    content: railLinePopoverContent,
     mouseover: railLineMouseover,
     mouseout: railLineMouseout
 });
@@ -208,7 +233,8 @@ var interlinesLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     class: "rail-interline",
     type: "path",
     style: railLineStyle,
-    tip: railInterlineTip,
+    title: railInterlineTitle,
+    content: railInterlinePopoverContent,
     mouseover: railInterlineMouseover,
     mouseout: railInterlineMouseout
 });
@@ -226,7 +252,8 @@ var warehouseLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     type: "circle",
     radius: warehouseRadius,
     attribution: 'Wal-Mart: <a href="http://www.mwpvl.com/">© MWPVL International Inc.</a>, Target: <a href="https://corporate.target.com/careers/global-locations/distribution-center-locations">© Target</a>',
-    tip: warehouseTip,
+    title: warehouseTitle,
+    content: warehousePopoverContent,
     mouseover: warehouseMouseover,
     mouseout: warehouseMouseout
 });
@@ -244,7 +271,8 @@ var nodesLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     type: "circle",
     radius: railNodeRadius,
     fill: "red",
-    tip: railNodeTip,
+    title: railNodeTitle,
+    content: railNodePopoverContent,
     mouseover: railNodeMouseover,
     mouseout: railNodeMouseout
 });
@@ -263,7 +291,8 @@ var portLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     radius: portRadius,
     fill: "dodgerblue",
     attribution: 'Ports: <a href="http://msi.nga.mil/NGAPortal/MSI.portal?_nfpb=true&_pageLabel=msi_portal_page_62&pubCode=0015">National Geospatial-Intelligence Agency</a>; TEU data: <a href="http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/national_transportation_atlas_database/2013/points.html">USDOT Bureau of Transportation Statistics</a>',
-    tip: portTip,
+    title: portTitle,
+    content: portPopoverContent,
     mouseover: portMouseover,
     mouseout: portMouseout
 });
