@@ -49,7 +49,7 @@ function portRadius(feature) {
         if (tonnage.length == 0) {
             return radius;
         } else {
-            radius = ((((tonnage * map.getZoom() / 16) / 2000000)) > defaultRadius) ? (((tonnage * map.getZoom() / 16) / 2000000)) : defaultRadius;
+            radius = ((((tonnage * map.getZoom() / 16) / 3800000)) > defaultRadius) ? (((tonnage * map.getZoom() / 16) / 3800000)) : defaultRadius;
             return radius;
         }
     } else {
