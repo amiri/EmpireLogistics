@@ -62,3 +62,34 @@ path
 .popover {
     max-width: 600px;
 }
+span.rail-line-bug {
+    background-color: transparent;
+    background-image: url(/images/railroad.png);
+    background-repeat: no-repeat;
+    margin-right: 1em;
+    background-size: contain;
+    height: 18px;
+    width: 18px;
+    display: inline-block;
+}
+
+span.port-bug {
+    background-color: transparent;
+    background-image: url(/images/port.png);
+    background-repeat: no-repeat;
+    margin-right: 1em;
+    background-size: contain;
+    height: 18px;
+    width: 18px;
+    display: inline-block;
+}
+span.warehouse-bug {
+    background-color: transparent;
+    background-image: url(/images/warehouse.png);
+    background-repeat: no-repeat;
+    margin-right: 1em;
+    background-size: contain;
+    height: 18px;
+    width: 18px;
+    display: inline-block;
+}
