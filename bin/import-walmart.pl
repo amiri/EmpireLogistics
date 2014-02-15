@@ -98,13 +98,16 @@ for my $key ( keys %$dcs ) {
         my $area = $dc->{square_feet};
         $area =~ tr/0-9//cd;
         $area = undef if !$area;
+        my $walmart_id;
+        $walmart_id = $dc->{walmart_id} if $dc->{walmart_id};
+        $walmart_id = undef if $walmart_id eq 'NA';
         my $date_opened = $dc->{date_opened};
         $date_opened = length($date_opened) ? DateTimeX::Easy->new($date_opened) : undef;
         my $geom = "$lon $lat";
         my $warehouse = [
             $name, $street_address, $city,        $state,  $postal_code,
             $country,        $description, $status, $area,
-            $owner,          $date_opened, $geom,
+            $owner,          $date_opened, $walmart_id, $geom,
         ];
         push @warehouses, $warehouse;
         say "    Processed Walmart warehouse ", $dc->{address};
@@ -127,18 +130,29 @@ my $warehouse_command
     = "insert into warehouse (name,street_address,city,state,postal_code,country,description,status,area,owner,date_opened) values (?,?,?,?,?,?,?,?,?,?,?)";
 $sth = $dbh->prepare($warehouse_command);
 
-my @geom_commands;
 my @geoms;
+my @walmarts;
+my @geom_commands;
 for my $warehouse (@warehouses) {
     my $geom = pop @$warehouse;
+    my $walmart_id = pop @$warehouse;
     $sth->execute(@$warehouse) or die $sth->errstr;
     my $newid = $dbh->last_insert_id( undef, undef, "warehouse", undef );
     push @geoms, { geometry => $geom, warehouse => $newid };
-    my $geom_command;
+    push @walmarts, { walmart_id => $walmart_id, warehouse_id => $newid } if $walmart_id;
+    my ($geom_command,$walmart_command);
     my ($lon,$lat) = split(" ",$geom);
     #$geom_command = "update warehouse set geometry = ST_GeomFromText('POINT($geom)',900913) where id = $newid" if $geom =~ /\d/;
     $geom_command = "update warehouse set geometry = ST_SetSRID(ST_MakePoint($lon, $lat),4326) where id = $newid" if $geom =~ /\d/;
     push @geom_commands, $geom_command if $geom_command;
+}
+
+for my $walmart (@walmarts) {
+    $sth = $dbh->prepare("insert into walmart (walmart_id) values (?)");
+    $sth->execute($walmart->{walmart_id}) or die $sth->errstr;
+    my $newid = $dbh->last_insert_id(undef, undef, 'walmart', undef);
+    $sth = $dbh->prepare("insert into warehouse_walmart (walmart,warehouse) values (?,?)");
+    $sth->execute($newid,$walmart->{warehouse_id}) or die $sth->errstr;
 }
 
 for my $geom_command (@geom_commands) {

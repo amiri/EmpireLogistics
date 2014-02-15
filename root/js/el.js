@@ -23,11 +23,11 @@ function railNodeRadius(feature) {
 
 // Minimum radius of 4 px
 function warehouseRadius(feature) {
-    var defaultRadius = ((map.getZoom()/16) * 8);
-    var radius = (defaultRadius > 4) ? ((map.getZoom()/16) * 8) : 4;
+    var defaultRadius = ((map.getZoom() / 16) * 8);
+    var radius = (defaultRadius > 4) ? ((map.getZoom() / 16) * 8) : 4;
     if (feature.properties.area) {
         var area = feature.properties.area;
-        area = area.replace(/\D/g,'');
+        area = area.replace(/\D/g, '');
         if (area.length == 0) {
             return radius;
         } else {
@@ -41,11 +41,11 @@ function warehouseRadius(feature) {
 
 // Minimum radius of 3 px
 function portRadius(feature) {
-    var defaultRadius = ((map.getZoom()/16) * 8);
-    var radius = (defaultRadius > 3) ? defaultRadius : 3;
+    var defaultRadius = ((map.getZoom() / 16) * 8);
+    var radius = (defaultRadius > 3) ? defaultRadius: 3;
     if (feature.properties.total_tonnage) {
         var tonnage = feature.properties.total_tonnage;
-        tonnage = tonnage.replace(/\D/g,'');
+        tonnage = tonnage.replace(/\D/g, '');
         if (tonnage.length == 0) {
             return radius;
         } else {
@@ -128,77 +128,132 @@ function warehouseMouseout(d) {
 }
 
 // Tooltip functions for each layer
+// Rail line
 function railLineTitle(d) {
-    var html = "<span class='rail-line-bug'></span>"+d.properties.name;
+    var html = "<span class='rail-line-bug'></span>" + d.properties.name;
     return html;
 }
 function railLinePopoverContent(d) {
     var html = "<dl class='dl-horizontal'>";
-    if (d.properties.owner) { html += "<dt>Owner</dt><dd>"+ d.properties.owner+"</dd>";}
-    if (d.properties.subdivision) { html += "<dt>Subdivision</dt><dd>"+ d.properties.subdivision+"</dd>";}
-    if (d.properties.reporting_mark) { html += "<dt>Reporting Mark</dt><dd>"+ d.properties.reporting_mark+"</dd>";}
-    if (d.properties.miles) { html += "<dt>Length</dt><dd>"+ d.properties.miles+" miles</dd>";}
-    if (d.properties.density_detail) { html += "<dt>Freight Volume</dt><dd>"+ d.properties.density_detail+"</dd>";}
+    if (d.properties.owner) {
+        html += "<dt>Owner</dt><dd>" + d.properties.owner + "</dd>";
+    }
+    if (d.properties.subdivision) {
+        html += "<dt>Subdivision</dt><dd>" + d.properties.subdivision + "</dd>";
+    }
+    if (d.properties.reporting_mark) {
+        html += "<dt>Reporting Mark</dt><dd>" + d.properties.reporting_mark + "</dd>";
+    }
+    if (d.properties.miles) {
+        html += "<dt>Length</dt><dd>" + d.properties.miles + " miles</dd>";
+    }
+    if (d.properties.density_detail) {
+        html += "<dt>Freight Volume</dt><dd>" + d.properties.density_detail + "</dd>";
+    }
     html += "</dl>";
     return html;
 }
 
+// Rail interline
 function railInterlineTitle(d) {
-    var html = "<span class='rail-interline-bug'><span>"+d.properties.junction_code;
+    var html = "<span class='rail-interline-bug'><span>" + d.properties.junction_code;
     return html;
 }
 function railInterlinePopoverContent(d) {
     var html = "<dl class='dl-horizontal'>";
-    if (d.properties.forwarding_node) { html += "<dt>Forwarding Node</dt><dd>"+ d.properties.forwarding_node+"</dd>";}
-    if (d.properties.forwarding_node_owner) { html += "<dt>Forwarding Node Owner</dt><dd>"+ d.properties.forwarding_node_owner+"</dd>";}
-    if (d.properties.receiving_node) { html += "<dt>Receiving Node</dt><dd>"+ d.properties.receiving_node+"</dd>";}
-    if (d.properties.receiving_node_owner) { html += "<dt>Receiving Node Owner</dt><dd>"+ d.properties.receiving_node_owner+"</dd>";}
-    if (d.properties.impedance) { html += "<dt>Impedance/Expense</dt><dd>"+ d.properties.impedance+"</dd>";}
+    if (d.properties.forwarding_node) {
+        html += "<dt>Forwarding Node</dt><dd>" + d.properties.forwarding_node + "</dd>";
+    }
+    if (d.properties.forwarding_node_owner) {
+        html += "<dt>Forwarding Node Owner</dt><dd>" + d.properties.forwarding_node_owner + "</dd>";
+    }
+    if (d.properties.receiving_node) {
+        html += "<dt>Receiving Node</dt><dd>" + d.properties.receiving_node + "</dd>";
+    }
+    if (d.properties.receiving_node_owner) {
+        html += "<dt>Receiving Node Owner</dt><dd>" + d.properties.receiving_node_owner + "</dd>";
+    }
+    if (d.properties.impedance) {
+        html += "<dt>Impedance/Expense</dt><dd>" + d.properties.impedance + "</dd>";
+    }
     html += "</dl>";
     return html;
 }
 
+// Rail node
 function railNodeTitle(d) {
-    var html = "<span class='rail-node-bug'></span>"+d.properties.name;
+    var html = "<span class='rail-node-bug'></span>" + d.properties.name;
     return html;
 }
 function railNodePopoverContent(d) {
     var html = "<dl class='dl-horizontal'>";
-    if (d.properties.incident_links) { html += "<dt>Inbound links</dt><dd>"+ d.properties.incident_links+"</dd>";}
+    if (d.properties.incident_links) {
+        html += "<dt>Inbound links</dt><dd>" + d.properties.incident_links + "</dd>";
+    }
     html += "</dl>";
     return html;
 }
 
+// Warehouse
 function warehouseTitle(d) {
-    var html = "<span class='warehouse-bug'></span>"+d.properties.name;
+    var html = "<span class='warehouse-bug'></span>" + d.properties.name;
     return html;
 }
 function warehousePopoverContent(d) {
     var html = "<dl class='dl-horizontal'>";
-    if (d.properties.owner) { html += "<dt>Owner</dt><dd>"+ d.properties.owner+"</dd>";}
-    if (d.properties.description) { html += "<dt>Description</dt><dd>"+ d.properties.description+"</dd>";}
-    if (d.properties.area) { html += "<dt>Square Footage</dt><dd>"+ d.properties.area+"</dd>";}
-    if (d.properties.year_opened) { html += "<dt>Year Opened</dt><dd>"+ d.properties.year_opened+"</dd>";}
+    if (d.properties.owner) {
+        html += "<dt>Owner</dt><dd>" + d.properties.owner + "</dd>";
+    }
+    if (d.properties.description) {
+        html += "<dt>Description</dt><dd>" + d.properties.description + "</dd>";
+    }
+    if (d.properties.area) {
+        html += "<dt>Square Footage</dt><dd>" + d.properties.area + "</dd>";
+    }
+    if (d.properties.year_opened) {
+        html += "<dt>Year Opened</dt><dd>" + d.properties.year_opened + "</dd>";
+    }
     html += "</dl>";
     return html;
 }
 
+// Port
 function portTitle(d) {
-    var html = "<span class='port-bug'></span>"+d.properties.name;
+    var html = "<span class='port-bug'></span>" + d.properties.name;
     return html;
 }
 function portPopoverContent(d) {
     var html = "<dl class='dl-horizontal'>";
-    if (d.properties.harbor_size) { html += "<dt>Harbor Size</dt><dd>"+ d.properties.harbor_size+"</dd>";}
-    if (d.properties.shelter) { html += "<dt>Shelter</dt><dd>"+ d.properties.shelter+"</dd>";}
-    if (d.properties.cargo_pier_depth) { html += "<dt>Cargo Pier Depth</dt><dd>"+ d.properties.cargo_pier_depth+"</dd>";}
-    if (d.properties.oil_terminal_depth) { html += "<dt>Oil Terminal Depth</dt><dd>"+ d.properties.oil_terminal_depth+"</dd>";}
-    if (d.properties.max_vessel_size_from_port) { html += "<dt>Max Vessel Size</dt><dd>"+ d.properties.max_vessel_size_from_port+"</dd>";}
-    if (d.properties.domestic_tonnage !== "Unknown") { html += "<dt>Domestic Tonnage</dt><dd>"+ d.properties.domestic_tonnage+" ("+ d.properties.year +")</dd>";}
-    if (d.properties.foreign_tonnage !== "Unknown") { html += "<dt>Foreign Tonnage</dt><dd>"+ d.properties.foreign_tonnage+" ("+ d.properties.year +")</dd>";}
-    if (d.properties.import_tonnage !== "Unknown") { html += "<dt>Import Tonnage</dt><dd>"+ d.properties.import_tonnage+" ("+ d.properties.year +")</dd>";}
-    if (d.properties.export_tonnage !== "Unknown") { html += "<dt>Export Tonnage</dt><dd>"+ d.properties.export_tonnage+" ("+ d.properties.year +")</dd>";}
-    if (d.properties.total_tonnage !== "Unknown") { html += "<dt>Total Tonnage</dt><dd>"+ d.properties.total_tonnage+" ("+ d.properties.year +")</dd>";}
+    if (d.properties.harbor_size) {
+        html += "<dt>Harbor Size</dt><dd>" + d.properties.harbor_size + "</dd>";
+    }
+    if (d.properties.shelter) {
+        html += "<dt>Shelter</dt><dd>" + d.properties.shelter + "</dd>";
+    }
+    if (d.properties.cargo_pier_depth) {
+        html += "<dt>Cargo Pier Depth</dt><dd>" + d.properties.cargo_pier_depth + "</dd>";
+    }
+    if (d.properties.oil_terminal_depth) {
+        html += "<dt>Oil Terminal Depth</dt><dd>" + d.properties.oil_terminal_depth + "</dd>";
+    }
+    if (d.properties.max_vessel_size_from_port) {
+        html += "<dt>Max Vessel Size</dt><dd>" + d.properties.max_vessel_size_from_port + "</dd>";
+    }
+    if (d.properties.domestic_tonnage !== "Unknown") {
+        html += "<dt>Domestic Tonnage</dt><dd>" + d.properties.domestic_tonnage + " (" + d.properties.year + ")</dd>";
+    }
+    if (d.properties.foreign_tonnage !== "Unknown") {
+        html += "<dt>Foreign Tonnage</dt><dd>" + d.properties.foreign_tonnage + " (" + d.properties.year + ")</dd>";
+    }
+    if (d.properties.import_tonnage !== "Unknown") {
+        html += "<dt>Import Tonnage</dt><dd>" + d.properties.import_tonnage + " (" + d.properties.year + ")</dd>";
+    }
+    if (d.properties.export_tonnage !== "Unknown") {
+        html += "<dt>Export Tonnage</dt><dd>" + d.properties.export_tonnage + " (" + d.properties.year + ")</dd>";
+    }
+    if (d.properties.total_tonnage !== "Unknown") {
+        html += "<dt>Total Tonnage</dt><dd>" + d.properties.total_tonnage + " (" + d.properties.year + ")</dd>";
+    }
     html += "</dl>";
     return html;
 }
@@ -241,6 +296,26 @@ var interlinesLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
 map.addLayer(interlinesLayer);
 overlays["Rail Interlines"] = interlinesLayer;
 
+// Ports layer
+new L.geoJson({
+    "type": "Point",
+    "coordinates": [0, 0]
+}).addTo(map);
+var geojsonURL = "http://50.116.5.25/tiles/ports/{z}/{x}/{y}.json";
+var portLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
+    class: "port",
+    type: "circle",
+    radius: portRadius,
+    fill: "dodgerblue",
+    attribution: 'Ports: <a href="http://msi.nga.mil/NGAPortal/MSI.portal?_nfpb=true&_pageLabel=msi_portal_page_62&pubCode=0015">National Geospatial-Intelligence Agency</a>; TEU data: <a href="http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/national_transportation_atlas_database/2013/points.html">USDOT Bureau of Transportation Statistics</a>',
+    title: portTitle,
+    content: portPopoverContent,
+    mouseover: portMouseover,
+    mouseout: portMouseout
+});
+map.addLayer(portLayer);
+overlays["Ports"] = portLayer;
+
 // Warehouses layer
 new L.geoJson({
     "type": "Point",
@@ -279,26 +354,6 @@ var nodesLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
 map.addLayer(nodesLayer);
 overlays["Rail Nodes"] = nodesLayer;
 
-// Ports layer
-new L.geoJson({
-    "type": "Point",
-    "coordinates": [0, 0]
-}).addTo(map);
-var geojsonURL = "http://50.116.5.25/tiles/ports/{z}/{x}/{y}.json";
-var portLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
-    class: "port",
-    type: "circle",
-    radius: portRadius,
-    fill: "dodgerblue",
-    attribution: 'Ports: <a href="http://msi.nga.mil/NGAPortal/MSI.portal?_nfpb=true&_pageLabel=msi_portal_page_62&pubCode=0015">National Geospatial-Intelligence Agency</a>; TEU data: <a href="http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/national_transportation_atlas_database/2013/points.html">USDOT Bureau of Transportation Statistics</a>',
-    title: portTitle,
-    content: portPopoverContent,
-    mouseover: portMouseover,
-    mouseout: portMouseout
-});
-map.addLayer(portLayer);
-overlays["Ports"] = portLayer;
-
 // Legend
 var legend = L.control({
     position: 'bottomright'
@@ -319,5 +374,7 @@ legend.onAdd = function(map) {
 
 legend.addTo(map);
 
-L.control.layers(baseLayers, overlays).addTo(map);
-
+L.control.layers(baseLayers, overlays, {
+    "collapsed": false,
+    "autoZIndex": true
+}).addTo(map);
