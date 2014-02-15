@@ -14,32 +14,6 @@ update raw_rail_line set t1 = null where t1 in ('-','_');
 update raw_rail_line set t2 = null where t2 in ('-','_');
 update raw_rail_line set t3 = null where t3 in ('-','_');
 
-drop table if exists rail_line cascade;
-create table rail_line (
-    id integer not null primary key,
-    link_id text,
-    route_id text,
-    miles double precision,
-    direction text,
-    track_type text,
-    grade text,
-    gauge text,
-    status text,
-    passenger text,
-    military_subsystem text,
-    signal_system text,
-    traffic_density text,
-    line_class text,
-    a_junction text,
-    b_junction text,
-    subdivision text,
-    owner1 text,
-    owner2 text,
-    trackage_rights1 text,
-    trackage_rights2 text,
-    trackage_rights3 text,
-    geometry geometry
-);
 insert into rail_line (
     id,
     link_id,

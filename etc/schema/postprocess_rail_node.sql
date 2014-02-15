@@ -3,14 +3,6 @@ update raw_rail_node set astate = null where astate in ('-','_');
 update raw_rail_node set splc = null where splc in ('-','_');
 update raw_rail_node set jname = 'Unknown' where jname in ('-','_');
 
-drop table if exists rail_node cascade;
-create table rail_node (
-    id integer not null primary key,
-    junction_id integer,
-    name text,
-    incident_links integer,
-    geometry geometry
-);
 insert into rail_node (
     id,
     junction_id,

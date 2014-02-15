@@ -2,7 +2,7 @@
 
 DB=empirelogistics
 
-echo "Postprocessing rail data - select into new table"
-psql -U el -q -d $DB < etc/schema/rail_line.sql
-psql -U el -q -d $DB < etc/schema/rail_node.sql
-psql -U el -q -d $DB < etc/schema/rail_interline.sql
+echo "Postprocessing rail lines, nodes, interlines: selecting into new tables"
+psql -U el -q -d $DB < etc/schema/postprocess_rail_line.sql
+psql -U el -q -d $DB < etc/schema/postprocess_rail_node.sql
+psql -U el -q -d $DB < etc/schema/postprocess_rail_interline.sql

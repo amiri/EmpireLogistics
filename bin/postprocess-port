@@ -3,5 +3,4 @@
 DB=empirelogistics
 
 echo "Postprocessing port data - select into new table"
-psql -U el -q -d $DB < etc/schema/port.sql
-psql -U el -q -d $DB < etc/schema/port_tonnage.sql
+psql -U el -q -d $DB < etc/schema/postprocess_port.sql
