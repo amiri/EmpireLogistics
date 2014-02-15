@@ -460,6 +460,12 @@ create type warehouse_owner as enum ('walmart', 'target', 'costco', 'krogers', '
 drop type if exists warehouse_status cascade;
 create type warehouse_status as enum ('open', 'closed');
 
+drop table if exists warehouse_type cascade;
+create table warehouse_type (
+    id serial primary key not null,
+    name text
+);
+
 drop table if exists warehouse cascade;
 create table warehouse (
     id serial primary key not null,
