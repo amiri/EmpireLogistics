@@ -92,6 +92,24 @@ function railLineClass(feature) {
             className += " " + subClass;
         }
     }
+    if (feature && feature.properties && feature.properties.status) {
+        var statusClass;
+        switch (feature.properties.status) {
+            case "Embargoed (Rails Exist)":
+                statusClass = 'embargo';
+                break;
+            case "Abandoned":
+                statusClass = 'abandoned';
+                break;
+            case "Active":
+                statusClass = 'active';
+                break;
+            case "Suspended (Out Of Service, But Reopenable)":
+                statusClass = 'suspended';
+                break;
+        }
+        className += " " + statusClass;
+    }
     return className;
 }
 
@@ -130,7 +148,7 @@ function warehouseMouseout(d) {
 // Tooltip functions for each layer
 // Rail line
 function railLineTitle(d) {
-    var html = "<span class='rail-line-bug'></span>" + d.properties.name;
+    var html = "<span class='rail-line-bug'></span>" + d.properties.name + " (2012)";
     return html;
 }
 function railLinePopoverContent(d) {
@@ -147,8 +165,17 @@ function railLinePopoverContent(d) {
     if (d.properties.miles) {
         html += "<dt>Length</dt><dd>" + d.properties.miles + " miles</dd>";
     }
-    if (d.properties.density_detail) {
-        html += "<dt>Freight Volume</dt><dd>" + d.properties.density_detail + "</dd>";
+    if (d.properties.traffic_density_detail) {
+        html += "<dt>Freight Volume</dt><dd>" + d.properties.traffic_density_detail + "</dd>";
+    }
+    if (d.properties.direction) {
+        html += "<dt>Direction</dt><dd>" + d.properties.direction+ "</dd>";
+    }
+    if (d.properties.military_subsystem) {
+        html += "<dt>Military Subsystem</dt><dd>" + d.properties.military_subsystem+ "</dd>";
+    }
+    if (d.properties.status) {
+        html += "<dt>Status</dt><dd>" + d.properties.status+ "</dd>";
     }
     html += "</dl>";
     return html;
@@ -156,7 +183,7 @@ function railLinePopoverContent(d) {
 
 // Rail interline
 function railInterlineTitle(d) {
-    var html = "<span class='rail-interline-bug'><span>" + d.properties.junction_code;
+    var html = "<span class='rail-interline-bug'></span>" + d.properties.junction_code;
     return html;
 }
 function railInterlinePopoverContent(d) {
@@ -236,11 +263,11 @@ function portPopoverContent(d) {
     if (d.properties.oil_terminal_depth) {
         html += "<dt>Oil Terminal Depth</dt><dd>" + d.properties.oil_terminal_depth + "</dd>";
     }
-    if (d.properties.max_vessel_size_from_port) {
-        html += "<dt>Max Vessel Size</dt><dd>" + d.properties.max_vessel_size_from_port + "</dd>";
+    if (d.properties.max_vessel_size) {
+        html += "<dt>Max Vessel Size</dt><dd>" + d.properties.max_vessel_size+ "</dd>";
     }
     if (d.properties.domestic_tonnage !== "Unknown") {
-        html += "<dt>Domestic Tonnage</dt><dd>" + d.properties.domestic_tonnage + " (" + d.properties.year + ")</dd>";
+        html += "<hr><dt>Domestic Tonnage</dt><dd>" + d.properties.domestic_tonnage + " (" + d.properties.year + ")</dd>";
     }
     if (d.properties.foreign_tonnage !== "Unknown") {
         html += "<dt>Foreign Tonnage</dt><dd>" + d.properties.foreign_tonnage + " (" + d.properties.year + ")</dd>";
@@ -252,7 +279,7 @@ function portPopoverContent(d) {
         html += "<dt>Export Tonnage</dt><dd>" + d.properties.export_tonnage + " (" + d.properties.year + ")</dd>";
     }
     if (d.properties.total_tonnage !== "Unknown") {
-        html += "<dt>Total Tonnage</dt><dd>" + d.properties.total_tonnage + " (" + d.properties.year + ")</dd>";
+        html += "<hr><dt>Total Tonnage</dt><dd>" + d.properties.total_tonnage + " (" + d.properties.year + ")</dd>";
     }
     html += "</dl>";
     return html;
@@ -268,7 +295,7 @@ var lineLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     class: railLineClass,
     type: "path",
     style: railLineStyle,
-    attribution: 'Rail: <a href="http://cta.ornl.gov/transnet/index.html">CTA Transportation Networks</a>',
+    attribution: 'Rail: <a href="http://cta.ornl.gov/transnet/index.html">CTA</a>',
     title: railLineTitle,
     content: railLinePopoverContent,
     mouseover: railLineMouseover,
@@ -307,7 +334,7 @@ var portLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     type: "circle",
     radius: portRadius,
     fill: "dodgerblue",
-    attribution: 'Ports: <a href="http://msi.nga.mil/NGAPortal/MSI.portal?_nfpb=true&_pageLabel=msi_portal_page_62&pubCode=0015">National Geospatial-Intelligence Agency</a>; TEU data: <a href="http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/national_transportation_atlas_database/2013/points.html">USDOT Bureau of Transportation Statistics</a>',
+    attribution: 'Ports: <a href="http://msi.nga.mil/NGAPortal/MSI.portal?_nfpb=true&_pageLabel=msi_portal_page_62&pubCode=0015">NGA</a>; TEU data: <a href="http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/national_transportation_atlas_database/2013/points.html">USDOT</a>',
     title: portTitle,
     content: portPopoverContent,
     mouseover: portMouseover,
@@ -326,7 +353,7 @@ var warehouseLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
     class: "warehouse",
     type: "circle",
     radius: warehouseRadius,
-    attribution: 'Wal-Mart: <a href="http://www.mwpvl.com/">© MWPVL International Inc.</a>, Target: <a href="https://corporate.target.com/careers/global-locations/distribution-center-locations">© Target</a>',
+    attribution: 'Wal-Mart: <a href="http://www.mwpvl.com/">© MWPVL</a>, Target: <a href="https://corporate.target.com/careers/global-locations/distribution-center-locations">© Target</a>',
     title: warehouseTitle,
     content: warehousePopoverContent,
     mouseover: warehouseMouseover,

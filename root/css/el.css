@@ -23,73 +23,138 @@ path
     stroke-linecap:round;
 }
 
-.rail-line {
+.rail-line
+{
     fill:none;
     stroke:#000;
     stroke-linejoin:round;
-    stroke-width:4.0;
-}
-.rail-interline {
-    fill:none;
-    stroke:goldenrod;
-    stroke-linejoin:round;
-    stroke-width:4.0;
-}
-.info {
-    padding: 6px 8px;
-    background: white;
-    background: rgba(255,255,255,0.9);
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    border-radius: 5px;
-}
-.legend {
-    line-height: 18px;
-    color: #555;
-}
-.legend i {
-    width: 18px;
-    height: 18px;
-    float: left;
-    margin-right: 8px;
-    opacity: 1.0;
-}
-.stroke-highlight {
-    stroke:#5bc0de;
-}
-.fill-highlight {
-    fill:#5bc0de;
-}
-.popover {
-    max-width: 600px;
-}
-span.rail-line-bug {
-    background-color: transparent;
-    background-image: url(/images/railroad.png);
-    background-repeat: no-repeat;
-    margin-right: 1em;
-    background-size: contain;
-    height: 18px;
-    width: 18px;
-    display: inline-block;
+    stroke-width:4;
 }
 
-span.port-bug {
-    background-color: transparent;
-    background-image: url(/images/port.png);
-    background-repeat: no-repeat;
-    margin-right: 1em;
-    background-size: contain;
-    height: 18px;
-    width: 18px;
-    display: inline-block;
+.embargo
+{
+    stroke:#D2691E;
 }
-span.warehouse-bug {
-    background-color: transparent;
-    background-image: url(/images/warehouse.png);
-    background-repeat: no-repeat;
-    margin-right: 1em;
-    background-size: contain;
-    height: 18px;
-    width: 18px;
-    display: inline-block;
+
+.suspended
+{
+    stroke:#B8860B;
+}
+
+.abandoned
+{
+    stroke:#696969;
+}
+
+.rail-interline
+{
+    fill:none;
+    stroke:#DAA520;
+    stroke-linejoin:round;
+    stroke-width:4;
+}
+
+.info
+{
+    padding:6px 8px;
+    background:#FFF;
+    background:rgba(255,255,255,0.9);
+    box-shadow:0 0 15px rgba(0,0,0,0.2);
+    border-radius:5px;
+}
+
+.legend
+{
+    line-height:18px;
+    color:#555;
+}
+
+.legend i
+{
+    width:18px;
+    height:18px;
+    float:left;
+    margin-right:8px;
+    opacity:1;
+}
+
+.stroke-highlight
+{
+    stroke:#5bc0de;
+}
+
+.fill-highlight
+{
+    fill:#5bc0de;
+}
+
+.popover
+{
+    max-width:600px;
+}
+
+span.rail-line-bug
+{
+    background-color:transparent;
+    background-image:url(/images/railroad.png);
+    background-repeat:no-repeat;
+    margin-right:1em;
+    background-size:contain;
+    height:18px;
+    width:18px;
+    display:inline-block;
+}
+
+span.rail-node-bug
+{
+    background-color:transparent;
+    background-image:url(/images/rail-node.png);
+    background-repeat:no-repeat;
+    margin-right:1em;
+    background-size:contain;
+    height:18px;
+    width:18px;
+    display:inline-block;
+}
+
+span.rail-interline-bug
+{
+    background-color:transparent;
+    background-image:url(/images/rail-interline.png);
+    background-repeat:no-repeat;
+    margin-right:1em;
+    background-size:contain;
+    height:18px;
+    width:18px;
+    display:inline-block;
+}
+
+span.port-bug
+{
+    background-color:transparent;
+    background-image:url(/images/port.png);
+    background-repeat:no-repeat;
+    margin-right:1em;
+    background-size:contain;
+    height:18px;
+    width:18px;
+    display:inline-block;
+}
+
+span.warehouse-bug
+{
+    background-color:transparent;
+    background-image:url(/images/warehouse.png);
+    background-repeat:no-repeat;
+    margin-right:1em;
+    background-size:contain;
+    height:18px;
+    width:18px;
+    display:inline-block;
+}
+
+.dl-horizontal hr
+{
+    margin-top:10px;
+    margin-bottom:10px;
 }
