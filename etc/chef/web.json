@@ -170,6 +170,13 @@
           "postgis",
           "postgis_topology"
         ]
+      },
+      {
+        "name": "pgloader",
+        "owner": "el",
+        "encoding": "utf8",
+        "locale": "en_US.UTF-8",
+        "languages": "plpgsql"
       }
     ],
     "external_pid_file": "/var/run/postgresql/9.3-main.pid",
