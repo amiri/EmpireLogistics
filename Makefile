@@ -52,7 +52,7 @@ download-port-data: make-data-directories
 
 download-rail-data: make-data-directories $(rail_dir)/na-rail.zip $(rail_dir)/cta-sup/wconv.txt $(rail_dir)/qc28R.zip $(rail_dir)/QNdata.zip $(rail_dir)/cta-sup/subdiv.txt $(rail_dir)/shp/qn28n.shp $(rail_dir)/shp/qn28l.shp $(rail_dir)/na-rail-interlines.geojson $(rail_dir)/na-rail-ownership.json $(rail_dir)/na-rail-subdivisions.json
 
-download-warehouse-data: make-data-directories $(warehouse_dir)/walmart-distribution-centers.json $(warehouse_dir)/target-distribution-centers.json $(warehouse_dir)/costco.txt $(warehouse_dir)/krogers.txt $(warehouse_dir)/walgreens.csv $(warehouse_dir)/amazon.tsv $(warehouse_dir)/homedepot.csv
+download-warehouse-data: make-data-directories $(warehouse_dir)/walmart-distribution-centers.json $(warehouse_dir)/target-distribution-centers.json $(warehouse_dir)/costco.txt $(warehouse_dir)/krogers.txt $(warehouse_dir)/walgreens.csv $(warehouse_dir)/amazon.tsv $(warehouse_dir)/homedepot.csv $(warehouse_dir)/ikea.csv
 
 ########## Process data
 
@@ -90,9 +90,9 @@ ifeq ($(wildcard $(warehouse_dir)/warehouse_data.sql),)
 	perl bin/import-walgreens.pl
 	perl bin/import-amazon.pl
 	perl bin/import-homedepot.pl
+	perl bin/import-ikea.pl
 else
 	bin/import-warehouse-data
-	echo "Found data"
 endif
 
 ########## Rail data download pieces
@@ -174,3 +174,6 @@ $(warehouse_dir)/amazon.tsv:
 
 $(warehouse_dir)/homedepot.csv:
 	test -s $(warehouse_dir)/homedepot.csv || cp 'etc/data/warehouses/homedepot/homedepot.csv' $(warehouse_dir)/homedepot.csv
+
+$(warehouse_dir)/ikea.csv:
+	test -s $(warehouse_dir)/ikea.csv || cp 'etc/data/warehouses/ikea/ikea.csv' $(warehouse_dir)/ikea.csv

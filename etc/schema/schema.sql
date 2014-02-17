@@ -455,7 +455,7 @@ insert into port_vessel_size (name,detail) values
     ('M', '≥ 500 feet');
 
 drop type if exists warehouse_owner cascade;
-create type warehouse_owner as enum ('walmart', 'target', 'costco', 'krogers', 'walgreens', 'home depot', 'amazon');
+create type warehouse_owner as enum ('walmart', 'target', 'costco', 'krogers', 'walgreens', 'home depot', 'amazon', 'ikea');
 
 drop type if exists warehouse_status cascade;
 create type warehouse_status as enum ('open', 'closed');

@@ -420,6 +420,8 @@ COPY warehouse (id, name, street_address, city, state, postal_code, country, des
 90	Walmart Distribution Center	3101 Highway 27 North	Carrollton	GA	30117	US	Dedicated Walmart.com distribution center.	\N	1000000	walmart	2002-01-01	0101000020E61000002A029CDEC54755C0865C0421B4D14040
 91	Walmart Distribution Center	5300 Westport Parkway	Fort Worth	TX	76177	US	Dedicated Walmart.com distribution center. Outsourced to 3PL Ozburn-Hessey Logistics, LLC.	\N	788160	walmart	2013-10-01	0101000020E6100000E811A3E7165058C0724F57772C7C4040
 92	Walmart Distribution Center	2785 Commerce Center Boulevard	Bethlehem	PA	18015	US	Dedicated Walmart.com distribution center.	\N	1200000	walmart	\N	0101000020E61000001E47BDF1FFD452C096ECD808C44D4440
+131	Walmart Distribution Center	843 Highway 43	Wintersville	OH	43953	US	\N	\N	880000	walmart	2003-06-01	0101000020E6100000AAD2BB1D062D54C009D51753FA2F4440
+132	Walmart Distribution Center	 West 3000 Road	\N	OK	\N	US	Swisslog automation in the Perishables complex.	\N	893900	walmart	2005-04-01	0101000020E6100000DF5FF360C1F957C0CEF11B70A74A4240
 93	Walmart Distribution Center	702 Southwest 8th Street	Bentonville	AR	72712	US	Walmart's first ever distribution center opened in 1970 as a General Merchandise & Fashion facility. Originally 60,000 sq ft; expanded to 124,800 in 1971; expanded again to 236,800 sq ft in 1972. Closed and converted into head office space in 1986.	closed	236800	walmart	1970-01-01	0101000020E6100000130A1170088E57C0FE2C9622F92E4240
 94	Walmart Distribution Center	12400 Riverside Drive	Eastvale	CA	91752	US	Import Center that was vacated around or before 2009.	closed	397630	walmart	1999-08-01	0101000020E6100000D13C80457E635DC08335CEA623024140
 95	Walmart Distribution Center	11850 Riverside Drive	\N	CA	91752	US	Import Center that was vacated around or before 2009.	closed	656000	walmart	2001-06-01	0101000020E61000007D1A4174D2625DC0093C8B3963024140
@@ -458,8 +460,6 @@ COPY warehouse (id, name, street_address, city, state, postal_code, country, des
 128	Walmart Distribution Center	 	Sparks	NV	89434	US	\N	\N	890000	walmart	2006-08-01	0101000020E6100000F9D85DA024E55DC01E4A592B7FC44340
 129	Walmart Distribution Center	300 Enterprise Road	Johnstown	NY	12095	US	\N	\N	868000	walmart	2000-01-01	0101000020E6100000220038F6EC9952C0DE8FDB2F9F7E4540
 130	Walmart Distribution Center	1400 Old Chillicothe Road Southeast	Washington Court House	OH	43160	US	\N	\N	880000	walmart	2002-07-01	0101000020E610000095C84FF48AD954C01A88653387C24340
-131	Walmart Distribution Center	843 Highway 43	Wintersville	OH	43953	US	\N	\N	880000	walmart	2003-06-01	0101000020E6100000AAD2BB1D062D54C009D51753FA2F4440
-132	Walmart Distribution Center	 West 3000 Road	\N	OK	\N	US	Swisslog automation in the Perishables complex.	\N	893900	walmart	2005-04-01	0101000020E6100000DF5FF360C1F957C0CEF11B70A74A4240
 133	Walmart Distribution Center	 South Indian Meridian Road	Pauls Valley	OK	73075	US	\N	\N	860000	walmart	2000-01-01	0101000020E61000000D77E4FED94F58C0FF870508305B4140
 134	Walmart Distribution Center	 	Bedford	PA	15522	US	\N	\N	830000	walmart	1998-05-01	0101000020E6100000F4476293C6A253C0EBDF9AE040F64340
 135	Walmart Distribution Center	390 Highridge Park Road	Pottsville	PA	17901	US	Swisslog automation in the Perishables complex.	\N	900000	walmart	2006-08-01	0101000020E610000050CF7124861453C054AC1A84B95D4440
@@ -604,6 +604,12 @@ COPY warehouse (id, name, street_address, city, state, postal_code, country, des
 405	Home Depot Distribution Center	8800 South 190th Street	Kent	WA	98031	US		\N	\N	home depot	\N	0101000020E610000060915F3F448E5EC0A66BDC5152B74740
 406	Home Depot Distribution Center	9303 Orion Drive Northeast	Lacey	WA	98516	US		\N	\N	home depot	\N	0101000020E61000000F9C33A2B4AF5EC0C7F07D16F0884740
 407	Home Depot Distribution Center	2301 Taylor Way	Tacoma	WA	98421	US		\N	\N	home depot	\N	0101000020E6100000CE14DFF53E985EC05E13D21A83A24740
+408	IKEA Tejon DC	4104 Industrial Parkway Drive	Lebec	CA	93243	US	\N	\N	\N	ikea	\N	0101000020E6100000DB6E826F9ABC5DC0289D4830D57C4140
+409	IKEA Tacoma DC	4604 196th Street East	Spanaway	WA	98387	US	\N	\N	\N	ikea	\N	0101000020E610000002DF23519E975EC08016A64AEF894740
+410	IKEA DC	100 Ikea Road	Perryville	MD	21903	US	\N	\N	\N	ikea	\N	0101000020E61000008EE89E758D0353C057EA5910CAC74340
+411	IKEA DC	100 Ikea Drive	Westampton	NJ	08060	US	\N	\N	\N	ikea	\N	0101000020E610000018265305A3B652C00BB5A679C7014440
+412	IKEA Savannah DC	202 Little Hearst Parkway	Port Wentworth	GA	31407	US	\N	\N	\N	ikea	\N	0101000020E61000000FEC9D761D4B54C064FBDA4477164040
+413	IKEA DC	5405 Place de la Couronne	Saint-Hubert	QC	J4Z 3R9	CA	\N	\N	\N	ikea	\N	0101000020E610000073744B61945A52C070896D9C5EBA4640
 \.
 
 
@@ -611,7 +617,7 @@ COPY warehouse (id, name, street_address, city, state, postal_code, country, des
 -- Name: warehouse_id_seq; Type: SEQUENCE SET; Schema: public; Owner: el
 --
 
-SELECT pg_catalog.setval('warehouse_id_seq', 407, true);
+SELECT pg_catalog.setval('warehouse_id_seq', 413, true);
 
 
 --
@@ -634,6 +640,7 @@ COPY warehouse_type (id, name) FROM stdin;
 13	Amazon Distribution Center
 14	Home Depot Rapid Deployment Center
 15	Home Depot Distribution Center
+16	Ikea Distribution Center
 \.
 
 
@@ -641,7 +648,7 @@ COPY warehouse_type (id, name) FROM stdin;
 -- Name: warehouse_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: el
 --
 
-SELECT pg_catalog.setval('warehouse_type_id_seq', 15, true);
+SELECT pg_catalog.setval('warehouse_type_id_seq', 16, true);
 
 
 --

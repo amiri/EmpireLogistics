@@ -227,9 +227,22 @@ function warehouseTitle(d) {
     return html;
 }
 function warehousePopoverContent(d) {
+    console.log(d);
     var html = "<dl class='dl-horizontal'>";
     if (d.properties.owner) {
         html += "<dt>Owner</dt><dd>" + d.properties.owner + "</dd>";
+    }
+    if (d.properties.street_address) {
+        html += "<dt>Address</dt><dd>" + d.properties.street_address;
+        if (d.properties.city) {
+            html += "<br />" + d.properties.city;
+        }
+        if (d.properties.state) {
+            html += ", " + d.properties.state;
+        }
+        if (d.properties.postal_code) {
+            html += " " + d.properties.postal_code;
+        }
     }
     if (d.properties.description) {
         html += "<dt>Description</dt><dd>" + d.properties.description + "</dd>";
@@ -389,10 +402,10 @@ var legend = L.control({
 legend.onAdd = function(map) {
 
     var div = L.DomUtil.create('div', 'info legend'),
-    elType = ["Rail Line", "Rail Node", "Rail Interline", "Port", "Costco", "Target", "Walmart", "Krogers", "Walgreens", "Amazon", "Home Depot"],
-    color = ["black", "red", "goldenrod", "dodgerblue", "blueviolet", "fuchsia", "darkorange", "mediumslateblue", "limegreen", "forestgreen", "maroon"];
+    elType = ["Rail Line", "Rail Node", "Rail Interline", "Port", "Costco", "Target", "Walmart", "Krogers", "Walgreens", "Amazon", "Home Depot", "Ikea"],
+    color = ["black", "red", "goldenrod", "dodgerblue", "blueviolet", "fuchsia", "darkorange", "mediumslateblue", "limegreen", "forestgreen", "maroon", "navy"];
 
-    for (var i = 0; i < 11; i++) {
+    for (var i = 0; i < color.length; i++) {
         div.innerHTML += '<i style="background:' + color[i] + '"></i> ' + elType[i] + '<br>';
     }
 
