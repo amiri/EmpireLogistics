@@ -227,7 +227,6 @@ function warehouseTitle(d) {
     return html;
 }
 function warehousePopoverContent(d) {
-    console.log(d);
     var html = "<dl class='dl-horizontal'>";
     if (d.properties.owner) {
         html += "<dt>Owner</dt><dd>" + d.properties.owner + "</dd>";

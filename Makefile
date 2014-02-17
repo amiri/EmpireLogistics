@@ -52,14 +52,13 @@ download-port-data: make-data-directories
 
 download-rail-data: make-data-directories $(rail_dir)/na-rail.zip $(rail_dir)/cta-sup/wconv.txt $(rail_dir)/qc28R.zip $(rail_dir)/QNdata.zip $(rail_dir)/cta-sup/subdiv.txt $(rail_dir)/shp/qn28n.shp $(rail_dir)/shp/qn28l.shp $(rail_dir)/na-rail-interlines.geojson $(rail_dir)/na-rail-ownership.json $(rail_dir)/na-rail-subdivisions.json
 
-download-warehouse-data: make-data-directories $(warehouse_dir)/walmart-distribution-centers.json $(warehouse_dir)/target-distribution-centers.json $(warehouse_dir)/costco.txt $(warehouse_dir)/krogers.txt $(warehouse_dir)/walgreens.csv $(warehouse_dir)/amazon.tsv $(warehouse_dir)/homedepot.csv $(warehouse_dir)/ikea.csv
+download-warehouse-data: make-data-directories $(warehouse_dir)/walmart-distribution-centers.json $(warehouse_dir)/target-distribution-centers.json $(warehouse_dir)/costco.txt $(warehouse_dir)/krogers.txt $(warehouse_dir)/walgreens.csv $(warehouse_dir)/amazon.tsv $(warehouse_dir)/homedepot.csv $(warehouse_dir)/ikea.csv $(warehouse_dir)/warehouse_data.sql
 
 ########## Process data
 
 rail: download-rail-data
 
 warehouses: download-warehouse-data
-	test -s $(warehouse_dir)/warehouse_data.sql || cp 'etc/data/warehouses/warehouse_data.sql' $(warehouse_dir)/warehouse_data.sql
 
 ports: download-port-data
 
@@ -177,3 +176,6 @@ $(warehouse_dir)/homedepot.csv:
 
 $(warehouse_dir)/ikea.csv:
 	test -s $(warehouse_dir)/ikea.csv || cp 'etc/data/warehouses/ikea/ikea.csv' $(warehouse_dir)/ikea.csv
+
+$(warehouse_dir)/warehouse_data.sql:
+	test -s $(warehouse_dir)/warehouse_data.sql || cp 'etc/data/warehouses/warehouse_data.sql' $(warehouse_dir)/warehouse_data.sql
