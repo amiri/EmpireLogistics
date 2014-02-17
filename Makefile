@@ -59,6 +59,7 @@ download-warehouse-data: make-data-directories $(warehouse_dir)/walmart-distribu
 rail: download-rail-data
 
 warehouses: download-warehouse-data
+	test -s $(warehouse_dir)/warehouse_data.sql || cp 'etc/data/warehouses/warehouse_data.sql' $(warehouse_dir)/warehouse_data.sql
 
 ports: download-port-data
 
@@ -81,6 +82,7 @@ import-port-teu: ports $(port_dir)/ports_major.shp
 	bin/import-major-port-teu.pl
 
 import-warehouse-data: warehouses
+ifeq ($(wildcard $(warehouse_dir)/warehouse_data.sql),)
 	perl bin/import-walmart.pl
 	perl bin/import-target.pl
 	perl bin/import-krogers.pl
@@ -88,6 +90,10 @@ import-warehouse-data: warehouses
 	perl bin/import-walgreens.pl
 	perl bin/import-amazon.pl
 	perl bin/import-homedepot.pl
+else
+	bin/import-warehouse-data
+	echo "Found data"
+endif
 
 ########## Rail data download pieces
 
