@@ -82,6 +82,7 @@ import-port-teu: ports $(port_dir)/ports_major.shp
 
 import-warehouse-data: warehouses
 ifeq ($(wildcard $(warehouse_dir)/warehouse_data.sql),)
+	@echo "Warehouse sql not found; processing..."
 	perl bin/import-walmart.pl
 	perl bin/import-target.pl
 	perl bin/import-krogers.pl
@@ -91,6 +92,7 @@ ifeq ($(wildcard $(warehouse_dir)/warehouse_data.sql),)
 	perl bin/import-homedepot.pl
 	perl bin/import-ikea.pl
 else
+	@echo "Warehouse sql found; importing..."
 	bin/import-warehouse-data
 endif
 

@@ -16,10 +16,13 @@ my $db_name = 'empirelogistics';
 
 my $dsn = "dbi:Pg:dbname=$db_name;host=$db_host";
 
-my $dbh
-    = DBI->connect( $dsn, $db_user, '3mp1r3',
-    { RaiseError => 1, AutoCommit => 0 } )
-    || die "Error connecting to the database: $DBI::errstr\n";
+my $dbh = DBI->connect(
+    $dsn, $db_user, '3mp1r3',
+    {   RaiseError    => 1,
+        AutoCommit    => 0,
+        on_connect_do => ['set timezone = "America/Los Angeles"']
+    }
+) || die "Error connecting to the database: $DBI::errstr\n";
 
 my $dir  = "data/ports";
 my $file = "$dir/ports_major.json";
@@ -84,8 +87,6 @@ for my $port_name ( keys %major_ports ) {
     say "Inserting 2013 tonnage record for ", $port->[0]->{port_name};
 
     my $insert_command = "insert into port_tonnage (port,year,domestic_tonnage,foreign_tonnage,import_tonnage,export_tonnage,total_tonnage) values (?,?,?,?,?,?,?)";
-    #my $update_command
-        #= "update port set domestic_tonnage = ?, foreign_tonnage = ?, import_tonnage = ?, export_tonnage = ?, total_tonnage = ? where id = ?";
     $sth = $dbh->prepare($insert_command);
     $sth->execute( $port->[0]->{id}, 2013,
         @{ $major_ports{$port_name}{properties} }

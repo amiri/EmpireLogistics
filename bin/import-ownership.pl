@@ -15,10 +15,13 @@ my $db_name = 'empirelogistics';
 
 my $dsn = "dbi:Pg:dbname=$db_name;host=$db_host";
 
-my $dbh
-    = DBI->connect( $dsn, $db_user, '3mp1r3',
-    { RaiseError => 1, AutoCommit => 0 } )
-    || die "Error connecting to the database: $DBI::errstr\n";
+my $dbh = DBI->connect(
+    $dsn, $db_user, '3mp1r3',
+    {   RaiseError    => 1,
+        AutoCommit    => 0,
+        on_connect_do => ['set timezone = "America/Los Angeles"']
+    }
+) || die "Error connecting to the database: $DBI::errstr\n";
 
 
 my $truncate = "truncate rail_ownership restart identity cascade";

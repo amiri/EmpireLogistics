@@ -18,16 +18,13 @@ If you want to break it down, you can build the parts individually:
     make prereqs
     make chef
     make database
-    make tilestache-cache
 
 Now you should have a mostly populated PostgreSQL database with
 a lot of data in place. You also have nginx, PostgreSQL, and uwsgi
 installed, but unconfigured.
 
-We have all the rail and port data importing now. Remaining are:
-
-    - Target warehouses
-    - original data
+We have all the rail, warehouse, and port data importing now. Remaining
+is original data from the current site.
 
 OVERVIEW
 
@@ -55,11 +52,12 @@ North American rail data comes from:
     - http://cta.ornl.gov/transnet/wconv.txt
     - http://cta.ornl.gov/transnet/QNdata.zip
 
-North American warehouse data is currently restricted only to Target and Walmart
-distribution centers, and it comes from:
+North American warehouse data comes from:
 
     - http://www.mwpvl.com/html/walmart.html
     - https://corporate.target.com/_ui/js/main.comb.xml
+    - a lot of legwork and research for Costco, Amazon,
+      Home Depot, Ikea, Krogers, and Walgreens.
 
 The shapefiles are imported directly into a PostGIS-enabled
 database. Other data sources are imported into the same database
@@ -68,20 +66,19 @@ the database, we make new tables in that database by joining and
 selecting from the raw data tables. This produces the set of tables
 that our application, finally, consumes.
 
-The visualization will be done in d3 or leaflet using GeoJSON to render
-each layer.
-
+The visualization of each layer is a separate Leaflet TileLayer,
+rendered by d3, which is faster than Leaflet options now.
 
 ARCHITECTURE
 
-We will be running two uwsgi app servers behind nginx:
+We run two uwsgi app servers behind nginx:
 
     - TileStache (http://tilestache.org/)
-        uwsgi will serve a TileStache app for the vector tiles.
+        uwsgi serves a TileStache app for the vector tiles.
     - EmpireLogistics
-        uwsgi will serve a PSGI app for the main application.
+        uwsgi serves a PSGI app for the main application.
 
 The database server is PostgreSQL 9.3 with PostGIS extensions.
 
-We will cache vector tiles on disk, where they will be served
+We cache vector tiles on disk, where they are served
 directly, speedily, from nginx.

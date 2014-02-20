@@ -20,10 +20,13 @@ my $db_name = 'empirelogistics';
 
 my $dsn = "dbi:Pg:dbname=$db_name;host=$db_host";
 
-my $dbh
-    = DBI->connect( $dsn, $db_user, '3mp1r3',
-    { RaiseError => 1, AutoCommit => 0 } )
-    || die "Error connecting to the database: $DBI::errstr\n";
+my $dbh = DBI->connect(
+    $dsn, $db_user, '3mp1r3',
+    {   RaiseError    => 1,
+        AutoCommit    => 0,
+        on_connect_do => ['set timezone = "America/Los Angeles"']
+    }
+) || die "Error connecting to the database: $DBI::errstr\n";
 
 my $geocoder = Geo::Coder::Google->new( apiver => 3 );
 
@@ -38,8 +41,16 @@ my $cols = $csv->column_names("address","city","state","zip","type","type2");
 my @warehouse_types = ("Walgreens Distribution Center");
 my @warehouses;
 
+sub trim {
+    my ($string) = @_;
+    $string =~ s/^\s+//g;
+    $string =~ s/\s+$//g;
+    return $string;
+}
+
 while ( my $row = $csv->getline_hr($io) ) {
     my $owner = 'walgreens';
+    my $name = "Walgreen's Distribution Center";
     my $location;
     my $address = $row->{address}, ", ", $row->{city}, ", ", $row->{state}, " ", $row->{zip};
     my @types = @{$row}{qw/type type2/};
@@ -78,12 +89,19 @@ while ( my $row = $csv->getline_hr($io) ) {
     my $lat         = $location->{geometry}{location}{lat};
     my $lon         = $location->{geometry}{location}{lng};
     my $geom = "$lon $lat";
+    $street_address = trim($street_address);
     my $warehouse = [
-        "Walgreen's Distribution Center", $street_address, $city,        $state,  $postal_code,
-        $country,        $owner,       $description, $geom,
+        $name, $owner,$description,
+        {   street_address => $street_address,
+            city           => $city,
+            state          => $state,
+            postal_code    => $postal_code,
+            country        => $country
+        },
+        $geom,
     ];
     push @warehouses, $warehouse;
-    say "    Processed Walgreens warehouse ", $street_address;
+    say "    Processed Walgreen's warehouse ", $street_address;
 
     # Sleep for google.
     sleep 1;
@@ -97,30 +115,42 @@ for my $warehouse_type (@warehouse_types) {
     $sth->execute($warehouse_type) or die $sth->errstr;
 }
 
-# lon     lat
-#ST_GeomFromText('POINT (-6.2222 53.307)',4326)
 my $warehouse_command
-    = "insert into warehouse (name,street_address,city,state,postal_code,country,owner,description) values (?,?,?,?,?,?,?,?)";
+    = "insert into warehouse (name,owner,description) values (?,?,?)";
 $sth = $dbh->prepare($warehouse_command);
 
 my @geom_commands;
 my @geoms;
+my @addresses;
 for my $warehouse (@warehouses) {
     my $geom = pop @$warehouse;
+    my $address = pop @$warehouse;
     $sth->execute(@$warehouse) or die $sth->errstr;
     my $newid = $dbh->last_insert_id( undef, undef, "warehouse", undef );
     push @geoms, { geometry => $geom, warehouse => $newid };
+    push @addresses, { address  => $address, warehouse => $newid };
     my $geom_command;
     my ($lon,$lat) = split(" ",$geom);
-    #$geom_command = "update warehouse set geometry = ST_GeomFromText('POINT($geom)',900913) where id = $newid" if $geom =~ /\d/;
     $geom_command = "update warehouse set geometry = ST_SetSRID(ST_MakePoint($lon, $lat),4326) where id = $newid" if $geom =~ /\d/;
     push @geom_commands, $geom_command if $geom_command;
 }
 
 for my $geom_command (@geom_commands) {
-    say $geom_command;
     $sth = $dbh->prepare($geom_command);
     $sth->execute();
+}
+
+for my $address (@addresses) {
+    my $address_insert
+        = "insert into address (street_address,city,state,postal_code,country) values (?,?,?,?,?)";
+    my $warehouse_address_insert
+        = "insert into warehouse_address (warehouse,address) values (?,?)";
+    $sth = $dbh->prepare($address_insert);
+    $sth->execute( @{ $address->{address} }
+            {qw/street_address city state postal_code country/} );
+    my $newid = $dbh->last_insert_id( undef, undef, "address", undef );
+    $sth = $dbh->prepare($warehouse_address_insert);
+    $sth->execute( $address->{warehouse}, $newid );
 }
 
 $dbh->commit or die $dbh->errstr;

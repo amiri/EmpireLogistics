@@ -92,6 +92,10 @@
     "user": "el"
   },
   "postgresql": {
+    "conf": {
+      "data_directory": "/var/lib/postgresql/9.3/main",
+      "timezone": "UTC"
+    },
     "ssl_cert_file": "/etc/ssl/certs/ssl-cert-snakeoil.pem",
     "users": [
       {
