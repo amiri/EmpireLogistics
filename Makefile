@@ -81,20 +81,7 @@ import-port-teu: ports $(port_dir)/ports_major.shp
 	bin/import-major-port-teu.pl
 
 import-warehouse-data: warehouses
-ifeq ($(wildcard $(warehouse_dir)/warehouse_data.sql),)
-	@echo "Warehouse sql not found; performing geocoding..."
-	perl bin/import-walmart.pl
-	perl bin/import-target.pl
-	perl bin/import-krogers.pl
-	perl bin/import-costco.pl
-	perl bin/import-walgreens.pl
-	perl bin/import-amazon.pl
-	perl bin/import-homedepot.pl
-	perl bin/import-ikea.pl
-else
-	@echo "Warehouse sql found; importing..."
 	bin/import-warehouse-data
-endif
 
 ########## Rail data download pieces
 

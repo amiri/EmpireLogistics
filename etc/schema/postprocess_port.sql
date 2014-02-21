@@ -1,5 +1,4 @@
 insert into port (
-    id,
     port_name,
     country,
     harbor_size,
@@ -68,7 +67,6 @@ insert into port (
     railway,
     geometry
 ) select
-    rp.gid as id,
     rp.port_name as port_name,
     rp.country as country,
     harbor_size.detail as harbor_size,

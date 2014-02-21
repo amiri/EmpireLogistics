@@ -2,7 +2,6 @@ update raw_rail_interline set iidq = null where iidq = '';
 update raw_rail_interline set impedance = null where impedance = '';
 
 insert into rail_interline (
-    id,
     interline_id_number,
     forwarding_node,
     receiving_node,
@@ -12,7 +11,6 @@ insert into rail_interline (
     impedance,
     geometry
 ) select
-    ri.ogc_fid,
     ri.iidq::integer,
     rna.name,
     rnb.name,

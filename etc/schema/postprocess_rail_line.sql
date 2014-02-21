@@ -15,7 +15,6 @@ update raw_rail_line set t2 = null where t2 in ('-','_');
 update raw_rail_line set t3 = null where t3 in ('-','_');
 
 insert into rail_line (
-    id,
     link_id,
     route_id,
     miles,
@@ -39,7 +38,6 @@ insert into rail_line (
     trackage_rights3,
     geometry
 ) select
-    rl.gid as id,
     rl.alid as link_id,
     rl.rtid as route_id,
     rl.miles as miles,

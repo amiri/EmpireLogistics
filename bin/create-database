@@ -3,23 +3,6 @@
 DB=empirelogistics
 DB2=pgloader
 
-## Drop db
-#echo "Dropping $DB"
-#dropdb $DB
-
-## Drop user
-#echo "Dropping user"
-#psql -c "DROP OWNED BY el CASCADE"
-#dropuser el
-
-## Create role el
-#echo "Creating password"
-#password=`cat etc/passwords/el-pgsql`
-#echo "Creating user"
-#psql -c "create role el WITH NOSUPERUSER CREATEDB LOGIN REPLICATION PASSWORD '$password';"
-
-#echo "Creating $DB"
-#createdb $DB
 echo "Enabling PostGIS"
 psql -U postgres -q -d $DB -c "create extension if not exists postgis"
 psql -U postgres -q -d $DB -c "create extension if not exists postgis_topology"
@@ -31,7 +14,7 @@ for tbl in `psql -U postgres -qAt -c "select tablename from pg_tables where sche
 echo "Importing schema"
 psql -U el -q -d $DB < etc/schema/schema.sql
 
-# pgloader
+# pgloader for old data
 psql -U postgres -q -d $DB2 -c "create or replace language plpgsql"
 psql -U postgres -q -c "grant all privileges on database $DB2 to el"
 psql -U postgres -q -c "alter database $DB2 owner to el"
