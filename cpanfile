@@ -15,3 +15,6 @@ requires "Text::CSV_XS";
 requires "Try::Tiny";
 requires "Web::Scraper";
 requires "DateTimeX::Easy";
+requires "URI";
+requires "LWP::UserAgent";
+requires "LWP::Protocol::https";

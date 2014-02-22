@@ -31359,8 +31359,9 @@ DEVEL_GLOBALDESTRUCTION
 
 $fatpacked{"Devel/StackTrace.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'DEVEL_STACKTRACE';
   package Devel::StackTrace;
-  {
-    $Devel::StackTrace::VERSION = '1.30';
+  $Devel::StackTrace::VERSION = '1.31';
+  BEGIN {
+    $Devel::StackTrace::AUTHORITY = 'cpan:DROLSKY';
   }
   
   use 5.006;
@@ -31627,45 +31628,45 @@ $fatpacked{"Devel/StackTrace.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<
   
   =head1 VERSION
   
-  version 1.30
+  version 1.31
   
   =head1 SYNOPSIS
   
     use Devel::StackTrace;
   
-    my $trace = Devel::StackTrace->new;
+    my $trace = Devel::StackTrace->new();
   
-    print $trace->as_string; # like carp
+    print $trace->as_string(); # like carp
   
     # from top (most recent) of stack to bottom.
-    while (my $frame = $trace->next_frame) {
-        print "Has args\n" if $frame->hasargs;
+    while ( my $frame = $trace->next_frame() ) {
+        print "Has args\n" if $frame->hasargs();
     }
   
     # from bottom (least recent) of stack to top.
-    while (my $frame = $trace->prev_frame) {
-        print "Sub: ", $frame->subroutine, "\n";
+    while ( my $frame = $trace->prev_frame() ) {
+        print "Sub: ", $frame->subroutine(), "\n";
     }
   
   =head1 DESCRIPTION
   
-  The Devel::StackTrace module contains two classes, Devel::StackTrace
-  and Devel::StackTrace::Frame.  The goal of this object is to encapsulate
-  the information that can found through using the caller() function, as
-  well as providing a simple interface to this data.
+  The C<Devel::StackTrace> module contains two classes, C,Devel::StackTrace> and
+  L<Devel::StackTrace::Frame>. These objects encapsulate the information that
+  can retrieved via Perl's C<caller()> function, as well as providing a simple
+  interface to this data.
   
-  The Devel::StackTrace object contains a set of Devel::StackTrace::Frame
-  objects, one for each level of the stack.  The frames contain all the
-  data available from C<caller()>.
+  The C<Devel::StackTrace> object contains a set of C<Devel::StackTrace::Frame>
+  objects, one for each level of the stack. The frames contain all the data
+  available from C<caller()>.
   
-  This code was created to support my L<Exception::Class::Base> class
-  (part of Exception::Class) but may be useful in other contexts.
+  This code was created to support my L<Exception::Class::Base> class (part of
+  L<Exception::Class>) but may be useful in other contexts.
   
   =head1 'TOP' AND 'BOTTOM' OF THE STACK
   
-  When describing the methods of the trace object, I use the words 'top'
-  and 'bottom'.  In this context, the 'top' frame on the stack is the
-  most recent frame and the 'bottom' is the least recent.
+  When describing the methods of the trace object, I use the words 'top' and
+  'bottom'. In this context, the 'top' frame on the stack is the most recent
+  frame and the 'bottom' is the least recent.
   
   Here's an example:
   
@@ -31676,25 +31677,25 @@ $fatpacked{"Devel/StackTrace.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<
     }
   
     sub bar {
-       Devel::StackTrace->new;  # top frame is here.
+       Devel::StackTrace->new();  # top frame is here.
     }
   
-  =head1 Devel::StackTrace METHODS
+  =head1 METHODS
   
-  =over 4
+  This class provide the following methods:
   
-  =item * Devel::StackTrace->new(%named_params)
+  =head2 Devel::StackTrace->new(%named_params)
   
   Returns a new Devel::StackTrace object.
   
   Takes the following parameters:
   
-  =over 8
+  =over 4
   
   =item * frame_filter => $sub
   
   By default, Devel::StackTrace will include all stack frames before the
-  call to its its constructor.
+  call to its constructor.
   
   However, you may want to filter out some frames with more granularity
   than 'ignore_package' or 'ignore_class' allow.
@@ -31720,13 +31721,13 @@ $fatpacked{"Devel/StackTrace.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<
   
   Devel::StackTrace internally adds itself to the 'ignore_package'
   parameter, meaning that the Devel::StackTrace package is B<ALWAYS>
-  ignored.  However, if you create a subclass of Devel::StackTrace it
+  ignored. However, if you create a subclass of Devel::StackTrace it
   will not be ignored.
   
   =item * no_refs => $boolean
   
   If this parameter is true, then Devel::StackTrace will not store
-  references internally when generating stacktrace frames.  This lets
+  references internally when generating stacktrace frames. This lets
   your objects go out of scope.
   
   Devel::StackTrace replaces any references with their stringified
@@ -31741,7 +31742,7 @@ $fatpacked{"Devel/StackTrace.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<
   
   By default, Devel::StackTrace will call C<overload::AddrRef()> to get
   the underlying string representation of an object, instead of
-  respecting the object's stringification overloading.  If you would
+  respecting the object's stringification overloading. If you would
   prefer to see the overloaded representation of objects in stack
   traces, then set this parameter to true.
   
@@ -31765,62 +31766,60 @@ $fatpacked{"Devel/StackTrace.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<
   
   =back
   
-  =item * $trace->next_frame
+  =head2 $trace->next_frame()
   
-  Returns the next Devel::StackTrace::Frame object down on the stack.  If
-  it hasn't been called before it returns the first frame.  It returns
-  undef when it reaches the bottom of the stack and then resets its
-  pointer so the next call to C<next_frame> or C<prev_frame> will work
-  properly.
+  Returns the next L<Devel::StackTrace::Frame> object on the stack, going
+  down. If this method hasn't been called before it returns the first frame. It
+  returns C<undef> when it reaches the bottom of the stack and then resets its
+  pointer so the next call to C<< $trace->next_frame() >> or C<<
+  $trace->prev_frame() >> will work properly.
   
-  =item * $trace->prev_frame
+  =head2 $trace->prev_frame()
   
-  Returns the next Devel::StackTrace::Frame object up on the stack.  If it
-  hasn't been called before it returns the last frame.  It returns undef
-  when it reaches the top of the stack and then resets its pointer so
-  pointer so the next call to C<next_frame> or C<prev_frame> will work
-  properly.
+  Returns the next L<Devel::StackTrace::Frame> object on the stack, going up. If
+  this method hasn't been called before it returns the last frame. It returns
+  undef when it reaches the top of the stack and then resets its pointer so the
+  next call to C<< $trace->next_frame() >> or C<< $trace->prev_frame() >> will
+  work properly.
   
-  =item * $trace->reset_pointer
+  =head2 $trace->reset_pointer
   
-  Resets the pointer so that the next call C<next_frame> or
-  C<prev_frame> will start at the top or bottom of the stack, as
+  Resets the pointer so that the next call to C<< $trace->next_frame() >> or C<<
+  $trace->prev_frame() >> will start at the top or bottom of the stack, as
   appropriate.
   
-  =item * $trace->frames
+  =head2 $trace->frames()
   
   When this method is called with no arguments, it returns a list of
   L<Devel::StackTrace::Frame> objects. They are returned in order from top (most
   recent) to bottom.
   
   This method can also be used to set the object's frames if you pass it a list
-  of L<Devel::StackTrace::Frame> objects objects.
+  of L<Devel::StackTrace::Frame> objects.
   
   This is useful if you want to filter the list of frames in ways that are more
-  complex than can be handled by C<filter_frames>:
+  complex than can be handled by the C<< $trace->filter_frames() >> method:
   
     $stacktrace->frames( my_filter( $stacktrace->frames() ) );
   
-  =item * $trace->frame ($index)
+  =head2 $trace->frame($index)
   
-  Given an index, returns the relevant frame or undef if there is not
-  frame at that index.  The index is exactly like a Perl array.  The
-  first frame is 0 and negative indexes are allowed.
+  Given an index, this method returns the relevant frame, or undef if there is
+  no frame at that index. The index is exactly like a Perl array. The first
+  frame is 0 and negative indexes are allowed.
   
-  =item * $trace->frame_count
+  =head2 $trace->frame_count()
   
   Returns the number of frames in the trace object.
   
-  =item * $trace->as_string(\%p)
+  =head2 $trace->as_string(\%p)
   
-  Calls as_string on each frame from top to bottom, producing output
-  quite similar to the Carp module's cluck/confess methods.
+  Calls C<< $frame->as_string() >> on each frame from top to bottom, producing
+  output quite similar to the Carp module's cluck/confess methods.
   
-  The optional C<\%p> parameter only has one useful option. The
-  C<max_arg_length> parameter truncates each subroutine argument's string
-  representation if it is longer than this number of characters.
-  
-  =back
+  The optional C<\%p> parameter only has one option. The C<max_arg_length>
+  parameter truncates each subroutine argument's string representation if it is
+  longer than this number of characters.
   
   =head1 SUPPORT
   
@@ -31834,7 +31833,7 @@ $fatpacked{"Devel/StackTrace.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<
   
   =head1 COPYRIGHT AND LICENSE
   
-  This software is Copyright (c) 2012 by Dave Rolsky.
+  This software is Copyright (c) 2014 by Dave Rolsky.
   
   This is free software, licensed under:
   
@@ -31845,8 +31844,9 @@ DEVEL_STACKTRACE
 
 $fatpacked{"Devel/StackTrace/Frame.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'DEVEL_STACKTRACE_FRAME';
   package Devel::StackTrace::Frame;
-  {
-    $Devel::StackTrace::Frame::VERSION = '1.30';
+  $Devel::StackTrace::Frame::VERSION = '1.31';
+  BEGIN {
+    $Devel::StackTrace::Frame::AUTHORITY = 'cpan:DROLSKY';
   }
   
   use strict;
@@ -32004,49 +32004,51 @@ $fatpacked{"Devel/StackTrace/Frame.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\
   
   =head1 VERSION
   
-  version 1.30
+  version 1.31
   
   =head1 DESCRIPTION
   
   See L<Devel::StackTrace> for details.
   
+  =for Pod::Coverage new
+  
   =head1 METHODS
   
-  See the L<caller> documentation for more information on what these
+  See Perl's C<caller()> documentation for more information on what these
   methods return.
   
-  =over 4
+  =head2 $frame->package()
   
-  =item * $frame->package
+  =head2 $frame->filename()
   
-  =item * $frame->filename
+  =head2 $frame->line()
   
-  =item * $frame->line
+  =head2 $frame->subroutine()
   
-  =item * $frame->subroutine
+  =head2 $frame->hasargs()
   
-  =item * $frame->hasargs
+  =head2 $frame->wantarray()
   
-  =item * $frame->wantarray
-  
-  =item * $frame->evaltext
+  =head2 $frame->evaltext()
   
   Returns undef if the frame was not part of an eval.
   
-  =item * $frame->is_require
+  =head2 $frame->is_require()
   
   Returns undef if the frame was not part of a require.
   
-  =item * $frame->args
+  =head2 $frame->args()
   
   Returns the arguments passed to the frame.  Note that any arguments
   that are references are returned as references, not copies.
   
-  =item * $frame->hints
+  =head2 $frame->hints()
   
-  =item * $frame->bitmask
+  =head2 $frame->bitmask()
   
-  =back
+  =head2 $frame->as_string()
+  
+  Returns a string containing a description of the frame.
   
   =head1 AUTHOR
   
@@ -32054,7 +32056,7 @@ $fatpacked{"Devel/StackTrace/Frame.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\
   
   =head1 COPYRIGHT AND LICENSE
   
-  This software is Copyright (c) 2012 by Dave Rolsky.
+  This software is Copyright (c) 2014 by Dave Rolsky.
   
   This is free software, licensed under:
   
@@ -38707,6 +38709,298 @@ $fatpacked{"Getopt/Long.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'GET
   
 GETOPT_LONG
 
+$fatpacked{"Import/Into.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'IMPORT_INTO';
+  package Import::Into;
+  
+  use strict;
+  use warnings FATAL => 'all';
+  
+  our $VERSION = '1.002000'; # 1.2.0
+  
+  sub _prelude {
+    my $target = shift;
+    my ($package, $file, $line, $level)
+      = ref $target         ? @{$target}{qw(package filename line)}
+      : $target =~ /[^0-9]/ ? ($target)
+                            : (undef, undef, undef, $target);
+    if (defined $level) {
+      my ($p, $fn, $ln) = caller($level + 2);
+      $package ||= $p;
+      $file    ||= $fn;
+      $line    ||= $ln;
+    }
+    qq{package $package;\n}
+      . ($file ? "#line $line \"$file\"\n" : '')
+  }
+  
+  sub _make_action {
+    my ($action, $target) = @_;
+    my $version = ref $target && $target->{version};
+    my $ver_check = $version ? '$_[0]->VERSION($version);' : '';
+    eval _prelude($target).qq{sub { $ver_check shift->$action(\@_) }}
+      or die "Failed to build action sub to ${action} for ${target}: $@";
+  }
+  
+  sub import::into {
+    my ($class, $target, @args) = @_;
+    _make_action(import => $target)->($class, @args);
+  }
+  
+  sub unimport::out_of {
+    my ($class, $target, @args) = @_;
+    _make_action(unimport => $target)->($class, @args);
+  }
+  
+  1;
+  
+  __END__
+  
+  =head1 NAME
+  
+  Import::Into - import packages into other packages
+  
+  =head1 SYNOPSIS
+  
+    package My::MultiExporter;
+  
+    use Import::Into;
+  
+    use Thing1 ();
+    use Thing2 ();
+  
+    # simple
+    sub import {
+      Thing1->import::into(scalar caller);
+    }
+  
+    # multiple
+    sub import {
+      my $target = caller;
+      Thing1->import::into($target);
+      Thing2->import::into($target, qw(import arguments));
+    }
+  
+    # by level
+    sub import {
+      Thing1->import::into(1);
+    }
+  
+    # with exporter
+    use base qw(Exporter);
+    sub import {
+      shift->export_to_level(1);
+      Thing1->import::into(1);
+    }
+  
+    # no My::MultiExporter == no Thing1
+    sub unimport {
+      Thing1->unimport::out_of(scalar caller);
+    }
+  
+  People wanting to re-export your module should also be using L<Import::Into>.
+  Any exporter or pragma will work seamlessly.
+  
+  Note: You do B<not> need to make any changes to Thing1 to be able to call
+  C<import::into> on it. This is a global method, and is callable on any
+  package (and in fact on any object as well, although it's rarer that you'd
+  want to do that).
+  
+  =head1 DESCRIPTION
+  
+  Writing exporters is a pain. Some use L<Exporter>, some use L<Sub::Exporter>,
+  some use L<Moose::Exporter>, some use L<Exporter::Declare> ... and some things
+  are pragmas.
+  
+  Exporting on someone else's behalf is harder.  The exporters don't provide a
+  consistent API for this, and pragmas need to have their import method called
+  directly, since they effect the current unit of compilation.
+  
+  C<Import::Into> provides global methods to make this painless.
+  
+  =head1 METHODS
+  
+  =head2 $package->import::into( $target, @arguments );
+  
+  A global method, callable on any package.  Imports the given package into
+  C<$target>.  C<@arguments> are passed along to the package's import method.
+  
+  C<$target> can be an package name to export to, an integer for the
+  caller level to export to, or a hashref with the following options:
+  
+  =over 4
+  
+  =item package
+  
+  The target package to export to.
+  
+  =item filename
+  
+  The apparent filename to export to.  Some exporting modules, such as
+  L<autodie> or L<strictures>, care about the filename they are being imported
+  to.
+  
+  =item line
+  
+  The apparent line number to export to.  To be combined with the C<filename>
+  option.
+  
+  =item level
+  
+  The caller level to export to.  This will automatically populate the
+  C<package>, C<filename>, and C<line> options, making it the easiest most
+  constent option.
+  
+  =item version
+  
+  A version number to check for the module.  The equivalent of specifying the
+  version number on a C<use> line.
+  
+  =back
+  
+  =head2 $package->unimport::out_of( $target, @arguments );
+  
+  Equivalent to C<import::into>, but dispatches to C<$package>'s C<unimport>
+  method instead of C<import>.
+  
+  =head1 WHY USE THIS MODULE
+  
+  The APIs for exporting modules aren't consistent.  L<Exporter> subclasses
+  provide export_to_level, but if they overrode their import method all bets
+  are off.  L<Sub::Exporter> provides an into parameter but figuring out
+  something used it isn't trivial. Pragmas need to have their C<import> method
+  called directly since they affect the current unit of compilation.
+  
+  It's ... annoying.
+  
+  However, there is an approach that actually works for all of these types.
+  
+    eval "package $target; use $thing;"
+  
+  will work for anything checking caller, which is everything except pragmas.
+  But it doesn't work for pragmas - pragmas need:
+  
+    $thing->import;
+  
+  because they're designed to affect the code currently being compiled - so
+  within an eval, that's the scope of the eval itself, not the module that
+  just C<use>d you - so
+  
+    sub import {
+      eval "use strict;"
+    }
+  
+  doesn't do what you wanted, but
+  
+    sub import {
+      strict->import;
+    }
+  
+  will apply L<strict> to the calling file correctly.
+  
+  Of course, now you have two new problems - first, that you still need to
+  know if something's a pragma, and second that you can't use either of
+  these approaches alone on something like L<Moose> or L<Moo> that's both
+  an exporter and a pragma.
+  
+  So, a solution for that is:
+  
+    my $sub = eval "package $target; sub { shift->import(\@_) }";
+    $sub->($thing, @import_args);
+  
+  which means that import is called from the right place for pragmas to take
+  effect, and from the right package for caller checking to work - and so
+  behaves correctly for all types of exporter, for pragmas, and for hybrids.
+  
+  Additionally, some import routines check the filename they are being imported
+  to.  This can be dealt with by generating a L<#line directive|perlsyn/Plain
+  Old Comments (Not!)> in the eval, which will change what C<caller> reports for
+  the filename when called in the importer. The filename and line number to use
+  in the directive then need to be fetched using C<caller>:
+  
+    my ($target, $file, $line) = caller(1);
+    my $sub = eval qq{
+      package $target;
+    #line $line "$file"
+      sub { shift->import(\@_) }
+    };
+    $sub->($thing, @import_args);
+  
+  And you need to switch between these implementations depending on if you are
+  targetting a specific package, or something in your call stack.
+  
+  Remembering all this, however, is excessively irritating. So I wrote a module
+  so I didn't have to anymore. Loading L<Import::Into> creates a global method
+  C<import::into> which you can call on any package to import it into another
+  package. So now you can simply write:
+  
+    use Import::Into;
+  
+    $thing->import::into($target, @import_args);
+  
+  This works because of how perl resolves method calls - a call to a simple
+  method name is resolved against the package of the class or object, so
+  
+    $thing->method_name(@args);
+  
+  is roughly equivalent to:
+  
+    my $code_ref = $thing->can('method_name');
+    $code_ref->($thing, @args);
+  
+  while if a C<::> is found, the lookup is made relative to the package name
+  (i.e. everything before the last C<::>) so
+  
+    $thing->Package::Name::method_name(@args);
+  
+  is roughly equivalent to:
+  
+    my $code_ref = Package::Name->can('method_name');
+    $code_ref->($thing, @args);
+  
+  So since L<Import::Into> defines a method C<into> in package C<import>
+  the syntax reliably calls that.
+  
+  For more craziness of this order, have a look at the article I wrote at
+  L<http://shadow.cat/blog/matt-s-trout/madness-with-methods> which covers
+  coderef abuse and the C<${\...}> syntax.
+  
+  Final note: You do still need to ensure that you already loaded C<$thing> - if
+  you're receiving this from a parameter, I recommend using L<Module::Runtime>:
+  
+    use Import::Into;
+    use Module::Runtime qw(use_module);
+  
+    use_module($thing)->import::into($target, @import_args);
+  
+  And that's it.
+  
+  =head1 ACKNOWLEDGEMENTS
+  
+  Thanks to Getty for asking "how can I get C<< use strict; use warnings; >>
+  turned on for all consumers of my code?" and then "why is this not a
+  module?!".
+  
+  =head1 AUTHOR
+  
+  mst - Matt S. Trout (cpan:MSTROUT) <mst@shadowcat.co.uk>
+  
+  =head1 CONTRIBUTORS
+  
+  haarg - Graham Knop (cpan:HAARG) <haarg@haarg.org>
+  
+  =head1 COPYRIGHT
+  
+  Copyright (c) 2012 the Import::Into L</AUTHOR> and L</CONTRIBUTORS>
+  as listed above.
+  
+  =head1 LICENSE
+  
+  This library is free software and may be distributed under the same terms
+  as perl itself.
+  
+  =cut
+IMPORT_INTO
+
 $fatpacked{"JSON.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'JSON';
   package JSON;
   
@@ -44195,6 +44489,10 @@ $fatpacked{"Method/Generate/Accessor.pm"} = '#line '.(1+__LINE__).' "'.__FILE__.
         &&
       (eval { Class::XSAccessor->VERSION('1.07') })
     ;
+    our $CAN_HAZ_XS_PRED =
+      $CAN_HAZ_XS &&
+      (eval { Class::XSAccessor->VERSION('1.17') })
+    ;
   }
   
   sub _SIGDIE
@@ -44203,9 +44501,9 @@ $fatpacked{"Method/Generate/Accessor.pm"} = '#line '.(1+__LINE__).' "'.__FILE__.
     my $sigdie = $OrigSigDie && $OrigSigDie != \&_SIGDIE
       ? $OrigSigDie
       : sub { die $_[0] };
-    
+  
     return $sigdie->(@_) if ref($_[0]);
-    
+  
     my $attr_desc = _attr_desc(@$CurrentAttribute{qw(name init_arg)});
     $sigdie->("$CurrentAttribute->{step} for $attr_desc failed: $_[0]");
   }
@@ -44337,10 +44635,16 @@ $fatpacked{"Method/Generate/Accessor.pm"} = '#line '.(1+__LINE__).' "'.__FILE__.
     if (my $pred = $spec->{predicate}) {
       _die_overwrite($into, $pred, 'a predicate')
         if !$spec->{allow_overwrite} && *{_getglob("${into}::${pred}")}{CODE};
-      $methods{$pred} =
-        quote_sub "${into}::${pred}" =>
-          '    '.$self->_generate_simple_has('$_[0]', $name, $spec)."\n"
-        ;
+      if (our $CAN_HAZ_XS && our $CAN_HAZ_XS_PRED) {
+        $methods{$pred} = $self->_generate_xs(
+          exists_predicates => $into, $pred, $name, $spec
+        );
+      } else {
+        $methods{$pred} =
+          quote_sub "${into}::${pred}" =>
+            '    '.$self->_generate_simple_has('$_[0]', $name, $spec)."\n"
+          ;
+      }
     }
     if (my $pred = $spec->{builder_sub}) {
       _install_coderef( "${into}::$spec->{builder}" => $spec->{builder_sub} );
@@ -44349,7 +44653,7 @@ $fatpacked{"Method/Generate/Accessor.pm"} = '#line '.(1+__LINE__).' "'.__FILE__.
       _die_overwrite($into, $cl, 'a clearer')
         if !$spec->{allow_overwrite} && *{_getglob("${into}::${cl}")}{CODE};
       $methods{$cl} =
-        quote_sub "${into}::${cl}" => 
+        quote_sub "${into}::${cl}" =>
           $self->_generate_simple_clear('$_[0]', $name, $spec)."\n"
         ;
     }
@@ -44362,7 +44666,7 @@ $fatpacked{"Method/Generate/Accessor.pm"} = '#line '.(1+__LINE__).' "'.__FILE__.
           map [ $_ => ref($hspec->{$_}) ? @{$hspec->{$_}} : $hspec->{$_} ],
             keys %$hspec;
         } elsif (!ref($hspec)) {
-          map [ $_ => $_ ], use_module('Role::Tiny')->methods_provided_by(use_module($hspec))
+          map [ $_ => $_ ], use_module('Moo::Role')->methods_provided_by(use_module($hspec))
         } else {
           die "You gave me a handles of ${hspec} and I have no idea why";
         }
@@ -44518,7 +44822,7 @@ $fatpacked{"Method/Generate/Accessor.pm"} = '#line '.(1+__LINE__).' "'.__FILE__.
         $code = "do { my \$self = shift;\n";
       }
       if ($isa_check) {
-        $code .= 
+        $code .=
           "        ".$self->_generate_isa_check($name, $value_store, $isa_check).";\n";
       }
       my $simple = $self->_generate_simple_set('$self', $name, $spec, $value_store);
@@ -44557,7 +44861,7 @@ $fatpacked{"Method/Generate/Accessor.pm"} = '#line '.(1+__LINE__).' "'.__FILE__.
       $self->_generate_call_code($name, 'coerce', "${value}", $coerce)
     );
   }
-   
+  
   sub generate_trigger {
     my $self = shift;
     $self->{captures} = {};
@@ -44612,7 +44916,7 @@ $fatpacked{"Method/Generate/Accessor.pm"} = '#line '.(1+__LINE__).' "'.__FILE__.
       }
       my $code = $quoted->[1];
       if (my $captures = $quoted->[2]) {
-        my $cap_name = qq{\$${type}_captures_for_${name}};
+        my $cap_name = qq{\$${type}_captures_for_}.$self->_sanitize_name($name);
         $self->{captures}->{$cap_name} = \$captures;
         Sub::Quote::inlinify(
           $code, $values, Sub::Quote::capture_unroll($cap_name, $captures, 6), $local
@@ -44621,10 +44925,16 @@ $fatpacked{"Method/Generate/Accessor.pm"} = '#line '.(1+__LINE__).' "'.__FILE__.
         Sub::Quote::inlinify($code, $values, undef, $local);
       }
     } else {
-      my $cap_name = qq{\$${type}_for_${name}};
+      my $cap_name = qq{\$${type}_for_}.$self->_sanitize_name($name);
       $self->{captures}->{$cap_name} = \$sub;
       "${cap_name}->(${values})";
     }
+  }
+  
+  sub _sanitize_name {
+    my ($self, $name) = @_;
+    $name =~ s/([_\W])/sprintf('_%x', ord($1))/ge;
+    $name;
   }
   
   sub generate_populate_set {
@@ -44641,7 +44951,7 @@ $fatpacked{"Method/Generate/Accessor.pm"} = '#line '.(1+__LINE__).' "'.__FILE__.
       my $get_default = $self->_generate_get_default(
                           '$new', $name, $spec
                         );
-      my $get_value = 
+      my $get_value =
         defined($spec->{init_arg})
           ? "(\n${get_indent}  ${test}\n${get_indent}   ? ${source}\n${get_indent}   : "
               .$get_default
@@ -44876,6 +45186,10 @@ $fatpacked{"Method/Generate/Constructor.pm"} = '#line '.(1+__LINE__).' "'.__FILE
           }
         }
       }
+      if (exists $new_spec->{init_arg} && !defined $new_spec->{init_arg}
+          && $new_spec->{required}) {
+        die "${name} attribute can't be required with init_arg => undef";
+      }
       $new_spec->{index} = scalar keys %$specs
         unless defined $new_spec->{index};
       $specs->{$name} = $new_spec;
@@ -44897,9 +45211,17 @@ $fatpacked{"Method/Generate/Constructor.pm"} = '#line '.(1+__LINE__).' "'.__FILE
       ||= $self->_build_construction_string;
   }
   
+  sub buildall_generator {
+    require Method::Generate::BuildAll;
+    Method::Generate::BuildAll->new;
+  }
+  
   sub _build_construction_string {
-    'bless('
-      .$_[0]->accessor_generator->default_construction_string
+    my ($self) = @_;
+    my $builder = $self->{construction_builder};
+    $builder ? $self->$builder
+      : 'bless('
+      .$self->accessor_generator->default_construction_string
       .', $class);'
   }
   
@@ -44933,8 +45255,7 @@ $fatpacked{"Method/Generate/Constructor.pm"} = '#line '.(1+__LINE__).' "'.__FILE
     $body .= '    my $new = '.$self->construction_string.";\n";
     $body .= $self->_assign_new($spec);
     if ($into->can('BUILD')) {
-      require Method::Generate::BuildAll;
-      $body .= Method::Generate::BuildAll->new->buildall_body_for(
+      $body .= $self->buildall_generator->buildall_body_for(
         $into, '$new', '$args'
       );
     }
@@ -45040,6 +45361,7 @@ $fatpacked{"Method/Generate/Constructor.pm"} = '#line '.(1+__LINE__).' "'.__FILE
     },
     accessor_generator => { is => 'ro' },
     construction_string => { is => 'lazy' },
+    construction_builder => { is => 'lazy' },
     subconstructor_handler => { is => 'ro' },
     package => { is => 'ro' },
   );
@@ -45620,7 +45942,8 @@ $fatpacked{"Module/CoreList.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
   use vars qw/$VERSION %released %version %families %upstream
   	    %bug_tracker %deprecated %delta/;
   use Module::CoreList::TieHashDelta;
-  $VERSION = '3.02';
+  use version;
+  $VERSION = '3.07';
   
   my $dumpinc = 0;
   sub import {
@@ -45859,6 +46182,9 @@ $fatpacked{"Module/CoreList.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
       5.019005 => '2013-10-20',
       5.019006 => '2013-11-20',
       5.019007 => '2013-12-20',
+      5.018002 => '2014-01-06',
+      5.019008 => '2014-01-20',
+      5.019009 => '2014-02-20',
     );
   
   for my $version ( sort { $a <=> $b } keys %released ) {
@@ -53663,6 +53989,18 @@ $fatpacked{"Module/CoreList.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
              'VMS::Filespec'         => 1,
           }
       },
+      5.018002 => {
+          delta_from => 5.018001,
+          changed => {
+              'B'                     => '1.42_02',
+              'B::Concise'            => '0.95_01',
+              'Config'                => '5.018002',
+              'File::Glob'            => '1.20_01',
+              'Module::CoreList'      => '3.03',
+              'Module::CoreList::TieHashDelta'=> '3.03',
+              'Module::CoreList::Utils'=> '3.03',
+          },
+      },
       5.019000 => {
           delta_from => 5.018000,
           changed => {
@@ -54870,6 +55208,310 @@ $fatpacked{"Module/CoreList.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
           removed => {
           }
       },
+      5.019008 => {
+          delta_from => 5.019007,
+          changed => {
+              'Config'                => '5.019008',
+              'DynaLoader'            => '1.24',
+              'Encode'                => '2.57',
+              'Errno'                 => '1.20_02',
+              'ExtUtils::CBuilder'    => '0.280213',
+              'ExtUtils::CBuilder::Base'=> '0.280213',
+              'ExtUtils::CBuilder::Platform::Unix'=> '0.280213',
+              'ExtUtils::CBuilder::Platform::VMS'=> '0.280213',
+              'ExtUtils::CBuilder::Platform::Windows'=> '0.280213',
+              'ExtUtils::CBuilder::Platform::Windows::BCC'=> '0.280213',
+              'ExtUtils::CBuilder::Platform::Windows::GCC'=> '0.280213',
+              'ExtUtils::CBuilder::Platform::Windows::MSVC'=> '0.280213',
+              'ExtUtils::CBuilder::Platform::aix'=> '0.280213',
+              'ExtUtils::CBuilder::Platform::cygwin'=> '0.280213',
+              'ExtUtils::CBuilder::Platform::darwin'=> '0.280213',
+              'ExtUtils::CBuilder::Platform::dec_osf'=> '0.280213',
+              'ExtUtils::CBuilder::Platform::os2'=> '0.280213',
+              'ExtUtils::Command::MM' => '6.86',
+              'ExtUtils::Liblist'     => '6.86',
+              'ExtUtils::Liblist::Kid'=> '6.86',
+              'ExtUtils::MM'          => '6.86',
+              'ExtUtils::MM_AIX'      => '6.86',
+              'ExtUtils::MM_Any'      => '6.86',
+              'ExtUtils::MM_BeOS'     => '6.86',
+              'ExtUtils::MM_Cygwin'   => '6.86',
+              'ExtUtils::MM_DOS'      => '6.86',
+              'ExtUtils::MM_Darwin'   => '6.86',
+              'ExtUtils::MM_MacOS'    => '6.86',
+              'ExtUtils::MM_NW5'      => '6.86',
+              'ExtUtils::MM_OS2'      => '6.86',
+              'ExtUtils::MM_QNX'      => '6.86',
+              'ExtUtils::MM_UWIN'     => '6.86',
+              'ExtUtils::MM_Unix'     => '6.86',
+              'ExtUtils::MM_VMS'      => '6.86',
+              'ExtUtils::MM_VOS'      => '6.86',
+              'ExtUtils::MM_Win32'    => '6.86',
+              'ExtUtils::MM_Win95'    => '6.86',
+              'ExtUtils::MY'          => '6.86',
+              'ExtUtils::MakeMaker'   => '6.86',
+              'ExtUtils::MakeMaker::Config'=> '6.86',
+              'ExtUtils::Mkbootstrap' => '6.86',
+              'ExtUtils::Mksymlists'  => '6.86',
+              'ExtUtils::testlib'     => '6.86',
+              'File::Copy'            => '2.29',
+              'Hash::Util::FieldHash' => '1.14',
+              'IO::Socket::IP'        => '0.26',
+              'IO::Socket::UNIX'      => '1.26',
+              'List::Util'            => '1.36',
+              'List::Util::XS'        => '1.36',
+              'Module::Build'         => '0.4204',
+              'Module::Build::Base'   => '0.4204',
+              'Module::Build::Compat' => '0.4204',
+              'Module::Build::Config' => '0.4204',
+              'Module::Build::Cookbook'=> '0.4204',
+              'Module::Build::Dumper' => '0.4204',
+              'Module::Build::ModuleInfo'=> '0.4204',
+              'Module::Build::Notes'  => '0.4204',
+              'Module::Build::PPMMaker'=> '0.4204',
+              'Module::Build::Platform::Default'=> '0.4204',
+              'Module::Build::Platform::MacOS'=> '0.4204',
+              'Module::Build::Platform::Unix'=> '0.4204',
+              'Module::Build::Platform::VMS'=> '0.4204',
+              'Module::Build::Platform::VOS'=> '0.4204',
+              'Module::Build::Platform::Windows'=> '0.4204',
+              'Module::Build::Platform::aix'=> '0.4204',
+              'Module::Build::Platform::cygwin'=> '0.4204',
+              'Module::Build::Platform::darwin'=> '0.4204',
+              'Module::Build::Platform::os2'=> '0.4204',
+              'Module::Build::PodParser'=> '0.4204',
+              'Module::CoreList'      => '3.04',
+              'Module::CoreList::TieHashDelta'=> '3.04',
+              'Module::CoreList::Utils'=> '3.04',
+              'Module::Load'          => '0.28',
+              'Module::Load::Conditional'=> '0.60',
+              'Net::Config'           => '1.13',
+              'Net::FTP::A'           => '1.19',
+              'POSIX'                 => '1.38_01',
+              'Perl::OSType'          => '1.007',
+              'PerlIO::encoding'      => '0.18',
+              'Pod::Perldoc'          => '3.21',
+              'Pod::Perldoc::BaseTo'  => '3.21',
+              'Pod::Perldoc::GetOptsOO'=> '3.21',
+              'Pod::Perldoc::ToANSI'  => '3.21',
+              'Pod::Perldoc::ToChecker'=> '3.21',
+              'Pod::Perldoc::ToMan'   => '3.21',
+              'Pod::Perldoc::ToNroff' => '3.21',
+              'Pod::Perldoc::ToPod'   => '3.21',
+              'Pod::Perldoc::ToRtf'   => '3.21',
+              'Pod::Perldoc::ToTerm'  => '3.21',
+              'Pod::Perldoc::ToText'  => '3.21',
+              'Pod::Perldoc::ToTk'    => '3.21',
+              'Pod::Perldoc::ToXml'   => '3.21',
+              'Scalar::Util'          => '1.36',
+              'Time::Piece'           => '1.27',
+              'Time::Seconds'         => '1.27',
+              'Unicode::UCD'          => '0.57',
+              'XS::APItest'           => '0.59',
+              'XSLoader'              => '0.17',
+              'base'                  => '2.21',
+              'constant'              => '1.31',
+              'inc::latest'           => '0.4204',
+              'threads::shared'       => '1.46',
+              'version'               => '0.9907',
+              'version::regex'        => '0.9907',
+              'version::vpp'          => '0.9907',
+              'warnings'              => '1.21',
+          },
+          removed => {
+          }
+      },
+      5.019009 => {
+          delta_from => 5.019008,
+          changed => {
+              'B'                     => '1.48',
+              'B::Concise'            => '0.992',
+              'B::Deparse'            => '1.25',
+              'CGI'                   => '3.65',
+              'CPAN::Meta::YAML'      => '0.011',
+              'Compress::Raw::Bzip2'  => '2.064',
+              'Compress::Raw::Zlib'   => '2.065',
+              'Compress::Zlib'        => '2.064',
+              'Config'                => '5.019009',
+              'Config::Perl::V'       => '0.20',
+              'Cwd'                   => '3.47',
+              'Devel::Peek'           => '1.16',
+              'Digest::SHA'           => '5.87',
+              'DynaLoader'            => '1.25',
+              'English'               => '1.09',
+              'ExtUtils::CBuilder'    => '0.280216',
+              'ExtUtils::CBuilder::Base'=> '0.280216',
+              'ExtUtils::CBuilder::Platform::Unix'=> '0.280216',
+              'ExtUtils::CBuilder::Platform::VMS'=> '0.280216',
+              'ExtUtils::CBuilder::Platform::Windows'=> '0.280216',
+              'ExtUtils::CBuilder::Platform::Windows::BCC'=> '0.280216',
+              'ExtUtils::CBuilder::Platform::Windows::GCC'=> '0.280216',
+              'ExtUtils::CBuilder::Platform::Windows::MSVC'=> '0.280216',
+              'ExtUtils::CBuilder::Platform::aix'=> '0.280216',
+              'ExtUtils::CBuilder::Platform::android'=> '0.280216',
+              'ExtUtils::CBuilder::Platform::cygwin'=> '0.280216',
+              'ExtUtils::CBuilder::Platform::darwin'=> '0.280216',
+              'ExtUtils::CBuilder::Platform::dec_osf'=> '0.280216',
+              'ExtUtils::CBuilder::Platform::os2'=> '0.280216',
+              'ExtUtils::Command::MM' => '6.88',
+              'ExtUtils::Embed'       => '1.32',
+              'ExtUtils::Install'     => '1.62',
+              'ExtUtils::Installed'   => '1.999004',
+              'ExtUtils::Liblist'     => '6.88',
+              'ExtUtils::Liblist::Kid'=> '6.88',
+              'ExtUtils::MM'          => '6.88',
+              'ExtUtils::MM_AIX'      => '6.88',
+              'ExtUtils::MM_Any'      => '6.88',
+              'ExtUtils::MM_BeOS'     => '6.88',
+              'ExtUtils::MM_Cygwin'   => '6.88',
+              'ExtUtils::MM_DOS'      => '6.88',
+              'ExtUtils::MM_Darwin'   => '6.88',
+              'ExtUtils::MM_MacOS'    => '6.88',
+              'ExtUtils::MM_NW5'      => '6.88',
+              'ExtUtils::MM_OS2'      => '6.88',
+              'ExtUtils::MM_QNX'      => '6.88',
+              'ExtUtils::MM_UWIN'     => '6.88',
+              'ExtUtils::MM_Unix'     => '6.88',
+              'ExtUtils::MM_VMS'      => '6.88',
+              'ExtUtils::MM_VOS'      => '6.88',
+              'ExtUtils::MM_Win32'    => '6.88',
+              'ExtUtils::MM_Win95'    => '6.88',
+              'ExtUtils::MY'          => '6.88',
+              'ExtUtils::MakeMaker'   => '6.88',
+              'ExtUtils::MakeMaker::Config'=> '6.88',
+              'ExtUtils::Mkbootstrap' => '6.88',
+              'ExtUtils::Mksymlists'  => '6.88',
+              'ExtUtils::Packlist'    => '1.47',
+              'ExtUtils::testlib'     => '6.88',
+              'Fatal'                 => '2.23',
+              'File::Fetch'           => '0.48',
+              'File::Spec'            => '3.47',
+              'File::Spec::Cygwin'    => '3.47',
+              'File::Spec::Epoc'      => '3.47',
+              'File::Spec::Functions' => '3.47',
+              'File::Spec::Mac'       => '3.47',
+              'File::Spec::OS2'       => '3.47',
+              'File::Spec::Unix'      => '3.47',
+              'File::Spec::VMS'       => '3.47',
+              'File::Spec::Win32'     => '3.47',
+              'HTTP::Tiny'            => '0.042',
+              'IO::Compress::Adapter::Bzip2'=> '2.064',
+              'IO::Compress::Adapter::Deflate'=> '2.064',
+              'IO::Compress::Adapter::Identity'=> '2.064',
+              'IO::Compress::Base'    => '2.064',
+              'IO::Compress::Base::Common'=> '2.064',
+              'IO::Compress::Bzip2'   => '2.064',
+              'IO::Compress::Deflate' => '2.064',
+              'IO::Compress::Gzip'    => '2.064',
+              'IO::Compress::Gzip::Constants'=> '2.064',
+              'IO::Compress::RawDeflate'=> '2.064',
+              'IO::Compress::Zip'     => '2.064',
+              'IO::Compress::Zip::Constants'=> '2.064',
+              'IO::Compress::Zlib::Constants'=> '2.064',
+              'IO::Compress::Zlib::Extra'=> '2.064',
+              'IO::Socket::INET'      => '1.35',
+              'IO::Socket::IP'        => '0.28',
+              'IO::Uncompress::Adapter::Bunzip2'=> '2.064',
+              'IO::Uncompress::Adapter::Identity'=> '2.064',
+              'IO::Uncompress::Adapter::Inflate'=> '2.064',
+              'IO::Uncompress::AnyInflate'=> '2.064',
+              'IO::Uncompress::AnyUncompress'=> '2.064',
+              'IO::Uncompress::Base'  => '2.064',
+              'IO::Uncompress::Bunzip2'=> '2.064',
+              'IO::Uncompress::Gunzip'=> '2.064',
+              'IO::Uncompress::Inflate'=> '2.064',
+              'IO::Uncompress::RawInflate'=> '2.064',
+              'IO::Uncompress::Unzip' => '2.064',
+              'IPC::Cmd'              => '0.92',
+              'List::Util'            => '1.38',
+              'List::Util::XS'        => '1.38',
+              'Locale::Codes'         => '3.29',
+              'Locale::Codes::Constants'=> '3.29',
+              'Locale::Codes::Country'=> '3.29',
+              'Locale::Codes::Country_Codes'=> '3.29',
+              'Locale::Codes::Country_Retired'=> '3.29',
+              'Locale::Codes::Currency'=> '3.29',
+              'Locale::Codes::Currency_Codes'=> '3.29',
+              'Locale::Codes::Currency_Retired'=> '3.29',
+              'Locale::Codes::LangExt'=> '3.29',
+              'Locale::Codes::LangExt_Codes'=> '3.29',
+              'Locale::Codes::LangExt_Retired'=> '3.29',
+              'Locale::Codes::LangFam'=> '3.29',
+              'Locale::Codes::LangFam_Codes'=> '3.29',
+              'Locale::Codes::LangFam_Retired'=> '3.29',
+              'Locale::Codes::LangVar'=> '3.29',
+              'Locale::Codes::LangVar_Codes'=> '3.29',
+              'Locale::Codes::LangVar_Retired'=> '3.29',
+              'Locale::Codes::Language'=> '3.29',
+              'Locale::Codes::Language_Codes'=> '3.29',
+              'Locale::Codes::Language_Retired'=> '3.29',
+              'Locale::Codes::Script' => '3.29',
+              'Locale::Codes::Script_Codes'=> '3.29',
+              'Locale::Codes::Script_Retired'=> '3.29',
+              'Locale::Country'       => '3.29',
+              'Locale::Currency'      => '3.29',
+              'Locale::Language'      => '3.29',
+              'Locale::Script'        => '3.29',
+              'Module::Build'         => '0.4205',
+              'Module::Build::Base'   => '0.4205',
+              'Module::Build::Compat' => '0.4205',
+              'Module::Build::Config' => '0.4205',
+              'Module::Build::Cookbook'=> '0.4205',
+              'Module::Build::Dumper' => '0.4205',
+              'Module::Build::ModuleInfo'=> '0.4205',
+              'Module::Build::Notes'  => '0.4205',
+              'Module::Build::PPMMaker'=> '0.4205',
+              'Module::Build::Platform::Default'=> '0.4205',
+              'Module::Build::Platform::MacOS'=> '0.4205',
+              'Module::Build::Platform::Unix'=> '0.4205',
+              'Module::Build::Platform::VMS'=> '0.4205',
+              'Module::Build::Platform::VOS'=> '0.4205',
+              'Module::Build::Platform::Windows'=> '0.4205',
+              'Module::Build::Platform::aix'=> '0.4205',
+              'Module::Build::Platform::cygwin'=> '0.4205',
+              'Module::Build::Platform::darwin'=> '0.4205',
+              'Module::Build::Platform::os2'=> '0.4205',
+              'Module::Build::PodParser'=> '0.4205',
+              'Module::CoreList'      => '3.06',
+              'Module::CoreList::TieHashDelta'=> '3.06',
+              'Module::CoreList::Utils'=> '3.06',
+              'Module::Load'          => '0.30',
+              'Module::Load::Conditional'=> '0.62',
+              'Net::Domain'           => '2.23',
+              'Net::FTP'              => '2.79',
+              'Net::NNTP'             => '2.26',
+              'Net::POP3'             => '2.31',
+              'Net::Ping'             => '2.43',
+              'Net::SMTP'             => '2.33',
+              'POSIX'                 => '1.38_02',
+              'Parse::CPAN::Meta'     => '1.4413',
+              'PathTools::Cwd'        => '3.47',
+              'Pod::Escapes'          => '1.06',
+              'Pod::Find'             => '1.62',
+              'Pod::InputObjects'     => '1.62',
+              'Pod::ParseUtils'       => '1.62',
+              'Pod::Parser'           => '1.62',
+              'Pod::Select'           => '1.62',
+              'Scalar::Util'          => '1.38',
+              'autodie'               => '2.23',
+              'autodie::exception'    => '2.23',
+              'autodie::exception::system'=> '2.23',
+              'autodie::hints'        => '2.23',
+              'autodie::skip'         => '2.23',
+              'diagnostics'           => '1.34',
+              'feature'               => '1.35',
+              'inc::latest'           => '0.4205',
+              'locale'                => '1.03',
+              'mro'                   => '1.15',
+              'threads'               => '1.92',
+              'version'               => '0.9908',
+              'version::regex'        => '0.9908',
+              'version::vpp'          => '0.9908',
+              'warnings'              => '1.22',
+          },
+          removed => {
+          }
+      },
   );
   
   sub is_core
@@ -54879,7 +55521,7 @@ $fatpacked{"Module/CoreList.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
       my ($module_version, $perl_version);
   
       $module_version = shift if @_ > 0;
-      $perl_version   = @_ > 0 ? shift : $^V;
+      $perl_version   = @_ > 0 ? shift : $];
   
       my $first_release = first_release($module);
   
@@ -54911,7 +55553,7 @@ $fatpacked{"Module/CoreList.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
               last RELEASE if $prn > $perl_version;
               next unless defined(my $next_module_version
                                      = $delta{$prn}->{changed}->{$module});
-              return 1 if $next_module_version >= $module_version;
+              return 1 if version->parse($next_module_version) >= version->parse($module_version);
           }
           return 0;
       }
@@ -55082,6 +55724,13 @@ $fatpacked{"Module/CoreList.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
           removed => {
           }
       },
+      5.018002 => {
+          delta_from => 5.018001,
+          changed => {
+          },
+          removed => {
+          }
+      },
   
       5.019    => {
           delta_from => 5.018,
@@ -55225,6 +55874,20 @@ $fatpacked{"Module/CoreList.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
               'CGI::Push'             => '1',
               'CGI::Switch'           => '1',
               'CGI::Util'             => '1',
+          },
+          removed => {
+          }
+      },
+      5.019008 => {
+          delta_from => 5.019007,
+          changed => {
+          },
+          removed => {
+          }
+      },
+      5.019009 => {
+          delta_from => 5.019008,
+          changed => {
           },
           removed => {
           }
@@ -55390,6 +56053,7 @@ $fatpacked{"Module/CoreList.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
       'IO::Compress::Zip::Constants'=> 'cpan',
       'IO::Compress::Zlib::Constants'=> 'cpan',
       'IO::Compress::Zlib::Extra'=> 'cpan',
+      'IO::Socket::IP'        => 'cpan',
       'IO::Uncompress::Adapter::Bunzip2'=> 'cpan',
       'IO::Uncompress::Adapter::Identity'=> 'cpan',
       'IO::Uncompress::Adapter::Inflate'=> 'cpan',
@@ -55643,6 +56307,9 @@ $fatpacked{"Module/CoreList.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
       'inc::latest'           => 'cpan',
       'parent'                => 'cpan',
       'perlfaq'               => 'cpan',
+      'version'               => 'cpan',
+      'version::regex'        => 'cpan',
+      'version::vpp'          => 'cpan',
   );
   
   %bug_tracker = (
@@ -55655,15 +56322,15 @@ $fatpacked{"Module/CoreList.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
       'Archive::Tar::Constant'=> undef,
       'Archive::Tar::File'    => undef,
       'B::Debug'              => undef,
-      'CGI'                   => undef,
-      'CGI::Apache'           => undef,
-      'CGI::Carp'             => undef,
-      'CGI::Cookie'           => undef,
-      'CGI::Fast'             => undef,
-      'CGI::Pretty'           => undef,
-      'CGI::Push'             => undef,
-      'CGI::Switch'           => undef,
-      'CGI::Util'             => undef,
+      'CGI'                   => 'https://github.com/markstos/CGI.pm/issues',
+      'CGI::Apache'           => 'https://github.com/markstos/CGI.pm/issues',
+      'CGI::Carp'             => 'https://github.com/markstos/CGI.pm/issues',
+      'CGI::Cookie'           => 'https://github.com/markstos/CGI.pm/issues',
+      'CGI::Fast'             => 'https://github.com/markstos/CGI.pm/issues',
+      'CGI::Pretty'           => 'https://github.com/markstos/CGI.pm/issues',
+      'CGI::Push'             => 'https://github.com/markstos/CGI.pm/issues',
+      'CGI::Switch'           => 'https://github.com/markstos/CGI.pm/issues',
+      'CGI::Util'             => 'https://github.com/markstos/CGI.pm/issues',
       'CPAN'                  => undef,
       'CPAN::Author'          => undef,
       'CPAN::Bundle'          => undef,
@@ -55794,6 +56461,7 @@ $fatpacked{"Module/CoreList.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
       'IO::Compress::Zip::Constants'=> undef,
       'IO::Compress::Zlib::Constants'=> undef,
       'IO::Compress::Zlib::Extra'=> undef,
+      'IO::Socket::IP'        => undef,
       'IO::Uncompress::Adapter::Bunzip2'=> undef,
       'IO::Uncompress::Adapter::Identity'=> undef,
       'IO::Uncompress::Adapter::Inflate'=> undef,
@@ -56047,6 +56715,9 @@ $fatpacked{"Module/CoreList.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
       'inc::latest'           => undef,
       'parent'                => undef,
       'perlfaq'               => 'https://github.com/perl-doc-cats/perlfaq/issues',
+      'version'               => undef,
+      'version::regex'        => undef,
+      'version::vpp'          => undef,
   );
   
   # Create aliases with trailing zeros for $] use
@@ -56054,6 +56725,7 @@ $fatpacked{"Module/CoreList.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
   $released{'5.000'} = $released{5};
   $version{'5.000'} = $version{5};
   
+  _create_aliases(\%delta);
   _create_aliases(\%released);
   _create_aliases(\%version);
   _create_aliases(\%deprecated);
@@ -56084,7 +56756,7 @@ $fatpacked{"Module/CoreList/TieHashDelta.pm"} = '#line '.(1+__LINE__).' "'.__FIL
   use strict;
   use vars qw($VERSION);
   
-  $VERSION = "3.02";
+  $VERSION = "3.07";
   
   sub TIEHASH {
       my ($class, $changed, $removed, $parent) = @_;
@@ -56164,7 +56836,7 @@ $fatpacked{"Module/CoreList/Utils.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"
   use Module::CoreList;
   use Module::CoreList::TieHashDelta;
   
-  $VERSION = '3.02';
+  $VERSION = '3.07';
   
   sub utilities {
       my $perl = shift;
@@ -56973,6 +57645,13 @@ $fatpacked{"Module/CoreList/Utils.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"
           removed => {
           }
       },
+      5.018002 => {
+          delta_from => 5.018001,
+          changed => {
+          },
+          removed => {
+          }
+      },
       5.019000 => {
           delta_from => 5.018000,
           changed => {
@@ -57028,6 +57707,20 @@ $fatpacked{"Module/CoreList/Utils.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"
       },
       5.019007 => {
           delta_from => 5.019006,
+          changed => {
+          },
+          removed => {
+          }
+      },
+      5.019008 => {
+          delta_from => 5.019007,
+          changed => {
+          },
+          removed => {
+          }
+      },
+      5.019009 => {
+          delta_from => 5.019008,
           changed => {
           },
           removed => {
@@ -58413,11 +59106,12 @@ $fatpacked{"Module/Runtime.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'
   avoids using any other modules, so that it can be used in low-level
   infrastructure.
   
-  The parts of this module that work with module names apply the same
-  syntax that is used for barewords in Perl source.  In principle this
-  syntax can vary between versions of Perl, and this module applies the
-  syntax of the Perl on which it is running.  In practice the usable syntax
-  hasn't changed yet, but there's a good chance of it changing in Perl 5.18.
+  The parts of this module that work with module names apply the same syntax
+  that is used for barewords in Perl source.  In principle this syntax
+  can vary between versions of Perl, and this module applies the syntax of
+  the Perl on which it is running.  In practice the usable syntax hasn't
+  changed yet.  There's some intent for Unicode module names to be supported
+  in the future, but this hasn't yet amounted to any consistent facility.
   
   The functions of this module whose purpose is to load modules include
   workarounds for three old Perl core bugs regarding C<require>.  These
@@ -58428,7 +59122,7 @@ $fatpacked{"Module/Runtime.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'
   =head2 Module name syntax
   
   The usable module name syntax has not changed from Perl 5.000 up to
-  Perl 5.15.7.  The syntax is composed entirely of ASCII characters.
+  Perl 5.19.8.  The syntax is composed entirely of ASCII characters.
   From Perl 5.6 onwards there has been some attempt to allow the use of
   non-ASCII Unicode characters in Perl source, but it was fundamentally
   broken (like the entirety of Perl 5.6's Unicode handling) and remained
@@ -58437,7 +59131,6 @@ $fatpacked{"Module/Runtime.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'
   parser in some places, it remains broken for module names.  Furthermore,
   there has not yet been any work on how to map Unicode module names into
   filenames, so in that respect also Unicode module names are unusable.
-  This may finally be addressed in the Perl 5.17 series.
   
   The module name syntax is, precisely: the string must consist of one or
   more segments separated by C<::>; each segment must consist of one or more
@@ -58491,7 +59184,7 @@ $fatpacked{"Module/Runtime.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'
   BEGIN { ${^WARNING_BITS} = ""; }
   # Don't "use strict" here, to avoid dependencies.
   
-  our $VERSION = "0.013";
+  our $VERSION = "0.014";
   
   # Don't use Exporter here, to avoid dependencies.
   our @EXPORT_OK = qw(
@@ -58681,11 +59374,11 @@ $fatpacked{"Module/Runtime.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'
   		my $notional_filename = &module_notional_filename;
   		my $guard = bless([ $notional_filename ],
   				"Module::Runtime::__GUARD__");
-  		my $result = require($notional_filename);
+  		my $result = CORE::require($notional_filename);
   		pop @$guard;
   		return $result;
   	} else {
-  		return scalar(require(&module_notional_filename));
+  		return scalar(CORE::require(&module_notional_filename));
   	}
   }
   
@@ -58717,9 +59410,7 @@ $fatpacked{"Module/Runtime.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'
   sub use_module($;$) {
   	my($name, $version) = @_;
   	require_module($name);
-  	if(defined $version) {
-  		$name->VERSION($version);
-  	}
+  	$name->VERSION($version) if @_ >= 2;
   	return $name;
   }
   
@@ -58737,8 +59428,8 @@ $fatpacked{"Module/Runtime.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'
   
   This is mostly the same operation that is performed by the L<base> pragma
   to ensure that the specified base classes are available.  The behaviour
-  of L<base> was simplified in version 2.18, and this function changed
-  to match.
+  of L<base> was simplified in version 2.18, and later improved in version
+  2.20, and on both occasions this function changed to match.
   
   If a I<VERSION> is specified, the C<VERSION> method of the loaded package is
   called with the specified I<VERSION> as an argument.  This normally serves
@@ -58750,11 +59441,13 @@ $fatpacked{"Module/Runtime.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'
   
   sub use_package_optimistically($;$) {
   	my($name, $version) = @_;
-  	check_module_name($name);
+  	my $fn = module_notional_filename($name);
   	eval { local $SIG{__DIE__}; require_module($name); };
   	die $@ if $@ ne "" &&
-  		$@ !~ /\ACan't locate .+ at \Q@{[__FILE__]}\E line/s;
-  	$name->VERSION($version) if defined $version;
+  		($@ !~ /\ACan't locate \Q$fn\E .+ at \Q@{[__FILE__]}\E line/s ||
+  		 $@ =~ /^Compilation\ failed\ in\ require
+  			 \ at\ \Q@{[__FILE__]}\E\ line/xm);
+  	$name->VERSION($version) if @_ >= 2;
   	return $name;
   }
   
@@ -58839,6 +59532,17 @@ $fatpacked{"Module/Runtime.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'
   
   =back
   
+  =head1 BUGS
+  
+  On Perl versions 5.7.2 to 5.8.8, if C<require> is overridden by the
+  C<CORE::GLOBAL> mechanism, it is likely to break the heuristics used by
+  L</use_package_optimistically>, making it signal an error for a missing
+  module rather than assume that it was already loaded.  From Perl 5.8.9
+  onwards, and on 5.7.1 and earlier, this module can avoid being confused
+  by such an override.  On the affected versions, a C<require> override
+  might be installed by L<Lexical::SealRequireHints>, if something requires
+  its bugfix but for some reason its XS implementation isn't available.
+  
   =head1 SEE ALSO
   
   L<Lexical::SealRequireHints>,
@@ -58852,7 +59556,7 @@ $fatpacked{"Module/Runtime.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'
   
   =head1 COPYRIGHT
   
-  Copyright (C) 2004, 2006, 2007, 2009, 2010, 2011, 2012
+  Copyright (C) 2004, 2006, 2007, 2009, 2010, 2011, 2012, 2014
   Andrew Main (Zefram) <zefram@fysh.org>
   
   =head1 LICENSE
@@ -58872,8 +59576,9 @@ $fatpacked{"Moo.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO';
   use Moo::_Utils;
   use B 'perlstring';
   use Sub::Defer ();
+  use Import::Into;
   
-  our $VERSION = '1.003001';
+  our $VERSION = '1.004002';
   $VERSION = eval $VERSION;
   
   require Moo::sification;
@@ -58889,7 +59594,8 @@ $fatpacked{"Moo.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO';
   sub import {
     my $target = caller;
     my $class = shift;
-    strictures->import;
+    _set_loaded(caller);
+    strictures->import::into(1);
     if ($Role::Tiny::INFO{$target} and $Role::Tiny::INFO{$target}{is_role}) {
       die "Cannot import Moo into a role";
     }
@@ -58933,6 +59639,9 @@ $fatpacked{"Moo.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO';
       };
     }
     return if $MAKERS{$target}{is_class}; # already exported into this package
+    my $stash = _getstash($target);
+    my @not_methods = map { *$_{CODE}||() } grep !ref($_), values %$stash;
+    @{$MAKERS{$target}{not_methods}={}}{@not_methods} = @not_methods;
     $MAKERS{$target}{is_class} = 1;
     {
       no strict 'refs';
@@ -58989,7 +59698,7 @@ $fatpacked{"Moo.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO';
     $MAKERS{$target}{accessor} ||= do {
       my $maker_class = do {
         if (my $m = do {
-              if (my $defer_target = 
+              if (my $defer_target =
                     (Sub::Defer::defer_info($target->can('new'))||[])->[0]
                 ) {
                 my ($pkg) = ($defer_target =~ /^(.*)::[^:]+$/);
@@ -59034,15 +59743,20 @@ $fatpacked{"Moo.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO';
         } else {
           $moo_constructor = 1; # no other constructor, make a Moo one
         }
-      };
+      }
       ($con ? ref($con) : 'Method::Generate::Constructor')
         ->new(
           package => $target,
           accessor_generator => $class->_accessor_maker_for($target),
-          construction_string => (
-            $moo_constructor
-              ? ($con ? $con->construction_string : undef)
-              : ('$class->'.$target.'::SUPER::new($class->can(q[FOREIGNBUILDARGS]) ? $class->FOREIGNBUILDARGS(@_) : @_)')
+          $moo_constructor ? (
+            $con ? (construction_string => $con->construction_string) : ()
+          ) : (
+            construction_builder => sub {
+              '$class->'.$target.'::SUPER::new('
+                .($target->can('FOREIGNBUILDARGS') ?
+                  '$class->FOREIGNBUILDARGS(@_)' : '@_')
+                .')'
+            },
           ),
           subconstructor_handler => (
             '      if ($Moo::MAKERS{$class}) {'."\n"
@@ -59058,7 +59772,26 @@ $fatpacked{"Moo.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO';
     }
   }
   
+  sub _concrete_methods_of {
+    my ($me, $role) = @_;
+    my $makers = $MAKERS{$role};
+    # grab role symbol table
+    my $stash = _getstash($role);
+    # reverse so our keys become the values (captured coderefs) in case
+    # they got copied or re-used since
+    my $not_methods = { reverse %{$makers->{not_methods}||{}} };
+    +{
+      # grab all code entries that aren't in the not_methods list
+      map {
+        my $code = *{$stash->{$_}}{CODE};
+        ( ! $code or exists $not_methods->{$code} ) ? () : ($_ => $code)
+      } grep !ref($stash->{$_}), keys %$stash
+    };
+  }
+  
   1;
+  __END__
+  
   =pod
   
   =encoding utf-8
@@ -59072,6 +59805,7 @@ $fatpacked{"Moo.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO';
    package Cat::Food;
   
    use Moo;
+   use namespace::clean;
   
    sub feed_lion {
      my $self = shift;
@@ -59288,7 +60022,9 @@ $fatpacked{"Moo.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO';
    extends 'Parent::Class';
   
   Declares base class. Multiple superclasses can be passed for multiple
-  inheritance (but please use roles instead).
+  inheritance (but please use roles instead).  The class will be loaded, however
+  no errors will be triggered if it can't be found and there are already subs in
+  the class.
   
   Calling extends more than once will REPLACE your superclasses, not add to
   them like 'use base' would.
@@ -59302,7 +60038,8 @@ $fatpacked{"Moo.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO';
    with 'Some::Role1', 'Some::Role2';
   
   Composes one or more L<Moo::Role> (or L<Role::Tiny>) roles into the current
-  class.  An error will be raised if these roles have conflicting methods.
+  class.  An error will be raised if these roles have conflicting methods.  The
+  roles will be loaded using the same mechansim as C<extends> uses.
   
   =head2 has
   
@@ -59569,8 +60306,10 @@ $fatpacked{"Moo.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO';
   
   To do this, you can write
   
-    use Moo;
     use Sub::Quote;
+  
+    use Moo;
+    use namespace::clean;
   
     has foo => (
       is => 'ro',
@@ -59600,6 +60339,48 @@ $fatpacked{"Moo.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO';
   
   See L<Sub::Quote> for more information, including how to pass lexical
   captures that will also be compiled into the subroutine.
+  
+  =head1 CLEANING UP IMPORTS
+  
+  L<Moo> will not clean up imported subroutines for you; you will have
+  to do that manually. The recommended way to do this is to declare your
+  imports first, then C<use Moo>, then C<use namespace::clean>.
+  Anything imported before L<namespace::clean> will be scrubbed.
+  Anything imported or declared after will be still be available.
+  
+   package Record;
+  
+   use Digest::MD5 qw(md5_hex);
+  
+   use Moo;
+   use namespace::clean;
+  
+   has name => (is => 'ro', required => 1);
+   has id => (is => 'lazy');
+   sub _build_id {
+     my ($self) = @_;
+     return md5_hex($self->name);
+   }
+  
+   1;
+  
+  If you were to import C<md5_hex> after L<namespace::clean> you would
+  be able to call C<< ->md5_hex() >> on your C<Record> instances (and it
+  probably wouldn't do what you expect!).
+  
+  L<Moo::Role>s behave slightly differently.  Since their methods are
+  composed into the consuming class, they can do a little more for you
+  automatically.  As long as you declare your imports before calling
+  C<use Moo::Role>, those imports and the ones L<Moo::Role> itself
+  provides will not be composed into consuming classes, so there's usually
+  no need to use L<namespace::clean>.
+  
+  B<On L<namespace::autoclean>:> If you're coming to Moo from the Moose
+  world, you may be accustomed to using L<namespace::autoclean> in all
+  your packages. This is not recommended for L<Moo> packages, because
+  L<namespace::autoclean> will inflate your class to a full L<Moose>
+  class.  It'll work, but you will lose the benefits of L<Moo>.  Instead
+  you are recommended to just use L<namespace::clean>.
   
   =head1 INCOMPATIBILITIES WITH MOOSE
   
@@ -59664,8 +60445,16 @@ $fatpacked{"Moo.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO';
   require it, the metaclass inflation for coerce alone is a trifle insane
   and if you attempt to subtype the result will almost certainly break.
   
-  Handling of warnings: when you C<use Moo> we enable FATAL warnings.  The nearest
-  similar invocation for L<Moose> would be:
+  C<BUILDARGS> is not triggered if your class does not have any attributes.
+  Without attributes, C<BUILDARGS> return value would be ignored, so we just
+  skip calling the method instead.
+  
+  Handling of warnings: when you C<use Moo> we enable FATAL warnings, and some
+  several extra pragmas when used in development: L<indirect>,
+  L<multidimensional>, and L<bareword::filehandles>.  See the L<strictures>
+  documentation for the details on this.
+  
+  A similar invocation for L<Moose> would be:
   
     use Moose;
     use warnings FATAL => "all";
@@ -59715,11 +60504,11 @@ $fatpacked{"Moo.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO';
   
   =for html <a href="http://chat.mibbit.com/#web-simple@irc.perl.org">(click for instant chatroom login)</a>
   
-  Bugtracker: L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Moo>
+  Bugtracker: L<https://rt.cpan.org/Public/Dist/Display.html?Name=Moo>
   
-  Git repository: L<git://git.shadowcat.co.uk/gitmo/Moo.git>
+  Git repository: L<git://github.com/moose/Moo.git>
   
-  Git web access: L<http://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=gitmo/Moo.git>
+  Git browser: L<https://github.com/moose/Moo>
   
   =head1 AUTHOR
   
@@ -59754,6 +60543,8 @@ $fatpacked{"Moo.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO';
   haarg - Graham Knop (cpan:HAARG) <haarg@cpan.org>
   
   mattp - Matt Phillips (cpan:MATTP) <mattp@cpan.org>
+  
+  bluefeet - Aran Deltac (cpan:BLUEFEET) <bluefeet@gmail.com>
   
   =head1 COPYRIGHT
   
@@ -59851,7 +60642,6 @@ $fatpacked{"Moo/HandleMoose.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
   
     sub _uninlined_body { \&Moose::Object::new }
   }
-      
   
   sub inject_real_metaclass_for {
     my ($name) = @_;
@@ -59883,7 +60673,8 @@ $fatpacked{"Moo/HandleMoose.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
       }
     }
   
-    my %methods = %{Role::Tiny->_concrete_methods_of($name)};
+    my %methods
+      = %{($am_role ? 'Role::Tiny' : 'Moo')->_concrete_methods_of($name)};
   
     # if stuff gets added afterwards, _maybe_reset_handlemoose should
     # trigger the recreation of the metaclass but we need to ensure the
@@ -60031,6 +60822,81 @@ $fatpacked{"Moo/HandleMoose/FakeMetaClass.pm"} = '#line '.(1+__LINE__).' "'.__FI
   1;
 MOO_HANDLEMOOSE_FAKEMETACLASS
 
+$fatpacked{"Moo/HandleMoose/_TypeMap.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO_HANDLEMOOSE__TYPEMAP';
+  package Moo::HandleMoose::_TypeMap;
+  use strictures 1;
+  
+  package
+    Moo::HandleMoose;
+  our %TYPE_MAP;
+  
+  package Moo::HandleMoose::_TypeMap;
+  
+  use Scalar::Util ();
+  
+  our %WEAK_TYPES;
+  
+  sub _str_to_ref {
+    my $in = shift;
+    return $in
+      if ref $in;
+  
+    if ($in =~ /(?:^|=)[A-Z]+\(0x([0-9a-zA-Z]+)\)$/) {
+      my $id = do { no warnings 'portable'; hex "$1" };
+      require B;
+      my $sv = bless \$id, 'B::SV';
+      my $ref = eval { $sv->object_2svref };
+      if (!defined $ref) {
+        die <<'END_ERROR';
+  Moo initialization encountered types defined in a parent thread - ensure that
+  Moo is require()d before any further thread spawns following a type definition.
+  END_ERROR
+      }
+      return $ref;
+    }
+    return $in;
+  }
+  
+  sub TIEHASH  { bless {}, $_[0] }
+  
+  sub STORE {
+    my ($self, $key, $value) = @_;
+    my $type = _str_to_ref($key);
+    $WEAK_TYPES{$type} = $type;
+    Scalar::Util::weaken($WEAK_TYPES{$type})
+      if ref $type;
+    $self->{$key} = $value;
+  }
+  
+  sub FETCH    { $_[0]->{$_[1]} }
+  sub FIRSTKEY { my $a = scalar keys %{$_[0]}; each %{$_[0]} }
+  sub NEXTKEY  { each %{$_[0]} }
+  sub EXISTS   { exists $_[0]->{$_[1]} }
+  sub DELETE   { delete $_[0]->{$_[1]} }
+  sub CLEAR    { %{$_[0]} = () }
+  sub SCALAR   { scalar %{$_[0]} }
+  
+  sub CLONE {
+    my @types = map {
+      defined $WEAK_TYPES{$_} ? ($WEAK_TYPES{$_} => $TYPE_MAP{$_}) : ()
+    } keys %TYPE_MAP;
+    %WEAK_TYPES = ();
+    %TYPE_MAP = @types;
+  }
+  
+  sub DESTROY {
+    my %types = %{$_[0]};
+    untie %TYPE_MAP;
+    %TYPE_MAP = %types;
+  }
+  
+  my @types = %TYPE_MAP;
+  tie %TYPE_MAP, __PACKAGE__;
+  %TYPE_MAP = @types;
+  
+  1;
+MOO_HANDLEMOOSE__TYPEMAP
+
 $fatpacked{"Moo/Object.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO_OBJECT';
   package Moo::Object;
   
@@ -60120,8 +60986,9 @@ $fatpacked{"Moo/Role.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO_RO
   use Moo::_Utils;
   use Role::Tiny ();
   use base qw(Role::Tiny);
+  use Import::Into;
   
-  our $VERSION = '1.003001';
+  our $VERSION = '1.004002';
   $VERSION = eval $VERSION;
   
   require Moo::sification;
@@ -60140,7 +61007,8 @@ $fatpacked{"Moo/Role.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO_RO
   sub import {
     my $target = caller;
     my ($me) = @_;
-    strictures->import;
+    _set_loaded(caller);
+    strictures->import::into(1);
     if ($Moo::MAKERS{$target} and $Moo::MAKERS{$target}{is_class}) {
       die "Cannot import Moo::Role into a Moo class";
     }
@@ -60218,6 +61086,13 @@ $fatpacked{"Moo/Role.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO_RO
     }
   }
   
+  sub methods_provided_by {
+    my ($self, $role) = @_;
+    $self->_inhale_if_moose($role);
+    die "${role} is not a Moo::Role" unless $INFO{$role};
+    return $self->SUPER::methods_provided_by($role);
+  }
+  
   sub _inhale_if_moose {
     my ($self, $role) = @_;
     _load_module($role);
@@ -60234,8 +61109,11 @@ $fatpacked{"Moo/Role.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO_RO
           and $meta->isa('Mouse::Meta::Role')
        )
     ) {
+      my $is_mouse = $meta->isa('Mouse::Meta::Role');
       $INFO{$role}{methods} = {
         map +($_ => $role->can($_)),
+          grep $role->can($_),
+          grep !($is_mouse && $_ eq 'meta'),
           grep !$meta->get_method($_)->isa('Class::MOP::Method::Meta'),
             $meta->get_method_list
       };
@@ -60246,7 +61124,6 @@ $fatpacked{"Moo/Role.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO_RO
       $INFO{$role}{attributes} = [
         map +($_ => do {
           my $attr = $meta->get_attribute($_);
-          my $is_mouse = $meta->isa('Mouse::Meta::Role');
           my $spec = { %{ $is_mouse ? $attr : $attr->original_options } };
   
           if ($spec->{isa}) {
@@ -60371,6 +61248,7 @@ $fatpacked{"Moo/Role.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO_RO
       # old fashioned way time.
       *{_getglob("${new_name}::ISA")} = [ $superclass ];
       $me->apply_roles_to_package($new_name, @roles);
+      _set_loaded($new_name, (caller)[1]);
       return $new_name;
     }
   
@@ -60386,12 +61264,14 @@ $fatpacked{"Moo/Role.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO_RO
   
     $me->_handle_constructor($new_name, $_) for @roles;
   
+    _set_loaded($new_name, (caller)[1]);
     return $new_name;
   }
   
   sub apply_roles_to_object {
     my ($me, $object, @roles) = @_;
     my $new = $me->SUPER::apply_roles_to_object($object, @roles);
+    _set_loaded(ref $new, (caller)[1]);
   
     my $apply_defaults = $APPLY_DEFAULTS{ref $new} ||= do {
       my %attrs = map { @{$INFO{$_}{attributes}||[]} } @roles;
@@ -60459,6 +61339,7 @@ $fatpacked{"Moo/Role.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO_RO
   }
   
   1;
+  __END__
   
   =head1 NAME
   
@@ -60513,6 +61394,33 @@ $fatpacked{"Moo/Role.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO_RO
   Declares an attribute for the class to be composed into.  See
   L<Moo/has> for all options.
   
+  =head1 CLEANING UP IMPORTS
+  
+  L<Moo::Role> cleans up its own imported methods and any imports
+  declared before the C<use Moo::Role> statement automatically.
+  Anything imported after C<use Moo::Role> will be composed into
+  consuming packages.  A package that consumes this role:
+  
+   package My::Role::ID;
+  
+   use Digest::MD5 qw(md5_hex);
+   use Moo::Role;
+   use Digest::SHA qw(sha1_hex);
+  
+   requires 'name';
+  
+   sub as_md5  { my ($self) = @_; return md5_hex($self->name);  }
+   sub as_sha1 { my ($self) = @_; return sha1_hex($self->name); }
+  
+   1;
+  
+  ..will now have a C<< $self->sha1_hex() >> method available to it
+  that probably does not do what you expect.  On the other hand, a call
+  to C<< $self->md5_hex() >> will die with the helpful error message:
+  C<Can't locate object method "md5_hex">.
+  
+  See L<Moo/"CLEANING UP IMPORTS"> for more details.
+  
   =head1 SUPPORT
   
   See L<Moo> for support and contact information.
@@ -60524,6 +61432,8 @@ $fatpacked{"Moo/Role.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO_RO
   =head1 COPYRIGHT AND LICENSE
   
   See L<Moo> for the copyright and license.
+  
+  =cut
 MOO_ROLE
 
 $fatpacked{"Moo/_Utils.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO__UTILS';
@@ -60538,15 +61448,17 @@ $fatpacked{"Moo/_Utils.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO_
   use constant can_haz_subname => eval { require Sub::Name };
   
   use strictures 1;
-  use Module::Runtime qw(require_module);
+  use Module::Runtime qw(use_package_optimistically module_notional_filename);
+  
   use Devel::GlobalDestruction ();
   use base qw(Exporter);
   use Moo::_mro;
+  use Config;
   
   our @EXPORT = qw(
       _getglob _install_modifier _load_module _maybe_load_module
       _get_linear_isa _getstash _install_coderef _name_coderef
-      _unimport_coderefs _in_global_destruction
+      _unimport_coderefs _in_global_destruction _set_loaded
   );
   
   sub _in_global_destruction ();
@@ -60566,14 +61478,21 @@ $fatpacked{"Moo/_Utils.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO_
   our %MAYBE_LOADED;
   
   sub _load_module {
-    (my $proto = $_[0]) =~ s/::/\//g;
-    return 1 if $INC{"${proto}.pm"};
+    my $module = $_[0];
+    my $file = module_notional_filename($module);
+    use_package_optimistically($module);
+    return 1
+      if $INC{$file};
+    my $error = $@ || "Can't locate $file";
+  
     # can't just ->can('can') because a sub-package Foo::Bar::Baz
     # creates a 'Baz::' key in Foo::Bar's symbol table
-    my $stash = _getstash($_[0])||{};
+    my $stash = _getstash($module)||{};
     return 1 if grep +(!ref($_) and *$_{CODE}), values %$stash;
-    require_module($_[0]);
-    return 1;
+    return 1
+      if $INC{"Moose.pm"} && Class::MOP::class_of($module)
+      or Mouse::Util->can('find_meta') && Mouse::Util::find_meta($module);
+    die $error;
   }
   
   sub _maybe_load_module {
@@ -60589,6 +61508,10 @@ $fatpacked{"Moo/_Utils.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO_
       $MAYBE_LOADED{$_[0]} = 0;
     }
     return $MAYBE_LOADED{$_[0]};
+  }
+  
+  sub _set_loaded {
+    $INC{Module::Runtime::module_notional_filename($_[0])} ||= $_[1];
   }
   
   sub _get_linear_isa {
@@ -60626,20 +61549,8 @@ $fatpacked{"Moo/_Utils.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO_
     }
   }
   
-  sub STANDARD_DESTROY {
-    my $self = shift;
-  
-    my $e = do {
-      local $?;
-      local $@;
-      eval {
-        $self->DEMOLISHALL(_in_global_destruction);
-      };
-      $@;
-    };
-  
-    no warnings 'misc';
-    die $e if $e; # rethrow
+  if ($Config{useithreads}) {
+    require Moo::HandleMoose::_TypeMap;
   }
   
   1;
@@ -60683,30 +61594,17 @@ $fatpacked{"Moo/sification.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'
 MOO_SIFICATION
 
 $fatpacked{"Parse/CPAN/Meta.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PARSE_CPAN_META';
+  use 5.008001;
   use strict;
   package Parse::CPAN::Meta;
   # ABSTRACT: Parse META.yml and META.json CPAN metadata files
-  our $VERSION = '1.4409'; # VERSION
+  our $VERSION = '1.4413'; # VERSION
   
+  use Exporter;
   use Carp 'croak';
   
-  # UTF Support?
-  sub HAVE_UTF8 () { $] >= 5.007003 }
-  sub IO_LAYER () { $] >= 5.008001 ? ":utf8" : "" }  
-  
-  BEGIN {
-  	if ( HAVE_UTF8 ) {
-  		# The string eval helps hide this from Test::MinimumVersion
-  		eval "require utf8;";
-  		die "Failed to load UTF-8 support" if $@;
-  	}
-  
-  	# Class structure
-  	require 5.004;
-  	require Exporter;
-  	@Parse::CPAN::Meta::ISA       = qw{ Exporter      };
-  	@Parse::CPAN::Meta::EXPORT_OK = qw{ Load LoadFile };
-  }
+  our @ISA = qw/Exporter/;
+  our @EXPORT_OK = qw/Load LoadFile/;
   
   sub load_file {
     my ($class, $filename) = @_;
@@ -60726,22 +61624,21 @@ $fatpacked{"Parse/CPAN/Meta.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
     my ($class, $string) = @_;
     my $backend = $class->yaml_backend();
     my $data = eval { no strict 'refs'; &{"$backend\::Load"}($string) };
-    if ( $@ ) { 
-      croak $backend->can('errstr') ? $backend->errstr : $@
-    }
+    croak $@ if $@;
     return $data || {}; # in case document was valid but empty
   }
   
   sub load_json_string {
     my ($class, $string) = @_;
-    return $class->json_backend()->new->decode($string);
+    my $data = eval { $class->json_backend()->new->decode($string) };
+    croak $@ if $@;
+    return $data || {};
   }
   
   sub yaml_backend {
-    local $Module::Load::Conditional::CHECK_INC_HASH = 1;
     if (! defined $ENV{PERL_YAML_BACKEND} ) {
-      _can_load( 'CPAN::Meta::YAML', 0.002 )
-        or croak "CPAN::Meta::YAML 0.002 is not available\n";
+      _can_load( 'CPAN::Meta::YAML', 0.011 )
+        or croak "CPAN::Meta::YAML 0.011 is not available\n";
       return "CPAN::Meta::YAML";
     }
     else {
@@ -60755,7 +61652,6 @@ $fatpacked{"Parse/CPAN/Meta.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
   }
   
   sub json_backend {
-    local $Module::Load::Conditional::CHECK_INC_HASH = 1;
     if (! $ENV{PERL_JSON_BACKEND} or $ENV{PERL_JSON_BACKEND} eq 'JSON::PP') {
       _can_load( 'JSON::PP' => 2.27103 )
         or croak "JSON::PP 2.27103 is not available\n";
@@ -60770,9 +61666,12 @@ $fatpacked{"Parse/CPAN/Meta.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
   }
   
   sub _slurp {
-    open my $fh, "<" . IO_LAYER, "$_[0]"
+    require Encode;
+    open my $fh, "<:raw", "$_[0]" ## no critic
       or die "can't open $_[0] for reading: $!";
-    return do { local $/; <$fh> };
+    my $content = do { local $/; <$fh> };
+    $content = Encode::decode('UTF-8', $content, Encode::PERLQQ());
+    return $content;
   }
     
   sub _can_load {
@@ -60793,17 +61692,14 @@ $fatpacked{"Parse/CPAN/Meta.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
   # Kept for backwards compatibility only
   # Create an object from a file
   sub LoadFile ($) {
-    require CPAN::Meta::YAML;
-    my $object = CPAN::Meta::YAML::LoadFile(shift)
-      or die CPAN::Meta::YAML->errstr;
-    return $object;
+    return Load(_slurp(shift));
   }
   
   # Parse a document from a string.
   sub Load ($) {
     require CPAN::Meta::YAML;
-    my $object = CPAN::Meta::YAML::Load(shift)
-      or die CPAN::Meta::YAML->errstr;
+    my $object = eval { CPAN::Meta::YAML::Load(shift) };
+    croak $@ if $@;
     return $object;
   }
   
@@ -60813,7 +61709,7 @@ $fatpacked{"Parse/CPAN/Meta.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
   
   =pod
   
-  =encoding utf-8
+  =encoding UTF-8
   
   =head1 NAME
   
@@ -60821,7 +61717,7 @@ $fatpacked{"Parse/CPAN/Meta.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
   
   =head1 VERSION
   
-  version 1.4409
+  version 1.4413
   
   =head1 SYNOPSIS
   
@@ -60865,7 +61761,12 @@ $fatpacked{"Parse/CPAN/Meta.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
   Note that META files are expected to be in UTF-8 encoding, only.  When
   converted string data, it must first be decoded from UTF-8.
   
-  =for Pod::Coverage HAVE_UTF8 IO_LAYER
+  =begin Pod::Coverage
+  
+  
+  
+  
+  =end Pod::Coverage
   
   =head1 METHODS
   
@@ -60876,8 +61777,8 @@ $fatpacked{"Parse/CPAN/Meta.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
     my $metadata_structure = Parse::CPAN::Meta->load_file('META.yml');
   
   This method will read the named file and deserialize it to a data structure,
-  determining whether it should be JSON or YAML based on the filename.  On
-  Perl 5.8.1 or later, the file will be read using the ":utf8" IO layer.
+  determining whether it should be JSON or YAML based on the filename.
+  The file will be read using the ":utf8" IO layer.
   
   =head2 load_yaml_string
   
@@ -60914,8 +61815,8 @@ $fatpacked{"Parse/CPAN/Meta.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
   
   =head1 FUNCTIONS
   
-  For maintenance clarity, no functions are exported.  These functions are
-  available for backwards compatibility only and are best avoided in favor of
+  For maintenance clarity, no functions are exported by default.  These functions
+  are available for backwards compatibility only and are best avoided in favor of
   C<load_file>.
   
   =head2 Load
@@ -60988,6 +61889,10 @@ $fatpacked{"Parse/CPAN/Meta.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
   
   =item *
   
+  Graham Knop <haarg@haarg.org>
+  
+  =item *
+  
   Joshua ben Jore <jjore@cpan.org>
   
   =item *
@@ -61006,7 +61911,7 @@ $fatpacked{"Parse/CPAN/Meta.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
   
   =head1 COPYRIGHT AND LICENSE
   
-  This software is copyright (c) 2013 by Adam Kennedy and Contributors.
+  This software is copyright (c) 2014 by Adam Kennedy and Contributors.
   
   This is free software; you can redistribute it and/or modify it under
   the same terms as the Perl 5 programming language system itself.
@@ -61021,9 +61926,10 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   
   package Path::Tiny;
   # ABSTRACT: File path utility
-  our $VERSION = '0.044'; # VERSION
+  our $VERSION = '0.052'; # VERSION
   
   # Dependencies
+  use Config;
   use Exporter 5.57   (qw/import/);
   use File::Spec 3.40 ();
   use Carp ();
@@ -61048,17 +61954,13 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
       fallback => 1,
   );
   
-  # if cloning, threads should already be loaded, but Win32 pseudoforks
-  # don't do that so we have to be sure it's loaded anyway
-  my $TID = 0; # for thread safe atomic writes
-  
-  sub CLONE { require threads; $TID = threads->tid }
-  
-  my $HAS_UU;  # has Unicode::UTF8; lazily populated
+  my $HAS_UU; # has Unicode::UTF8; lazily populated
   
   sub _check_UU {
       eval { require Unicode::UTF8; Unicode::UTF8->VERSION(0.58); 1 };
   }
+  
+  my $HAS_FLOCK = $Config{d_flock} || $Config{d_fcntl_can_lock} || $Config{d_lockf};
   
   # notions of "root" directories differ on Win32: \\server\dir\ or C:\ or \
   my $SLASH      = qr{[\\/]};
@@ -61070,10 +61972,10 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   sub _win32_vol {
       my ( $path, $drv ) = @_;
       require Cwd;
-      my $dcwd = Cwd::getdcwd($drv); # C: -> C:\some\cwd
+      my $dcwd = eval { Cwd::getdcwd($drv) }; # C: -> C:\some\cwd
       # getdcwd on non-existent drive returns empty string
       # so just use the original drive Z: -> Z:
-      $dcwd = "$drv" unless length $dcwd;
+      $dcwd = "$drv" unless defined $dcwd && length $dcwd;
       # normalize dwcd to end with a slash: might be C:\some\cwd or D:\ or Z:
       $dcwd =~ s{$SLASH?$}{/};
       # make the path absolute with dcwd
@@ -61161,7 +62063,7 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   
       # canonicalize paths
       my $cpath = $path = File::Spec->canonpath($path); # ugh, but probably worth it
-      $path =~ tr[\\][/];                               # unix convention enforced
+      $path =~ tr[\\][/] if IS_WIN32();                 # unix convention enforced
       $path .= "/" if IS_WIN32() && $path =~ m{^$UNC_VOL$}; # canonpath strips it
   
       # hack to make splitpath give us a basename; root paths must always have
@@ -61258,7 +62160,9 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
           # add missing volume
           if ( $self->is_absolute ) {
               require Cwd;
-              my ($drv) = Cwd::getdcwd() =~ /^($DRV_VOL | $UNC_VOL)/x;
+              # use Win32::GetCwd not Cwd::getdcwd because we're sure
+              # to have the former but not necessarily the latter
+              my ($drv) = Win32::GetCwd() =~ /^($DRV_VOL | $UNC_VOL)/x;
               return path( $drv . $self->[PATH] );
           }
       }
@@ -61383,7 +62287,7 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
       $binmode = "" unless defined $binmode;
   
       my ( $fh, $lock, $trunc );
-      if ( $args->{locked} ) {
+      if ( $HAS_FLOCK && $args->{locked} ) {
           require Fcntl;
           # truncating file modes shouldn't truncate until lock acquired
           if ( grep { $opentype eq $_ } qw( > +> ) ) {
@@ -61455,6 +62359,15 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
           my $next;
           while (@dirs) {
               if ( ref $dirs[0] eq 'Path::Tiny' ) {
+                  if ( !-r $dirs[0] ) {
+                      # Directory is missing or not readable, so skip it.  There
+                      # is still a race condition possible between the check and
+                      # the opendir, but we can't easily differentiate between
+                      # error cases that are OK to skip and those that we want
+                      # to be exceptions, so we live with the race and let opendir
+                      # be fatal.
+                      shift @dirs and next;
+                  }
                   $current = $dirs[0];
                   my $dh;
                   opendir( $dh, $current->[PATH] )
@@ -61493,14 +62406,14 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
       if ( $args->{count} ) {
           my ( @result, $counter );
           while ( my $line = <$fh> ) {
-              chomp $line if $chomp;
+              $line =~ s/(?:\x{0d}?\x{0a}|\x{0d})$// if $chomp;
               push @result, $line;
               last if ++$counter == $args->{count};
           }
           return @result;
       }
       elsif ($chomp) {
-          return map { chomp; $_ } <$fh>;
+          return map { s/(?:\x{0d}?\x{0a}|\x{0d})$//; $_ } <$fh>; ## no critic
       }
       else {
           return wantarray ? <$fh> : ( my $count =()= <$fh> );
@@ -61511,7 +62424,7 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
       my $self = shift;
       my $args = _get_args( shift, qw/binmode chomp count/ );
       if ( $args->{chomp} && !$args->{count} ) {
-          return split /\n/, slurp_raw($self); ## no critic
+          return split /\n/, slurp_raw($self);                    ## no critic
       }
       else {
           $args->{binmode} = ":raw";
@@ -61526,7 +62439,7 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
           && $args->{chomp}
           && !$args->{count} )
       {
-          return split /\n/, slurp_utf8($self); ## no critic
+          return split /(?:\x{0d}?\x{0a}|\x{0d})/, slurp_utf8($self); ## no critic
       }
       else {
           $args->{binmode} = ":raw:encoding(UTF-8)";
@@ -61558,6 +62471,7 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   }
   
   
+  # map method names to corresponding open mode
   my %opens = (
       opena  => ">>",
       openr  => "<",
@@ -61633,7 +62547,10 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   sub realpath {
       my $self = shift;
       require Cwd;
-      my $realpath = eval { Cwd::realpath( $self->[PATH] ) };
+      my $realpath = eval {
+          local $SIG{__WARN__} = sub { }; # (sigh) pure-perl CWD can carp
+          Cwd::realpath( $self->[PATH] );
+      };
       $self->_throw("resolving realpath") unless defined $realpath and length $realpath;
       return path($realpath);
   }
@@ -61708,8 +62625,9 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
       my $args = ( @data && ref $data[0] eq 'HASH' ) ? shift @data : {};
       $args = _get_args( $args, qw/binmode/ );
       my $binmode = $args->{binmode};
+      # get default binmode from caller's lexical scope (see "perldoc open")
       $binmode = ( ( caller(0) )[10] || {} )->{'open>'} unless defined $binmode;
-      my $temp = path( $self->[PATH] . $TID . $$ );
+      my $temp = path( $self->[PATH] . $$ . int( rand( 2**31 ) ) );
       my $fh = $temp->filehandle( { locked => 1 }, ">", $binmode );
       print {$fh} map { ref eq 'ARRAY' ? @$_ : $_ } @data;
       close $fh or $self->_throw( 'close', $temp->[PATH] );
@@ -61750,6 +62668,43 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   
   
   sub stringify { $_[0]->[PATH] }
+  
+  
+  sub subsumes {
+      my $self = shift;
+      Carp::croak("subsumes() requires a defined, positive-length argument")
+        unless defined $_[0];
+      my $other = path(shift);
+  
+      # normalize absolute vs relative
+      if ( $self->is_absolute && !$other->is_absolute ) {
+          $other = $other->absolute;
+      }
+      elsif ( $other->is_absolute && !$self->is_absolute ) {
+          $self = $self->absolute;
+      }
+  
+      # normalize volume vs non-volume; do this after absolute path
+      # adjustments above since that might add volumes already
+      if ( length $self->volume && !length $other->volume ) {
+          $other = $other->absolute;
+      }
+      elsif ( length $other->volume && !length $self->volume ) {
+          $self = $self->absolute;
+      }
+  
+      if ( $self->[PATH] eq '.' ) {
+          return !!1; # cwd subsumes everything relative
+      }
+      elsif ( $self->is_rootdir ) {
+          # a root directory ("/", "c:/") already ends with a separator
+          return $other->[PATH] =~ m{^\Q$self->[PATH]\E};
+      }
+      else {
+          # exact match or prefix breaking at a separator
+          return $other->[PATH] =~ m{^\Q$self->[PATH]\E(?:/|$)};
+      }
+  }
   
   
   sub touch {
@@ -61801,7 +62756,7 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   
   =pod
   
-  =encoding utf-8
+  =encoding UTF-8
   
   =head1 NAME
   
@@ -61809,7 +62764,7 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   
   =head1 VERSION
   
-  version 0.044
+  version 0.052
   
   =head1 SYNOPSIS
   
@@ -61866,7 +62821,7 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   the object gives you back the path (after some clean up).
   
   File input/output methods C<flock> handles before reading or writing,
-  as appropriate.
+  as appropriate (if supported by the platform).
   
   The C<*_utf8> methods (C<slurp_utf8>, C<lines_utf8>, etc.) operate in raw
   mode without CRLF translation.  Installing L<Unicode::UTF8> 0.58 or later
@@ -62125,7 +63080,8 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   If the C<recurse> option is true, the iterator will walk the directory
   recursively, breadth-first.  If the C<follow_symlinks> option is also true,
   directory links will be followed recursively.  There is no protection against
-  loops when following links.
+  loops when following links. If a directory is not readable, it will not be
+  followed.
   
   The default is the same as:
   
@@ -62149,8 +63105,9 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   Returns a list of lines from a file.  Optionally takes a hash-reference of
   options.  Valid options are C<binmode>, C<count> and C<chomp>.  If C<binmode>
   is provided, it will be set on the handle prior to reading.  If C<count> is
-  provided, up to that many lines will be returned. If C<chomp> is set, lines
-  will be chomped before being returned.
+  provided, up to that many lines will be returned. If C<chomp> is set, any
+  end-of-line character sequences (C<CR>, C<CRLF>, or C<LF>) will be removed
+  from the lines returned.
   
   Because the return is a list, C<lines> in scalar context will return the number
   of lines (and throw away the data).
@@ -62329,6 +63286,25 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   Returns a string representation of the path.  Unlike C<canonpath>, this method
   returns the path standardized with Unix-style C</> directory separators.
   
+  =head2 subsumes
+  
+      path("foo/bar")->subsumes("foo/bar/baz"); # true
+      path("/foo/bar")->subsumes("/foo/baz");   # false
+  
+  Returns true if the first path is a prefix of the second path at a directory
+  boundary.
+  
+  This B<does not> resolve parent directory entries (C<..>) or symlinks:
+  
+      path("foo/bar")->subsumes("foo/bar/../baz"); # true
+  
+  If such things are important to you, ensure that both paths are resolved to
+  the filesystem with C<realpath>:
+  
+      my $p1 = path("foo/bar")->realpath;
+      my $p2 = path("foo/bar/../baz")->realpath;
+      if ( $p1->subsumes($p2) ) { ... }
+  
   =head2 touch
   
       path("foo.txt")->touch;
@@ -62393,7 +63369,14 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   
   =head1 CAVEATS
   
-  =head2 NFS and BSD
+  =head2 File locking
+  
+  If flock is not supported on a platform, it will not be used, even if
+  locking is requested.
+  
+  See additional caveats below.
+  
+  =head3 NFS and BSD
   
   On BSD, Perl's flock implementation may not work to lock files on an
   NFS filesystem.  Path::Tiny has some heuristics to detect this
@@ -62403,7 +63386,7 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   
       use warnings FATAL => 'flock';
   
-  =head2 AIX and locking
+  =head3 AIX and locking
   
   AIX requires a write handle for locking.  Therefore, calls that normally
   open a read handle and take a shared lock instead will open a read-write
@@ -62489,6 +63472,8 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   There are probably comparable, non-Tiny tools.  Let me know if you want me to
   add a module to the list.
   
+  This module was featured in the L<2013 Perl Advent Calendar|http://www.perladvent.org/2013/2013-12-18.html>.
+  
   =for :stopwords cpan testmatrix url annocpan anno bugtracker rt cpants kwalitee diff irc mailto metadata placeholders metacpan
   
   =head1 SUPPORT
@@ -62550,10 +63535,6 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   
   =item *
   
-  Keedi Kim <keedi@cpan.org>
-  
-  =item *
-  
   Martin Kjeldsen <mk@bluepipe.dk>
   
   =item *
@@ -62563,6 +63544,10 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   =item *
   
   Toby Inkster <tobyink@cpan.org>
+  
+  =item *
+  
+  김도형 - Keedi Kim <keedi@cpan.org>
   
   =back
   
@@ -62585,10 +63570,10 @@ $fatpacked{"Sub/Defer.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'SUB_D
   use Moo::_Utils;
   use Scalar::Util qw(weaken);
   
-  our $VERSION = '1.003001';
+  our $VERSION = '1.004002';
   $VERSION = eval $VERSION;
   
-  our @EXPORT = qw(defer_sub undefer_sub);
+  our @EXPORT = qw(defer_sub undefer_sub undefer_all);
   
   our %DEFERRED;
   
@@ -62612,6 +63597,11 @@ $fatpacked{"Sub/Defer.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'SUB_D
     weaken($DEFERRED{$made} = $DEFERRED{$deferred});
   
     return $made;
+  }
+  
+  sub undefer_all {
+    undefer_sub($_) for keys %DEFERRED;
+    return;
   }
   
   sub defer_info {
@@ -62639,6 +63629,7 @@ $fatpacked{"Sub/Defer.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'SUB_D
   }
   
   1;
+  __END__
   
   =head1 NAME
   
@@ -62683,6 +63674,16 @@ $fatpacked{"Sub/Defer.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'SUB_D
   
   If this is confusing, take a look at the example in the L</SYNOPSIS>.
   
+  =head2 undefer_all
+  
+   undefer_all();
+  
+  This will undefer all defered subs in one go.  This can be very useful in a
+  forking environment where child processes would each have to undefer the same
+  subs.  By calling this just before you start forking children you can undefer
+  all currently deferred subs in the parent so that the children do not have to
+  do it.
+  
   =head1 SUPPORT
   
   See L<Moo> for support and contact information.
@@ -62694,6 +63695,8 @@ $fatpacked{"Sub/Defer.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'SUB_D
   =head1 COPYRIGHT AND LICENSE
   
   See L<Moo> for the copyright and license.
+  
+  =cut
 SUB_DEFER
 
 $fatpacked{"Sub/Exporter/Progressive.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'SUB_EXPORTER_PROGRESSIVE';
@@ -62869,7 +63872,7 @@ $fatpacked{"Sub/Quote.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'SUB_Q
   use Scalar::Util qw(weaken);
   use base qw(Exporter);
   
-  our $VERSION = '1.003001';
+  our $VERSION = '1.004002';
   $VERSION = eval $VERSION;
   
   our @EXPORT = qw(quote_sub unquote_sub quoted_from_sub);
@@ -62893,19 +63896,19 @@ $fatpacked{"Sub/Quote.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'SUB_Q
   sub inlinify {
     my ($code, $args, $extra, $local) = @_;
     my $do = 'do { '.($extra||'');
-    if (my ($code_args, $body) = $code =~ / +my \(([^)]+)\) = \@_;(.*)$/s) {
-      if ($code_args eq $args) {
-        $do.$body.' }'
-      } else {
-        $do.'my ('.$code_args.') = ('.$args.'); '.$body.' }';
-      }
-    } else {
-      my $assign = '';
-      if ($local || $args ne '@_') {
-        $assign = ($local ? 'local ' : '').'@_ = ('.$args.'); ';
-      }
-      $do.$assign.$code.' }';
+    if ($code =~ s/^(\s*package\s+([a-zA-Z0-9:]+);)//) {
+      $do .= $1;
     }
+    my $assign = '';
+    if (my ($code_args) = $code =~ /^\s*my\s*\(([^)]+)\)\s*=\s*\@_;$/s) {
+      if ($code_args ne $args) {
+        $assign = 'my ('.$code_args.') = ('.$args.'); ';
+      }
+    }
+    elsif ($local || $args ne '@_') {
+      $assign = ($local ? 'local ' : '').'@_ = ('.$args.'); ';
+    }
+    $do.$assign.$code.' }';
   }
   
   sub quote_sub {
@@ -62919,10 +63922,23 @@ $fatpacked{"Sub/Quote.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'SUB_Q
       (ref($_[-1]) eq 'HASH' and ref($_[-2]) eq 'HASH')
         ? pop
         : {};
-    my $captures = pop if ref($_[-1]) eq 'HASH';
+    my $captures = ref($_[-1]) eq 'HASH' ? pop : undef;
     undef($captures) if $captures && !keys %$captures;
     my $code = pop;
     my $name = $_[0];
+    my ($package, $hints, $bitmask, $hintshash) = (caller(0))[0,8,9,10];
+    my $context
+      ="package $package;\n"
+      ."BEGIN {\n"
+      ."  \$^H = ".B::perlstring($hints).";\n"
+      ."  \${^WARNING_BITS} = ".B::perlstring($bitmask).";\n"
+      ."  \%^H = (\n"
+      . join('', map
+       "    ".B::perlstring($_)." => ".B::perlstring($hintshash->{$_}).",",
+        keys %$hintshash)
+      ."  );\n"
+      ."}\n";
+    $code = "$context$code";
     my $quoted_info;
     my $deferred = defer_sub +($options->{no_install} ? undef : $name) => sub {
       unquote_sub($quoted_info->[4]);
@@ -62964,11 +63980,16 @@ $fatpacked{"Sub/Quote.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'SUB_Q
       $make_sub .= "}\n1;\n";
       $ENV{SUB_QUOTE_DEBUG} && warn $make_sub;
       {
-        local $@;
         no strict 'refs';
         local *{$name} if $name;
-        unless (_clean_eval $make_sub, \%captures) {
-          die "Eval went very, very wrong:\n\n${make_sub}\n\n$@";
+        my ($success, $e);
+        {
+          local $@;
+          $success = _clean_eval($make_sub, \%captures);
+          $e = $@;
+        }
+        unless ($success) {
+          die "Eval went very, very wrong:\n\n${make_sub}\n\n$e";
         }
       }
     }
@@ -62981,6 +64002,7 @@ $fatpacked{"Sub/Quote.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'SUB_Q
   }
   
   1;
+  __END__
   
   =head1 NAME
   
@@ -63125,19 +64147,14 @@ $fatpacked{"Sub/Quote.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'SUB_Q
   Which will obviously return from foo, when all you meant to do was return from
   the code context in quote_sub and proceed with running important code b.
   
-  =head2 strictures
+  =head2 pragmas
   
-  Sub::Quote compiles quoted subs in an environment where C<< use strictures >>
-  is in effect. L<strictures> enables L<strict> and FATAL L<warnings>.
-  
-  The following dies I<< Use of uninitialized value in print... >>
-  
-   no warnings;
-   quote_sub 'Silly::kitty', q{ print undef };
-  
-  If you need to disable parts of strictures, do it within the quoted sub:
-  
-   quote_sub 'Silly::kitty', q{ no warnings; print undef };
+  C<Sub::Quote> preserves the environment of the code creating the
+  quoted subs.  This includes the package, strict, warnings, and any
+  other lexical pragmas.  This is done by prefixing the code with a
+  block that sets up a matching environment.  When inlining C<Sub::Quote>
+  subs, care should be taken that user pragmas won't effect the rest
+  of the code.
   
   =head1 SUPPORT
   
@@ -63150,6 +64167,8 @@ $fatpacked{"Sub/Quote.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'SUB_Q
   =head1 COPYRIGHT AND LICENSE
   
   See L<Moo> for the copyright and license.
+  
+  =cut
 SUB_QUOTE
 
 $fatpacked{"Try/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'TRY_TINY';
@@ -63157,16 +64176,14 @@ $fatpacked{"Try/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'TRY_TI
   BEGIN {
     $Try::Tiny::AUTHORITY = 'cpan:NUFFIN';
   }
-  {
-    $Try::Tiny::VERSION = '0.18';
-  }
+  $Try::Tiny::VERSION = '0.19';
   use 5.006;
   # ABSTRACT: minimal try/catch with proper preservation of $@
   
   use strict;
   use warnings;
   
-  use base 'Exporter';
+  use Exporter 5.57 'import';
   our @EXPORT = our @EXPORT_OK = qw(try catch finally);
   
   use Carp;
@@ -63337,7 +64354,7 @@ $fatpacked{"Try/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'TRY_TI
   
   =head1 VERSION
   
-  version 0.18
+  version 0.19
   
   =head1 SYNOPSIS
   
@@ -63669,6 +64686,20 @@ $fatpacked{"Try/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'TRY_TI
   
       say "This text WILL NEVER appear!";
     }
+    # OR
+    sub parent_sub_with_catch {
+      my $success = try {
+        die;
+        1;
+      }
+      catch {
+        # do something with $_
+        return undef; #see note
+      };
+      return unless $success;
+  
+      say "This text WILL NEVER appear!";
+    }
   
   Note that if you have a C<catch> block, it must return C<undef> for this to work,
   since if a C<catch> block exists, its return value is returned in place of C<undef>
@@ -63802,7 +64833,7 @@ $fatpacked{"Try/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'TRY_TI
   
   =head1 COPYRIGHT AND LICENSE
   
-  This software is Copyright (c) 2013 by Yuval Kogman.
+  This software is Copyright (c) 2014 by Yuval Kogman.
   
   This is free software, licensed under:
   
@@ -64751,18 +65782,17 @@ $fatpacked{"strictures.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'STRI
     *_PERL_LT_5_8_4 = ($] < 5.008004) ? sub(){1} : sub(){0};
   }
   
-  our $VERSION = '1.005002'; # 1.5.2
+  our $VERSION = '1.005003'; # 1.5.3
   
   sub VERSION {
-    for ($_[1]) {
+    my ($class, $version) = @_;
+    for ($version) {
       last unless defined && !ref && int != 1;
       die "Major version specified as $_ - this is strictures version 1";
     }
-    # disable this since Foo->VERSION(undef) correctly returns the version
-    # and that can happen either if our caller passes undef explicitly or
-    # because the for above autovivified $_[1] - I could make it stop but
-    # it's pointless since we don't want to blow up if the caller does
-    # something valid either.
+    # passing undef here may either warn or die depending on the version of perl.
+    # we can't match the caller's warning state in this case, so just disable the
+    # warning.
     no warnings 'uninitialized';
     shift->SUPER::VERSION(@_);
   }
@@ -71997,8 +73027,6 @@ $fatpacked{"x86_64-linux-thread-multi/JSON/XS/Boolean.pm"} = '#line '.(1+__LINE_
 X86_64-LINUX-THREAD-MULTI_JSON_XS_BOOLEAN
 
 $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'X86_64-LINUX-THREAD-MULTI_LIST_UTIL';
-  # List::Util.pm
-  #
   # Copyright (c) 1997-2009 Graham Barr <gbarr@pobox.com>. All rights reserved.
   # This program is free software; you can redistribute it and/or
   # modify it under the same terms as Perl itself.
@@ -72015,7 +73043,7 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "
     all any first min max minstr maxstr none notall product reduce sum sum0 shuffle
     pairmap pairgrep pairfirst pairs pairkeys pairvalues
   );
-  our $VERSION    = "1.35";
+  our $VERSION    = "1.38";
   our $XS_VERSION = $VERSION;
   $VERSION    = eval $VERSION;
   
@@ -72049,10 +73077,10 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "
   
   =head1 DESCRIPTION
   
-  C<List::Util> contains a selection of subroutines that people have
-  expressed would be nice to have in the perl core, but the usage would
-  not really be high enough to warrant the use of a keyword, and the size
-  so small such that being individual extensions would be wasteful.
+  C<List::Util> contains a selection of subroutines that people have expressed
+  would be nice to have in the perl core, but the usage would not really be high
+  enough to warrant the use of a keyword, and the size so small such that being
+  individual extensions would be wasteful.
   
   By default C<List::Util> does not export any subroutines.
   
@@ -72064,22 +73092,22 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "
   
   =cut
   
-  =head2 reduce BLOCK LIST
+  =head2 $result = reduce { BLOCK } @list
   
-  Reduces LIST by calling BLOCK, in a scalar context, multiple times,
-  setting C<$a> and C<$b> each time. The first call will be with C<$a>
-  and C<$b> set to the first two elements of the list, subsequent
-  calls will be done by setting C<$a> to the result of the previous
-  call and C<$b> to the next element in the list.
+  Reduces C<@list> by calling C<BLOCK> in a scalar context multiple times,
+  setting C<$a> and C<$b> each time. The first call will be with C<$a> and C<$b>
+  set to the first two elements of the list, subsequent calls will be done by
+  setting C<$a> to the result of the previous call and C<$b> to the next element
+  in the list.
   
-  Returns the result of the last call to BLOCK. If LIST is empty then
-  C<undef> is returned. If LIST only contains one element then that
-  element is returned and BLOCK is not executed.
+  Returns the result of the last call to the C<BLOCK>. If C<@list> is empty then
+  C<undef> is returned. If C<@list> only contains one element then that element
+  is returned and C<BLOCK> is not executed.
   
-  The following examples all demonstrate how C<reduce> could be used to
-  implement the other list-reduction functions in this module. (They are
-  not in fact implemented like this, but instead in a more efficient
-  manner in individual C functions).
+  The following examples all demonstrate how C<reduce> could be used to implement
+  the other list-reduction functions in this module. (They are not in fact
+  implemented like this, but instead in a more efficient manner in individual C
+  functions).
   
       $foo = reduce { defined($a)            ? $a :
                       $code->(local $_ = $b) ? $b :
@@ -72098,21 +73126,21 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "
       $foo = reduce { $a || !$code->(local $_ = $b) } 0, @bar  # notall
          # Note that these implementations do not fully short-circuit
   
-  If your algorithm requires that C<reduce> produce an identity value, then
-  make sure that you always pass that identity value as the first argument to prevent
+  If your algorithm requires that C<reduce> produce an identity value, then make
+  sure that you always pass that identity value as the first argument to prevent
   C<undef> being returned
   
     $foo = reduce { $a + $b } 0, @values;             # sum with 0 identity value
   
-  The remaining list-reduction functions are all specialisations of this
-  generic idea.
+  The remaining list-reduction functions are all specialisations of this generic
+  idea.
   
-  =head2 any BLOCK LIST
+  =head2 $b = any { BLOCK } @list
   
-  Similar to C<grep> in that it evaluates BLOCK setting C<$_> to each element
-  of LIST in turn. C<any> returns true if any element makes the BLOCK return a
-  true value. If BLOCK never returns true or LIST was empty then it returns
-  false.
+  Similar to C<grep> in that it evaluates C<BLOCK> setting C<$_> to each element
+  of C<@list> in turn. C<any> returns true if any element makes the C<BLOCK>
+  return a true value. If C<BLOCK> never returns true or C<@list> was empty then
+  it returns false.
   
   Many cases of using C<grep> in a conditional can be written using C<any>
   instead, as it can short-circuit after the first true result.
@@ -72121,164 +73149,170 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "
           # at least one string has more than 10 characters
       }
   
-  =head2 all BLOCK LIST
+  =head2 $b = all { BLOCK } @list
   
-  Similar to C<any>, except that it requires all elements of the LIST to make
-  the BLOCK return true. If any element returns false, then it returns true. If
-  the BLOCK never returns false or the LIST was empty then it returns true.
+  Similar to C<any>, except that it requires all elements of the C<@list> to make
+  the C<BLOCK> return true. If any element returns false, then it returns false.
+  If the C<BLOCK> never returns false or the C<@list> was empty then it returns
+  true.
   
-  =head2 none BLOCK LIST
+  =head2 $b = none { BLOCK } @list
   
-  =head2 notall BLOCK LIST
+  =head2 $b = notall { BLOCK } @list
   
   Similar to C<any> and C<all>, but with the return sense inverted. C<none>
-  returns true if no value in the LIST causes the BLOCK to return true, and
-  C<notall> returns true if not all of the values do.
+  returns true only if no value in the LIST causes the BLOCK to return true, and
+  C<notall> returns true only if not all of the values do.
   
-  =head2 first BLOCK LIST
+  =head2 $val = first { BLOCK } @list
   
-  Similar to C<grep> in that it evaluates BLOCK setting C<$_> to each element
-  of LIST in turn. C<first> returns the first element where the result from
-  BLOCK is a true value. If BLOCK never returns true or LIST was empty then
-  C<undef> is returned.
+  Similar to C<grep> in that it evaluates C<BLOCK> setting C<$_> to each element
+  of C<@list> in turn. C<first> returns the first element where the result from
+  C<BLOCK> is a true value. If C<BLOCK> never returns true or C<@list> was empty
+  then C<undef> is returned.
   
       $foo = first { defined($_) } @list    # first defined value in @list
       $foo = first { $_ > $value } @list    # first value in @list which
                                             # is greater than $value
   
-  =head2 max LIST
+  =head2 $num = max @list
   
-  Returns the entry in the list with the highest numerical value. If the
-  list is empty then C<undef> is returned.
+  Returns the entry in the list with the highest numerical value. If the list is
+  empty then C<undef> is returned.
   
       $foo = max 1..10                # 10
       $foo = max 3,9,12               # 12
       $foo = max @bar, @baz           # whatever
   
-  =head2 maxstr LIST
+  =head2 $str = maxstr @list
   
-  Similar to C<max>, but treats all the entries in the list as strings
-  and returns the highest string as defined by the C<gt> operator.
-  If the list is empty then C<undef> is returned.
+  Similar to C<max>, but treats all the entries in the list as strings and
+  returns the highest string as defined by the C<gt> operator. If the list is
+  empty then C<undef> is returned.
   
       $foo = maxstr 'A'..'Z'          # 'Z'
       $foo = maxstr "hello","world"   # "world"
       $foo = maxstr @bar, @baz        # whatever
   
-  =head2 min LIST
+  =head2 $num = min @list
   
-  Similar to C<max> but returns the entry in the list with the lowest
-  numerical value. If the list is empty then C<undef> is returned.
+  Similar to C<max> but returns the entry in the list with the lowest numerical
+  value. If the list is empty then C<undef> is returned.
   
       $foo = min 1..10                # 1
       $foo = min 3,9,12               # 3
       $foo = min @bar, @baz           # whatever
   
-  =head2 minstr LIST
+  =head2 $str = minstr @list
   
-  Similar to C<min>, but treats all the entries in the list as strings
-  and returns the lowest string as defined by the C<lt> operator.
-  If the list is empty then C<undef> is returned.
+  Similar to C<min>, but treats all the entries in the list as strings and
+  returns the lowest string as defined by the C<lt> operator. If the list is
+  empty then C<undef> is returned.
   
       $foo = minstr 'A'..'Z'          # 'A'
       $foo = minstr "hello","world"   # "hello"
       $foo = minstr @bar, @baz        # whatever
   
-  =head2 product LIST
+  =head2 $num = product @list
   
-  Returns the product of all the elements in LIST. If LIST is empty then C<1> is
-  returned.
+  Returns the numerical product of all the elements in C<@list>. If C<@list> is
+  empty then C<1> is returned.
   
       $foo = product 1..10            # 3628800
       $foo = product 3,9,12           # 324
   
-  =head2 sum LIST
+  =head2 $num_or_undef = sum @list
   
-  Returns the sum of all the elements in LIST. If LIST is empty then
-  C<undef> is returned.
+  Returns the numerical sum of all the elements in C<@list>. For backwards
+  compatibility, if C<@list> is empty then C<undef> is returned.
   
       $foo = sum 1..10                # 55
       $foo = sum 3,9,12               # 24
       $foo = sum @bar, @baz           # whatever
   
-  =head2 sum0 LIST
+  =head2 $num = sum0 @list
   
-  Similar to C<sum>, except this returns 0 when given an empty list, rather
-  than C<undef>.
+  Similar to C<sum>, except this returns 0 when given an empty list, rather than
+  C<undef>.
   
   =cut
   
   =head1 KEY/VALUE PAIR LIST FUNCTIONS
   
-  The following set of functions, all inspired by L<List::Pairwise>, consume
-  an even-sized list of pairs. The pairs may be key/value associations from a
-  hash, or just a list of values. The functions will all preserve the original
-  ordering of the pairs, and will not be confused by multiple pairs having the
-  same "key" value - nor even do they require that the first of each pair be a
-  plain string.
+  The following set of functions, all inspired by L<List::Pairwise>, consume an
+  even-sized list of pairs. The pairs may be key/value associations from a hash,
+  or just a list of values. The functions will all preserve the original ordering
+  of the pairs, and will not be confused by multiple pairs having the same "key"
+  value - nor even do they require that the first of each pair be a plain string.
   
   =cut
   
-  =head2 pairgrep BLOCK KVLIST
+  =head2 @kvlist = pairgrep { BLOCK } @kvlist
+  
+  =head2 $count = pairgrep { BLOCK } @kvlist
   
   Similar to perl's C<grep> keyword, but interprets the given list as an
-  even-sized list of pairs. It invokes the BLOCK multiple times, in scalar
+  even-sized list of pairs. It invokes the C<BLOCK> multiple times, in scalar
   context, with C<$a> and C<$b> set to successive pairs of values from the
-  KVLIST.
+  C<@kvlist>.
   
-  Returns an even-sized list of those pairs for which the BLOCK returned true
+  Returns an even-sized list of those pairs for which the C<BLOCK> returned true
   in list context, or the count of the B<number of pairs> in scalar context.
-  (Note, therefore, in scalar context that it returns a number half the size
-  of the count of items it would have returned in list context).
+  (Note, therefore, in scalar context that it returns a number half the size of
+  the count of items it would have returned in list context).
   
       @subset = pairgrep { $a =~ m/^[[:upper:]]+$/ } @kvlist
   
-  Similar to C<grep>, C<pairgrep> aliases C<$a> and C<$b> to elements of the
-  given list. Any modifications of it by the code block will be visible to
-  the caller.
+  As with C<grep> aliasing C<$_> to list elements, C<pairgrep> aliases C<$a> and
+  C<$b> to elements of the given list. Any modifications of it by the code block
+  will be visible to the caller.
   
-  =head2 pairfirst BLOCK KVLIST
+  =head2 ( $key, $val ) = pairfirst { BLOCK } @kvlist
+  
+  =head2 $found = pairfirst { BLOCK } @kvlist
   
   Similar to the C<first> function, but interprets the given list as an
-  even-sized list of pairs. It invokes the BLOCK multiple times, in scalar
+  even-sized list of pairs. It invokes the C<BLOCK> multiple times, in scalar
   context, with C<$a> and C<$b> set to successive pairs of values from the
-  KVLIST.
+  C<@kvlist>.
   
-  Returns the first pair of values from the list for which the BLOCK returned
+  Returns the first pair of values from the list for which the C<BLOCK> returned
   true in list context, or an empty list of no such pair was found. In scalar
   context it returns a simple boolean value, rather than either the key or the
   value found.
   
       ( $key, $value ) = pairfirst { $a =~ m/^[[:upper:]]+$/ } @kvlist
   
-  Similar to C<grep>, C<pairfirst> aliases C<$a> and C<$b> to elements of the
-  given list. Any modifications of it by the code block will be visible to
-  the caller.
+  As with C<grep> aliasing C<$_> to list elements, C<pairfirst> aliases C<$a> and
+  C<$b> to elements of the given list. Any modifications of it by the code block
+  will be visible to the caller.
   
-  =head2 pairmap BLOCK KVLIST
+  =head2 @list = pairmap { BLOCK } @kvlist
+  
+  =head2 $count = pairmap { BLOCK } @kvlist
   
   Similar to perl's C<map> keyword, but interprets the given list as an
-  even-sized list of pairs. It invokes the BLOCK multiple times, in list
+  even-sized list of pairs. It invokes the C<BLOCK> multiple times, in list
   context, with C<$a> and C<$b> set to successive pairs of values from the
-  KVLIST.
+  C<@kvlist>.
   
-  Returns the concatenation of all the values returned by the BLOCK in list
-  context, or the count of the number of items that would have been returned
-  in scalar context.
+  Returns the concatenation of all the values returned by the C<BLOCK> in list
+  context, or the count of the number of items that would have been returned in
+  scalar context.
   
       @result = pairmap { "The key $a has value $b" } @kvlist
   
-  Similar to C<map>, C<pairmap> aliases C<$a> and C<$b> to elements of the
-  given list. Any modifications of it by the code block will be visible to
-  the caller.
+  As with C<map> aliasing C<$_> to list elements, C<pairmap> aliases C<$a> and
+  C<$b> to elements of the given list. Any modifications of it by the code block
+  will be visible to the caller.
   
-  =head2 pairs KVLIST
+  =head2 @pairs = pairs @kvlist
   
-  A convenient shortcut to operating on even-sized lists of pairs, this
-  function returns a list of ARRAY references, each containing two items from
-  the given list. It is a more efficient version of
+  A convenient shortcut to operating on even-sized lists of pairs, this function
+  returns a list of ARRAY references, each containing two items from the given
+  list. It is a more efficient version of
   
-      pairmap { [ $a, $b ] } KVLIST
+      @pairs = pairmap { [ $a, $b ] } @kvlist
   
   It is most convenient to use in a C<foreach> loop, for example:
   
@@ -72287,21 +73321,21 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "
          ...
       }
   
-  =head2 pairkeys KVLIST
+  =head2 @keys = pairkeys @kvlist
   
-  A convenient shortcut to operating on even-sized lists of pairs, this
-  function returns a list of the the first values of each of the pairs in
-  the given list. It is a more efficient version of
+  A convenient shortcut to operating on even-sized lists of pairs, this function
+  returns a list of the the first values of each of the pairs in the given list.
+  It is a more efficient version of
   
-      pairmap { $a } KVLIST
+      @keys = pairmap { $a } @kvlist
   
-  =head2 pairvalues KVLIST
+  =head2 @values = pairvalues @kvlist
   
-  A convenient shortcut to operating on even-sized lists of pairs, this
-  function returns a list of the the second values of each of the pairs in
-  the given list. It is a more efficient version of
+  A convenient shortcut to operating on even-sized lists of pairs, this function
+  returns a list of the the second values of each of the pairs in the given list.
+  It is a more efficient version of
   
-      pairmap { $b } KVLIST
+      @values = pairmap { $b } @kvlist
   
   =cut
   
@@ -72309,9 +73343,9 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "
   
   =cut
   
-  =head2 shuffle LIST
+  =head2 @values = shuffle @values
   
-  Returns the elements of LIST in a random order
+  Returns the values of the input in a random order
   
       @cards = shuffle 0..51      # 0..51 in a random order
   
@@ -72319,9 +73353,8 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "
   
   =head1 KNOWN BUGS
   
-  With perl versions prior to 5.005 there are some cases where reduce
-  will return an incorrect result. This will show up as test 7 of
-  reduce.t failing.
+  With perl versions prior to 5.005 there are some cases where reduce will return
+  an incorrect result. This will show up as test 7 of reduce.t failing.
   
   =head1 SUGGESTED ADDITIONS
   
@@ -72357,7 +73390,7 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util/XS.pm"} = '#line '.(1+__LINE__).
   use strict;
   use List::Util;
   
-  our $VERSION = "1.35";       # FIXUP
+  our $VERSION = "1.38";       # FIXUP
   $VERSION = eval $VERSION;    # FIXUP
   
   1;
@@ -72705,8 +73738,6 @@ $fatpacked{"x86_64-linux-thread-multi/MIME/QuotedPrint.pm"} = '#line '.(1+__LINE
 X86_64-LINUX-THREAD-MULTI_MIME_QUOTEDPRINT
 
 $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'X86_64-LINUX-THREAD-MULTI_SCALAR_UTIL';
-  # Scalar::Util.pm
-  #
   # Copyright (c) 1997-2007 Graham Barr <gbarr@pobox.com>. All rights reserved.
   # This program is free software; you can redistribute it and/or
   # modify it under the same terms as Perl itself.
@@ -72721,21 +73752,11 @@ $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).'
   
   our @ISA       = qw(Exporter);
   our @EXPORT_OK = qw(
-    blessed
-    dualvar
-    isdual
-    isvstring
-    isweak
-    looks_like_number
-    openhandle
-    readonly
-    refaddr
-    reftype
-    set_prototype
-    tainted
-    weaken
+    blessed refaddr reftype weaken unweaken isweak
+  
+    dualvar isdual isvstring looks_like_number openhandle readonly set_prototype tainted
   );
-  our $VERSION    = "1.35";
+  our $VERSION    = "1.38";
   $VERSION   = eval $VERSION;
   
   our @EXPORT_FAIL;
@@ -72781,104 +73802,40 @@ $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).'
   
   =head1 DESCRIPTION
   
-  C<Scalar::Util> contains a selection of subroutines that people have
-  expressed would be nice to have in the perl core, but the usage would
-  not really be high enough to warrant the use of a keyword, and the size
-  so small such that being individual extensions would be wasteful.
+  C<Scalar::Util> contains a selection of subroutines that people have expressed
+  would be nice to have in the perl core, but the usage would not really be high
+  enough to warrant the use of a keyword, and the size so small such that being
+  individual extensions would be wasteful.
   
-  By default C<Scalar::Util> does not export any subroutines. The
-  subroutines defined are
+  By default C<Scalar::Util> does not export any subroutines.
   
-  =head2 blessed EXPR
+  =cut
   
-  If EXPR evaluates to a blessed reference the name of the package
-  that it is blessed into is returned. Otherwise C<undef> is returned.
+  =head1 FUNCTIONS FOR REFERENCES
   
-     $scalar = "foo";
-     $class  = blessed $scalar;           # undef
+  The following functions all perform some useful activity on reference values.
   
-     $ref    = [];
-     $class  = blessed $ref;              # undef
+  =head2 $pkg = blessed( $ref )
   
-     $obj    = bless [], "Foo";
-     $class  = blessed $obj;              # "Foo"
+  If C<$ref> is a blessed reference the name of the package that it is blessed
+  into is returned. Otherwise C<undef> is returned.
+  
+      $scalar = "foo";
+      $class  = blessed $scalar;           # undef
+  
+      $ref    = [];
+      $class  = blessed $ref;              # undef
+  
+      $obj    = bless [], "Foo";
+      $class  = blessed $obj;              # "Foo"
   
   Take care when using this function simply as a truth test (such as in
-  C<if(blessed $ref)...>) because the package name C<"0"> is defined yet
-  false.
+  C<if(blessed $ref)...>) because the package name C<"0"> is defined yet false.
   
-  =head2 dualvar NUM, STRING
+  =head2 $addr = refaddr( $ref )
   
-  Returns a scalar that has the value NUM in a numeric context and the
-  value STRING in a string context.
-  
-      $foo = dualvar 10, "Hello";
-      $num = $foo + 2;                    # 12
-      $str = $foo . " world";             # Hello world
-  
-  =head2 isdual EXPR
-  
-  If EXPR is a scalar that is a dualvar, the result is true.
-  
-      $foo = dualvar 86, "Nix";
-      $dual = isdual($foo);               # true
-  
-  Note that a scalar can be made to have both string and numeric content
-  through numeric operations:
-  
-      $foo = "10";
-      $dual = isdual($foo);               # false
-      $bar = $foo + 0;
-      $dual = isdual($foo);               # true
-  
-  Note that although C<$!> appears to be dual-valued variable, it is
-  actually implemented using a tied scalar:
-  
-      $! = 1;
-      print("$!\n");                      # "Operation not permitted"
-      $dual = isdual($!);                 # false
-  
-  You can capture its numeric and string content using:
-  
-      $err = dualvar $!, $!;
-      $dual = isdual($err);               # true
-  
-  =head2 isvstring EXPR
-  
-  If EXPR is a scalar which was coded as a vstring the result is true.
-  
-      $vs   = v49.46.48;
-      $fmt  = isvstring($vs) ? "%vd" : "%s"; #true
-      printf($fmt,$vs);
-  
-  =head2 looks_like_number EXPR
-  
-  Returns true if perl thinks EXPR is a number. See
-  L<perlapi/looks_like_number>.
-  
-  =head2 openhandle FH
-  
-  Returns FH if FH may be used as a filehandle and is open, or FH is a tied
-  handle. Otherwise C<undef> is returned.
-  
-      $fh = openhandle(*STDIN);           # \*STDIN
-      $fh = openhandle(\*STDIN);          # \*STDIN
-      $fh = openhandle(*NOTOPEN);         # undef
-      $fh = openhandle("scalar");         # undef
-  
-  =head2 readonly SCALAR
-  
-  Returns true if SCALAR is readonly.
-  
-      sub foo { readonly($_[0]) }
-  
-      $readonly = foo($bar);              # false
-      $readonly = foo(0);                 # true
-  
-  =head2 refaddr EXPR
-  
-  If EXPR evaluates to a reference the internal memory address of
-  the referenced value is returned. Otherwise C<undef> is returned.
+  If C<$ref> is reference the internal memory address of the referenced value is
+  returned as a plain integer. Otherwise C<undef> is returned.
   
       $addr = refaddr "string";           # undef
       $addr = refaddr \$var;              # eg 12345678
@@ -72887,10 +73844,11 @@ $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).'
       $obj  = bless {}, "Foo";
       $addr = refaddr $obj;               # eg 88123488
   
-  =head2 reftype EXPR
+  =head2 $type = reftype( $ref )
   
-  If EXPR evaluates to a reference the type of the variable referenced
-  is returned. Otherwise C<undef> is returned.
+  If C<$ref> is a reference the basic Perl type of the variable referenced is
+  returned as a plain string (such as C<ARRAY> or C<HASH>). Otherwise C<undef>
+  is returned.
   
       $type = reftype "string";           # undef
       $type = reftype \$var;              # SCALAR
@@ -72899,28 +73857,16 @@ $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).'
       $obj  = bless {}, "Foo";
       $type = reftype $obj;               # HASH
   
-  =head2 set_prototype CODEREF, PROTOTYPE
+  =head2 weaken( REF )
   
-  Sets the prototype of the given function, or deletes it if PROTOTYPE is
-  undef. Returns the CODEREF.
+  The lvalue C<REF> will be turned into a weak reference. This means that it
+  will not hold a reference count on the object it references. Also when the
+  reference count on that object reaches zero, the reference will be set to
+  undef. This function mutates the lvalue passed as its argument and returns no
+  value.
   
-      set_prototype \&foo, '$$';
-  
-  =head2 tainted EXPR
-  
-  Return true if the result of EXPR is tainted
-  
-      $taint = tainted("constant");       # false
-      $taint = tainted($ENV{PWD});        # true if running under -T
-  
-  =head2 weaken REF
-  
-  REF will be turned into a weak reference. This means that it will not
-  hold a reference count on the object it references. Also when the reference
-  count on that object reaches zero, REF will be set to undef.
-  
-  This is useful for keeping copies of references , but you don't want to
-  prevent the object being DESTROY-ed at its usual time.
+  This is useful for keeping copies of references, but you don't want to prevent
+  the object being DESTROY-ed at its usual time.
   
       {
         my $var;
@@ -72929,8 +73875,8 @@ $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).'
       }
       # $ref is now undef
   
-  Note that if you take a copy of a scalar with a weakened reference,
-  the copy will be a strong reference.
+  Note that if you take a copy of a scalar with a weakened reference, the copy
+  will be a strong reference.
   
       my $var;
       my $foo = \$var;
@@ -72944,13 +73890,30 @@ $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).'
       @object = grep { defined } @object;
   
   This will indeed remove all references to destroyed objects, but the remaining
-  references to objects will be strong, causing the remaining objects to never
-  be destroyed because there is now always a strong reference to them in the
-  @object array.
+  references to objects will be strong, causing the remaining objects to never be
+  destroyed because there is now always a strong reference to them in the @object
+  array.
   
-  =head2 isweak EXPR
+  =head2 unweaken( REF )
   
-  If EXPR is a scalar which is a weak reference the result is true.
+  The lvalue C<REF> will be turned from a weak reference back into a normal
+  (strong) reference again. This function mutates the lvalue passed as its
+  argument and returns no value. This undoes the action performed by
+  C<weaken()>.
+  
+  This function is slightly neater and more convenient than the
+  otherwise-equivalent code
+  
+      my $tmp = $REF;
+      undef $REF;
+      $REF = $tmp;
+  
+  (because in particular, simply assigning a weak reference back to itself does
+  not work to unweaken it; C<$REF = $REF> does not work).
+  
+  =head2 $weak = isweak( $ref )
+  
+  Returns true if C<$ref> is a weak reference.
   
       $ref  = \$foo;
       $weak = isweak($ref);               # false
@@ -72962,6 +73925,91 @@ $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).'
       $copy = $ref;
       $weak = isweak($copy);              # false
   
+  =head1 OTHER FUNCTIONS
+  
+  =head2 $var = dualvar( $num, $string )
+  
+  Returns a scalar that has the value C<$num> in a numeric context and the value
+  C<$string> in a string context.
+  
+      $foo = dualvar 10, "Hello";
+      $num = $foo + 2;                    # 12
+      $str = $foo . " world";             # Hello world
+  
+  =head2 $dual = isdual( $var )
+  
+  If C<$var> is a scalar that has both numeric and string values, the result is
+  true.
+  
+      $foo = dualvar 86, "Nix";
+      $dual = isdual($foo);               # true
+  
+  Note that a scalar can be made to have both string and numeric content through
+  numeric operations:
+  
+      $foo = "10";
+      $dual = isdual($foo);               # false
+      $bar = $foo + 0;
+      $dual = isdual($foo);               # true
+  
+  Note that although C<$!> appears to be dual-valued variable, it is actually
+  implemented using a tied scalar:
+  
+      $! = 1;
+      print("$!\n");                      # "Operation not permitted"
+      $dual = isdual($!);                 # false
+  
+  You can capture its numeric and string content using:
+  
+      $err = dualvar $!, $!;
+      $dual = isdual($err);               # true
+  
+  =head2 $vstring = isvstring( $var )
+  
+  If C<$var> is a scalar which was coded as a vstring the result is true.
+  
+      $vs   = v49.46.48;
+      $fmt  = isvstring($vs) ? "%vd" : "%s"; #true
+      printf($fmt,$vs);
+  
+  =head2 $isnum = looks_like_number( $var )
+  
+  Returns true if perl thinks C<$var> is a number. See
+  L<perlapi/looks_like_number>.
+  
+  =head2 $fh = openhandle( $fh )
+  
+  Returns C<$fh> itself if C<$fh> may be used as a filehandle and is open, or is
+  is a tied handle. Otherwise C<undef> is returned.
+  
+      $fh = openhandle(*STDIN);           # \*STDIN
+      $fh = openhandle(\*STDIN);          # \*STDIN
+      $fh = openhandle(*NOTOPEN);         # undef
+      $fh = openhandle("scalar");         # undef
+  
+  =head2 $ro = readonly( $var )
+  
+  Returns true if C<$var> is readonly.
+  
+      sub foo { readonly($_[0]) }
+  
+      $readonly = foo($bar);              # false
+      $readonly = foo(0);                 # true
+  
+  =head2 $code = set_prototype( $code, $prototype )
+  
+  Sets the prototype of the function given by the C<$code> reference, or deletes
+  it if C<$prototype> is C<undef>. Returns the C<$code> reference itself.
+  
+      set_prototype \&foo, '$$';
+  
+  =head2 $t = tainted( $var )
+  
+  Return true if C<$var> is tainted.
+  
+      $taint = tainted("constant");       # false
+      $taint = tainted($ENV{PWD});        # true if running under -T
+  
   =head1 DIAGNOSTICS
   
   Module use may give one of the following errors during import.
@@ -72970,8 +74018,8 @@ $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).'
   
   =item Weak references are not implemented in the version of perl
   
-  The version of perl that you are using does not implement weak references, to use
-  C<isweak> or C<weaken> you will need to use a newer release of perl.
+  The version of perl that you are using does not implement weak references, to
+  use C<isweak> or C<weaken> you will need to use a newer release of perl.
   
   =item Vstrings are not implemented in the version of perl
   
@@ -72980,9 +74028,10 @@ $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).'
   
   =item C<NAME> is only available with the XS version of Scalar::Util
   
-  C<Scalar::Util> contains both perl and C implementations of many of its functions
-  so that those without access to a C compiler may still use it. However some of the functions
-  are only available when a C compiler was available to compile the XS version of the extension.
+  C<Scalar::Util> contains both perl and C implementations of many of its
+  functions so that those without access to a C compiler may still use it.
+  However some of the functions are only available when a C compiler was
+  available to compile the XS version of the extension.
   
   At present that list is: weaken, isweak, dualvar, isvstring, set_prototype
   
@@ -78241,14 +79290,131 @@ $fatpacked{"x86_64-linux-thread-multi/version.pm"} = '#line '.(1+__LINE__).' "'.
   #!perl -w
   package version;
   
-  use 5.005_04;
+  use 5.006002;
   use strict;
   
   use vars qw(@ISA $VERSION $CLASS $STRICT $LAX *declare *qv);
   
-  $VERSION = 0.9904;
-  
+  $VERSION = 0.9908;
   $CLASS = 'version';
+  
+  # !!!!Delete this next block completely when adding to Perl core!!!!
+  {
+      local $SIG{'__DIE__'};
+      eval "use version::vxs $VERSION";
+      if ( $@ ) { # don't have the XS version installed
+  	eval "use version::vpp $VERSION"; # don't tempt fate
+  	die "$@" if ( $@ );
+  	push @ISA, "version::vpp";
+  	local $^W;
+  	*version::qv = \&version::vpp::qv;
+  	*version::declare = \&version::vpp::declare;
+  	*version::_VERSION = \&version::vpp::_VERSION;
+  	*version::vcmp = \&version::vpp::vcmp;
+  	*version::new = \&version::vpp::new;
+  	if ($] >= 5.009000) {
+  	    no strict 'refs';
+  	    *version::stringify = \&version::vpp::stringify;
+  	    *{'version::(""'} = \&version::vpp::stringify;
+  	    *{'version::(<=>'} = \&version::vpp::vcmp;
+  	    *version::parse = \&version::vpp::parse;
+  	}
+      }
+      else { # use XS module
+  	push @ISA, "version::vxs";
+  	local $^W;
+  	*version::declare = \&version::vxs::declare;
+  	*version::qv = \&version::vxs::qv;
+  	*version::_VERSION = \&version::vxs::_VERSION;
+  	*version::vcmp = \&version::vxs::VCMP;
+  	*version::new = \&version::vxs::new;
+  	if ($] >= 5.009000) {
+  	    no strict 'refs';
+  	    *version::stringify = \&version::vxs::stringify;
+  	    *{'version::(""'} = \&version::vxs::stringify;
+  	    *{'version::(<=>'} = \&version::vxs::VCMP;
+  	    *version::parse = \&version::vxs::parse;
+  	}
+      }
+  }
+  
+  # avoid using Exporter
+  require version::regex;
+  *version::is_lax = \&version::regex::is_lax;
+  *version::is_strict = \&version::regex::is_strict;
+  *LAX = \$version::regex::LAX;
+  *STRICT = \$version::regex::STRICT;
+  
+  sub import {
+      no strict 'refs';
+      my ($class) = shift;
+  
+      # Set up any derived class
+      unless ($class eq $CLASS) {
+  	local $^W;
+  	*{$class.'::declare'} =  \&{$CLASS.'::declare'};
+  	*{$class.'::qv'} = \&{$CLASS.'::qv'};
+      }
+  
+      my %args;
+      if (@_) { # any remaining terms are arguments
+  	map { $args{$_} = 1 } @_
+      }
+      else { # no parameters at all on use line
+  	%args =
+  	(
+  	    qv => 1,
+  	    'UNIVERSAL::VERSION' => 1,
+  	);
+      }
+  
+      my $callpkg = caller();
+  
+      if (exists($args{declare})) {
+  	*{$callpkg.'::declare'} =
+  	    sub {return $class->declare(shift) }
+  	  unless defined(&{$callpkg.'::declare'});
+      }
+  
+      if (exists($args{qv})) {
+  	*{$callpkg.'::qv'} =
+  	    sub {return $class->qv(shift) }
+  	  unless defined(&{$callpkg.'::qv'});
+      }
+  
+      if (exists($args{'UNIVERSAL::VERSION'})) {
+  	local $^W;
+  	*UNIVERSAL::VERSION
+  		= \&{$CLASS.'::_VERSION'};
+      }
+  
+      if (exists($args{'VERSION'})) {
+  	*{$callpkg.'::VERSION'} = \&{$CLASS.'::_VERSION'};
+      }
+  
+      if (exists($args{'is_strict'})) {
+  	*{$callpkg.'::is_strict'} = \&{$CLASS.'::is_strict'}
+  	  unless defined(&{$callpkg.'::is_strict'});
+      }
+  
+      if (exists($args{'is_lax'})) {
+  	*{$callpkg.'::is_lax'} = \&{$CLASS.'::is_lax'}
+  	  unless defined(&{$callpkg.'::is_lax'});
+      }
+  }
+  
+  
+  1;
+X86_64-LINUX-THREAD-MULTI_VERSION
+
+$fatpacked{"x86_64-linux-thread-multi/version/regex.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'X86_64-LINUX-THREAD-MULTI_VERSION_REGEX';
+  package version::regex;
+  
+  use strict;
+  
+  use vars qw($VERSION $CLASS $STRICT $LAX);
+  
+  $VERSION = 0.9908;
   
   #--------------------------------------------------------------------------#
   # Version regexp components
@@ -78354,110 +79520,12 @@ $fatpacked{"x86_64-linux-thread-multi/version.pm"} = '#line '.(1+__LINE__).' "'.
   
   #--------------------------------------------------------------------------#
   
-  {
-      local $SIG{'__DIE__'};
-      eval "use version::vxs $VERSION";
-      if ( $@ ) { # don't have the XS version installed
-  	eval "use version::vpp $VERSION"; # don't tempt fate
-  	die "$@" if ( $@ );
-  	push @ISA, "version::vpp";
-  	local $^W;
-  	*version::qv = \&version::vpp::qv;
-  	*version::declare = \&version::vpp::declare;
-  	*version::_VERSION = \&version::vpp::_VERSION;
-  	*version::vcmp = \&version::vpp::vcmp;
-  	*version::new = \&version::vpp::new;
-  	if ($] >= 5.009000) {
-  	    no strict 'refs';
-  	    *version::stringify = \&version::vpp::stringify;
-  	    *{'version::(""'} = \&version::vpp::stringify;
-  	    *{'version::(<=>'} = \&version::vpp::vcmp;
-  	    *version::parse = \&version::vpp::parse;
-  	}
-      }
-      else { # use XS module
-  	push @ISA, "version::vxs";
-  	local $^W;
-  	*version::declare = \&version::vxs::declare;
-  	*version::qv = \&version::vxs::qv;
-  	*version::_VERSION = \&version::vxs::_VERSION;
-  	*version::vcmp = \&version::vxs::VCMP;
-  	*version::new = \&version::vxs::new;
-  	if ($] >= 5.009000) {
-  	    no strict 'refs';
-  	    *version::stringify = \&version::vxs::stringify;
-  	    *{'version::(""'} = \&version::vxs::stringify;
-  	    *{'version::(<=>'} = \&version::vxs::VCMP;
-  	    *version::parse = \&version::vxs::parse;
-  	}
-  
-      }
-  }
-  
   # Preloaded methods go here.
-  sub import {
-      no strict 'refs';
-      my ($class) = shift;
-  
-      # Set up any derived class
-      unless ($class eq 'version') {
-  	local $^W;
-  	*{$class.'::declare'} =  \&version::declare;
-  	*{$class.'::qv'} = \&version::qv;
-      }
-  
-      my %args;
-      if (@_) { # any remaining terms are arguments
-  	map { $args{$_} = 1 } @_
-      }
-      else { # no parameters at all on use line
-  	%args =
-  	(
-  	    qv => 1,
-  	    'UNIVERSAL::VERSION' => 1,
-  	);
-      }
-  
-      my $callpkg = caller();
-  
-      if (exists($args{declare})) {
-  	*{$callpkg.'::declare'} =
-  	    sub {return $class->declare(shift) }
-  	  unless defined(&{$callpkg.'::declare'});
-      }
-  
-      if (exists($args{qv})) {
-  	*{$callpkg.'::qv'} =
-  	    sub {return $class->qv(shift) }
-  	  unless defined(&{$callpkg.'::qv'});
-      }
-  
-      if (exists($args{'UNIVERSAL::VERSION'})) {
-  	local $^W;
-  	*UNIVERSAL::VERSION
-  		= \&version::_VERSION;
-      }
-  
-      if (exists($args{'VERSION'})) {
-  	*{$callpkg.'::VERSION'} = \&version::_VERSION;
-      }
-  
-      if (exists($args{'is_strict'})) {
-  	*{$callpkg.'::is_strict'} = \&version::is_strict
-  	  unless defined(&{$callpkg.'::is_strict'});
-      }
-  
-      if (exists($args{'is_lax'})) {
-  	*{$callpkg.'::is_lax'} = \&version::is_lax
-  	  unless defined(&{$callpkg.'::is_lax'});
-      }
-  }
-  
   sub is_strict	{ defined $_[0] && $_[0] =~ qr/ \A $STRICT \z /x }
   sub is_lax	{ defined $_[0] && $_[0] =~ qr/ \A $LAX \z /x }
   
   1;
-X86_64-LINUX-THREAD-MULTI_VERSION
+X86_64-LINUX-THREAD-MULTI_VERSION_REGEX
 
 $fatpacked{"x86_64-linux-thread-multi/version/vpp.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'X86_64-LINUX-THREAD-MULTI_VERSION_VPP';
   package charstar;
@@ -78578,12 +79646,20 @@ $fatpacked{"x86_64-linux-thread-multi/version/vpp.pm"} = '#line '.(1+__LINE__).'
   }
   
   package version::vpp;
+  
+  use 5.006002;
   use strict;
   
-  use POSIX qw/locale_h/;
-  use locale;
-  use vars qw ($VERSION @ISA @REGEXS);
-  $VERSION = 0.9904;
+  use Config;
+  use vars qw($VERSION $CLASS @ISA $LAX $STRICT);
+  $VERSION = 0.9908;
+  $CLASS = 'version::vpp';
+  
+  require version::regex;
+  *version::vpp::is_strict = \&version::regex::is_strict;
+  *version::vpp::is_lax = \&version::regex::is_lax;
+  *LAX = \$version::regex::LAX;
+  *STRICT = \$version::regex::STRICT;
   
   use overload (
       '""'       => \&stringify,
@@ -78610,6 +79686,64 @@ $fatpacked{"x86_64-linux-thread-multi/version/vpp.pm"} = '#line '.(1+__LINE__).'
   	sub enabled {return $^W;}
   	1;
       ';
+  }
+  
+  sub import {
+      no strict 'refs';
+      my ($class) = shift;
+  
+      # Set up any derived class
+      unless ($class eq $CLASS) {
+  	local $^W;
+  	*{$class.'::declare'} =  \&{$CLASS.'::declare'};
+  	*{$class.'::qv'} = \&{$CLASS.'::qv'};
+      }
+  
+      my %args;
+      if (@_) { # any remaining terms are arguments
+  	map { $args{$_} = 1 } @_
+      }
+      else { # no parameters at all on use line
+  	%args =
+  	(
+  	    qv => 1,
+  	    'UNIVERSAL::VERSION' => 1,
+  	);
+      }
+  
+      my $callpkg = caller();
+  
+      if (exists($args{declare})) {
+  	*{$callpkg.'::declare'} =
+  	    sub {return $class->declare(shift) }
+  	  unless defined(&{$callpkg.'::declare'});
+      }
+  
+      if (exists($args{qv})) {
+  	*{$callpkg.'::qv'} =
+  	    sub {return $class->qv(shift) }
+  	  unless defined(&{$callpkg.'::qv'});
+      }
+  
+      if (exists($args{'UNIVERSAL::VERSION'})) {
+  	local $^W;
+  	*UNIVERSAL::VERSION
+  		= \&{$CLASS.'::_VERSION'};
+      }
+  
+      if (exists($args{'VERSION'})) {
+  	*{$callpkg.'::VERSION'} = \&{$CLASS.'::_VERSION'};
+      }
+  
+      if (exists($args{'is_strict'})) {
+  	*{$callpkg.'::is_strict'} = \&{$CLASS.'::is_strict'}
+  	  unless defined(&{$callpkg.'::is_strict'});
+      }
+  
+      if (exists($args{'is_lax'})) {
+  	*{$callpkg.'::is_lax'} = \&{$CLASS.'::is_lax'}
+  	  unless defined(&{$callpkg.'::is_lax'});
+      }
   }
   
   my $VERSION_MAX = 0x7FFFFFFF;
@@ -78874,7 +80008,7 @@ $fatpacked{"x86_64-linux-thread-multi/version/vpp.pm"} = '#line '.(1+__LINE__).'
       if ($errstr) {
   	# 'undef' is a special case and not an error
   	if ( $s ne 'undef') {
-  	    use Carp;
+  	    require Carp;
   	    Carp::croak($errstr);
   	}
       }
@@ -79030,25 +80164,49 @@ $fatpacked{"x86_64-linux-thread-multi/version/vpp.pm"} = '#line '.(1+__LINE__).'
       return $s;
   }
   
-  sub new
-  {
-  	my ($class, $value) = @_;
-  	unless (defined $class) {
-  	    require Carp;
-  	    Carp::croak('Usage: version::new(class, version)');
-  	}
-  	my $self = bless ({}, ref ($class) || $class);
-  	my $qv = FALSE;
+  sub new {
+      my $class = shift;
+      unless (defined $class or $#_ > 1) {
+  	require Carp;
+  	Carp::croak('Usage: version::new(class, version)');
+      }
   
-  	if ( ref($value) && eval('$value->isa("version")') ) {
-  	    # Can copy the elements directly
-  	    $self->{version} = [ @{$value->{version} } ];
-  	    $self->{qv} = 1 if $value->{qv};
-  	    $self->{alpha} = 1 if $value->{alpha};
-  	    $self->{original} = ''.$value->{original};
-  	    return $self;
-  	}
+      my $self = bless ({}, ref ($class) || $class);
+      my $qv = FALSE;
   
+      if ( $#_ == 1 ) { # must be CVS-style
+  	$qv = TRUE;
+      }
+      my $value = pop; # always going to be the last element
+  
+      if ( ref($value) && eval('$value->isa("version")') ) {
+  	# Can copy the elements directly
+  	$self->{version} = [ @{$value->{version} } ];
+  	$self->{qv} = 1 if $value->{qv};
+  	$self->{alpha} = 1 if $value->{alpha};
+  	$self->{original} = ''.$value->{original};
+  	return $self;
+      }
+  
+      if ( not defined $value or $value =~ /^undef$/ ) {
+  	# RT #19517 - special case for undef comparison
+  	# or someone forgot to pass a value
+  	push @{$self->{version}}, 0;
+  	$self->{original} = "0";
+  	return ($self);
+      }
+  
+  
+      if (ref($value) =~ m/ARRAY|HASH/) {
+  	require Carp;
+  	Carp::croak("Invalid version format (non-numeric data)");
+      }
+  
+      $value = _un_vstring($value);
+  
+      if ($Config{d_setlocale}) {
+  	use POSIX qw/locale_h/;
+  	use if $Config{d_setlocale}, 'locale';
   	my $currlocale = setlocale(LC_ALL);
   
   	# if the current locale uses commas for decimal points, we
@@ -79057,42 +80215,27 @@ $fatpacked{"x86_64-linux-thread-multi/version/vpp.pm"} = '#line '.(1+__LINE__).'
   	if ( localeconv()->{decimal_point} eq ',' ) {
   	    $value =~ tr/,/./;
   	}
+      }
   
-  	if ( not defined $value or $value =~ /^undef$/ ) {
-  	    # RT #19517 - special case for undef comparison
-  	    # or someone forgot to pass a value
-  	    push @{$self->{version}}, 0;
-  	    $self->{original} = "0";
-  	    return ($self);
-  	}
+      # exponential notation
+      if ( $value =~ /\d+.?\d*e[-+]?\d+/ ) {
+  	$value = sprintf("%.9f",$value);
+  	$value =~ s/(0+)$//; # trim trailing zeros
+      }
   
-  	if ( $#_ == 2 ) { # must be CVS-style
-  	    $value = $_[2];
-  	    $qv = TRUE;
-  	}
+      my $s = scan_version($value, \$self, $qv);
   
-  	$value = _un_vstring($value);
+      if ($s) { # must be something left over
+  	warn("Version string '%s' contains invalid data; "
+  		   ."ignoring: '%s'", $value, $s);
+      }
   
-  	# exponential notation
-  	if ( $value =~ /\d+.?\d*e[-+]?\d+/ ) {
-  	    $value = sprintf("%.9f",$value);
-  	    $value =~ s/(0+)$//; # trim trailing zeros
-  	}
-  
-  	my $s = scan_version($value, \$self, $qv);
-  
-  	if ($s) { # must be something left over
-  	    warn("Version string '%s' contains invalid data; "
-                         ."ignoring: '%s'", $value, $s);
-  	}
-  
-  	return ($self);
+      return ($self);
   }
   
   *parse = \&new;
   
-  sub numify
-  {
+  sub numify {
       my ($self) = @_;
       unless (_verify($self)) {
   	require Carp;
@@ -79132,8 +80275,7 @@ $fatpacked{"x86_64-linux-thread-multi/version/vpp.pm"} = '#line '.(1+__LINE__).'
       return $string;
   }
   
-  sub normal
-  {
+  sub normal {
       my ($self) = @_;
       unless (_verify($self)) {
   	require Carp;
@@ -79168,8 +80310,7 @@ $fatpacked{"x86_64-linux-thread-multi/version/vpp.pm"} = '#line '.(1+__LINE__).'
       return $string;
   }
   
-  sub stringify
-  {
+  sub stringify {
       my ($self) = @_;
       unless (_verify($self)) {
   	require Carp;
@@ -79182,8 +80323,7 @@ $fatpacked{"x86_64-linux-thread-multi/version/vpp.pm"} = '#line '.(1+__LINE__).'
   	    : $self->numify;
   }
   
-  sub vcmp
-  {
+  sub vcmp {
       require UNIVERSAL;
       my ($left,$right,$swap) = @_;
       my $class = ref($left);
@@ -79268,7 +80408,7 @@ $fatpacked{"x86_64-linux-thread-multi/version/vpp.pm"} = '#line '.(1+__LINE__).'
   
   sub qv {
       my $value = shift;
-      my $class = 'version';
+      my $class = $CLASS;
       if (@_) {
   	$class = ref($value) || $value;
   	$value = shift;
@@ -79276,7 +80416,7 @@ $fatpacked{"x86_64-linux-thread-multi/version/vpp.pm"} = '#line '.(1+__LINE__).'
   
       $value = _un_vstring($value);
       $value = 'v'.$value unless $value =~ /(^v|\d+\.\d+\.\d)/;
-      my $obj = version->new($value);
+      my $obj = $CLASS->new($value);
       return bless $obj, $class;
   }
   
@@ -79417,13 +80557,11 @@ $fatpacked{"x86_64-linux-thread-multi/version/vxs.pm"} = '#line '.(1+__LINE__).'
   #!perl -w
   package version::vxs;
   
-  use 5.005_03;
+  use v5.10;
   use strict;
   
   use vars qw(@ISA $VERSION $CLASS );
-  
-  $VERSION = 0.9904;
-  
+  $VERSION = 0.9908;
   $CLASS = 'version::vxs';
   
   eval {

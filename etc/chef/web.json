@@ -96,7 +96,10 @@
       "Try::Tiny",
       "Text::CSV_XS",
       "DateTimeX::Easy",
-      "local::lib"
+      "local::lib",
+      "URI",
+      "LWP::Protocol::https",
+      "LWP::UserAgent",
     ],
     "perl_version": "perl-5.18.2",
     "deploy_dir": "/var/local/EmpireLogistics/shared/perl",
