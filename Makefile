@@ -167,4 +167,4 @@ $(warehouse_dir)/ikea.csv:
 	test -s $(warehouse_dir)/ikea.csv || cp 'etc/data/warehouses/ikea/ikea.csv' $(warehouse_dir)/ikea.csv
 
 $(warehouse_dir)/warehouse_data.sql:
-	test -s $(warehouse_dir)/warehouse_data.sql || cp 'etc/data/warehouses/warehouse_data.sql' $(warehouse_dir)/warehouse_data.sql
+	test -s $(warehouse_dir)/warehouse_data.sql || cp 'etc/data/warehouses/warehouse_data.sql' $(warehouse_dir)/warehouse_data.sql || echo 0
