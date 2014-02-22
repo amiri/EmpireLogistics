@@ -96,7 +96,7 @@ while ( my $row = $csv->getline_hr($io) ) {
     my $geom      = "$lon $lat";
     $street_address = trim($street_address);
     my $warehouse = [
-        $name, $owner,$description,
+        $name, $owner,$description, $lat,$lon,
         {   street_address => $street_address,
             city           => $city,
             state          => $state,
@@ -120,8 +120,7 @@ for my $warehouse_type (@warehouse_types) {
     $sth->execute($warehouse_type) or die $sth->errstr;
 }
 
-my $warehouse_command
-    = "insert into warehouse (name,owner,description) values (?,?,?)";
+my $warehouse_command = "insert into warehouse (name,owner,description,latitude,longitude) values (?,?,?,?,?)";
 $sth = $dbh->prepare($warehouse_command);
 
 my @geom_commands;
@@ -136,7 +135,7 @@ for my $warehouse (@warehouses) {
     push @addresses, { address  => $address, warehouse => $newid };
     my $geom_command;
     my ( $lon, $lat ) = split( " ", $geom );
-    $geom_command = "update warehouse set geometry = ST_SetSRID(ST_MakePoint($lon, $lat),4326) where id = $newid" if $geom =~ /\d/;
+    $geom_command = "update warehouse set geometry = ST_Transform(ST_SetSRID(ST_MakePoint($lon, $lat),4326),900913) where id = $newid" if $geom =~ /\d/;
     push @geom_commands, $geom_command if $geom_command;
 }
 

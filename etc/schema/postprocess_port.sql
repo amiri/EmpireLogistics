@@ -65,6 +65,8 @@ insert into port (
     repairs,
     drydock,
     railway,
+    latitude,
+    longitude,
     geometry
 ) select
     rp.port_name as port_name,
@@ -341,6 +343,8 @@ insert into port (
     repair.detail as repairs,
     drydock.detail as drydock,
     railway.detail as railway,
+    rp.latitude as latitude,
+    rp.longitude as longitude,
     rp.geom as geometry
 from raw_port rp
     left join port_harbor_size harbor_size on rp.harborsize = harbor_size.name

@@ -55,7 +55,9 @@ create table rail_node (
     junction_id integer,
     name text,
     incident_links integer,
-    geometry geometry
+    latitude double precision,
+    longitude double precision,
+    geometry geometry(Point,900913)
 );
 drop sequence if exists rail_ownership_id_seq cascade;
 drop table if exists rail_ownership cascade;
@@ -346,7 +348,9 @@ create table port (
     repairs text,
     drydock text,
     railway text,
-    geometry geometry
+    latitude double precision,
+    longitude double precision,
+    geometry geometry(Point,900913)
 );
 drop table if exists port_depth_feet cascade;
 create table port_depth_feet (
@@ -539,7 +543,9 @@ create table warehouse (
     area integer,
     owner warehouse_owner,
     date_opened date,
-    geometry geometry
+    latitude double precision,
+    longitude double precision,
+    geometry geometry(Point,900913)
 );
 
 drop table if exists walmart;
@@ -762,6 +768,183 @@ create table labor_organization_nlrb_decision (
 alter table labor_organization_nlrb_decision add foreign key (labor_organization) references labor_organization(id);
 alter table labor_organization_nlrb_decision add foreign key (nlrb_decision) references nlrb_decision(id);
 
+
+-- labor_organization_port
+drop table if exists labor_organization_port cascade;
+create table labor_organization_port (
+    id integer not null primary key default nextval('el_seq'),
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    labor_organization integer not null,
+    port integer not null,
+    unique (labor_organization,port)
+);
+alter table labor_organization_port add foreign key (labor_organization) references labor_organization(id);
+alter table labor_organization_port add foreign key (port) references port(id);
+
+-- labor_organization_warehouse
+drop table if exists labor_organization_warehouse cascade;
+create table labor_organization_warehouse (
+    id integer not null primary key default nextval('el_seq'),
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    labor_organization integer not null,
+    warehouse integer not null,
+    unique (labor_organization,warehouse)
+);
+alter table labor_organization_warehouse add foreign key (labor_organization) references labor_organization(id);
+alter table labor_organization_warehouse add foreign key (warehouse) references warehouse(id);
+
+-- labor_organization_rail_node
+drop table if exists labor_organization_rail_node cascade;
+create table labor_organization_rail_node (
+    id integer not null primary key default nextval('el_seq'),
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    labor_organization integer not null,
+    rail_node integer not null,
+    unique (labor_organization,rail_node)
+);
+alter table labor_organization_rail_node add foreign key (labor_organization) references labor_organization(id);
+alter table labor_organization_rail_node add foreign key (rail_node) references rail_node(id);
+
+-- company_port
+drop table if exists company_port cascade;
+create table company_port (
+    id integer not null primary key default nextval('el_seq'),
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    company integer not null,
+    port integer not null,
+    unique (company,port)
+);
+alter table company_port add foreign key (company) references company(id);
+alter table company_port add foreign key (port) references port(id);
+
+-- company_warehouse
+drop table if exists company_warehouse cascade;
+create table company_warehouse (
+    id integer not null primary key default nextval('el_seq'),
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    company integer not null,
+    warehouse integer not null,
+    unique (company,warehouse)
+);
+alter table company_warehouse add foreign key (company) references company(id);
+alter table company_warehouse add foreign key (warehouse) references warehouse(id);
+
+-- company_rail_node
+drop table if exists company_rail_node cascade;
+create table company_rail_node (
+    id integer not null primary key default nextval('el_seq'),
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    company integer not null,
+    rail_node integer not null,
+    unique (company,rail_node)
+);
+alter table company_rail_node add foreign key (company) references company(id);
+alter table company_rail_node add foreign key (rail_node) references rail_node(id);
+
+-- user
+drop table if exists "user" cascade;
+create table "user" (
+    id integer not null primary key default nextval('el_seq'),
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    email text not null,
+    nickname text not null,
+    password text not null
+);
+
+-- object type
+drop type if exists object_type cascade;
+create type object_type as enum (
+    'address',
+    'company',
+    'company_address',
+    'company_nlrb_decision',
+    'company_osha_citation',
+    'company_port',
+    'company_rail_node',
+    'company_warehouse',
+    'labor_organization',
+    'labor_organization_address',
+    'labor_organization_nlrb_decision',
+    'labor_organization_osha_citation',
+    'labor_organization_port',
+    'labor_organization_rail_node',
+    'labor_organization_warehouse',
+    'media',
+    'nlrb_decision',
+    'osha_citation',
+    'port',
+    'port_address',
+    'port_depth_feet',
+    'port_depth_meters',
+    'port_drydock',
+    'port_harbor_size',
+    'port_harbor_type',
+    'port_repair',
+    'port_shelter',
+    'port_tonnage',
+    'port_vessel_size',
+    'rail_density',
+    'rail_interline',
+    'rail_line',
+    'rail_line_class',
+    'rail_military',
+    'rail_node',
+    'rail_ownership',
+    'rail_passenger',
+    'rail_signal',
+    'rail_status',
+    'rail_subdivision',
+    'rail_subdivision_state',
+    'rail_track_gauge',
+    'rail_track_grade',
+    'rail_track_type',
+    'state',
+    'topology',
+    'user',
+    'walmart',
+    'warehouse',
+    'warehouse_address',
+    'warehouse_type',
+    'warehouse_walmart',
+    'work_stoppage'
+);
+
+-- edit history
+drop table if exists edit_history cascade;
+create table edit_history (
+    id integer not null primary key default nextval('el_seq'),
+    create_time timestamptz not null default 'now',
+    object_type object_type not null,
+    object integer not null,
+    "user" integer not null,
+    notes text
+);
+create index edit_history_object_object_type on edit_history (object_type,object);
+
+-- edit history field
+drop table if exists edit_history_field cascade;
+create table edit_history_field (
+    edit_history integer not null,
+    field text not null,
+    original_value text,
+    new_value text,
+    primary key (edit_history, field)
+);
+
 CREATE OR REPLACE FUNCTION update_timestamp() RETURNS TRIGGER
 LANGUAGE plpgsql
 AS
@@ -775,23 +958,27 @@ BEGIN
 END;
 $$;
 
-create trigger update_time before update on rail_line for each row execute procedure update_timestamp();
-create trigger update_time before update on rail_interline for each row execute procedure update_timestamp();
-create trigger update_time before update on rail_node for each row execute procedure update_timestamp();
-create trigger update_time before update on rail_ownership for each row execute procedure update_timestamp();
-create trigger update_time before update on rail_subdivision for each row execute procedure update_timestamp();
-create trigger update_time before update on state for each row execute procedure update_timestamp();
-create trigger update_time before update on rail_subdivision_state for each row execute procedure update_timestamp();
-create trigger update_time before update on rail_track_type for each row execute procedure update_timestamp();
-create trigger update_time before update on rail_track_grade for each row execute procedure update_timestamp();
-create trigger update_time before update on rail_track_gauge for each row execute procedure update_timestamp();
-create trigger update_time before update on rail_status for each row execute procedure update_timestamp();
-create trigger update_time before update on rail_density for each row execute procedure update_timestamp();
-create trigger update_time before update on rail_signal for each row execute procedure update_timestamp();
-create trigger update_time before update on rail_passenger for each row execute procedure update_timestamp();
-create trigger update_time before update on rail_military for each row execute procedure update_timestamp();
-create trigger update_time before update on rail_line_class for each row execute procedure update_timestamp();
+create trigger update_time before update on "user" for each row execute procedure update_timestamp();
+create trigger update_time before update on address for each row execute procedure update_timestamp();
+create trigger update_time before update on company for each row execute procedure update_timestamp();
+create trigger update_time before update on company_address for each row execute procedure update_timestamp();
+create trigger update_time before update on company_nlrb_decision for each row execute procedure update_timestamp();
+create trigger update_time before update on company_osha_citation for each row execute procedure update_timestamp();
+create trigger update_time before update on company_port for each row execute procedure update_timestamp();
+create trigger update_time before update on company_rail_node for each row execute procedure update_timestamp();
+create trigger update_time before update on company_warehouse for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_address for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_nlrb_decision for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_osha_citation for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_port for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_rail_node for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_warehouse for each row execute procedure update_timestamp();
+create trigger update_time before update on media for each row execute procedure update_timestamp();
+create trigger update_time before update on nlrb_decision for each row execute procedure update_timestamp();
+create trigger update_time before update on osha_citation for each row execute procedure update_timestamp();
 create trigger update_time before update on port for each row execute procedure update_timestamp();
+create trigger update_time before update on port_address for each row execute procedure update_timestamp();
 create trigger update_time before update on port_depth_feet for each row execute procedure update_timestamp();
 create trigger update_time before update on port_depth_meters for each row execute procedure update_timestamp();
 create trigger update_time before update on port_drydock for each row execute procedure update_timestamp();
@@ -801,22 +988,25 @@ create trigger update_time before update on port_repair for each row execute pro
 create trigger update_time before update on port_shelter for each row execute procedure update_timestamp();
 create trigger update_time before update on port_tonnage for each row execute procedure update_timestamp();
 create trigger update_time before update on port_vessel_size for each row execute procedure update_timestamp();
-create trigger update_time before update on warehouse_type for each row execute procedure update_timestamp();
-create trigger update_time before update on warehouse for each row execute procedure update_timestamp();
+create trigger update_time before update on rail_density for each row execute procedure update_timestamp();
+create trigger update_time before update on rail_interline for each row execute procedure update_timestamp();
+create trigger update_time before update on rail_line for each row execute procedure update_timestamp();
+create trigger update_time before update on rail_line_class for each row execute procedure update_timestamp();
+create trigger update_time before update on rail_military for each row execute procedure update_timestamp();
+create trigger update_time before update on rail_node for each row execute procedure update_timestamp();
+create trigger update_time before update on rail_ownership for each row execute procedure update_timestamp();
+create trigger update_time before update on rail_passenger for each row execute procedure update_timestamp();
+create trigger update_time before update on rail_signal for each row execute procedure update_timestamp();
+create trigger update_time before update on rail_status for each row execute procedure update_timestamp();
+create trigger update_time before update on rail_subdivision for each row execute procedure update_timestamp();
+create trigger update_time before update on rail_subdivision_state for each row execute procedure update_timestamp();
+create trigger update_time before update on rail_track_gauge for each row execute procedure update_timestamp();
+create trigger update_time before update on rail_track_grade for each row execute procedure update_timestamp();
+create trigger update_time before update on rail_track_type for each row execute procedure update_timestamp();
+create trigger update_time before update on state for each row execute procedure update_timestamp();
 create trigger update_time before update on walmart for each row execute procedure update_timestamp();
-create trigger update_time before update on warehouse_walmart for each row execute procedure update_timestamp();
-create trigger update_time before update on company for each row execute procedure update_timestamp();
-create trigger update_time before update on labor_organization for each row execute procedure update_timestamp();
-create trigger update_time before update on media for each row execute procedure update_timestamp();
-create trigger update_time before update on work_stoppage for each row execute procedure update_timestamp();
-create trigger update_time before update on address for each row execute procedure update_timestamp();
-create trigger update_time before update on osha_citation for each row execute procedure update_timestamp();
-create trigger update_time before update on nlrb_decision for each row execute procedure update_timestamp();
-create trigger update_time before update on labor_organization_address for each row execute procedure update_timestamp();
-create trigger update_time before update on company_address for each row execute procedure update_timestamp();
+create trigger update_time before update on warehouse for each row execute procedure update_timestamp();
 create trigger update_time before update on warehouse_address for each row execute procedure update_timestamp();
-create trigger update_time before update on port_address for each row execute procedure update_timestamp();
-create trigger update_time before update on company_osha_citation for each row execute procedure update_timestamp();
-create trigger update_time before update on labor_organization_osha_citation for each row execute procedure update_timestamp();
-create trigger update_time before update on company_nlrb_decision for each row execute procedure update_timestamp();
-create trigger update_time before update on labor_organization_nlrb_decision for each row execute procedure update_timestamp();
+create trigger update_time before update on warehouse_type for each row execute procedure update_timestamp();
+create trigger update_time before update on warehouse_walmart for each row execute procedure update_timestamp();
+create trigger update_time before update on work_stoppage for each row execute procedure update_timestamp();

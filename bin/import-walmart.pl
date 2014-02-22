@@ -116,7 +116,7 @@ for my $key ( keys %$dcs ) {
         my $geom = "$lon $lat";
         $street_address = trim($street_address);
         my $warehouse = [
-            $name, $description, $status, $area, $owner, $date_opened, $walmart_id, 
+            $name, $description, $status, $area, $owner, $date_opened, $lat,$lon,$walmart_id,
             {   street_address => $street_address,
                 city           => $city,
                 state          => $state,
@@ -141,7 +141,7 @@ for my $warehouse_type (@warehouse_types) {
 }
 
 my $warehouse_command
-    = "insert into warehouse (name,description,status,area,owner,date_opened) values (?,?,?,?,?,?)";
+    = "insert into warehouse (name,description,status,area,owner,date_opened,latitude,longitude) values (?,?,?,?,?,?,?,?)";
 $sth = $dbh->prepare($warehouse_command);
 
 my @geoms;
@@ -159,7 +159,7 @@ for my $warehouse (@warehouses) {
     push @walmarts, { walmart_id => $walmart_id, warehouse_id => $newid } if $walmart_id;
     my ($geom_command,$walmart_command);
     my ($lon,$lat) = split(" ",$geom);
-    $geom_command = "update warehouse set geometry = ST_SetSRID(ST_MakePoint($lon, $lat),4326) where id = $newid" if $geom =~ /\d/;
+    $geom_command = "update warehouse set geometry = ST_Transform(ST_SetSRID(ST_MakePoint($lon, $lat),4326),900913) where id = $newid" if $geom =~ /\d/;
     push @geom_commands, $geom_command if $geom_command;
 }
 
