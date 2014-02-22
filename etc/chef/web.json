@@ -99,7 +99,7 @@
       "local::lib",
       "URI",
       "LWP::Protocol::https",
-      "LWP::UserAgent",
+      "LWP::UserAgent"
     ],
     "perl_version": "perl-5.18.2",
     "deploy_dir": "/var/local/EmpireLogistics/shared/perl",
