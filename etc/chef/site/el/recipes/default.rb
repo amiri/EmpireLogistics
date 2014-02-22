@@ -178,6 +178,12 @@ include_recipe "npm"
 include_recipe "sudo"
 include_recipe "perl"
 
+node["el"]["hold_packages"].each do |package|
+  execute "hold_package" do
+    command "echo '#{package} hold' | dpkg --set-selections"
+  end
+end
+
 node["el"]["system_perl_packages"].each do |package|
   cpan_module package
 end
