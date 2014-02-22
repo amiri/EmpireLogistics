@@ -18,3 +18,5 @@ requires "DateTimeX::Easy";
 requires "URI";
 requires "LWP::UserAgent";
 requires "LWP::Protocol::https";
+requires "DBM::Deep";
+requires "Image::Magick";

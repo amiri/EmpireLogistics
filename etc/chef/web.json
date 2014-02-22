@@ -82,7 +82,17 @@
       "automake",
       "libtool",
       "autotools-dev",
-      "autoconf"
+      "autoconf",
+      "imagemagick",
+      "imagemagick-common",
+      "imagemagick-dbg",
+      "imagemagick-doc",
+      "inkscape",
+      "libmagick++-dev",
+      "libmagick++5",
+      "libmagickcore5",
+      "libmagickwand5",
+      "perlmagick"
     ],
     "system_perl_packages": [
       "IO::All",
@@ -99,7 +109,9 @@
       "local::lib",
       "URI",
       "LWP::Protocol::https",
-      "LWP::UserAgent"
+      "LWP::UserAgent",
+      "DBM::Deep",
+      "Image::Magick"
     ],
     "perl_version": "perl-5.18.2",
     "deploy_dir": "/var/local/EmpireLogistics/shared/perl",
