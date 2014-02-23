@@ -87,12 +87,13 @@
       "imagemagick-common",
       "imagemagick-dbg",
       "imagemagick-doc",
-      "inkscape",
       "libmagick++-dev",
       "libmagick++5",
       "libmagickcore5",
+      "libmagickcore-dev",
       "libmagickwand5",
-      "perlmagick"
+      "perlmagick",
+      "libperl-dev"
     ],
     "system_perl_packages": [
       "IO::All",
