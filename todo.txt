@@ -1,14 +1,11 @@
-Tiles
-    Make a cron job to gzip every json file in the cache
-    Use tilestache-seed to create cache for all layers in whole area
-Tables
-    user
-    union
-    company
-    company_port
-    company_warehouse
-    company_railyard
-    union_port
-    union_warehouse
-    union_railyard
+Places
+    Lookup addresses / info for
+        - etc/data/3pl/companies.txt
+        - etc/data/3pl/unions/wikipedia_labor_unions.html
 
+    Download photos for
+        - ports
+        - rail nodes
+        - warehouses
+
+Import original data
