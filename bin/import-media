@@ -1,0 +1,10 @@
+#!/bin/bash
+
+DB=empirelogistics
+SQL_FILE=data/media/media.sql
+
+if test -f $SQL_FILE; then
+    psql -U el -q -d $DB < data/media/media.sql
+else
+    echo "No media.sql found"
+fi

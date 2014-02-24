@@ -58,21 +58,24 @@ $ua->timeout(5);
 
 my $im = Image::Magick->new;
 
+my $counter = 0;
 # Loop through types
 TYPE: for my $type ( sort @photo_types ) {
     my $type_dir = $dir . $type . "/";
-    
+
     make_path($type_dir) unless -d $type_dir;
-    
+
     my $get_command = qq{select id,$name_for_type{$type},latitude,longitude from $type};
     $sth = $dbh->prepare($get_command);
 
     $sth->execute or die "Could not execute statement handle: ", $sth->errstr;
-    
+
     my $items = $sth->fetchall_arrayref( {} );
 
     # Loop through array of items of type
     ITEM: for my $item (@$items) {
+        sleep(86400) if $counter % 1000 = 0;
+        $counter++;
         my $item_name = "lat_".$item->{latitude}."_lon_".$item->{longitude};
         $item_name =~ s/\./-/g;
 
@@ -80,9 +83,9 @@ TYPE: for my $type ( sort @photo_types ) {
 
         my $cache_key = $type . '-' . $item_name;
         say "  Cachekey: $cache_key";
-        
+
         next ITEM if defined( $cache{$cache_key}{has_photo} );
-        
+
         my $uri = URI->new($base_url);
         $uri->query_form(
             location => $item->{latitude} . "," . $item->{longitude},
@@ -91,37 +94,41 @@ TYPE: for my $type ( sort @photo_types ) {
             radius   => $radius,
         );
         my $response = $ua->get( $uri->as_string );
-        
+
         say "  Response is failure" unless $response->is_success;
         next ITEM unless $response->is_success;
+
+        my $json;
+        $json = $response->decoded_content;
+        my $results = decode_json($json);
+
+        say " Over query limit" if $results->{status} eq 'OVER_QUERY_LIMIT';
+        next ITEM if $results->{status} eq 'OVER_QUERY_LIMIT';
 
         # Sleep for google
         say "  Sleeping...";
         sleep 1;
-        
-        my $json;
-        $json = $response->decoded_content if $response->is_success;
+
 
         if ($json) {
-            my $results = decode_json($json);
             my ($result) = grep { $_->{photos} } @{ $results->{results} };
 
             $cache{$cache_key}{has_photo} = 0 unless $result->{photos};
 
             next ITEM unless $result->{photos};
-            
+
             my $photos = $result->{photos};
-            
+
             $cache{$cache_key}{has_photo} = 1;
-            
+
             my $photo           = $photos->[0];
             my $photo_reference = $photo->{photo_reference};
             say "  Photo reference ($type $item_name): $photo_reference";
-            
+
             $cache{$cache_key}{photo_reference} = $photo_reference;
 
             next ITEM if $cache{$cache_key}{photo_error} == 1;
-            
+
             my $photo_uri = URI->new($base_photo_url);
             $photo_uri->query_form(
                 sensor         => $sensor,
@@ -129,23 +136,23 @@ TYPE: for my $type ( sort @photo_types ) {
                 maxwidth       => 1000,
                 photoreference => $photo_reference,
             );
-            
+
             my $photo_response = $ua->get( $photo_uri->as_string );
-            
+
             say "  Photo response is failure" unless $photo_response->is_success;
             next ITEM unless $photo_response->is_success;
 
             my $type_header    = $photo_response->header('content-type');
-            
+
             $cache{$cache_key}{photo_error} = 1 unless $type_header =~ /image/;
 
             next ITEM unless $type_header =~ /image/;
-            
+
             my $image = $photo_response->decoded_content( charset => 'none' );
-            
+
             my $image_extension;
             $image_extension = $type_header if $type_header =~ /image/;
-            
+
             $image_extension =~ s/image\///g;
             $image_extension = ".$image_extension";
             say "  Image extension: $image_extension";
@@ -157,7 +164,7 @@ TYPE: for my $type ( sort @photo_types ) {
 
             say "  Saving file: $image_file_dest";
             io($image_file_dest)->print($image);
-            
+
             $cache{$cache_key}{photo_file} = $image_file_dest;
 
             $im->Read($image_file_dest);

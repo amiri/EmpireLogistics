@@ -1,9 +1,6 @@
-drop sequence if exists el_seq cascade;
-create sequence el_seq start 1;
-
 drop table if exists rail_line cascade;
 create table rail_line (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -32,7 +29,7 @@ create table rail_line (
 );
 drop table if exists rail_interline cascade;
 create table rail_interline (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -48,7 +45,7 @@ create table rail_interline (
 );
 drop table if exists rail_node cascade;
 create table rail_node (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -62,7 +59,7 @@ create table rail_node (
 drop sequence if exists rail_ownership_id_seq cascade;
 drop table if exists rail_ownership cascade;
 create table rail_ownership (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -78,7 +75,7 @@ CREATE INDEX name_idx ON rail_ownership (name);
 
 drop table if exists rail_subdivision cascade;
 create table rail_subdivision (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -94,7 +91,7 @@ create index subdiv_wmark_idx on rail_subdivision (wmark);
 drop sequence if exists state_id_seq cascade;
 drop table if exists state cascade;
 create table state (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -118,7 +115,7 @@ alter table rail_subdivision_state add foreign key (subdivision) references rail
 
 drop table if exists rail_track_type cascade;
 create table rail_track_type (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -138,7 +135,7 @@ insert into rail_track_type (name,detail) values
 
 drop table if exists rail_track_grade cascade;
 create table rail_track_grade (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -158,7 +155,7 @@ insert into rail_track_grade (name,detail) values
 
 drop table if exists rail_track_gauge cascade;
 create table rail_track_gauge (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -174,7 +171,7 @@ insert into rail_track_gauge (name,detail) values
 
 drop table if exists rail_status cascade;
 create table rail_status (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -189,7 +186,7 @@ insert into rail_status (name,detail) values
 
 drop table if exists rail_density cascade;
 create table rail_density (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -208,7 +205,7 @@ insert into rail_density (name,detail) values
 
 drop table if exists rail_signal cascade;
 create table rail_signal (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -227,7 +224,7 @@ insert into rail_signal (name,detail) values
 
 drop table if exists rail_passenger cascade;
 create table rail_passenger (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -247,7 +244,7 @@ insert into rail_passenger (name,detail) values
 
 drop table if exists rail_military cascade;
 create table rail_military (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -260,7 +257,7 @@ insert into rail_military (name,detail) values
 
 drop table if exists rail_line_class cascade;
 create table rail_line_class (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -278,7 +275,7 @@ insert into rail_line_class (name,detail) values
 
 drop table if exists port cascade;
 create table port (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -354,7 +351,7 @@ create table port (
 );
 drop table if exists port_depth_feet cascade;
 create table port_depth_feet (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -381,7 +378,7 @@ insert into port_depth_feet (name,detail) values
 
 drop table if exists port_depth_meters cascade;
 create table port_depth_meters (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -408,7 +405,7 @@ insert into port_depth_meters (name,detail) values
 
 drop table if exists port_drydock cascade;
 create table port_drydock (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -422,7 +419,7 @@ insert into port_drydock (name,detail) values
 
 drop table if exists port_harbor_size cascade;
 create table port_harbor_size (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -437,7 +434,7 @@ insert into port_harbor_size (name,detail) values
 
 drop table if exists port_harbor_type cascade;
 create table port_harbor_type (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -457,7 +454,7 @@ insert into port_harbor_type (name,detail) values
 
 drop table if exists port_repair cascade;
 create table port_repair (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -473,7 +470,7 @@ insert into port_repair (name,detail) values
 
 drop table if exists port_shelter cascade;
 create table port_shelter (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -489,7 +486,7 @@ insert into port_shelter (name,detail) values
 
 drop table if exists port_tonnage cascade;
 create table port_tonnage (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -505,7 +502,7 @@ create table port_tonnage (
 
 drop table if exists port_vessel_size cascade;
 create table port_vessel_size (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -524,7 +521,7 @@ create type warehouse_status as enum ('open', 'closed');
 
 drop table if exists warehouse_type cascade;
 create table warehouse_type (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -533,7 +530,7 @@ create table warehouse_type (
 
 drop table if exists warehouse cascade;
 create table warehouse (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -550,7 +547,7 @@ create table warehouse (
 
 drop table if exists walmart;
 create table walmart (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -567,12 +564,25 @@ create table warehouse_walmart (
     primary key (warehouse, walmart)
 );
 
+drop table if exists address cascade;
+create table address (
+    id serial not null primary key,
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    street_address text,
+    city text,
+    state text,
+    postal_code text,
+    country text
+);
+
 drop type if exists company_type cascade;
 create type company_type as enum ('3PL', 'commercial', 'financial', 'industrial');
 
 drop table if exists company cascade;
 create table company (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -581,19 +591,97 @@ create table company (
     description text
 );
 
+drop type if exists labor_organization_type cascade;
+create type labor_organization_type as enum ('federation', 'union', 'hybrid','reform','other');
+
 drop table if exists labor_organization cascade;
 create table labor_organization (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
     name text,
+    abbreviation text,
+    year_established integer,
+    members integer,
+    url text,
+    organization_type labor_organization_type,
     description text
 );
 
+drop table if exists labor_local cascade;
+create table labor_local (
+    id serial not null primary key,
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    name text,
+    year_established integer,
+    members integer,
+    url text,
+    description text
+);
+
+-- labor_organization_affiliation
+drop table if exists labor_organization_affiliation cascade;
+create table labor_organization_affiliation (
+    id serial not null primary key,
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    child integer not null,
+    parent integer not null,
+    unique (child,parent),
+    check (child <> parent)
+);
+alter table labor_organization_affiliation add foreign key (child) references labor_organization(id);
+alter table labor_organization_affiliation add foreign key (parent) references labor_organization(id);
+
+-- labor_local_affiliation
+drop table if exists labor_local_affiliation cascade;
+create table labor_local_affiliation (
+    id serial not null primary key,
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    labor_local integer not null,
+    labor_organization integer not null,
+    unique (labor_local,labor_organization)
+);
+alter table labor_local_affiliation add foreign key (labor_local) references labor_local(id);
+alter table labor_local_affiliation add foreign key (labor_organization) references labor_organization(id);
+
+-- labor_organization_address
+drop table if exists labor_organization_address cascade;
+create table labor_organization_address (
+    id serial not null primary key,
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    labor_organization integer not null,
+    address integer not null,
+    unique (labor_organization,address)
+);
+alter table labor_organization_address add foreign key (labor_organization) references labor_organization(id);
+alter table labor_organization_address add foreign key (address) references address(id);
+
+-- labor_local_address
+drop table if exists labor_local_address cascade;
+create table labor_local_address (
+    id serial not null primary key,
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    labor_local integer not null,
+    address integer not null,
+    unique (labor_local,address)
+);
+alter table labor_local_address add foreign key (labor_local) references labor_local(id);
+alter table labor_local_address add foreign key (address) references address(id);
+
 drop table if exists media cascade;
 create table media (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -608,7 +696,7 @@ create table media (
 
 drop table if exists work_stoppage cascade;
 create table work_stoppage (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -617,23 +705,94 @@ create table work_stoppage (
     description text
 );
 
-drop table if exists address cascade;
-create table address (
-    id integer not null primary key default nextval('el_seq'),
+-- labor_local_work_stoppage
+drop table if exists labor_local_work_stoppage cascade;
+create table labor_local_work_stoppage (
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
-    street_address text,
-    city text,
-    state text,
-    postal_code text,
-    country text
+    labor_local integer not null,
+    work_stoppage integer not null,
+    unique (labor_local,work_stoppage)
 );
+alter table labor_local_work_stoppage add foreign key (labor_local) references labor_local(id);
+alter table labor_local_work_stoppage add foreign key (work_stoppage) references work_stoppage(id);
+
+-- labor_organization_work_stoppage
+drop table if exists labor_organization_work_stoppage cascade;
+create table labor_organization_work_stoppage (
+    id serial not null primary key,
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    labor_organization integer not null,
+    work_stoppage integer not null,
+    unique (labor_organization,work_stoppage)
+);
+alter table labor_organization_work_stoppage add foreign key (labor_organization) references labor_organization(id);
+alter table labor_organization_work_stoppage add foreign key (work_stoppage) references work_stoppage(id);
+
+-- port_work_stoppage
+drop table if exists port_work_stoppage cascade;
+create table port_work_stoppage (
+    id serial not null primary key,
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    port integer not null,
+    work_stoppage integer not null,
+    unique (port,work_stoppage)
+);
+alter table port_work_stoppage add foreign key (port) references port(id);
+alter table port_work_stoppage add foreign key (work_stoppage) references work_stoppage(id);
+
+-- warehouse_work_stoppage
+drop table if exists warehouse_work_stoppage cascade;
+create table warehouse_work_stoppage (
+    id serial not null primary key,
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    warehouse integer not null,
+    work_stoppage integer not null,
+    unique (warehouse,work_stoppage)
+);
+alter table warehouse_work_stoppage add foreign key (warehouse) references warehouse(id);
+alter table warehouse_work_stoppage add foreign key (work_stoppage) references work_stoppage(id);
+
+-- rail_node_work_stoppage
+drop table if exists rail_node_work_stoppage cascade;
+create table rail_node_work_stoppage (
+    id serial not null primary key,
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    rail_node integer not null,
+    work_stoppage integer not null,
+    unique (rail_node,work_stoppage)
+);
+alter table rail_node_work_stoppage add foreign key (rail_node) references rail_node(id);
+alter table rail_node_work_stoppage add foreign key (work_stoppage) references work_stoppage(id);
+
+-- rail_line_work_stoppage
+drop table if exists rail_line_work_stoppage cascade;
+create table rail_line_work_stoppage (
+    id serial not null primary key,
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    rail_line integer not null,
+    work_stoppage integer not null,
+    unique (rail_line,work_stoppage)
+);
+alter table rail_line_work_stoppage add foreign key (rail_line) references rail_line(id);
+alter table rail_line_work_stoppage add foreign key (work_stoppage) references work_stoppage(id);
 
 -- osha_citation
 drop table if exists osha_citation cascade;
 create table osha_citation (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -645,7 +804,7 @@ create table osha_citation (
 -- nlrb_decision
 drop table if exists nlrb_decision cascade;
 create table nlrb_decision (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -655,25 +814,10 @@ create table nlrb_decision (
     url text not null
 );
 
--- labor_organization_address
-drop table if exists labor_organization_address cascade;
-create table labor_organization_address (
-    id integer not null primary key default nextval('el_seq'),
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
-    delete_time timestamptz default null,
-    labor_organization integer not null,
-    address integer not null,
-    unique (labor_organization,address)
-);
-alter table labor_organization_address add foreign key (labor_organization) references labor_organization(id);
-alter table labor_organization_address add foreign key (address) references address(id);
-
-
 -- company_address
 drop table if exists company_address cascade;
 create table company_address (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -687,7 +831,7 @@ alter table company_address add foreign key (address) references address(id);
 -- warehouse_address
 drop table if exists warehouse_address cascade;
 create table warehouse_address (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -701,7 +845,7 @@ alter table warehouse_address add foreign key (address) references address(id);
 -- port_address
 drop table if exists port_address cascade;
 create table port_address (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -715,7 +859,7 @@ alter table port_address add foreign key (address) references address(id);
 -- company_osha_citation
 drop table if exists company_osha_citation cascade;
 create table company_osha_citation (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -729,7 +873,7 @@ alter table company_osha_citation add foreign key (osha_citation) references osh
 -- labor_organization_osha_citation
 drop table if exists labor_organization_osha_citation cascade;
 create table labor_organization_osha_citation (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -743,7 +887,7 @@ alter table labor_organization_osha_citation add foreign key (osha_citation) ref
 -- company_nlrb_decision
 drop table if exists company_nlrb_decision cascade;
 create table company_nlrb_decision (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -757,7 +901,7 @@ alter table company_nlrb_decision add foreign key (nlrb_decision) references nlr
 -- labor_organization_nlrb_decision
 drop table if exists labor_organization_nlrb_decision cascade;
 create table labor_organization_nlrb_decision (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -772,7 +916,7 @@ alter table labor_organization_nlrb_decision add foreign key (nlrb_decision) ref
 -- labor_organization_port
 drop table if exists labor_organization_port cascade;
 create table labor_organization_port (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -786,7 +930,7 @@ alter table labor_organization_port add foreign key (port) references port(id);
 -- labor_organization_warehouse
 drop table if exists labor_organization_warehouse cascade;
 create table labor_organization_warehouse (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -800,7 +944,7 @@ alter table labor_organization_warehouse add foreign key (warehouse) references 
 -- labor_organization_rail_node
 drop table if exists labor_organization_rail_node cascade;
 create table labor_organization_rail_node (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -814,7 +958,7 @@ alter table labor_organization_rail_node add foreign key (rail_node) references 
 -- company_port
 drop table if exists company_port cascade;
 create table company_port (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -828,7 +972,7 @@ alter table company_port add foreign key (port) references port(id);
 -- company_warehouse
 drop table if exists company_warehouse cascade;
 create table company_warehouse (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -842,7 +986,7 @@ alter table company_warehouse add foreign key (warehouse) references warehouse(i
 -- company_rail_node
 drop table if exists company_rail_node cascade;
 create table company_rail_node (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -856,7 +1000,7 @@ alter table company_rail_node add foreign key (rail_node) references rail_node(i
 -- user
 drop table if exists "user" cascade;
 create table "user" (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
@@ -926,7 +1070,7 @@ create type object_type as enum (
 -- edit history
 drop table if exists edit_history cascade;
 create table edit_history (
-    id integer not null primary key default nextval('el_seq'),
+    id serial not null primary key,
     create_time timestamptz not null default 'now',
     object_type object_type not null,
     object integer not null,

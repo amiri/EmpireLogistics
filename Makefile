@@ -4,6 +4,8 @@ SHELL=/bin/bash
 rail_dir := data/rail
 port_dir := data/ports
 warehouse_dir := data/warehouses
+labor_organization_dir := data/labor_organizations
+media_dir := data/media
 
 ########## Meta commands
 
@@ -11,13 +13,13 @@ all: chef data database
 
 data: download-data rail warehouses ports
 
-database: data create-database import-rail-data import-port-data import-port-teu import-warehouse-data
+database: data create-database import-rail-data import-port-data import-port-teu import-warehouse-data import-media import-labor-organizations
 
 create-database:
 	bin/create-database
 
 clean:
-	rm -rf data/{rail,ports,warehouses}
+	rm -rf data/{rail,ports,warehouses,media,labor_organizations}
 
 prereqs:
 	sudo perl -pi.orig -e "s/%admin ALL=\(ALL\) ALL/%admin ALL=(ALL) NOPASSWD: ALL/" /etc/sudoers
@@ -42,13 +44,14 @@ make-data-directories:
 	test -d $(rail_dir) || mkdir -p $(rail_dir)/{cta-sup,shp}
 	test -d $(warehouse_dir) || mkdir -p $(warehouse_dir)
 	test -d $(port_dir) || mkdir -p $(port_dir)
+	test -d $(media_dir) || mkdir -p $(media_dir)
+	test -d $(labor_organization_dir) || mkdir -p $(labor_organization_dir)
 
 download-data: download-port-data download-rail-data download-warehouse-data
 
 download-port-data: make-data-directories
 	test -s $(port_dir)/WPI_Shapefile.zip || curl -o $(port_dir)/WPI_Shapefile.zip 'http://msi.nga.mil/MSISiteContent/StaticFiles/NAV_PUBS/WPI/WPI_Shapefile.zip'
 	test -s $(port_dir)/ports_major.zip || curl -o $(port_dir)/ports_major.zip 'http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/national_transportation_atlas_database/2013/zip/ports_major.zip'
-
 
 download-rail-data: make-data-directories $(rail_dir)/na-rail.zip $(rail_dir)/cta-sup/wconv.txt $(rail_dir)/qc28R.zip $(rail_dir)/QNdata.zip $(rail_dir)/cta-sup/subdiv.txt $(rail_dir)/shp/qn28n.shp $(rail_dir)/shp/qn28l.shp $(rail_dir)/na-rail-interlines.geojson $(rail_dir)/na-rail-ownership.json $(rail_dir)/na-rail-subdivisions.json
 
@@ -82,6 +85,12 @@ import-port-teu: ports $(port_dir)/ports_major.shp
 
 import-warehouse-data: warehouses
 	bin/import-warehouse-data
+
+import-media: $(media_dir)/media.sql
+	bin/import-media
+
+import-labor-organizations: $(labor_organization_dir)/labor-organizations.json
+	perl bin/import-labor-organizations.pl
 
 ########## Rail data download pieces
 
@@ -168,3 +177,16 @@ $(warehouse_dir)/ikea.csv:
 
 $(warehouse_dir)/warehouse_data.sql:
 	test -s $(warehouse_dir)/warehouse_data.sql || cp 'etc/data/warehouses/warehouse_data.sql' $(warehouse_dir)/warehouse_data.sql || echo 0
+
+########## Media data download pieces
+
+$(media_dir)/media.sql:
+	test -s $(media_dir)/media.sql || cp 'etc/data/media.sql' $(media_dir)/media.sql
+
+########## Labor organization data download pieces
+
+$(labor_organization_dir)/labor_organizations.html:
+	test -s $(labor_organization_dir)/labor_organizations.html || cp 'etc/data/labor_organizations/wikipedia_labor_unions.html' $(labor_organization_dir)/labor_organizations.html
+
+$(labor_organization_dir)/labor-organizations.json: $(labor_organization_dir)/labor_organizations.html
+	perl bin/extract-labor-organizations.pl
