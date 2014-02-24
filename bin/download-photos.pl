@@ -74,7 +74,7 @@ TYPE: for my $type ( sort @photo_types ) {
 
     # Loop through array of items of type
     ITEM: for my $item (@$items) {
-        sleep(86400) if $counter % 1000 = 0;
+        sleep(86400) if ($counter/1000 > 1) && $counter % 1000 == 0;
         $counter++;
         my $item_name = "lat_".$item->{latitude}."_lon_".$item->{longitude};
         $item_name =~ s/\./-/g;
