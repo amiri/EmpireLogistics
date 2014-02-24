@@ -14,5 +14,6 @@ na-rail-*.json
 /etc/chef/cookbooks/el
 /etc/chef-cache
 /local
+/data
 /.vagrant
 *.swp

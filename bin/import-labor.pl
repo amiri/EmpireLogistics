@@ -51,7 +51,7 @@ sub trim {
 my @affiliation_commands;
 
 for my $labor_organization (@$labor_organizations) {
-    my $insert_command = 'insert into labor_organization (name,year_established,members,url,organization_type,description,abbreviation) values (?,?,?,?,?,?,?)';
+    my $insert_command = 'insert into labor_organization (name,year_established,url,organization_type,description,abbreviation) values (?,?,?,?,?,?)';
     $sth = $dbh->prepare($insert_command);
     
     my $name = $labor_organization->{name} ? $labor_organization->{name} : undef;
@@ -62,8 +62,11 @@ for my $labor_organization (@$labor_organizations) {
     my $description = $labor_organization->{description} ? $labor_organization->{description} : undef;
     my $abbreviation = $labor_organization->{abbreviation} ? $labor_organization->{abbreviation} : undef;
 
-    $sth->execute($name,$year_established,$members,$url,$organization_type,$description,$abbreviation) or die "Could not execute statement handle: ", $sth->errstr;
+    $sth->execute($name,$year_established,$url,$organization_type,$description,$abbreviation) or die "Could not execute statement handle: ", $sth->errstr;
     my $newid = $dbh->last_insert_id( undef, undef, "labor_organization", undef );
+    my $members_command = 'insert into labor_organization_members (labor_organization,members,year) values (?,?,?)';
+    $sth = $dbh->prepare($members_command);
+    $sth->execute($newid,$members,2013);
     for my $affiliation (@{$labor_organization->{federation}}) {
         my $affiliation_command = qq{insert into labor_organization_affiliation (child,parent) values ($newid,(select id from labor_organization where abbreviation='$affiliation'))};
         push @affiliation_commands, $affiliation_command;

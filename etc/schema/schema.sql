@@ -603,10 +603,45 @@ create table labor_organization (
     name text,
     abbreviation text,
     year_established integer,
-    members integer,
     url text,
     organization_type labor_organization_type,
     description text
+);
+
+drop table if exists labor_organization_members;
+create table labor_organization_members (
+    id serial not null primary key,
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    labor_organization integer not null references labor_organization(id),
+    year integer not null,
+    members integer,
+    unique (labor_organization,year)
+);
+
+drop table if exists labor_organization_finances cascade;
+create table labor_organization_finances (
+    id serial not null primary key,
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    labor_organization integer not null references labor_organization(id),
+    year integer not null,
+    assets integer,
+    liabilities integer,
+    total_income integer,
+    representation_expenses integer,
+    political_expenses integer,
+    gifts_expenses integer,
+    general_overhead_expenses integer,
+    union_administration_expenses integer,
+    strike_benefits_expenses integer,
+    officer_salary_expenses integer,
+    employee_salary_expenses integer,
+    education_expenses integer,
+    total_expenses integer,
+    unique (labor_organization,year)
 );
 
 drop table if exists labor_local cascade;
@@ -617,10 +652,22 @@ create table labor_local (
     delete_time timestamptz default null,
     name text,
     year_established integer,
-    members integer,
     url text,
     description text
 );
+
+drop table if exists labor_local_members;
+create table labor_local_members (
+    id serial not null primary key,
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    labor_local integer not null references labor_local(id),
+    year integer not null,
+    members integer,
+    unique (labor_local,year)
+);
+
 
 -- labor_organization_affiliation
 drop table if exists labor_organization_affiliation cascade;
