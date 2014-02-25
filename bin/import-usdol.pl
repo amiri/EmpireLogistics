@@ -84,26 +84,25 @@ for my $year (@years) {
         my $io   = io($file);
         $csv->column_names( $csv->getline($io) );
 
-        while (my $row = $csv->getline_hr($io)) {
-            if ($file_name eq 'lm_data_data_') {
-                my $primary_key =
-                      $row->{UNION_NAME} . ':'
-                    . ($row->{AFF_ABBR}  || '') . ':'
-                    . ($row->{F_NUM}     || '') . ':'
-                    . ($row->{FYE}       || '') . ':'
-                    . ($row->{UNIT_NAME} || '');
-                $primary_key_for_rpt_id_year{$row->{RPT_ID} . '-' . $year} =
-                    $primary_key;
+        while ( my $row = $csv->getline_hr($io) ) {
+            if ( $file_name eq 'lm_data_data_' ) {
+                my $primary_key
+                    = $row->{UNION_NAME} . ':'
+                    . ( $row->{AFF_ABBR}  || '' ) . ':'
+                    . ( $row->{F_NUM}     || '' ) . ':'
+                    . ( $row->{FYE}       || '' ) . ':'
+                    . ( $row->{UNIT_NAME} || '' );
+                $primary_key_for_rpt_id_year{ $row->{RPT_ID} . '-' . $year }
+                    = $primary_key;
             }
-            $union_data{  $primary_key_for_rpt_id_year{$row->{RPT_ID} . '-'
-                        . $year}}{$year}{$key_for_filename{$file_name}} =
-                $row;
+            $union_data{  $primary_key_for_rpt_id_year{ $row->{RPT_ID} . '-'
+                        . $year } }{$year}{ $key_for_filename{$file_name} }
+                = $row;
         }
     }
 }
 
 say p $union_data{"AIR LINE PILOTS ASN AFL-CIO:ALPA:69077:12:DELTA AIRLINES"};
-say p %primary_key_for_rpt_id_year;
 
 1;
 
