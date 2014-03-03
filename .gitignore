@@ -17,3 +17,4 @@ na-rail-*.json
 /data
 /.vagrant
 *.swp
+*.db

@@ -112,7 +112,8 @@
       "LWP::Protocol::https",
       "LWP::UserAgent",
       "DBM::Deep",
-      "Image::Magick"
+      "Image::Magick",
+      "Parallel::ForkManager"
     ],
     "perl_version": "perl-5.18.2",
     "deploy_dir": "/var/local/EmpireLogistics/shared/perl",

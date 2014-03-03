@@ -602,7 +602,7 @@ create table labor_organization (
     delete_time timestamptz default null,
     name text,
     abbreviation text,
-    year_established integer,
+    date_established date,
     url text,
     organization_type labor_organization_type,
     description text
@@ -651,7 +651,7 @@ create table labor_local (
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
     name text,
-    year_established integer,
+    date_established date,
     url text,
     description text
 );
