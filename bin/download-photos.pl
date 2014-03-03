@@ -103,7 +103,7 @@ TYPE: for my $type ( sort @photo_types ) {
         my $results = decode_json($json);
 
         say " Over query limit" if $results->{status} eq 'OVER_QUERY_LIMIT';
-        sleep(86400) if $results->{status} eq 'OVER_QUERY_LIMIT';
+        sleep(3600) if $results->{status} eq 'OVER_QUERY_LIMIT';
 
         # Sleep for google
         say "  Sleeping...";

@@ -51,18 +51,18 @@ sub trim {
 my @affiliation_commands;
 
 for my $labor_organization (@$labor_organizations) {
-    my $insert_command = 'insert into labor_organization (name,year_established,url,organization_type,description,abbreviation) values (?,?,?,?,?,?)';
+    my $insert_command = 'insert into labor_organization (name,date_established,url,organization_type,description,abbreviation) values (?,?,?,?,?,?)';
     $sth = $dbh->prepare($insert_command);
     
     my $name = $labor_organization->{name} ? $labor_organization->{name} : undef;
-    my $year_established = $labor_organization->{year_established} ? $labor_organization->{year_established} : undef;
+    my $date_established = $labor_organization->{year_established} ? DateTimeX::Easy->new(year => $labor_organization->{year_established}) : undef;
     my $members = $labor_organization->{members} ? $labor_organization->{members} : undef;
     my $url = $labor_organization->{url} ? $labor_organization->{url} : undef;
     my $organization_type = $labor_organization->{type} ? $labor_organization->{type} : undef;
     my $description = $labor_organization->{description} ? $labor_organization->{description} : undef;
     my $abbreviation = $labor_organization->{abbreviation} ? $labor_organization->{abbreviation} : undef;
 
-    $sth->execute($name,$year_established,$url,$organization_type,$description,$abbreviation) or die "Could not execute statement handle: ", $sth->errstr;
+    $sth->execute($name,$date_established,$url,$organization_type,$description,$abbreviation) or die "Could not execute statement handle: ", $sth->errstr;
     my $newid = $dbh->last_insert_id( undef, undef, "labor_organization", undef );
     my $members_command = 'insert into labor_organization_members (labor_organization,members,year) values (?,?,?)';
     $sth = $dbh->prepare($members_command);
