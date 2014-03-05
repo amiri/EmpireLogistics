@@ -150,6 +150,13 @@ end
 
 include_recipe "python"
 
+directory "/var/run/postgresql" do
+  owner "postgres"
+  group "postgres"
+  mode 2775
+  action :create
+end
+
 pg_database "empirelogistics" do
   action :drop
 end

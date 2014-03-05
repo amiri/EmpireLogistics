@@ -7,7 +7,7 @@ use Text::CSV_XS;
 use DBI;
 use JSON::XS;
 use Data::Printer;
-use List::MoreUtils qw/any/;
+use List::MoreUtils qw/any uniq/;
 use Try::Tiny;
 use DateTimeX::Easy;
 use Tie::IxHash;
@@ -16,25 +16,25 @@ tie my %union_data, 'DBM::Deep', {
     file => "etc/data/union_data.db",
     pack_size => 'large',
     locking => 1,
-    #autoflush => 1,
+    autoflush => 1,
 };
 use Parallel::ForkManager;
 use feature qw/say/;
 no warnings qw/uninitialized/;
 
-my $db_host = 'localhost';
-my $db_user = 'el';
-my $db_name = 'empirelogistics';
+#my $db_host = 'localhost';
+#my $db_user = 'el';
+#my $db_name = 'empirelogistics';
 
-my $dsn = "dbi:Pg:dbname=$db_name;host=$db_host";
+#my $dsn = "dbi:Pg:dbname=$db_name;host=$db_host";
 
-my $dbh = DBI->connect(
-    $dsn, $db_user, '3mp1r3',
-    {   RaiseError    => 1,
-        AutoCommit    => 0,
-        on_connect_do => ['set timezone = "America/Los Angeles"']
-    }
-) || die "Error connecting to the database: $DBI::errstr\n";
+#my $dbh = DBI->connect(
+    #$dsn, $db_user, '3mp1r3',
+    #{   RaiseError    => 1,
+        #AutoCommit    => 0,
+        #on_connect_do => ['set timezone = "America/Los Angeles"']
+    #}
+#) || die "Error connecting to the database: $DBI::errstr\n";
 
 my $sth;
 
@@ -222,77 +222,84 @@ my $csv = Text::CSV_XS->new(
     }
 );
 
-%union_data = ();
+#%union_data = ();
 
-my %primary_key_for_rpt_id_year = ();
+#my %primary_key_for_rpt_id_year = ();
 
-#my $pm = Parallel::ForkManager->new(scalar(@years));
-for my $year (@years) {
-    #$pm->start and next;
-    my $subdir = $dir . $year . '/';
+##my $pm = Parallel::ForkManager->new(scalar(@years));
+#for my $year (@years) {
+    ##$pm->start and next;
+    #my $subdir = $dir . $year . '/';
 
-    for my $file_name ( keys %key_for_filename ) {
-        my $file = $subdir . $file_name . $year . '.txt';
-        my $io   = io($file);
-        $csv->column_names( $csv->getline($io) );
+    #for my $file_name ( keys %key_for_filename ) {
+        #my $file = $subdir . $file_name . $year . '.txt';
+        #my $io   = io($file);
+        #$csv->column_names( $csv->getline($io) );
 
-        while (my $row = $csv->getline_hr($io)) {
-            if ($file_name eq 'lm_data_data_') {
-                my $primary_key = $row->{F_NUM};
-                    #. ':'
-                    #. ($row->{UNION_NAME} || '') . ':'
-                    #. ($row->{UNIT_NAME}  || '') . ':'
-                    #. ($row->{DESIG_NAME} || '') . ':'
-                    #. ($row->{DESIG_NUM}  || '')
-                    ;
-                $primary_key_for_rpt_id_year{$row->{RPT_ID} . '-' . $year} =
-                    $primary_key;
-            }
-            $union_data{$primary_key_for_rpt_id_year{$row->{RPT_ID}.'-'.$year}}{$year}{$key_for_filename{$file_name}} = $row
-            #unless defined($union_data{$primary_key_for_rpt_id_year{$row->{RPT_ID}.'-'.$year}}{$year}{$key_for_filename{$file_name}})
-            ;
-        }
-    }
-    #$pm->finish;
-}
-#$pm->wait_all_children;
+        #while (my $row = $csv->getline_hr($io)) {
+            #if ($file_name eq 'lm_data_data_') {
+                #my $primary_key = $row->{F_NUM};
+                    ##. ':'
+                    ##. ($row->{UNION_NAME} || '') . ':'
+                    ##. ($row->{UNIT_NAME}  || '') . ':'
+                    ##. ($row->{DESIG_NAME} || '') . ':'
+                    ##. ($row->{DESIG_NUM}  || '')
+                    #;
+                #$primary_key_for_rpt_id_year{$row->{RPT_ID} . '-' . $year} =
+                    #$primary_key;
+            #}
+            #$union_data{$primary_key_for_rpt_id_year{$row->{RPT_ID}.'-'.$year}}{$year}{$key_for_filename{$file_name}} = $row
+            ##unless defined($union_data{$primary_key_for_rpt_id_year{$row->{RPT_ID}.'-'.$year}}{$year}{$key_for_filename{$file_name}})
+            #;
+        #}
+    #}
+    ##$pm->finish;
+#}
+##$pm->wait_all_children;
 
-#say p $union_data{$_} for (keys %union_data)[0 .. 9];
-#say p $union_data{69077};
-#say p $union_data{"69077:AIR LINE PILOTS ASN AFL-CIO:DELTA AIRLINES:MEC:"};
+##say p $union_data{$_} for (keys %union_data)[0 .. 9];
+##say p $union_data{69077};
+##say p $union_data{"69077:AIR LINE PILOTS ASN AFL-CIO:DELTA AIRLINES:MEC:"};
 
 say "Number of unions: ", scalar keys %union_data;
-
-for my $key ((sort {$a <=> $b} keys %union_data)[0 .. 2]) {
-    next unless $key;    
-    my $union_data_for_year = $union_data{$key};
-    for my $year ((sort keys %$union_data_for_year)) {
-         say "Year: $year";
-         say "Union key: $key";
-         my $basic = $process{basic}->($union_data_for_year->{$year}{basic});
-         my $total_assets = $process{total_assets}->($union_data_for_year->{$year}{total_assets});
-         my $accounts_receivable = $process{accounts_receivable}->($union_data_for_year->{$year}{accounts_receivable});
-         my $fixed_assets = $process{fixed_assets}->($union_data_for_year->{$year}{fixed_assets});
-         my $loans_receivable = $process{loans_receivable}->($union_data_for_year->{$year}{loans_receivable});
-         my $investment_assets = $process{investment_assets}->($union_data_for_year->{$year}{investment_assets});
-         my $other_assets = $process{other_assets}->($union_data_for_year->{$year}{other_assets});
-         my $total_liabilities = $process{total_liabilities}->($union_data_for_year->{$year}{total_liabilities});
-         my $accounts_payable = $process{accounts_payable}->($union_data_for_year->{$year}{accounts_payable});
-         my $loans_payable = $process{loans_payable}->($union_data_for_year->{$year}{loans_payable});
-         my $other_liabilities = $process{other_liabilities}->($union_data_for_year->{$year}{other_liabilities});
-         my $total_receipts = $process{total_receipts}->($union_data_for_year->{$year}{total_receipts});
-         my $sales_receipts = $process{sales_receipts}->($union_data_for_year->{$year}{sales_receipts});
-         my $other_receipts = $process{other_receipts}->($union_data_for_year->{$year}{other_receipts});
-         my $total_disbursements = $process{total_disbursements}->($union_data_for_year->{$year}{total_disbursements});
-         my $general_disbursements = $process{general_disbursements}->($union_data_for_year->{$year}{general_disbursements});
-         my $investment_purchases = $process{investment_purchases}->($union_data_for_year->{$year}{investment_purchases});
-         my $officer_disbursements = $process{officer_disbursements}->($union_data_for_year->{$year}{officer_disbursements});
-         my $benefits_disbursements = $process{benefits_disbursements}->($union_data_for_year->{$year}{benefits_disbursements});
-         my $payees = $process{payees}->($union_data_for_year->{$year}{payees});
-         my $dues = $process{dues}->($union_data_for_year->{$year}{dues});
-         my $membership = $process{membership}->($union_data_for_year->{$year}{membership});
-    }
+my @labor_orgs;
+for my $year (@years) {
+    push @labor_orgs, map { $union_data{$_}{$year}{basic}{AFF_ABBR} => trim($union_data{$_}{$year}{basic}{UNION_NAME}) } keys %union_data;
 }
+my %labor_orgs = @labor_orgs;
+%labor_orgs = reverse %labor_orgs;
+say p %labor_orgs;
+
+#for my $key ((sort {$a <=> $b} keys %union_data)[0 .. 2]) {
+    #next unless $key;    
+    #my $union_data_for_year = $union_data{$key};
+    #for my $year ((sort keys %$union_data_for_year)) {
+         #say "Year: $year";
+         #say "Union key: $key";
+         #my $basic = $process{basic}->($union_data_for_year->{$year}{basic});
+         #my $total_assets = $process{total_assets}->($union_data_for_year->{$year}{total_assets});
+         #my $accounts_receivable = $process{accounts_receivable}->($union_data_for_year->{$year}{accounts_receivable});
+         #my $fixed_assets = $process{fixed_assets}->($union_data_for_year->{$year}{fixed_assets});
+         #my $loans_receivable = $process{loans_receivable}->($union_data_for_year->{$year}{loans_receivable});
+         #my $investment_assets = $process{investment_assets}->($union_data_for_year->{$year}{investment_assets});
+         #my $other_assets = $process{other_assets}->($union_data_for_year->{$year}{other_assets});
+         #my $total_liabilities = $process{total_liabilities}->($union_data_for_year->{$year}{total_liabilities});
+         #my $accounts_payable = $process{accounts_payable}->($union_data_for_year->{$year}{accounts_payable});
+         #my $loans_payable = $process{loans_payable}->($union_data_for_year->{$year}{loans_payable});
+         #my $other_liabilities = $process{other_liabilities}->($union_data_for_year->{$year}{other_liabilities});
+         #my $total_receipts = $process{total_receipts}->($union_data_for_year->{$year}{total_receipts});
+         #my $sales_receipts = $process{sales_receipts}->($union_data_for_year->{$year}{sales_receipts});
+         #my $other_receipts = $process{other_receipts}->($union_data_for_year->{$year}{other_receipts});
+         #my $total_disbursements = $process{total_disbursements}->($union_data_for_year->{$year}{total_disbursements});
+         #my $general_disbursements = $process{general_disbursements}->($union_data_for_year->{$year}{general_disbursements});
+         #my $investment_purchases = $process{investment_purchases}->($union_data_for_year->{$year}{investment_purchases});
+         #my $officer_disbursements = $process{officer_disbursements}->($union_data_for_year->{$year}{officer_disbursements});
+         #my $benefits_disbursements = $process{benefits_disbursements}->($union_data_for_year->{$year}{benefits_disbursements});
+         #my $payees = $process{payees}->($union_data_for_year->{$year}{payees});
+         #my $dues = $process{dues}->($union_data_for_year->{$year}{dues});
+         #my $membership = $process{membership}->($union_data_for_year->{$year}{membership});
+    #}
+#}
 
 1;
 

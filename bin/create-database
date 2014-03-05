@@ -10,7 +10,7 @@ psql -U postgres -q -d $DB -c "create or replace language plpgsql"
 echo "Granting privileges to el"
 psql -U postgres -q -c "grant all privileges on database $DB to el"
 psql -U postgres -q -c "alter database $DB owner to el"
-for tbl in `psql -U postgres -qAt -c "select tablename from pg_tables where schemaname = 'public';" $DB` ; do  psql -U postgres -q -c "alter table $tbl owner to el" $DB ; done
+for tbl in `psql -U postgres -qAt -c "select tablename from pg_tables where schemaname = 'public';" $DB` ; do  psql -U postgres -q -c "alter table \"$tbl\" owner to el" $DB ; done
 echo "Importing schema"
 psql -U el -q -d $DB < etc/schema/schema.sql
 
