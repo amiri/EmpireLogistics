@@ -1,70 +1,34 @@
 package EmpireLogistics::Web::Controller::Root;
+
 use Moose;
+use EmpireLogistics::Config;
 use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller' }
 
-#
-# Sets the actions in this controller to be registered with no prefix
-# so they function identically to actions created in MyApp.pm
-#
-__PACKAGE__->config(namespace => '');
+__PACKAGE__->config( namespace => '' );
 
-=encoding utf-8
-
-=head1 NAME
-
-EmpireLogistics::Web::Controller::Root - Root Controller for EmpireLogistics::Web
-
-=head1 DESCRIPTION
-
-[enter your description here]
-
-=head1 METHODS
-
-=head2 index
-
-The root page (/)
-
-=cut
-
-sub index :Path :Args(0) {
+sub auto : Private {
     my ( $self, $c ) = @_;
-
-    # Hello World
-    $c->response->body( $c->welcome_message );
+    $c->stash( use_wrapper => 1 ) unless $c->req->is_xhr;
+    my $locale = $c->req->param('locale');
+    $c->response->headers->push_header( 'Vary' => 'Accept-Language' );
+    $c->language( $locale ? [$locale] : undef );
 }
 
-=head2 default
-
-Standard 404 error page
-
-=cut
-
-sub default :Path {
+sub index : Path : Args(0) {
     my ( $self, $c ) = @_;
-    $c->response->body( 'Page not found' );
+    $c->stash->{tiles_url} = $EmpireLogistics::Config::tiles_url;
+    #$c->stash->{template} = "index.tt";
+}
+
+sub default : Path {
+    my ( $self, $c ) = @_;
+    $c->response->body('Page not found');
     $c->response->status(404);
 }
 
-=head2 end
-
-Attempt to render a view, if needed.
-
-=cut
-
-sub end : ActionClass('RenderView') {}
-
-=head1 AUTHOR
-
-Amiri Barksdale,,,
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
+sub end : ActionClass('RenderView') { }
 
 __PACKAGE__->meta->make_immutable;
 

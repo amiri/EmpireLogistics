@@ -1,0 +1,5 @@
+[% IF use_wrapper %]
+    [% WRAPPER 'wrapper.tt'%]
+    [% content; END %]
+[%  ELSE %]
+    [% content ; END %]

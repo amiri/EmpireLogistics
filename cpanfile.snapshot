@@ -180,6 +180,17 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::Exception 0
+  Catalyst-Action-RenderView-0.16
+    pathname: B/BO/BOBTFISH/Catalyst-Action-RenderView-0.16.tar.gz
+    provides:
+      Catalyst::Action::RenderView 0.16
+    requirements:
+      Catalyst::Runtime 5.80030
+      Data::Visitor 0.24
+      ExtUtils::MakeMaker 6.42
+      HTTP::Request::AsCGI 0
+      MRO::Compat 0
+      Test::More 0.88
   Catalyst-Authentication-Store-DBIx-Class-0.1505
     pathname: B/BO/BOBTFISH/Catalyst-Authentication-Store-DBIx-Class-0.1505.tar.gz
     provides:
@@ -273,6 +284,28 @@ DISTRIBUTIONS
       Try::Tiny 0
       namespace::autoclean 0
       perl 5.008001
+  Catalyst-Plugin-Authorization-ACL-0.15
+    pathname: R/RK/RKITOVER/Catalyst-Plugin-Authorization-ACL-0.15.tar.gz
+    provides:
+      Catalyst::Plugin::Authorization::ACL 0.15
+      Catalyst::Plugin::Authorization::ACL::Engine undef
+    requirements:
+      Catalyst::Plugin::Authentication 0
+      Catalyst::Plugin::Authorization::Roles 0
+      Catalyst::Plugin::Session 0
+      Catalyst::Plugin::Session::State::Cookie 0
+      Catalyst::Runtime 5.80013
+      Class::Data::Inheritable 0
+      Class::Throwable 0
+      ExtUtils::MakeMaker 6.42
+      MRO::Compat 0
+      Moose 0
+      Test::More 0
+      Test::WWW::Mechanize::Catalyst 0
+      Tree::Simple 0
+      Tree::Simple::Visitor::FindByPath 0
+      Tree::Simple::Visitor::GetAllDescendents 0
+      namespace::autoclean 0
   Catalyst-Plugin-Authorization-Roles-0.09
     pathname: B/BO/BOBTFISH/Catalyst-Plugin-Authorization-Roles-0.09.tar.gz
     provides:
@@ -285,6 +318,19 @@ DISTRIBUTIONS
       Test::Exception 0
       Test::More 0
       UNIVERSAL::isa 0.05
+      perl 5.008
+  Catalyst-Plugin-ConfigLoader-0.33
+    pathname: B/BO/BOBTFISH/Catalyst-Plugin-ConfigLoader-0.33.tar.gz
+    provides:
+      Catalyst::Plugin::ConfigLoader 0.33
+    requirements:
+      Catalyst::Runtime 5.7008
+      Config::Any 0.20
+      Data::Visitor 0.24
+      ExtUtils::MakeMaker 6.59
+      MRO::Compat 0.09
+      Path::Class 0
+      Test::More 0
       perl 5.008
   Catalyst-Plugin-I18N-0.10
     pathname: B/BO/BOBTFISH/Catalyst-Plugin-I18N-0.10.tar.gz
@@ -345,6 +391,18 @@ DISTRIBUTIONS
       MRO::Compat 0
       Moose 0
       Object::Signature 0
+      namespace::autoclean 0
+  Catalyst-Plugin-Session-State-Cookie-0.17
+    pathname: M/MS/MSTROUT/Catalyst-Plugin-Session-State-Cookie-0.17.tar.gz
+    provides:
+      Catalyst::Plugin::Session::State::Cookie 0.17
+    requirements:
+      Catalyst 5.80005
+      Catalyst::Plugin::Session 0.27
+      ExtUtils::MakeMaker 6.42
+      MRO::Compat 0
+      Moose 0
+      Test::More 0
       namespace::autoclean 0
   Catalyst-Plugin-Static-Simple-0.31
     pathname: A/AB/ABRAXXA/Catalyst-Plugin-Static-Simple-0.31.tar.gz
@@ -498,6 +556,19 @@ DISTRIBUTIONS
       MooseX::Types::Moose 0
       Test::More 0.89
       namespace::autoclean 0
+  Catalyst-View-JSON-0.33
+    pathname: M/MI/MIYAGAWA/Catalyst-View-JSON-0.33.tar.gz
+    provides:
+      Catalyst::Helper::View::JSON undef
+      Catalyst::View::JSON 0.33
+    requirements:
+      Catalyst 5.6
+      ExtUtils::MakeMaker 6.42
+      JSON::Any 1.15
+      MRO::Compat 0
+      Test::More 0
+      YAML 0
+      perl 5.008001
   Catalyst-View-TT-0.41
     pathname: J/JJ/JJNAPIORK/Catalyst-View-TT-0.41.tar.gz
     provides:
@@ -684,6 +755,15 @@ DISTRIBUTIONS
       Class::Singleton 1.4
     requirements:
       ExtUtils::MakeMaker 0
+  Class-Throwable-0.11
+    pathname: K/KM/KMX/Class-Throwable-0.11.tar.gz
+    provides:
+      Class::Throwable 0.11
+      TestException undef
+    requirements:
+      ExtUtils::MakeMaker 0
+      Scalar::Util 1.1
+      Test::More 0.47
   Class-XSAccessor-1.19
     pathname: S/SM/SMUELLER/Class-XSAccessor-1.19.tar.gz
     provides:
@@ -729,6 +809,18 @@ DISTRIBUTIONS
       Module::Pluggable 3.01
       Test::More 0
       perl 5.006
+  Config-General-2.52
+    pathname: T/TL/TLINDEN/Config-General-2.52.tar.gz
+    provides:
+      Config::General 2.52
+      Config::General::Extended 2.06
+      Config::General::Interpolated 2.15
+    requirements:
+      ExtUtils::MakeMaker 0
+      File::Glob 0
+      File::Spec::Functions 0
+      FileHandle 0
+      IO::File 0
   Context-Preserve-0.01
     pathname: J/JR/JROCKWAY/Context-Preserve-0.01.tar.gz
     provides:
@@ -1131,6 +1223,18 @@ DISTRIBUTIONS
       Term::ANSIColor 3
       Test::More 0.88
       version 0.77
+  Data-Visitor-0.30
+    pathname: D/DO/DOY/Data-Visitor-0.30.tar.gz
+    provides:
+      Data::Visitor 0.30
+      Data::Visitor::Callback 0.30
+    requirements:
+      Class::Load 0.06
+      ExtUtils::MakeMaker 6.30
+      Moose 0.89
+      Task::Weaken 0
+      Tie::ToObject 0.01
+      namespace::clean 0.19
   DateTime-1.07
     pathname: D/DR/DROLSKY/DateTime-1.07.tar.gz
     provides:
@@ -3120,6 +3224,13 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
+  JSON-Any-1.32
+    pathname: P/PE/PERIGRIN/JSON-Any-1.32.tar.gz
+    provides:
+      JSON::Any 1.32
+      inc::MakeMaker undef
+    requirements:
+      ExtUtils::MakeMaker 6.30
   JSON-MaybeXS-1.001000
     pathname: M/MS/MSTROUT/JSON-MaybeXS-1.001000.tar.gz
     provides:
@@ -4618,6 +4729,12 @@ DISTRIBUTIONS
       constant 0
       strict 0
       warnings 0
+  Sys-Hostname-Long-1.4
+    pathname: S/SC/SCOTT/Sys-Hostname-Long-1.4.tar.gz
+    provides:
+      Sys::Hostname::Long 1.4
+    requirements:
+      ExtUtils::MakeMaker 0
   Task-Weaken-1.04
     pathname: A/AD/ADAMK/Task-Weaken-1.04.tar.gz
     provides:
@@ -5048,6 +5165,25 @@ DISTRIBUTIONS
       URI::file 0
       WWW::Mechanize 1.68
       perl 5.008
+  Test-WWW-Mechanize-Catalyst-0.59
+    pathname: I/IL/ILMARI/Test-WWW-Mechanize-Catalyst-0.59.tar.gz
+    provides:
+      Test::WWW::Mechanize::Catalyst 0.59
+    requirements:
+      Catalyst 5.90
+      Catalyst::Plugin::Session::State::Cookie 0
+      Catalyst::Plugin::Session::Store::Dummy 0
+      Class::Load 0.19
+      ExtUtils::MakeMaker 6.59
+      LWP 5.816
+      Moose 0.67
+      Test::Exception 0
+      Test::More 0.88
+      Test::WWW::Mechanize 1.14
+      Test::utf8 0
+      WWW::Mechanize 1.54
+      namespace::clean 0.09
+      perl 5.008004
   Test-WWW-Mechanize-PSGI-0.35
     pathname: L/LB/LBROCARD/Test-WWW-Mechanize-PSGI-0.35.tar.gz
     provides:
@@ -5088,6 +5224,15 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 6.36
       perl 5.005
+  Test-utf8-1.01
+    pathname: M/MA/MARKF/Test-utf8-1.01.tar.gz
+    provides:
+      Test::utf8 1.01
+    requirements:
+      ExtUtils::MakeMaker 6.59
+      Test::Builder 0
+      Test::Builder::Tester 0.09
+      perl 5.007003
   Text-CSV_XS-1.04
     pathname: H/HM/HMBRAND/Text-CSV_XS-1.04.tgz
     provides:
@@ -5129,6 +5274,16 @@ DISTRIBUTIONS
     requirements:
       Test::More 0
       perl 5.005
+  Tie-ToObject-0.03
+    pathname: N/NU/NUFFIN/Tie-ToObject-0.03.tar.gz
+    provides:
+      Tie::ToObject 0.03
+    requirements:
+      ExtUtils::MakeMaker 0
+      Scalar::Util 0
+      Test::More 0
+      Test::use::ok 0
+      Tie::RefHash 0
   TimeDate-2.30
     pathname: G/GB/GBARR/TimeDate-2.30.tar.gz
     provides:

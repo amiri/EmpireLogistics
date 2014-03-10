@@ -13,7 +13,7 @@ all: chef data database
 
 data: download-data rail warehouses ports labor
 
-database: data create-database import-rail-data import-port-data import-port-teu import-warehouse-data import-media import-labor
+database: data create-database import-rail-data import-port-data import-port-teu import-warehouse-data import-labor
 
 create-database:
 	bin/create-database

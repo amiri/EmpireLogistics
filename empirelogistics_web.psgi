@@ -7,11 +7,14 @@ use lib catpath((splitpath(abs_path $0))[0, 1], './lib');
 
 use Plack::Builder;
 use Plack::App::File;
+use EmpireLogistics::Web;
 
 my $path = `which perl`;
 warn "Perl interp path: $path";
 warn map { "$_ " } @INC;
 
-my $app = Plack::App::File->new(root => catpath((splitpath(abs_path $0))[0, 1], './root'))->to_app;
+my $app = EmpireLogistics::Web->apply_default_middlewares(EmpireLogistics::Web->psgi_app(@_));
+
+#my $app = Plack::App::File->new(root => catpath((splitpath(abs_path $0))[0, 1], './root'))->to_app;
 
 $app;

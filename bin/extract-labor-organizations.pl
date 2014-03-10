@@ -21,6 +21,263 @@ sub trim {
     return $string;
 }
 
+sub rename_and_process {
+    my ($unions) = @_;
+    my @unions = @$unions;
+    for my $union (@unions) {
+        if ($union->{name} eq 'United Independent Technology Technicians Of America' && !defined($union->{federation})) {
+            $union = undef;
+            next;
+        }
+        if ($union->{name} eq 'United Brotherhood of Carpenters and Joiners of America' && !defined($union->{year_established})) {
+            $union = undef;
+            next;
+        }
+        if ($union->{name} eq
+            "National Education Association of the United States")
+        {
+            $union->{federation}   = ['EI'];
+            $union->{abbreviation} = 'NEA';
+        }
+        if ($union->{name} eq "National Education Association") {
+            $union = undef;
+            next;
+        }
+
+        if ($union->{name} eq "Service Employees International Union") {
+            $union->{federation} = ['CTW', 'CLC'];
+            $union->{abbreviation} = 'SEIU';
+        }
+
+        if ($union->{name} eq
+            "American Federation of State, County, and Municipal Employees")
+        {
+            $union->{federation}   = ['AFL-CIO'];
+            $union->{abbreviation} = 'AFSCME';
+        }
+        if ($union->{name} eq
+            "American Federation of State, County, and Municipal Employees")
+        {
+            $union->{federation}   = ['AFL-CIO'];
+            $union->{abbreviation} = 'AFSCME';
+        }
+        if ($union->{name} eq
+            "American Federation of State, County and Municipal Employees")
+        {
+            $union = undef;
+            next;
+        }
+
+        if ($union->{name} eq "Teamsters") {
+            $union->{federation} = ['CTW', 'CLC'];
+            $union->{abbreviation} = 'IBT';
+        }
+
+        if ($union->{name} eq "United Food and Commercial Workers" && !defined($union->{year_established})) {
+            $union = undef;
+            next;
+        }
+        if ($union->{name} eq "United Food and Commercial Workers") {
+            $union->{federation} = ['AFL-CIO', 'CLC'];
+            $union->{abbreviation} = 'UFCW';
+        }
+
+        if ($union->{name} eq "American Federation of Teachers") {
+            $union->{federation} = ['AFL-CIO', 'EI'];
+            $union->{abbreviation} = 'AFT';
+        }
+
+        if ($union->{name} eq 'United Steel, Paper and Forestry, Rubber, Manufacturing, Energy, Allied Industrial and Service Workers International Union' && !defined($union->{members})) {
+            $union = undef;
+            next;
+        }
+        if ($union->{name} eq "United Steelworkers") {
+            $union->{name} = 'United Steel, Paper and Forestry, Rubber, Manufacturing, Energy, Allied Industrial and Service Workers International Union';
+            $union->{federation} = ['AFL-CIO', 'CLC'];
+            $union->{abbreviation} = 'USWA';
+        }
+
+        if ($union->{name} eq
+            "International Brotherhood of Electrical Workers")
+        {
+            $union->{federation} = ['AFL-CIO', 'CLC'];
+            $union->{abbreviation} = 'IBEW';
+        }
+
+        if ($union->{name} eq
+            "Laborers’ International Union of North America")
+        {
+            $union->{federation}   = ['AFL-CIO'];
+            $union->{abbreviation} = 'LIUNA';
+        }
+
+        if ($union->{name} eq
+            "International Association of Machinists and Aerospace Workers")
+        {
+            $union->{federation} = ['AFL-CIO', 'CLC', 'ITF'];
+            $union->{abbreviation} = 'IAM';
+        }
+
+        if ($union->{name} eq "United Auto Workers") {
+            $union->{federation} = ['AFL-CIO', 'CLC'];
+            $union->{abbreviation} = 'UAW';
+        }
+
+        if ($union->{name} eq "Communications Workers of America") {
+            $union->{federation} = ['AFL-CIO', 'CLC'];
+            $union->{abbreviation} = 'CWA';
+        }
+
+        if ($union->{name} eq
+            "United Brotherhood of Carpenters and Joiners of America")
+        {
+            $union->{federation}   = ['CLC'];
+            $union->{abbreviation} = 'CJA';
+        }
+
+        if ($union->{name} eq
+            "Union of Needletrades, Industrial, and Textile Employees")
+        {
+            $union->{federation} = ['AFL-CIO', 'CLC'];
+            $union->{abbreviation} = 'UNITE';
+        }
+
+        if ($union->{name} eq "International Longshore and Warehouse Union")
+        {
+            $union->{federation}   = ['CLC'];
+            $union->{abbreviation} = 'ILWU';
+        }
+
+        if ($union->{name} eq "International Union of Operating Engineers")
+        {
+            $union->{federation} = ['AFL-CIO', 'CLC'];
+            $union->{abbreviation} = 'IUOE';
+        }
+
+        if ($union->{name} eq
+            "United Association of Journeymen and Apprentices of the Plumbing, Pipefitting and Sprinkler Fitting Industry of the United States and Canada"
+            )
+        {
+            $union = undef;
+            next;
+        }
+
+        if ($union->{name} eq "United Association") {
+            $union->{federation} = ['AFL-CIO', 'CLC'];
+            $union->{abbreviation} = 'UA';
+            $union->{name} =
+                'United Association of Journeymen and Apprentices of the Plumbing, Pipefitting and Sprinkler Fitting Industry of the United States and Canada';
+        }
+
+        if ($union->{name} eq "National Association of Letter Carriers") {
+            $union->{federation} = ['AFL-CIO', 'UNI'];
+            $union->{abbreviation} = 'NALC';
+        }
+
+        if ($union->{name} eq "American Postal Workers Union") {
+            $union->{federation} = ['AFL-CIO', 'UNI'];
+            $union->{abbreviation} = 'APWU';
+        }
+
+        if ($union->{name} eq "International Association of Fire Fighters")
+        {
+            $union->{federation} = ['AFL-CIO', 'CLC'];
+            $union->{abbreviation} = 'IAFF';
+        }
+
+        if ($union->{name} eq "National Postal Mail Handlers Union") {
+            $union->{federation}   = ['AFL-CIO'];
+            $union->{abbreviation} = 'NPMHU';
+        }
+
+        if ($union->{name} eq "American Federation of Government Employees")
+        {
+            $union->{federation}   = ['AFL-CIO'];
+            $union->{abbreviation} = 'AFGE';
+        }
+
+        if ($union->{name} eq "Amalgamated Transit Union") {
+            $union->{federation} = ['AFL-CIO', 'CLC'];
+            $union->{abbreviation} = 'ATU';
+        }
+
+        if ($union->{name} eq "American Nurses Association") {
+            $union->{federation}   = [];
+            $union->{abbreviation} = 'ANA';
+        }
+
+        if ($union->{name} eq
+            "Sheet Metal Workers International Association")
+        {
+            $union->{federation} = ['AFL-CIO', 'CLC'];
+            $union->{abbreviation} = 'SMW';
+        }
+
+        if ($union->{name} eq
+            "International Union of Painters and Allied Trades")
+        {
+            $union->{federation} = ['AFL-CIO', 'CLC'];
+            $union->{abbreviation} = 'IUPAT';
+        }
+
+        if ($union->{name} eq
+            "International Association of Bridge, Structural, Ornamental and Reinforcing Iron Workers"
+            )
+        {
+            $union = undef;
+            next;
+        }
+
+        if ($union->{name} eq
+            "International Association of Bridge, Structural, Ornamental, and Reinforcing Iron Workers"
+            )
+        {
+            $union->{federation} = ['AFL-CIO', 'CLC'];
+            $union->{abbreviation} = 'BSOIW';
+        }
+
+        if ($union->{name} eq "Transport Workers Union of America") {
+            $union->{federation}   = ['AFL-CIO'];
+            $union->{abbreviation} = 'TWU';
+        }
+
+        if ($union->{name} eq
+            "American Association of Classified School Employees")
+        {
+            $union->{federation}   = [];
+            $union->{abbreviation} = 'AACSE';
+        }
+
+        if ($union->{name} eq "National Rural Letter Carriers Association")
+        {
+            $union = undef;
+            next;
+        }
+        if ($union->{name} eq "National Rural Letter Carriers' Association")
+        {
+            $union->{federation}   = [];
+            $union->{abbreviation} = 'NRLCA';
+        }
+        if ($union->{name} eq
+            "International Union Security * Police * Fire Professionals of America"
+            )
+        {
+            $union->{name} =
+                'International Union, Security, Police and Fire Professionals of America';
+            $union->{abbreviation} = 'SPFPA';
+        }
+        if ($union->{name} eq
+            "Writers Guild of America, west"
+            )
+        {
+            $union->{name} =
+                'Writers Guild of America, West';
+        }
+    }
+
+    return [grep {$_} @unions];
+}
+
 my $html_string = io($file)->all;
 
 $html_string =~ s/’/'/g;
@@ -116,189 +373,7 @@ my $scraper = scraper {
 };
 
 my $largest_unions = $scraper->scrape($html_string);
-my @largest_names = map { $_->{name} } @{ $largest_unions->{largest} };
-
-for my $large_union ( @{ $largest_unions->{largest} } ) {
-    if ( $large_union->{name} eq
-        "National Education Association of the United States" )
-    {
-        $large_union->{federation}   = ['EI'];
-        $large_union->{abbreviation} = 'NEA';
-    }
-
-    if ( $large_union->{name} eq "Service Employees International Union" ) {
-        $large_union->{federation} = [ 'CTW', 'CLC' ];
-        $large_union->{abbreviation} = 'SEIU';
-    }
-
-    if ( $large_union->{name} eq
-        "American Federation of State, County, and Municipal Employees" )
-    {
-        $large_union->{federation}   = ['AFL-CIO'];
-        $large_union->{abbreviation} = 'AFSCME';
-    }
-
-    if ( $large_union->{name} eq "Teamsters" ) {
-        $large_union->{federation} = [ 'CTW', 'CLC' ];
-        $large_union->{abbreviation} = 'IBT';
-    }
-
-    if ( $large_union->{name} eq "United Food and Commercial Workers" ) {
-        $large_union->{federation} = [ 'AFL-CIO', 'CLC' ];
-        $large_union->{abbreviation} = 'UFCW';
-    }
-
-    if ( $large_union->{name} eq "American Federation of Teachers" ) {
-        $large_union->{federation} = [ 'AFL-CIO', 'EI' ];
-        $large_union->{abbreviation} = 'AFT';
-    }
-
-    if ( $large_union->{name} eq "United Steelworkers" ) {
-        $large_union->{federation} = [ 'AFL-CIO', 'CLC' ];
-        $large_union->{abbreviation} = 'USW';
-    }
-
-    if ( $large_union->{name} eq
-        "International Brotherhood of Electrical Workers" )
-    {
-        $large_union->{federation} = [ 'AFL-CIO', 'CLC' ];
-        $large_union->{abbreviation} = 'IBEW';
-    }
-
-    if ( $large_union->{name} eq
-        "Laborers’ International Union of North America" )
-    {
-        $large_union->{federation}   = ['AFL-CIO'];
-        $large_union->{abbreviation} = 'LIUNA';
-    }
-
-    if ( $large_union->{name} eq
-        "International Association of Machinists and Aerospace Workers" )
-    {
-        $large_union->{federation} = [ 'AFL-CIO', 'CLC', 'ITF' ];
-        $large_union->{abbreviation} = 'IAM';
-    }
-
-    if ( $large_union->{name} eq "United Auto Workers" ) {
-        $large_union->{federation} = [ 'AFL-CIO', 'CLC' ];
-        $large_union->{abbreviation} = 'UAW';
-    }
-
-    if ( $large_union->{name} eq "Communications Workers of America" ) {
-        $large_union->{federation} = [ 'AFL-CIO', 'CLC' ];
-        $large_union->{abbreviation} = 'CWA';
-    }
-
-    if ( $large_union->{name} eq
-        "United Brotherhood of Carpenters and Joiners of America" )
-    {
-        $large_union->{federation}   = ['CLC'];
-        $large_union->{abbreviation} = 'UBC';
-    }
-
-    if ( $large_union->{name} eq
-        "Union of Needletrades, Industrial, and Textile Employees" )
-    {
-        $large_union->{federation} = [ 'AFL-CIO', 'CLC' ];
-        $large_union->{abbreviation} = 'UNITE';
-    }
-
-    if ( $large_union->{name} eq
-        "International Longshore and Warehouse Union" )
-    {
-        $large_union->{federation}   = ['CLC'];
-        $large_union->{abbreviation} = 'ILWU';
-    }
-
-    if ($large_union->{name} eq "International Union of Operating Engineers" )
-    {
-        $large_union->{federation} = [ 'AFL-CIO', 'CLC' ];
-        $large_union->{abbreviation} = 'IUOE';
-    }
-
-    if ( $large_union->{name} eq "United Association" ) {
-        $large_union->{federation} = [ 'AFL-CIO', 'CLC' ];
-        $large_union->{abbreviation} = 'UA';
-    }
-
-    if ( $large_union->{name} eq "National Association of Letter Carriers" ) {
-        $large_union->{federation} = [ 'AFL-CIO', 'UNI' ];
-        $large_union->{abbreviation} = 'NALC';
-    }
-
-    if ( $large_union->{name} eq "American Postal Workers Union" ) {
-        $large_union->{federation} = [ 'AFL-CIO', 'UNI' ];
-        $large_union->{abbreviation} = 'APWU';
-    }
-
-    if ($large_union->{name} eq "International Association of Fire Fighters" )
-    {
-        $large_union->{federation} = [ 'AFL-CIO', 'CLC' ];
-        $large_union->{abbreviation} = 'IAFF';
-    }
-
-    if ( $large_union->{name} eq "National Postal Mail Handlers Union" ) {
-        $large_union->{federation}   = ['AFL-CIO'];
-        $large_union->{abbreviation} = 'NPMHU';
-    }
-
-    if ( $large_union->{name} eq
-        "American Federation of Government Employees" )
-    {
-        $large_union->{federation}   = ['AFL-CIO'];
-        $large_union->{abbreviation} = 'AFGE';
-    }
-
-    if ( $large_union->{name} eq "Amalgamated Transit Union" ) {
-        $large_union->{federation} = [ 'AFL-CIO', 'CLC' ];
-        $large_union->{abbreviation} = 'ATU';
-    }
-
-    if ( $large_union->{name} eq "American Nurses Association" ) {
-        $large_union->{federation}   = [];
-        $large_union->{abbreviation} = 'ANA';
-    }
-
-    if ( $large_union->{name} eq
-        "Sheet Metal Workers International Association" )
-    {
-        $large_union->{federation} = [ 'AFL-CIO', 'CLC' ];
-        $large_union->{abbreviation} = 'SMWIA';
-    }
-
-    if ( $large_union->{name} eq
-        "International Union of Painters and Allied Trades" )
-    {
-        $large_union->{federation} = [ 'AFL-CIO', 'CLC' ];
-        $large_union->{abbreviation} = 'IUPAT';
-    }
-
-    if ( $large_union->{name} eq
-        "International Association of Bridge, Structural, Ornamental, and Reinforcing Iron Workers"
-        )
-    {
-        $large_union->{federation} = [ 'AFL-CIO', 'CLC' ];
-        $large_union->{abbreviation} = 'Ironworkers';
-    }
-
-    if ( $large_union->{name} eq "Transport Workers Union of America" ) {
-        $large_union->{federation}   = ['AFL-CIO'];
-        $large_union->{abbreviation} = 'TWU';
-    }
-
-    if ( $large_union->{name} eq
-        "American Association of Classified School Employees" )
-    {
-        $large_union->{federation} = [];
-    }
-
-    if ( $large_union->{name} eq
-        "National Rural Letter Carriers' Association" )
-    {
-        $large_union->{federation}   = [];
-        $large_union->{abbreviation} = 'NRLCA';
-    }
-}
+$largest_unions->{largest} = rename_and_process($largest_unions->{largest});
 
 my $scraper2 = scraper {
     process '//div[@id="mw-content-text"]/ul[1]/li', "aflcio[]" => scraper {
@@ -314,6 +389,7 @@ my $scraper2 = scraper {
 };
 
 my $aflcio = $scraper2->scrape($html_string);
+$aflcio->{aflcio} = rename_and_process($aflcio->{aflcio});
 
 my $scraper3 = scraper {
     process '//div[@id="mw-content-text"]/ul[2]/li', "ctw[]" => scraper {
@@ -329,6 +405,7 @@ my $scraper3 = scraper {
 };
 
 my $ctw = $scraper3->scrape($html_string);
+$ctw->{ctw} = rename_and_process($ctw->{ctw});
 
 my $scraper4 = scraper {
     process '//div[@id="mw-content-text"]/ul[3]/li', "indy[]" => scraper {
@@ -344,6 +421,7 @@ my $scraper4 = scraper {
 };
 
 my $indy = $scraper4->scrape($html_string);
+$indy->{indy} = rename_and_process($indy->{indy});
 
 my $scraper5 = scraper {
     process '//div[@id="mw-content-text"]/ul[4]/li', "reform[]" => scraper {
@@ -360,19 +438,34 @@ my $scraper5 = scraper {
 
 my $reform = $scraper5->scrape($html_string);
 
+my @largest_names = map { $_->{name} } @{ $largest_unions->{largest} };
 # Make sure each of the CTW and AFL-CIO unions has its proper federation set.
 # And take out records that duplicate the largest unions.
-@{ $ctw->{ctw} } = map { $_->{federation} = ['CTW']; $_ } @{ $ctw->{ctw} };
+@{ $ctw->{ctw} } = map {
+    $_->{federation} = ['CTW']; $_
+} grep {
+    defined $_->{name}
+} @{ $ctw->{ctw} };
+
 @{ $aflcio->{aflcio} } = grep {
     my $afl = $_;
     none { $afl->{name} eq $_ } @largest_names
-    }
-    map {
+} map {
     $_->{federation} = ['AFL-CIO'];
     $_
-    } @{ $aflcio->{aflcio} };
-@{ $reform->{reform} }
-    = map { $_->{type} = 'reform'; $_ } @{ $reform->{reform} };
+} grep {
+    defined $_->{name}
+} @{ $aflcio->{aflcio} };
+
+@{ $reform->{reform} } = map {
+    $_->{type} = 'reform'; $_
+} grep {
+    defined $_->{name}
+} @{ $reform->{reform} };
+
+@{ $largest_unions->{largest} } = grep {
+    defined $_->{name}
+} @{ $largest_unions->{largest} };
 
 # Put all the unions into one array.
 my @unions = (
@@ -402,7 +495,7 @@ for my $subfederation (@subfederations) {
         : $subfederation->{name} eq
         'Associated Actors and Artistes of America' ? 'AAA'
         : '';
-    @$unions = map { $_->{federation} = [$federation]; $_ } @$unions;
+    @$unions = map { $_->{federation} = [$federation]; $_ } grep {$_} @$unions;
     push @normal_unions, @$unions;
 }
 
@@ -438,109 +531,123 @@ push @federations, @filtered_federations;
 my @all_organizations = ( @federations, @filtered_unions );
 
 my %abbreviations = (
-"Actors' Equity Association"                              => "AEA",
-"Air Line Pilots Association"                         => "ALPA",
-"Aircraft Mechanics Fraternal Association"                  => "FAAM",
-"Amalgamated Transit Union"                           => "ATU",
-"American Association of Classified School Employees" => "AACSE",
-"American Federation of Government Employees"         => "AFGE",
-"American Federation of Musicians"                    => "AFM",
-"American Federation of School Administrators"        => "AFSA",
-"American Federation of State, County and Municipal Employees" => "AFSCME",
-"American Federation of Teachers"       => "AFT",
-"American Guild of Musical Artists"                       => "AGMA",
-"American Guild of Variety Artists"                       => "AGVA",
-"American Postal Workers Union"         => "APWU",
-"American Train Dispatchers Department" => "ATDD",
-"Bakery, Confectionery, Tobacco Workers and Grain Millers' International Union" => "BCTGMI",
-"Brotherhood of Railroad Signalmen"       => "BRS",
-"California Nurses Association"           => "CNA",
-"California School Employees Association" => "CSEA",
-"Coalition of Graduate Employee Unions"                     => "CGEU",
-"Colorado Workers for Innovations and New Solutions (WINS)" => "WINS",
-"Communications Workers of America"       => "CWA",
-"Directors Guild of America"                                => "DGA",
-"Dramatists Guild of America"                         => "Dramatists",
-"Farm Labor Organizing Committee"         => "FLOC",
-"Federation of Professional Athletes"     => "FPA",
-"Fraternal Order of Police"                           => "FOP",
-"Glass, Molders, Pottery, Plastics and Allied Workers International Union" => "GMP",
-"Graphic Communications Conference (GCC)"                 => "GCIU",
-"Independent Pilots Association"                      => "IPA",
-"Industrial Workers of the World"                     => "IWW",
-"International Alliance of Theatrical Stage Employees" => "IATSE",
-"International Association of Bridge, Structural, Ornamental and Reinforcing Iron Workers" => "BSOIW",
-"International Association of Fire Fighters" => "IAFF",
-"International Association of Heat and Frost Insulators and Asbestos Workers" => "HFIA",
-"International Association of Machinists and Aerospace Workers" => "IAM",
-"International Brotherhood of Boilermakers, Iron Ship Builders, Blacksmiths, Forgers and Helpers" => "BBF",
-"International Brotherhood of Electrical Workers" => "IBEW",
-"International Federation of Professional and Technical Engineers" => "IFPTE",
-"International Guards Union of America"       => "GUA",
-"International Longshore and Warehouse Union" => "ILWU",
-"International Longshoremen's Association"    => "ILA",
-"International Plate Printers, Die Stampers and Engravers Union of North America" => "PPDSE",
-"International Union Security * Police * Fire Professionals of America" => "SPFPA",
-"International Union of Allied Novelty and Production Workers" => "NPW",
-"International Union of Bricklayers and Allied Craftworkers" => "BAC",
-"International Union of Elevator Constructors"               => "IUEC",
-"International Union of Journeymen and Allied Trades" => "IUJAT",
-"International Union of Operating Engineers"                 => "IUOE",
-"International Union of Painters and Allied Trades"          => "PAT",
-"International Union of Police Associations"                 => "IUPA",
-"Jockeys' Guild"                                  => "Jockeys",
-"Labor Notes"                                             => undef,
-"Laborers' International Union of North America"             => "LIUNA",
-"Laborers' International Union of North America"      => "LIUNA",
-"Major League Baseball Players Association"       => "MLBPA",
-"Marine Engineers Beneficial Association"                    => "MEBA",
-"NHL Players Association"                         => "NHLPA",
-"National Air Traffic Controllers Association"               => "NATCA",
-"National Association of Letter Carriers"                    => "NALC",
-"National Basketball Players Association"         => "NBPA",
-"National Education Association"                  => "NEA",
-"National Emergency Medical Services Association" => "NEMSA",
-"National Football League Players Association"               => "NFLPA",
-"National Rural Letter Carriers Association"      => "RLCA",
-"National Treasury Employees Union"               => "NTEU",
-"National Weather Service Employees Organization" => "NWSEO",
-"Office and Professional Employees International Union"      => "OPEIU",
-"Operative Plasterers' and Cement Masons' International Association" => "OPCM",
-"Patrolmen's Benevolent Association"              => "PBA",
-"Professional Lacrosse Players' Association"      => "PLPA",
-"Programmers Guild"                               => "Programmers",
-"SAG-AFTRA"                                               => "SAG-AFTRA",
-"Seafarers International Union of North America" => "SIUNA",
-"Sheet Metal Workers International Association"  => "SMW",
-"Short Circuits"                                          => undef,
-"Stage Directors and Choreographers Society"      => "SDC",
-"Teamsters for a Democratic Union"                        => "TDU",
-"The Guild of Italian American Actors"                    => "GIAA",
-"Transport Workers Union of America"             => "TWU",
-"UNITE HERE"                                     => "UNITEHE",
-"US Airline Pilots Association"                           => "USAPA",
-"United American Nurses"                         => "UAN",
-"United Association of Journeymen and Apprentices of the Plumbing, Pipefitting and Sprinkler Fitting Industry of the United States and Canada" => "UA",
-"United Automobile, Aerospace & Agricultural Implement Workers of America International Union" => "UAW",
-"United Brotherhood of Carpenters and Joiners of America" => "UBC",
-"United Electrical, Radio and Machine Workers of America" => "UE",
-"United Farm Workers of America"                            => "UFW",
-"United Food and Commercial Workers"                        => "UFCW",
-"United Independent Technology Technicians Of America"    => "UITTA",
-"United Independent Technology Technicians of America" => "UITTA",
-"United Mine Workers of America"                       => "UMW",
-"United Steel, Paper and Forestry, Rubber, Manufacturing, Energy, Allied Industrial and Service Workers International Union" => "USWA",
-"United Transportation Union"                               => "UTU",
-"United Union of Roofers, Waterproofers and Allied Workers" => "RWAW",
-"Utility Workers Union of America"                          => "UWU",
-"Workers United"                                          => "WU",
-"World Umpires Association"                               => "WUA",
-"Writers Guild of America, East"                            => "WGAE",
-"Writers Guild of America, west"                          => "WGAW",
+    "Actors' Equity Association"                          => "AEA",
+    "Air Line Pilots Association"                         => "ALPA",
+    "Aircraft Mechanics Fraternal Association"            => "FAAM",
+    "Amalgamated Transit Union"                           => "ATU",
+    "American Association of Classified School Employees" => "AACSE",
+    "American Federation of Government Employees"         => "AFGE",
+    "American Federation of Musicians"                    => "AFM",
+    "American Federation of School Administrators"        => "AFSA",
+    "American Federation of State, County and Municipal Employees" =>
+        "AFSCME",
+    "American Federation of Teachers"       => "AFT",
+    "American Guild of Musical Artists"     => "AGMA",
+    "American Guild of Variety Artists"     => "AGVA",
+    "American Postal Workers Union"         => "APWU",
+    "American Train Dispatchers Department" => "ATDD",
+    "Bakery, Confectionery, Tobacco Workers and Grain Millers' International Union"
+        => "BCTGMI",
+    "Brotherhood of Railroad Signalmen"                         => "BRS",
+    "California Nurses Association"                             => "CNA",
+    "California School Employees Association"                   => "CSEA",
+    "Coalition of Graduate Employee Unions"                     => "CGEU",
+    "Colorado Workers for Innovations and New Solutions (WINS)" => "WINS",
+    "Communications Workers of America"                         => "CWA",
+    "Directors Guild of America"                                => "DGA",
+    "Dramatists Guild of America"         => "Dramatists",
+    "Farm Labor Organizing Committee"     => "FLOC",
+    "Federation of Professional Athletes" => "FPA",
+    "Fraternal Order of Police"           => "FOP",
+    "Glass, Molders, Pottery, Plastics and Allied Workers International Union"
+        => "GMP",
+    "Graphic Communications Conference (GCC)"              => "GCIU",
+    "Independent Pilots Association"                       => "IPA",
+    "Industrial Workers of the World"                      => "IWW",
+    "International Alliance of Theatrical Stage Employees" => "IATSE",
+    "International Association of Bridge, Structural, Ornamental, and Reinforcing Iron Workers"
+        => "BSOIW",
+    "International Association of Fire Fighters" => "IAFF",
+    "International Association of Heat and Frost Insulators and Asbestos Workers"
+        => "HFIA",
+    "International Association of Machinists and Aerospace Workers" => "IAM",
+    "International Brotherhood of Boilermakers, Iron Ship Builders, Blacksmiths, Forgers and Helpers"
+        => "BBF",
+    "International Brotherhood of Electrical Workers" => "IBEW",
+    "International Federation of Professional and Technical Engineers" =>
+        "IFPTE",
+    "International Guards Union of America"       => "GUA",
+    "International Longshore and Warehouse Union" => "ILWU",
+    "International Longshoremen's Association"    => "ILA",
+    "International Plate Printers, Die Stampers and Engravers Union of North America"
+        => "PPDSE",
+    "International Union Security * Police * Fire Professionals of America"
+        => "SPFPA",
+    "International Union of Allied Novelty and Production Workers" => "NPW",
+    "International Union of Bricklayers and Allied Craftworkers"   => "BAC",
+    "International Union of Elevator Constructors"                 => "IUEC",
+    "International Union of Journeymen and Allied Trades"          => "IUJAT",
+    "International Union of Operating Engineers"                   => "IUOE",
+    "International Union of Painters and Allied Trades"            => "IUPAT",
+    "International Union of Police Associations"                   => "IUPA",
+    "Jockeys' Guild"                                        => "Jockeys",
+    "Labor Notes"                                           => undef,
+    "Laborers' International Union of North America"        => "LIUNA",
+    "Laborers' International Union of North America"        => "LIUNA",
+    "Major League Baseball Players Association"             => "MLBPA",
+    "Marine Engineers Beneficial Association"               => "MEBA",
+    "NHL Players Association"                               => "NHLPA",
+    "National Air Traffic Controllers Association"          => "NATCA",
+    "National Association of Letter Carriers"               => "NALC",
+    "National Basketball Players Association"               => "NBPA",
+    "National Education Association"                        => "NEA",
+    "National Emergency Medical Services Association"       => "NEMSA",
+    "National Football League Players Association"          => "NFLPA",
+    "National Rural Letter Carriers Association"            => "RLCA",
+    "National Treasury Employees Union"                     => "NTEU",
+    "National Weather Service Employees Organization"       => "NWSEO",
+    "Office and Professional Employees International Union" => "OPEIU",
+    "Operative Plasterers' and Cement Masons' International Association" =>
+        "OPCM",
+    "Patrolmen's Benevolent Association"             => "PBA",
+    "Professional Lacrosse Players' Association"     => "PLPA",
+    "Programmers Guild"                              => "Programmers",
+    "SAG-AFTRA"                                      => "SAG-AFTRA",
+    "Seafarers International Union of North America" => "SIUNA",
+    "Sheet Metal Workers International Association"  => "SMW",
+    "Short Circuits"                                 => undef,
+    "Stage Directors and Choreographers Society"     => "SDC",
+    "Teamsters for a Democratic Union"               => "TDU",
+    "The Guild of Italian American Actors"           => "GIAA",
+    "Transport Workers Union of America"             => "TWU",
+    "UNITE HERE"                                     => "UNITEHE",
+    "US Airline Pilots Association"                  => "USAPA",
+    "United American Nurses"                         => "UAN",
+    "United Association of Journeymen and Apprentices of the Plumbing, Pipefitting and Sprinkler Fitting Industry of the United States and Canada"
+        => "UA",
+    "United Automobile, Aerospace & Agricultural Implement Workers of America International Union"
+        => "UAW",
+    "United Brotherhood of Carpenters and Joiners of America" => "UBC",
+    "United Electrical, Radio and Machine Workers of America" => "UE",
+    "United Farm Workers of America"                          => "UFW",
+    "United Food and Commercial Workers"                      => "UFCW",
+    "United Independent Technology Technicians Of America"    => "UITTA",
+    "United Independent Technology Technicians of America"    => "UITTA",
+    "United Mine Workers of America"                          => "UMW",
+    "United Steel, Paper and Forestry, Rubber, Manufacturing, Energy, Allied Industrial and Service Workers International Union"
+        => "USWA",
+    "United Transportation Union"                               => "UTU",
+    "United Union of Roofers, Waterproofers and Allied Workers" => "RWAW",
+    "Utility Workers Union of America"                          => "UWU",
+    "Workers United"                                            => "WU",
+    "World Umpires Association"                                 => "WUA",
+    "Writers Guild of America, East"                            => "WGAE",
+    "Writers Guild of America, west"                            => "WGAW",
 );
 
 # Set abbreviations
 for my $org (@all_organizations) {
+    next unless $org;
     unless ( $org->{abbreviation} ) {
         if ( $abbreviations{ $org->{name} } ) {
             $org->{abbreviation} = $abbreviations{ $org->{name} };

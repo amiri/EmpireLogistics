@@ -620,27 +620,54 @@ create table labor_organization_members (
     unique (labor_organization,year)
 );
 
-drop table if exists labor_organization_finances cascade;
-create table labor_organization_finances (
+drop table if exists labor_organization_assets cascade;
+create table labor_organization_assets (
     id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
     labor_organization integer not null references labor_organization(id),
     year integer not null,
-    assets integer,
-    liabilities integer,
-    total_income integer,
-    representation_expenses integer,
-    political_expenses integer,
-    gifts_expenses integer,
-    general_overhead_expenses integer,
-    union_administration_expenses integer,
-    strike_benefits_expenses integer,
-    officer_salary_expenses integer,
-    employee_salary_expenses integer,
-    education_expenses integer,
-    total_expenses integer,
+    unique (labor_organization,year)
+);
+drop table if exists labor_organization_accounts cascade;
+create table labor_organization_accounts (
+    id serial not null primary key,
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    labor_organization integer not null references labor_organization(id),
+    year integer not null,
+    unique (labor_organization,year)
+);
+drop table if exists labor_organization_disbursements cascade;
+create table labor_organization_disbursements (
+    id serial not null primary key,
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    labor_organization integer not null references labor_organization(id),
+    year integer not null,
+    unique (labor_organization,year)
+);
+drop table if exists labor_organization_receipts cascade;
+create table labor_organization_receipts (
+    id serial not null primary key,
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    labor_organization integer not null references labor_organization(id),
+    year integer not null,
+    unique (labor_organization,year)
+);
+drop table if exists labor_organization_dues cascade;
+create table labor_organization_dues (
+    id serial not null primary key,
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    labor_organization integer not null references labor_organization(id),
+    year integer not null,
     unique (labor_organization,year)
 );
 
@@ -693,7 +720,8 @@ create table labor_local_affiliation (
     delete_time timestamptz default null,
     labor_local integer not null,
     labor_organization integer not null,
-    unique (labor_local,labor_organization)
+    year integer not null,
+    unique (labor_local,labor_organization,year)
 );
 alter table labor_local_affiliation add foreign key (labor_local) references labor_local(id);
 alter table labor_local_affiliation add foreign key (labor_organization) references labor_organization(id);
@@ -707,7 +735,8 @@ create table labor_organization_address (
     delete_time timestamptz default null,
     labor_organization integer not null,
     address integer not null,
-    unique (labor_organization,address)
+    year integer not null,
+    unique (labor_organization,address,year)
 );
 alter table labor_organization_address add foreign key (labor_organization) references labor_organization(id);
 alter table labor_organization_address add foreign key (address) references address(id);
@@ -721,7 +750,8 @@ create table labor_local_address (
     delete_time timestamptz default null,
     labor_local integer not null,
     address integer not null,
-    unique (labor_local,address)
+    year integer not null,
+    unique (labor_local,address,year)
 );
 alter table labor_local_address add foreign key (labor_local) references labor_local(id);
 alter table labor_local_address add foreign key (address) references address(id);
