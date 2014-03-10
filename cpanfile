@@ -33,6 +33,7 @@ requires "LWP::UserAgent";
 requires "List::MoreUtils";
 requires "Module::Runtime", "0.014";
 requires "Moose";
+requires "MooseX::Role::WithOverloading";
 requires "Parallel::ForkManager";
 requires "Plack";
 requires "Plack::App::File";
