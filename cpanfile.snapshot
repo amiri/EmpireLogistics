@@ -2377,6 +2377,16 @@ DISTRIBUTIONS
       Filter::Util::Call 0
       Test::More 0
       perl 5.008001
+  Devel-Symdump-2.11
+    pathname: A/AN/ANDK/Devel-Symdump-2.11.tar.gz
+    provides:
+      Devel::Symdump 2.11
+      Devel::Symdump::Export undef
+    requirements:
+      Compress::Zlib 0
+      ExtUtils::MakeMaker 0
+      Test::More 0
+      perl 5.004
   Digest-HMAC-1.03
     pathname: G/GA/GAAS/Digest-HMAC-1.03.tar.gz
     provides:
@@ -4552,6 +4562,20 @@ DISTRIBUTIONS
       Test::More 0.89
       Test::TCP 0
       URI 0
+  Pod-Coverage-0.23
+    pathname: R/RC/RCLAMP/Pod-Coverage-0.23.tar.gz
+    provides:
+      Pod::Coverage 0.23
+      Pod::Coverage::CountParents undef
+      Pod::Coverage::ExportOnly undef
+      Pod::Coverage::Extractor 0.23
+      Pod::Coverage::Overloader undef
+    requirements:
+      Devel::Symdump 2.01
+      ExtUtils::MakeMaker 0
+      Pod::Find 0.21
+      Pod::Parser 1.13
+      Test::More 0
   Probe-Perl-0.03
     pathname: K/KW/KWILLIAMS/Probe-Perl-0.03.tar.gz
     provides:
@@ -5067,6 +5091,32 @@ DISTRIBUTIONS
       strict 0
       vars 0
       warnings 0
+  Test-Pod-1.48
+    pathname: D/DW/DWHEELER/Test-Pod-1.48.tar.gz
+    provides:
+      Test::Pod 1.48
+    requirements:
+      File::Find 0
+      File::Spec 0
+      Module::Build 0.30
+      Pod::Simple 3.05
+      Test::Builder::Tester 1.02
+      Test::More 0.62
+  Test-Pod-Coverage-1.08
+    pathname: P/PE/PETDANCE/Test-Pod-Coverage-1.08.tar.gz
+    provides:
+      Nopod undef
+      Nosymbols undef
+      PC_Inherited undef
+      PC_Inherits undef
+      Privates undef
+      Simple undef
+      Test::Pod::Coverage 1.08
+    requirements:
+      ExtUtils::MakeMaker 0
+      Pod::Coverage 0
+      Test::Builder::Tester 0
+      Test::More 0
   Test-Requires-0.07
     pathname: T/TO/TOKUHIROM/Test-Requires-0.07.tar.gz
     provides:
@@ -5233,6 +5283,30 @@ DISTRIBUTIONS
       Test::Builder 0
       Test::Builder::Tester 0.09
       perl 5.007003
+  Text-CSV-1.32
+    pathname: M/MA/MAKAMAKA/Text-CSV-1.32.tar.gz
+    provides:
+      Text::CSV 1.32
+      Text::CSV::ErrorDiag 1.31
+      Text::CSV_PP 1.31
+    requirements:
+      ExtUtils::MakeMaker 0
+      IO::Handle 0
+      Test::Harness 0
+      Test::More 0
+  Text-CSV-Encoded-0.22
+    pathname: M/MA/MAKAMAKA/Text-CSV-Encoded-0.22.tar.gz
+    provides:
+      Text::CSV::Encoded 0.22
+      Text::CSV::Encoded::Coder::Base 0.03
+      Text::CSV::Encoded::Coder::Encode 0.05
+      Text::CSV::Encoded::Coder::EncodeGuess 0.04
+    requirements:
+      ExtUtils::MakeMaker 0
+      IO::Handle 0
+      Test::Harness 0
+      Test::More 0
+      Text::CSV 1.31
   Text-CSV_XS-1.04
     pathname: H/HM/HMBRAND/Text-CSV_XS-1.04.tgz
     provides:
@@ -5661,6 +5735,15 @@ DISTRIBUTIONS
       Test::More 0
       XSLoader 0
       perl 5.008001
+  lib-abs-0.93
+    pathname: M/MO/MONS/lib-abs-0.93.tar.gz
+    provides:
+      lib::abs 0.93
+    requirements:
+      Cwd 3.12
+      ExtUtils::MakeMaker 6.59
+      Test::More 0
+      perl 5.006
   libwww-perl-6.05
     pathname: G/GA/GAAS/libwww-perl-6.05.tar.gz
     provides:
@@ -5774,3 +5857,22 @@ DISTRIBUTIONS
       indirect 0
       multidimensional 0
       perl 5.006
+  warnings-everywhere-0.006
+    pathname: S/SK/SKINGTON/warnings-everywhere-0.006.tar.gz
+    provides:
+      goddamn::warnings::anywhere undef
+      minimal_warnings undef
+      warnings::anywhere undef
+      warnings::everywhere 0.006
+    requirements:
+      Carp 0
+      English 0
+      ExtUtils::MakeMaker 6.30
+      File::Spec 0
+      File::Temp 0
+      Test::More 0
+      Test::Pod 0
+      Test::Pod::Coverage 1.08
+      lib::abs 0
+      strict 0
+      warnings 0
