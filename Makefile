@@ -122,7 +122,8 @@ import-labor: labor $(labor_dir)/labor-organizations.json
 	unzip -o $(labor_dir)/2011.zip -d $(labor_dir)/2011
 	unzip -o $(labor_dir)/2012.zip -d $(labor_dir)/2012
 	unzip -o $(labor_dir)/2013.zip -d $(labor_dir)/2013
-	perl bin/import-labor.pl
+	bin/import-labor-data
+
 
 ########## Rail data download pieces
 

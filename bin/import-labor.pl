@@ -64,11 +64,13 @@ for my $labor_organization (@$labor_organizations) {
 
     $sth->execute($name,$date_established,$url,$organization_type,$description,$abbreviation) or die "Could not execute statement handle: ", $sth->errstr;
     my $newid = $dbh->last_insert_id( undef, undef, "labor_organization", undef );
-    my $members_command = 'insert into labor_organization_members (labor_organization,members,year) values (?,?,?)';
-    $sth = $dbh->prepare($members_command);
-    $sth->execute($newid,$members,2013);
+    if ($members) {
+        my $members_command = 'insert into labor_organization_membership (labor_organization,members,year) values (?,?,?)';
+        $sth = $dbh->prepare($members_command);
+        $sth->execute($newid,$members,2013);
+    }
     for my $affiliation (@{$labor_organization->{federation}}) {
-        my $affiliation_command = qq{insert into labor_organization_affiliation (child,parent) values ($newid,(select id from labor_organization where abbreviation='$affiliation'))};
+        my $affiliation_command = qq{insert into labor_organization_affiliation (child,parent,year) values ($newid,(select id from labor_organization where abbreviation='$affiliation'),2013)};
         push @affiliation_commands, $affiliation_command;
     }
 }

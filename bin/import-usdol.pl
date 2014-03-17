@@ -1,46 +1,40 @@
 #!/usr/bin/env perl
 
 use strict;
-use warnings;
+use warnings::everywhere qw/all/;
+no goddamn::warnings::anywhere qw/uninitialized/;
 use IO::All -utf8;
 use Text::CSV_XS;
 use DBI;
 use JSON::XS;
 use Data::Printer;
-use List::MoreUtils qw/any uniq/;
+use List::AllUtils qw/any uniq first/;
 use Try::Tiny;
 use DateTimeX::Easy;
 use Tie::IxHash;
-use DBM::Deep;
+use Text::CSV::Encoded  coder_class => 'Text::CSV::Encoded::Coder::EncodeGuess';
 use feature qw/say/;
-no warnings qw/uninitialized/;
 
-tie my %union_data, 'DBM::Deep', {
-    file      => "etc/data/union_data.db",
-    pack_size => 'large',
-    locking   => 1,
-    autoflush => 1,
-};
+my $db_host = 'localhost';
+my $db_user = 'el';
+my $db_name = 'empirelogistics';
 
-#my $db_host = 'localhost';
-#my $db_user = 'el';
-#my $db_name = 'empirelogistics';
+my $dsn = "dbi:Pg:dbname=$db_name;host=$db_host";
 
-#my $dsn = "dbi:Pg:dbname=$db_name;host=$db_host";
+my $dbh = DBI->connect(
+    $dsn, $db_user, '3mp1r3',
+    {   RaiseError    => 1,
+        AutoCommit    => 0,
+        on_connect_do => ['set timezone = "America/Los Angeles"']
+    }
+) || die "Error connecting to the database: $DBI::errstr\n";
 
-#my $dbh = DBI->connect(
-    #$dsn, $db_user, '3mp1r3',
-    #{   RaiseError    => 1,
-        #AutoCommit    => 0,
-        #on_connect_do => ['set timezone = "America/Los Angeles"']
-    #}
-#) || die "Error connecting to the database: $DBI::errstr\n";
-
-#my $sth;
+my $sth;
 
 my $dir   = "data/labor_organizations/";
 my @years = (2000 .. 2013);
 
+# The order in which the files are read.
 my %key_for_filename = ();
 tie(%key_for_filename, 'Tie::IxHash',
     lm_data_data_                        => 'basic',
@@ -67,6 +61,8 @@ tie(%key_for_filename, 'Tie::IxHash',
     ar_membership_data_                  => 'membership',
 );
 
+# Dispatch table to process union records. A union record
+# consists of all the data for a given union for a given year.
 my %process = (
     basic                  => \&process_basic,
     total_assets           => \&process_total_assets,
@@ -92,6 +88,8 @@ my %process = (
     membership             => \&process_membership,
 );
 
+# Some lookup tables to map codes in the original data to
+# our enum columns.
 my %account_type = (
     101 => 'itemized',
     102 => 'other',
@@ -136,6 +134,65 @@ my %membership_type = (
     2102 => 'non-itemized',
 );
 
+my %local_type = (
+    AREA  => 'Area',
+    ASSN  => 'Association',
+    BCTC  => 'Building and Construction Trades Council',
+    BD    => 'Board',
+    BR    => 'Branch',
+    C     => 'Council',
+    CH    => 'Chapter',
+    COM   => 'Committee',
+    CONBD => 'Conference Board',
+    CONF  => 'Conference',
+    D     => 'District',
+    DALU  => 'Directly Affiliated Local Union',
+    DC    => 'District Council',
+    DIV   => 'Division',
+    DJC   => 'District Joint Council',
+    DLG   => 'District Lodge',
+    FASTC => 'Food and Allied Services Trades Council',
+    FED   => 'Federation',
+    GC    => 'General Committee',
+    GCA   => 'General Committee of Adjustment',
+    JB    => 'Joint Board',
+    JC    => 'Joint Council',
+    JCONF => 'Joint Conference',
+    JPB   => 'Joint Protective Board',
+    LCH   => 'Local Chapter',
+    LDIV  => 'Local Division',
+    LEC   => 'Local Executive Council',
+    LG    => 'Lodge',
+    LJEB  => 'Local Joint Executive Board',
+    LLG   => 'Local Lodge',
+    LSC   => 'Local Staff Council',
+    LU    => 'Local Union',
+    MEC   => 'Master Executive Council',
+    MTC   => 'Metal Trades Council',
+    NHQ   => 'National Head Quarters',
+    PC    => 'Port Council',
+    R     => 'Region',
+    RC    => 'Regional Council',
+    SA    => 'State Association',
+    SBA   => 'System Board of Adjustment',
+    SC    => 'System Council',
+    SCOM  => 'System Committee',
+    SD    => 'System Division',
+    SF    => 'System Federal',
+    SFED  => 'State Federation',
+    SLB   => 'State Legislative Board',
+    SLG   => 'Sub-Lodge',
+    STC   => 'State Council',
+    STCON => 'State Conference',
+    UNIT  => 'Unit',
+);
+
+=head2 dispatch table subroutines
+
+Implementations of the subroutines in the dispatch table.
+
+=cut
+
 sub process_basic {
     my ($data) = shift;
     return undef unless $data;
@@ -144,6 +201,7 @@ sub process_basic {
         qw/
             abbreviation
             union_name
+            usdol_filing_number
             unit_name
             designation
             designation_number
@@ -161,10 +219,11 @@ sub process_basic {
             total_receipts
             /
         }
-        = map { trim($_) } @{$data}{
+        = map { my $datum = $_; my $return_datum = $datum eq "" ? undef : $datum; $return_datum } map { trim($_) } @{$data}{
         qw/
             AFF_ABBR
             UNION_NAME
+            F_NUM
             UNIT_NAME
             DESIG_NAME
             DESIG_NUM
@@ -187,7 +246,7 @@ sub process_basic {
 
 sub process_total_assets {
     my ($data) = shift;
-    #return undef unless $data;
+    return undef unless $data;
     my $return = {};
     @{$return}{
         qw/
@@ -212,7 +271,7 @@ sub process_total_assets {
             treasuries_start
             /
         }
-        = map { trim($_) } @{$data}{
+        = map { my $datum = $_; my $return_datum = $datum eq "" ? undef : $datum; $return_datum } map { trim($_) } @{$data}{
         qw/
             ACCOUNTS_RECEIVABLE_END
             ACCOUNTS_RECEIVABLE_START
@@ -240,7 +299,7 @@ sub process_total_assets {
 
 sub process_accounts_receivable {
     my ($data) = shift;
-    #return undef unless $data;
+    return undef unless $data;
     my $return = {};
     @{$return}{
         qw/
@@ -252,7 +311,7 @@ sub process_accounts_receivable {
             total
             /
         }
-        = map { trim($_) } @{$data}{
+        = map { my $datum = $_; my $return_datum = $datum eq "" ? undef : $datum; $return_datum } map { trim($_) } @{$data}{
         qw/
             ACCT_TYPE
             LIQUIDATED
@@ -267,109 +326,140 @@ sub process_accounts_receivable {
 
 sub process_fixed_assets {
     my ($data) = shift;
-    #return undef unless $data;
-    my $return = {};
-    @{$return}{
-        qw/
-            asset_type
-            book_value
-            cost_basis
-            depreciation
-            description
-            value
-            /
-        }
-        = map { trim($_) } @{$data}{
-        qw/
-            ASSET_TYPE
-            BOOK_VALUE
-            COST_BASIS
-            DEPRECIATION
-            DESCRIPTION
-            VALUE
-            /
-        };
+    return undef unless $data;
+    my $return = [];
+    $return = [
+        map {
+            my $each   = {};
+            my $record = $_;
+            @{$each}{
+                qw/
+                    asset_type
+                    book_value
+                    cost_basis
+                    depreciation
+                    description
+                    value
+                    /
+                }
+                = map {trim($_)} @{$record}{
+                qw/
+                    ASSET_TYPE
+                    BOOK_VALUE
+                    COST_BASIS
+                    DEPRECIATION
+                    DESCRIPTION
+                    VALUE
+                    /
+                };
+            $each;
+        } @$data
+    ];
     return $return;
 }
 
 sub process_loans_receivable {
     my ($data) = shift;
-    #return undef unless $data;
-    my $return = {};
-    @{$return}{
-        qw/
-            cash_repayments
-            loan_type
-            name
-            new_loan_amount
-            non_cash_repayments
-            outstanding_end_amount
-            outstanding_start_amount
-            purpose
-            security
-            terms
-            /
+    return undef unless $data;
+    my $return = [];
+    $return = [
+        map {
+            my $each = {};
+            my $record = $_;
+            @{$each}{
+                qw/
+                    cash_repayments
+                    loan_type
+                    name
+                    new_loan_amount
+                    non_cash_repayments
+                    outstanding_end_amount
+                    outstanding_start_amount
+                    purpose
+                    security
+                    terms
+                    /
+                }
+                = map { my $datum = $_; my $return_datum = $datum eq "" ? undef : $datum; $return_datum } map { trim($_) } @{$record}{
+                qw/
+                    CASH_REPAYMENTS
+                    LOAN_TYPE
+                    NAME
+                    NEW_LOAN_AMT
+                    NON_CASH_REPAYMENTS
+                    OUTSTANDING_END_AMT
+                    OUTSTANDING_START_AMT
+                    PURPOSE
+                    SECURITY
+                    TERMS
+                    /
+                };
+            $each;
         }
-        = map { trim($_) } @{$data}{
-        qw/
-            CASH_REPAYMENTS
-            LOAN_TYPE
-            NAME
-            NEW_LOAN_AMT
-            NON_CASH_REPAYMENTS
-            OUTSTANDING_END_AMT
-            OUTSTANDING_START_AMT
-            PURPOSE
-            SECURITY
-            TERMS
-            /
-        };
+        @$data
+    ];
     return $return;
 }
 
 sub process_investment_assets {
     my ($data) = shift;
-    #return undef unless $data;
-    my $return = {};
-    @{$return}{
-        qw/
-            amount
-            investment_type
-            name
-            /
+    return undef unless $data;
+    my $return = [];
+    $return = [
+        map {
+            my $each = {};
+            my $record = $_;
+            @{$each}{
+                qw/
+                    amount
+                    investment_type
+                    name
+                    /
+                }
+                = map { my $datum = $_; my $return_datum = $datum eq "" ? undef : $datum; $return_datum } map { trim($_) } @{$record}{
+                qw/
+                    AMOUNT
+                    INV_TYPE
+                    NAME
+                    /
+                };
+            $each;
         }
-        = map { trim($_) } @{$data}{
-        qw/
-            AMOUNT
-            INV_TYPE
-            NAME
-            /
-        };
+        @$data
+    ];
     return $return;
 }
 
 sub process_other_assets {
     my ($data) = shift;
-    #return undef unless $data;
-    my $return = {};
-    @{$return}{
-        qw/
-            book_value
-            description
-            /
+    return undef unless $data;
+    my $return = [];
+    $return = [
+        map {
+            my $each = {};
+            my $record = $_;
+            @{$each}{
+                qw/
+                    book_value
+                    description
+                    /
+                }
+                = map { my $datum = $_; my $return_datum = $datum eq "" ? undef : $datum; $return_datum } map { trim($_) } @{$_}{
+                qw/
+                    BOOK_VALUE
+                    DESCRIPTION
+                    /
+                };
+            $each;
         }
-        = map { trim($_) } @{$data}{
-        qw/
-            BOOK_VALUE
-            DESCRIPTION
-            /
-        };
+        @$data
+    ];
     return $return;
 }
 
 sub process_total_liabilities {
     my ($data) = shift;
-    #return undef unless $data;
+    return undef unless $data;
     my $return = {};
     @{$return}{
         qw/
@@ -384,7 +474,7 @@ sub process_total_liabilities {
             total_start
             /
         }
-        = map { trim($_) } @{$data}{
+        = map { my $datum = $_; my $return_datum = $datum eq "" ? undef : $datum; $return_datum } map { trim($_) } @{$data}{
         qw/
             ACCOUNTS_PAYABLE_END
             ACCOUNTS_PAYABLE_START
@@ -402,80 +492,101 @@ sub process_total_liabilities {
 
 sub process_accounts_payable {
     my ($data) = shift;
-    #return undef unless $data;
-    my $return = {};
-    @{$return}{
-        qw/
-            account_type
-            liquidated
-            name
-            past_due_90
-            past_due_180
-            total
-            /
-        }
-        = map { trim($_) } @{$data}{
-        qw/
-            ACCT_TYPE
-            LIQUIDATED
-            NAME
-            PAST_DUE_90
-            PAST_DUE_180
-            TOTAL
-            /
-        };
+    return undef unless $data;
+    my $return = [];
+    $return = [
+        map {
+            my $each = {};
+            my $record = $_;
+            @{$each}{
+                qw/
+                    account_type
+                    liquidated
+                    name
+                    past_due_90
+                    past_due_180
+                    total
+                    /
+                }
+                = map { my $datum = $_; my $return_datum = $datum eq "" ? undef : $datum; $return_datum } map { trim($_) } @{$record}{
+                qw/
+                    ACCT_TYPE
+                    LIQUIDATED
+                    NAME
+                    PAST_DUE_90
+                    PAST_DUE_180
+                    TOTAL
+                    /
+                };
+           $each; 
+        } @$data
+    ];
     return $return;
 }
 
 sub process_loans_payable {
     my ($data) = shift;
-    #return undef unless $data;
-    my $return = {};
-    @{$return}{
-        qw/
-            cash_repayment
-            loans_obtained
-            loans_owed_end
-            loans_owed_start
-            non_cash_repayment
-            source
-            /
-        }
-        = map { trim($_) } @{$data}{
-        qw/
-            CASH_REPAYMENT
-            LOANS_OBTAINED
-            LOANS_OWED_END
-            LOANS_OWED_START
-            NON_CASH_REPAYMENT
-            SOURCE
-            /
-        };
+    return undef unless $data;
+    my $return = [];
+    $return = [
+        map {
+            my $each = {};
+            my $record = $_;
+            @{$each}{
+                qw/
+                    cash_repayment
+                    loans_obtained
+                    loans_owed_end
+                    loans_owed_start
+                    non_cash_repayment
+                    source
+                    /
+                }
+                = map { my $datum = $_; my $return_datum = $datum eq "" ? undef : $datum; $return_datum } map { trim($_) } @{$record}{
+                qw/
+                    CASH_REPAYMENT
+                    LOANS_OBTAINED
+                    LOANS_OWED_END
+                    LOANS_OWED_START
+                    NON_CASH_REPAYMENT
+                    SOURCE
+                    /
+                };
+            $each;
+        } @$data
+    ];
     return $return;
 }
 
 sub process_other_liabilities {
     my ($data) = shift;
-    #return undef unless $data;
-    my $return = {};
-    @{$return}{
-        qw/
-            amount
-            description
-            /
-        }
-        = map { trim($_) } @{$data}{
-        qw/
-            AMOUNT
-            DESCRIPTION
-            /
-        };
+    return undef unless $data;
+    my $return = [];
+    $return = [
+        map {
+            my $each = {};
+            my $record = $_;
+            @{$each}{
+                qw/
+                    amount
+                    description
+                    /
+                }
+                = map { my $datum = $_; my $return_datum = $datum eq "" ? undef : $datum; $return_datum } map { trim($_) } @{$record}{
+                qw/
+                    AMOUNT
+                    DESCRIPTION
+                    /
+                };
+            $each;
+        } @$data
+    ];
     return $return;
 }
 
 sub process_total_receipts {
     my ($data) = shift;
-    #return undef unless $data;
+    return undef unless $data;
     my $return = {};
     @{$return}{
         qw/
@@ -495,7 +606,7 @@ sub process_total_receipts {
             tax
             /
         }
-        = map { trim($_) } @{$data}{
+        = map { my $datum = $_; my $return_datum = $datum eq "" ? undef : $datum; $return_datum } map { trim($_) } @{$data}{
         qw/
             AFFILIATES
             ALL_OTHER_RECEIPTS
@@ -518,57 +629,69 @@ sub process_total_receipts {
 
 sub process_sales_receipts {
     my ($data) = shift;
-    #return undef unless $data;
-    my $return = {};
-    @{$return}{
-        qw/
-            amount_received
-            book_value
-            cost
-            description
-            gross_sales_price
-            /
-        }
-        = map { trim($_) } @{$data}{
-        qw/
-            AMOUNT_RECD
-            BOOK_VALUE
-            COST
-            DESCRIPTION
-            GROSS_SALES_PRICE
-            /
-        };
+    return undef unless $data;
+    my $return = [];
+    $return = [
+        map {
+            my $each = {};
+            my $record = $_;
+            @{$each}{
+                qw/
+                    amount_received
+                    book_value
+                    cost
+                    description
+                    gross_sales_price
+                    /
+                }
+                = map { my $datum = $_; my $return_datum = $datum eq "" ? undef : $datum; $return_datum } map { trim($_) } @{$record}{
+                qw/
+                    AMOUNT_RECD
+                    BOOK_VALUE
+                    COST
+                    DESCRIPTION
+                    GROSS_SALES_PRICE
+                    /
+                };
+            $each;
+        } @$data
+    ];
     return $return;
 }
 
 sub process_other_receipts {
     my ($data) = shift;
-    #return undef unless $data;
-    my $return = {};
-    @{$return}{
-        qw/
-            amount
-            date
-            payee
-            purpose
-            receipt_type
-            /
-        }
-        = map { trim($_) } @{$data}{
-        qw/
-            AMOUNT
-            DATE
-            PAYER_PAYEE_ID
-            PURPOSE
-            RECEIPT_TYPE
-            /
-        };
+    return undef unless $data;
+    my $return = [];
+    $return = [
+        map {
+            my $each = {};
+            my $record = $_;
+            @{$each}{
+                qw/
+                    amount
+                    receipt_date
+                    payee
+                    purpose
+                    /
+                }
+                = map { my $datum = $_; my $return_datum = $datum eq "" ? undef : $datum; $return_datum } map { trim($_) } @{$record}{
+                qw/
+                    AMOUNT
+                    DATE
+                    PAYER_PAYEE_ID
+                    PURPOSE
+                    /
+                };
+            $each;
+        } @$data
+    ];
     return $return;
 }
 
 sub process_total_disbursements {
     my ($data) = shift;
-    #return undef unless $data;
+    return undef unless $data;
     my $return = {};
     @{$return}{
         qw/
@@ -606,7 +729,7 @@ sub process_total_disbursements {
             withheld_not_disbursed
             /
         }
-        = map { trim($_) } @{$data}{
+        = map { my $datum = $_; my $return_datum = $datum eq "" ? undef : $datum; $return_datum } map { trim($_) } @{$data}{
         qw/
             ADMINISTRATION
             AFFILIATES
@@ -647,192 +770,241 @@ sub process_total_disbursements {
 
 sub process_general_disbursements {
     my ($data) = shift;
-    #return undef unless $data;
-    my $return = {};
-    @{$return}{
-        qw/
-            amount
-            date
-            disbursement_type
-            payee
-            purpose
-            /
-        }
-        = map { trim($_) } @{$data}{
-        qw/
-            AMOUNT
-            DATE
-            DISBURSEMENT_TYPE
-            PAYER_PAYEE_ID
-            PURPOSE
-            /
-        };
+    return undef unless $data;
+    my $return = [];
+    $return = [
+        map {
+            my $each = {};
+            my $record = $_;
+            @{$each}{
+                qw/
+                    amount
+                    disbursement_date
+                    disbursement_type
+                    payee
+                    purpose
+                    /
+                }
+                = map { my $datum = $_; my $return_datum = $datum eq "" ? undef : $datum; $return_datum } map { trim($_) } @{$record}{
+                qw/
+                    AMOUNT
+                    DATE
+                    DISBURSEMENT_TYPE
+                    PAYER_PAYEE_ID
+                    PURPOSE
+                    /
+                };
+            $each;
+        } @$data
+    ];
     return $return;
 }
 
 sub process_investment_purchases {
     my ($data) = shift;
-    #return undef unless $data;
-    my $return = {};
-    @{$return}{
-        qw/
-            book_value
-            cash_paid
-            cost
-            description
-            investment_type
-            /
-        }
-        = map { trim($_) } @{$data}{
-        qw/
-            BOOK_VALUE
-            CASH_PAID
-            COST
-            DESCRIPTION
-            INV_TYPE
-            /
-        };
+    return undef unless $data;
+    my $return = [];
+    $return = [
+        map {
+            my $each = {};
+            my $record = $_;
+            @{$each}{
+                qw/
+                    book_value
+                    cash_paid
+                    cost
+                    description
+                    investment_type
+                    /
+                }
+                = map { my $datum = $_; my $return_datum = $datum eq "" ? undef : $datum; $return_datum } map { trim($_) } @{$record}{
+                qw/
+                    BOOK_VALUE
+                    CASH_PAID
+                    COST
+                    DESCRIPTION
+                    INV_TYPE
+                    /
+                };
+            $each;
+        } @$data
+    ];
     return $return;
 }
 
 sub process_officer_disbursements {
     my ($data) = shift;
-    #return undef unless $data;
-    my $return = {};
-    @{$return}{
-        qw/
-            first_name
-            middle_name
-            last_name
-            title
-            gross_salary
-            representation_percent
-            political_percent
-            contributions_percent
-            general_overhead_percent
-            administration_percent
-            total
-            /
-        }
-        = map { trim($_) } @{$data}{
-        qw/
-            FIRST_NAME
-            MIDDLE_NAME
-            LAST_NAME
-            TITLE
-            GROSS_SALARY
-            REP_PCT
-            POL_PCT
-            CONT_PCT
-            GEN_OVRHD_PCT
-            ADMIN_PCT
-            TOTAL
-            /
-        };
+    return undef unless $data;
+    my $return = [];
+    $return = [
+        map {
+            my $each = {};
+            my $record = $_;
+            @{$each}{
+                qw/
+                    first_name
+                    middle_name
+                    last_name
+                    title
+                    gross_salary
+                    representation_percent
+                    political_percent
+                    contributions_percent
+                    general_overhead_percent
+                    administration_percent
+                    total
+                    /
+                }
+                = map { my $datum = $_; my $return_datum = $datum eq "" ? undef : $datum; $return_datum } map { trim($_) } @{$record}{
+                qw/
+                    FIRST_NAME
+                    MIDDLE_NAME
+                    LAST_NAME
+                    TITLE
+                    GROSS_SALARY
+                    REP_PCT
+                    POL_PCT
+                    CONT_PCT
+                    GEN_OVRHD_PCT
+                    ADMIN_PCT
+                    TOTAL
+                    /
+                };
+            $each;
+        } @$data
+    ];
     return $return;
 }
 
 sub process_benefits_disbursements {
     my ($data) = shift;
-    #return undef unless $data;
-    my $return = {};
-    @{$return}{
-        qw/
-            amount
-            description
-            paid_to
-            /
-        }
-        = map { trim($_) } @{$data}{
-        qw/
-            AMOUNT
-            DESCRIPTION
-            PAID_TO
-            /
-        };
+    return undef unless $data;
+    my $return = [];
+    $return = [
+        map {
+            my $each = {};
+            my $record = $_;
+        @{$each}{
+            qw/
+                amount
+                description
+                paid_to
+                /
+            }
+            = map { my $datum = $_; my $return_datum = $datum eq "" ? undef : $datum; $return_datum } map { trim($_) } @{$record}{
+            qw/
+                AMOUNT
+                DESCRIPTION
+                PAID_TO
+                /
+            };
+            $each;
+        } @$data
+    ];
     return $return;
 }
 
 sub process_payees {
     my ($data) = shift;
-    #return undef unless $data;
-    my $return = {};
-    @{$return}{
-        qw/
-            city
-            name
-            payee
-            payer_payee_type
-            po_box
-            rcpt_disb_type
-            state
-            street
-            total
-            type_or_class
-            zip
-            /
-        }
-        = map { trim($_) } @{$data}{
-        qw/
-            CITY
-            NAME
-            PAYER_PAYEE_ID
-            PAYER_PAYEE_TYPE
-            PO_BOX
-            RCPT_DISB_TYPE
-            STATE
-            STREET
-            TOTAL
-            TYPE_OR_CLASS
-            ZIP
-            /
-        };
+    return undef unless $data;
+    my $return = [];
+    $return = [
+        map {
+            my $each = {};
+            my $record = $_;
+            @{$each}{
+                qw/
+                    city
+                    name
+                    payee
+                    payer_payee_type
+                    po_box
+                    rcpt_disb_type
+                    state
+                    street
+                    total
+                    type_or_class
+                    zip
+                    /
+                }
+                = map {trim($_)} @{$record}{
+                qw/
+                    CITY
+                    NAME
+                    PAYER_PAYEE_ID
+                    PAYER_PAYEE_TYPE
+                    PO_BOX
+                    RCPT_DISB_TYPE
+                    STATE
+                    STREET
+                    TOTAL
+                    TYPE_OR_CLASS
+                    ZIP
+                    /
+                };
+            $each;
+        } @$data
+    ];
     return $return;
 }
 
 sub process_dues {
     my ($data) = shift;
-    #return undef unless $data;
-    my $return = {};
-    @{$return}{
-        qw/
-            amount
-            maximum
-            minimum
-            unit
-            /
-        }
-        = map { trim($_) } @{$data}{
-        qw/
-            AMOUNT
-            MAXIMUM
-            MINIMUM
-            UNIT
-            /
-        };
+    return undef unless $data;
+    my $return = [];
+    $return = [
+        map {
+            my $each = {};
+            my $record = $_;
+            @{$each}{
+                qw/
+                    amount
+                    maximum
+                    minimum
+                    unit
+                    /
+                }
+                = map { my $datum = $_; my $return_datum = $datum eq "" ? undef : $datum; $return_datum } map { trim($_) } @{$record}{
+                qw/
+                    AMOUNT
+                    MAXIMUM
+                    MINIMUM
+                    UNIT
+                    /
+                };
+            $each;
+        } @$data
+    ];
     return $return;
 }
 
 sub process_membership {
     my ($data) = shift;
-    #return undef unless $data;
-    my $return = {};
-    @{$return}{
-        qw/
-            category
-            membership_type
-            number
-            voting_eligibility
-            /
-        }
-        = map { trim($_) } @{$data}{
-        qw/
-            CATEGORY
-            MEMBERSHIP_TYPE
-            NUMBER
-            VOTING_ELIGIBILITY
-            /
-        };
+    return undef unless $data;
+    my $return = [];
+    $return = [
+        map {
+            my $each = {};
+            my $record = $_;
+            @{$each}{
+                qw/
+                    category
+                    membership_type
+                    number
+                    voting_eligibility
+                    /
+                }
+                = map { my $datum = $_; my $return_datum = $datum eq "" ? undef : $datum; $return_datum } map { trim($_) } @{$record}{
+                qw/
+                    CATEGORY
+                    MEMBERSHIP_TYPE
+                    NUMBER
+                    VOTING_ELIGIBILITY
+                    /
+                };
+            $each;
+        } @$data
+    ];
     return $return;
 }
 
@@ -843,7 +1015,7 @@ sub trim {
     return $string;
 }
 
-my $csv = Text::CSV_XS->new(
+my $csv = Text::CSV::Encoded->new(
     {   allow_loose_quotes => 1,
         binary             => 1,
         auto_diag          => 1,
@@ -856,43 +1028,75 @@ my $csv = Text::CSV_XS->new(
     }
 );
 
-#=head2 CREATE UNION DB
+$csv->encoding_in( ['iso-8859-1', 'cp1252', 'ascii'] );
+$csv->encoding_out('utf8');
 
-%union_data = ();
+my %union_data = ();
 
 my %primary_key_for_rpt_id_year = ();
 
+# This gathers all the file data into a gigantic hashref keyed
+# on the filing number of each union. The filing number remains
+# the same across years, but the report id changes from year to
+# year. So we need to save the "primary key for report id and year"
+# for every year. We do that by looking at the files in a particular
+# order, namely, the lm_data_data file, which contains the filing
+# number and that year's RPT_ID, has to come first for every
+# year, so that we can set this. The RPT_ID is in every file,
+# but the filing number is only in the lm_data_data file, so we
+# have to check that first.
 for my $year (@years) {
     my $subdir = $dir . $year . '/';
 
+    # For every file in our list of files
     for my $file_name ( keys %key_for_filename ) {
         my $file = $subdir . $file_name . $year . '.txt';
         my $io   = io($file);
         $csv->column_names( $csv->getline($io) );
 
+        # Turn every line in the file into a hashref, signifying
+        # a record of one of the types. The types are basically
+        # what sort of record the file contains. If the file is
+        # ar_disbursements_emp_off_data_, each line is an
+        # officer_disbursement record.
         while (my $row = $csv->getline_hr($io)) {
+            # The lm_data_data file will come first because we set
+            # the order in %keys_for_filename.
             if ($file_name eq 'lm_data_data_') {
+                # The primary key is the filing number. Given a report id
+                # and year, we set that report_id/year combination's PK
+                # to the filing number. We will refer to this in every file
+                # processed. We establish it while processing lm_data_data.
                 my $primary_key = $row->{F_NUM} || ''
                     ;
                 $primary_key_for_rpt_id_year{$row->{RPT_ID} . '-' . $year} =
                     $primary_key;
             }
+            # Some types are "arrays," meaning they contain multiple records instead
+            # of just one. Do those first.
             if ($file_name =~ /^ar/ && $file_name !~ /total/) {
-                $union_data{$primary_key_for_rpt_id_year{$row->{RPT_ID}.'-'.$year}}{$year}{$key_for_filename{$file_name}} = []
-                    unless $union_data{$primary_key_for_rpt_id_year{$row->{RPT_ID}.'-'.$year}}{$year}{$key_for_filename{$file_name}};
-                push @{$union_data{$primary_key_for_rpt_id_year{$row->{RPT_ID}.'-'.$year}}{$year}{$key_for_filename{$file_name}}}, $row
-                ;
+                # Try to push the record into the proper array slot
+                try {
+                    $union_data{$primary_key_for_rpt_id_year{($row->{RPT_ID}||'').'-'.$year}}{$year}{$key_for_filename{$file_name}} = []
+                        unless $union_data{$primary_key_for_rpt_id_year{($row->{RPT_ID}||'').'-'.$year}}{$year}{$key_for_filename{$file_name}};
+                    push @{$union_data{$primary_key_for_rpt_id_year{($row->{RPT_ID}||'').'-'.$year}}{$year}{$key_for_filename{$file_name}}}, $row
+                    ;
+                } catch {
+                    say "Could not set data; RPT_ID: ", $row->{RPT_ID}, "; year: $year; filename: $file_name; key for filename: ",  $key_for_filename{$file_name}, "; row: ", p $row, "; error: $_";
+                }
+            # For non-array records, just pop it in.
             } else {
-                $union_data{$primary_key_for_rpt_id_year{$row->{RPT_ID}.'-'.$year}}{$year}{$key_for_filename{$file_name}} = $row
-                ;
+                # Put the record into the proper slot
+                try {
+                    $union_data{$primary_key_for_rpt_id_year{($row->{RPT_ID}||'').'-'.$year}}{$year}{$key_for_filename{$file_name}} = $row
+                    ;
+                } catch {
+                    say "Could not set data; RPT_ID: ", $row->{RPT_ID}, "; year: $year; filename: $file_name; key for filename: ",  $key_for_filename{$file_name}, "; row: ", p $row, "; error: $_";
+                }
             }
         }
     }
 }
-
-say p $union_data{8343};
-
-#=cut
 
 =head2 EXTRACT USDOL ABBREVIATIONS
 
@@ -907,107 +1111,633 @@ say p %labor_orgs;
 
 =cut
 
-#sub collate_record_type {
-    #my ($type, $keys, $data) = @_;
-    #return undef unless $data;
-    #my %record = ();
-    #for my $key (@$keys) {
-        #for my $inner_key (keys %{$data->{$key}}) {
-            #if ($inner_key eq 'payee') {
-                #my ($payee) = grep { $_->{payer_payee_id} = $data->{$key}{payee}} @{$data->{payees}};
-                #$record{$key."_".$inner_key} = $data->{payees}{name};
-                #if ($data->{payees}{payer_payee_type} == '1001') {
-                    #$record{$key."_amount"} = -($data->{$key}{amount});
-                #}
-            #} else {
-                #$record{$key."_".$inner_key} = $data->{$key}{$inner_key};
-            #}
-        #}
-    #}
-    #return \%record;
-#}
+# Here we do our saving. We pre-process the data in the hashref,
+# chop it up and format it to suit our needs, and then save each
+# piece appropriately.
+UNION: for my $key ((sort {$a <=> $b} keys %union_data)) {
+    my $union_data_for_year = $union_data{$key};
 
-#say "Number of unions: ", scalar keys %union_data;
+    my ($first_basic) = map {$union_data_for_year->{$_}{basic}}
+        first {defined($union_data_for_year->{$_}{basic})}
+    sort keys %$union_data_for_year;
+    my $first_basic_year = first {defined($union_data_for_year->{$_}{basic})}
+    sort keys %$union_data_for_year;
+    $first_basic = $process{basic}->($first_basic);
+    
+    # We need the labor_organization already defined
+    # before we enter the year loop.
+    my $id = save_local_or_organization($first_basic,$first_basic_year);
 
-#for my $key ((sort {$a <=> $b} keys %union_data)) {
-    #next unless $key eq '8343';
-    #my $union_data_for_year = $union_data{$key};
-    ##for my $year (sort keys %$union_data_for_year) {
-    #for my $year (@years) {
-         #say "Year: $year";
-         #say "Union key: $key";
-         #my %record = ();
-         #$record{basic} = $process{basic}->($union_data_for_year->{$year}{basic}); #if any {defined $union_data_for_year->{$year}{basic}{$_}} keys %{$union_data_for_year->{$year}{basic}};
-        #say p $record{basic};
+    YEAR: for my $year (sort keys %$union_data_for_year) {
+        my %record = ();
 
-         #$record{payees} = $process{payees}->($union_data_for_year->{$year}{payees}); #if any {defined $union_data_for_year->{$year}{payees}{$_}} keys %{$union_data_for_year->{$year}{payees}};
-        #say p $record{payees};
+        # Basic
+        $record{basic} =
+            $process{basic}->($union_data_for_year->{$year}{basic});
 
-         ## Assets
-         #$record{other_assets} = $process{other_assets}->($union_data_for_year->{$year}{other_assets}); #if any {defined $union_data_for_year->{$year}{other_assets}{$_}} keys %{$union_data_for_year->{$year}{other_assets}};
-         #$record{total_assets} = $process{total_assets}->($union_data_for_year->{$year}{total_assets}); #if any {defined $union_data_for_year->{$year}{total_assets}{$_}} keys %{$union_data_for_year->{$year}{total_assets}};
-         #$record{fixed_assets} = $process{fixed_assets}->($union_data_for_year->{$year}{fixed_assets}); #if any {defined $union_data_for_year->{$year}{fixed_assets}{$_}} keys %{$union_data_for_year->{$year}{fixed_assets}};
-         #$record{investment_assets} = $process{investment_assets}->($union_data_for_year->{$year}{investment_assets}); #if any {defined $union_data_for_year->{$year}{investment_assets}{$_}} keys %{$union_data_for_year->{$year}{investment_assets}};
-         #my $assets = collate_record_type('assets', [qw/investment_assets fixed_assets other_assets total_assets/],\%record);
+        # Payees
+        $record{payees} =
+            $process{payees}->($union_data_for_year->{$year}{payees});
 
-         ## Accounts
-         #$record{accounts_receivable} = $process{accounts_receivable}->($union_data_for_year->{$year}{accounts_receivable}); #if any {defined $union_data_for_year->{$year}{accounts_receivable}{$_}} keys %{$union_data_for_year->{$year}{accounts_receivable}};
-         #$record{accounts_payable} = $process{accounts_payable}->($union_data_for_year->{$year}{accounts_payable}); #if any {defined $union_data_for_year->{$year}{accounts_payable}{$_}} keys %{$union_data_for_year->{$year}{accounts_payable}};
-         #my $accounts = collate_record_type('accounts', [qw/accounts_payable accounts_receivable/],\%record);
+        # Assets
+        $record{other_assets} = $process{other_assets}
+            ->($union_data_for_year->{$year}{other_assets});
+        $record{fixed_assets} = $process{fixed_assets}
+            ->($union_data_for_year->{$year}{fixed_assets});
+        $record{investment_assets} = $process{investment_assets}
+            ->($union_data_for_year->{$year}{investment_assets});
+        $record{total_assets} = $process{total_assets}
+            ->($union_data_for_year->{$year}{total_assets});
 
-         ## Loans
-         #$record{loans_receivable} = $process{loans_receivable}->($union_data_for_year->{$year}{loans_receivable}); #if any {defined $union_data_for_year->{$year}{loans_receivable}{$_}} keys %{$union_data_for_year->{$year}{loans_receivable}};
-         #$record{loans_payable} = $process{loans_payable}->($union_data_for_year->{$year}{loans_payable}); #if any {defined $union_data_for_year->{$year}{loans_payable}{$_}} keys %{$union_data_for_year->{$year}{loans_payable}};
-         #my $loans = collate_record_type('loans', [qw/loans_payable loans_receivable/],\%record);
+        # Accounts
+        $record{accounts_receivable} = $process{accounts_receivable}
+            ->($union_data_for_year->{$year}{accounts_receivable});
+        $record{accounts_payable} = $process{accounts_payable}
+            ->($union_data_for_year->{$year}{accounts_payable});
 
-         ## Liabilities
-         #$record{total_liabilities} = $process{total_liabilities}->($union_data_for_year->{$year}{total_liabilities}); #if any {defined $union_data_for_year->{$year}{total_liabilities}{$_}} keys %{$union_data_for_year->{$year}{total_liabilities}};
-         #$record{other_liabilities} = $process{other_liabilities}->($union_data_for_year->{$year}{other_liabilities}); #if any {defined $union_data_for_year->{$year}{other_liabilities}{$_}} keys %{$union_data_for_year->{$year}{other_liabilities}};
-         #my $liabilities = collate_record_type('liabilities', [qw/other_liabilities total_liabilities/],\%record);
+        # Loans
+        $record{loans_receivable} = $process{loans_receivable}
+            ->($union_data_for_year->{$year}{loans_receivable});
+        $record{loans_payable} = $process{loans_payable}
+            ->($union_data_for_year->{$year}{loans_payable});
+
+        # Liabilities
+        $record{total_liabilities} = $process{total_liabilities}
+            ->($union_data_for_year->{$year}{total_liabilities});
+        $record{other_liabilities} = $process{other_liabilities}
+            ->($union_data_for_year->{$year}{other_liabilities});
+
+        # Receipts
+        $record{sales_receipts} = $process{sales_receipts}
+            ->($union_data_for_year->{$year}{sales_receipts});
+        $record{other_receipts} = $process{other_receipts}
+            ->($union_data_for_year->{$year}{other_receipts});
+        $record{total_receipts} = $process{total_receipts}
+            ->($union_data_for_year->{$year}{total_receipts});
+
+        # Disbursements
+        $record{general_disbursements} = $process{general_disbursements}
+            ->($union_data_for_year->{$year}{general_disbursements});
+        $record{investment_purchases} = $process{investment_purchases}
+            ->($union_data_for_year->{$year}{investment_purchases});
+        $record{officer_disbursements} = $process{officer_disbursements}
+            ->($union_data_for_year->{$year}{officer_disbursements});
+        $record{benefits_disbursements} = $process{benefits_disbursements}
+            ->($union_data_for_year->{$year}{benefits_disbursements});
+        $record{total_disbursements} = $process{total_disbursements}
+            ->($union_data_for_year->{$year}{total_disbursements});
+
+        ## Dues types
+        #$record{dues} = $process{dues}->($union_data_for_year->{$year}{dues});
+
+        ## Membership types
+        #$record{membership} =
+            #$process{membership}->($union_data_for_year->{$year}{membership});
+
+        # CREATE YEAR RECORDS
+        # Basic
+        #   Create members record from basic
+        create_membership($record{basic},$id,$year) if $record{basic}->{members};
+        #   Create address record from basic
+        create_labor_address($record{basic},$id,$year);
+        
+        # Payees
+        #   Create all payees from payees 
+        create_payees($record{payees},$id,$year) if $record{payees} && scalar @{$record{payees}} > 0;
+
+        # Assets
+        #   Other
+        create_other_assets($record{other_assets},$id,$year);
+        #   Fixed
+        create_fixed_assets($record{fixed_assets},$id,$year);
+        #   Investment
+        create_investment_assets($record{investment_assets},$id,$year);
+        #   Total
+        create_total_assets($record{total_assets},$id,$year);
+
+        # Accounts
+        #   Payable
+        create_accounts_payable($record{accounts_payable},$id,$year);
+        #   Receivable
+        create_accounts_receivable($record{accounts_receivable},$id,$year);
+
+        # Loans 
+        #   Payable
+        create_loans_payable($record{loans_payable},$id,$year);
+        #   Receivable
+        create_loans_receivable($record{loans_receivable},$id,$year);
+
+        # Liabilities
+        #   Other
+        create_other_liabilities($record{other_liabilities},$id,$year);
+        #   Total
+        create_total_liabilities($record{total_liabilities},$id,$year);
+
+        # Receipts
+        #   Sales
+        create_sales_receipts($record{sales_receipts},$id,$year);
+        #   Other
+        create_other_receipts($record{other_receipts},$id,$year,($record{payees}||[]));
+        #   Total
+        create_total_receipts($record{total_receipts},$id,$year);
+
+        # Disbursements
+        #   General
+        create_general_disbursements($record{general_disbursements},$id,$year,($record{payees}||[]));
+        #   Investment
+        create_investment_purchases($record{investment_purchases},$id,$year);
+        #   Officers
+        create_officer_disbursements($record{officer_disbursements},$id,$year);
+        #   Benefits
+        create_benefit_disbursements($record{benefits_disbursements},$id,$year);
+        #   Total
+        create_total_disbursements($record{total_disbursements},$id,$year);
+    }
+}
+
+sub save_local_or_organization {
+    my ($data, $year) = @_;
+    # These are what we will return
+    my $id;
+
+    # If there is an abbreviation and it is not UNAFF
+    if ($data->{abbreviation} && $data->{abbreviation} !~ /unaff/i) {
+        # Try to find the labor_organization to which the local belongs
+        my $org_id = find_org($data->{abbreviation});
+        my ($local_id, $new_org_id);
+        # If we found the labor_organization
+        $data->{labor_organization_type} = 'local';
+        if ($org_id) {
+            $local_id = create_local($data);
+            my $aff_id = create_affiliation($local_id, $org_id, $year);
+        # If we did not find the organization
+        } else {
+            $new_org_id = create_organization($data);
+            $local_id   = create_local($data);
+            my $aff_id = create_affiliation($local_id, $new_org_id, $year);
+        }
+        # Set our return vars
+        $id = $local_id;
+    # If there is an abbreviation and it is UNAFF and there is some labor_local data
+    } elsif (
+        $data->{abbreviation}
+        && $data->{abbreviation} =~ /unaff/i
+        && (   $data->{designation}
+            || $data->{designation_number}
+            || $data->{designation_prefix}
+            || $data->{designation_suffix})
+        )
+    {
+        # Create an unaffiliated local
+        $data->{labor_organization_type} = 'unaffiliated';
+        my $local_id = create_local($data);
+        # Set our return vars
+        $id = $local_id;
+    # If there is no abbreviation
+    } else {
+        # Create an organization
+        $data->{labor_organization_type} = 'union';
+        my $organization_id = create_organization($data);
+        # Set our return vars
+        $id = $organization_id;
+    }
+    return $id;
+}
+
+sub find_org {
+    my $abbreviation = shift;
+    my $find_org = 'select id from labor_organization where abbreviation = ?';
+    $sth = $dbh->prepare($find_org);
+    $sth->execute($abbreviation) or die $sth->errstr;
+    my $id = $sth->fetchrow_arrayref;
+    my $org_id = defined($id) ? $id->[0] : undef;
+    return $org_id;
+}
+
+sub create_local {
+    my $data = shift;
+    my $create_local = 'insert into labor_organization (name,usdol_filing_number,local_prefix,local_suffix,local_type,local_number,date_established,organization_type) values (?,?,?,?,?,?,?,?)';
+    my $local_name = $data->{union_name};
+    my $abb = $data->{abbreviation};
+    $local_name =~ s/(.+)\s+$abb.+/$1/g;
+    my $local_name   = join(" ", (map {ucfirst lc} (split(/ /, $local_name))));
+    my $local_type   = $local_type{$data->{designation}};
+    my $local_number = $data->{designation_number};
+    my $local_prefix = $data->{designation_prefix};
+    my $local_suffix = $data->{designation_suffix};
+    my $filing_number = $data->{usdol_filing_number};
+    my $date_established = $data->{date_established} ? DateTimeX::Easy->new($data->{date_established}) : undef;
+    $sth = $dbh->prepare($create_local);
+    $sth->execute($local_name,$filing_number,$local_prefix,$local_suffix,$local_type,$local_number,$date_established,'local') or die $sth->errstr;
+    my $local_id = $dbh->last_insert_id( undef, undef, "labor_organization", undef );
+    return $local_id;
+}
+
+sub create_organization {
+    my $data = shift;
+    my $create_organization = 'insert into labor_organization (name,usdol_filing_number,abbreviation,date_established) values (?,?,?,?)';
+    my $org_name = join(" ", (map {ucfirst lc} (split(/ /, $data->{union_name}))));
+    $sth = $dbh->prepare($create_organization);
+    my $org_abbreviation = undef if $data->{abbreviation} =~ /unaff/i;
+    my $date_established = $data->{date_established} ? DateTimeX::Easy->new($data->{date_established}) : undef;
+    my $filing_number = $data->{usdol_filing_number};
+    $sth->execute($org_name,$filing_number,$org_abbreviation,$date_established) or die $sth->errstr;
+    my $org_id = $dbh->last_insert_id( undef, undef, "labor_organization", undef );
+    return $org_id;
+}
+
+sub create_affiliation {
+    my ($local_id, $org_id, $year) = @_;
+    my $create_affiliation = 'insert into labor_organization_affiliation (child,parent,year) values (?,?,?)';
+    $sth = $dbh->prepare($create_affiliation);
+    $sth->execute($local_id,$org_id,$year) or die $sth->errstr;
+    my $affid = $dbh->last_insert_id( undef, undef, "labor_organization_affiliation", undef );
+    return $affid;
+}
+
+sub create_payee_address {
+    my ($payee_id, $address_id,$year) = @_;
+    my $type = "labor_organization";
+    die "No address" unless $address_id;
+    die "No year" unless $year;
+    my $table_name = $type."_payee_address";
+    my $rel_name = $type."_payee";
+    my $create_address = "insert into $table_name ($rel_name,address,year) values (?,?,?)";
+    $sth = $dbh->prepare($create_address);
+    $sth->execute($payee_id,$address_id,$year) or die $sth->errstr;
+    my $payee_address_id = $dbh->last_insert_id( undef, undef, $table_name, undef );
+    return $payee_address_id;
+}
+
+sub create_membership {
+    my ($data,$id,$year) = @_;
+    my $type = "labor_organization";
+    die "No id" unless $id;
+    die "No type" unless $type;
+    die "No year" unless $year;
+    my $table_name = $type."_membership";
+    my $create_membership = "insert into $table_name ($type,year,members) values (?,?,?)";
+    $sth = $dbh->prepare($create_membership);
+    $sth->execute($id,$year,$data->{members}) or die $sth->errstr;
+    my $membership_id = $dbh->last_insert_id( undef, undef, $table_name, undef );
+    return $membership_id;
+}
+
+sub create_payees {
+    my ($data,$id,$year) = @_;
+    my $type = "labor_organization";
+    die "No id" unless $id;
+    die "No type" unless $type;
+    die "No year" unless $year;
+    my $table_name = $type."_payee";
+    for my $payee (@$data) {
+        my $create_payee = "insert into $table_name ($type,year,name,payee_type,payment_type,amount) values (?,?,?,?,?,?)";
+        $sth = $dbh->prepare($create_payee);
+        my $amount = $payee->{total};
+        my $payee_type = $payee_type{$payee->{payer_payee_type}};
+        my $name = $payee->{name};
+        my $payment_type = $payee->{type_or_class};
+        my $street_address = $payee->{street};
+        my $city = $payee->{city};
+        my $state = $payee->{state};
+        my $zip = $payee->{zip};
+        $sth->execute($id,$year,$name,$payee_type,$payment_type,$amount) or die $sth->errstr;
+        my $payee_id = $dbh->last_insert_id( undef, undef, $table_name, undef );
+        my $address_id = create_address({
+            street_address => $street_address,
+            city           => $city,
+            state          => $state,
+            postal_code    => $zip,
+            country        => 'US'
+        });
+        my $payee_address_id = create_payee_address($payee_id,$address_id,$year) if $address_id;
+    }
+}
+
+sub create_total_disbursements {
+    my ($data, $id, $year) = @_;
+    my $type = "labor_organization";
+    die "No id"   unless $id;
+    die "No type" unless $type;
+    die "No year" unless $year;
+    my $table_name = $type . "_total_disbursement";
+    my $create_total_disbursement = "insert into $table_name ($type,year,administration,affiliates,benefits,contributions,education,employee_salaries,employees_total,fees,general_overhead,investments,loans_made,loans_paid,members,officer_administration,officer_salaries,officers_total,office_supplies,other,other_contributions,other_general_overhead,other_political,other_representation,other_union_administration,per_capita_tax,political,professional_services,representation,strike_benefits,taxes,union_administration,withheld,withheld_not_disbursed) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    $sth = $dbh->prepare($create_total_disbursement);
+    $sth->execute($id, $year, @{$data}{qw/administration affiliates benefits contributions education employee_salaries employees_total fees general_overhead investments loans_made loans_paid members officer_administration officer_salaries officers_total office_supplies other other_contributions other_general_overhead other_political other_representation other_union_administration per_capita_tax political professional_services representation strike_benefits taxes union_administration withheld withheld_not_disbursed/}) or die $sth->errstr;
+    return 1;
+}
+
+sub identify_payee {
+    my ($payee_number,$payees) = @_;
+    my ($payee_name) = map { $_->{name} } grep { $_->{payee} == $payee_number } @$payees;
+    return $payee_name;
+}
+
+sub create_general_disbursements {
+    my ($data, $id, $year, $payees) = @_;
+    my $type = "labor_organization";
+    die "No id" unless $id;
+    die "No type" unless $type;
+    die "No year" unless $year;
+    die "No payees" unless $payees;
+    my $table_name = $type."_general_disbursement";
+    for my $disbursement (@$data) {
+        my $disbursement_date = $disbursement->{disbursement_date} ? DateTimeX::Easy->new($disbursement->{disbursement_date}) : undef;
+        my $disbursement_type = $disbursement_type{$disbursement->{disbursement_type}};
+        my $payee_name = identify_payee($disbursement->{payee},$payees);
+        my $create_general_disbursement = qq{insert into $table_name ($type,year,payee,disbursement_date,disbursement_type,amount,purpose) values (?,?,(select id from labor_organization_payee where name = '$payee_name' and labor_organization = $id),?,?,?,?)};
+        $sth = $dbh->prepare($create_general_disbursement);
+        $sth->execute($id,$year,$disbursement_date,$disbursement_type,@{$disbursement}{qw/amount purpose/}) or die $sth->errstr;
+    }
+    return 1;
+}
+
+sub create_officer_disbursements {
+    my ($data, $id, $year) = @_;
+    my $type = "labor_organization";
+    die "No id" unless $id;
+    die "No type" unless $type;
+    die "No year" unless $year;
+    my $table_name = $type."_officer_disbursement";
+    for my $disbursement (@$data) {
+        my $create_officer_disbursement = "insert into $table_name ($type,year,first_name,middle_name,last_name,administration_percent,contributions_percent,general_overhead_percent,gross_salary,political_percent,representation_percent,title,total) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $sth = $dbh->prepare($create_officer_disbursement);
+        my $disbursement_type = $disbursement_type{$disbursement->{disbursement_type}};
+        $sth->execute($id,$year,@{$disbursement}{qw/first_name middle_name last_name administration_percent contributions_percent general_overhead_percent gross_salary political_percent representation_percent title total/}) or die $sth->errstr;
+    }
+    return 1;
+}
+
+sub create_benefit_disbursements {
+    my ($data, $id, $year) = @_;
+    my $type = "labor_organization";
+    die "No id" unless $id;
+    die "No type" unless $type;
+    die "No year" unless $year;
+    my $table_name = $type."_benefit_disbursement";
+    for my $disbursement (@$data) {
+        my $create_benefit_disbursement = "insert into $table_name ($type,year,amount,description,paid_to) values (?,?,?,?,?)";
+        $sth = $dbh->prepare($create_benefit_disbursement);
+        $sth->execute($id,$year,@{$disbursement}{qw/amount description paid_to/}) or die $sth->errstr;
+    }
+    return 1;
+}
+
+sub create_investment_purchases {
+    my ($data, $id, $year) = @_;
+    my $type = "labor_organization";
+    die "No id" unless $id;
+    die "No type" unless $type;
+    die "No year" unless $year;
+    my $table_name = $type."_investment_purchase";
+    for my $investment_purchase (@$data) {
+        my $create_investment_purchase = "insert into $table_name ($type,year,book_value,cash_paid,cost,description,investment_type) values (?,?,?,?,?,?,?)";
+        $sth = $dbh->prepare($create_investment_purchase);
+        my $investment_type = $investment_type{$investment_purchase->{investment_type}};
+        $sth->execute($id,$year,@{$investment_purchase}{qw/book_value cash_paid cost description/},$investment_type) or die $sth->errstr;
+    }
+    return 1;
+}
+
+sub create_total_receipts {
+    my ($data, $id, $year) = @_;
+    my $type = "labor_organization";
+    die "No id"   unless $id;
+    die "No type" unless $type;
+    die "No year" unless $year;
+    my $table_name = $type . "_total_receipt";
+    my $create_total_receipt = "insert into $table_name ($type,year,affiliates,all_other_receipts,dividends,dues,fees,interest,investments,loans_made,loans_taken,members,office_supplies,other_receipts,rents,tax) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    $sth = $dbh->prepare($create_total_receipt);
+    $sth->execute($id, $year, @{$data}{qw/affiliates all_other_receipts dividends dues fees interest investments loans_made loans_taken members office_supplies other_receipts rents tax/}) or die $sth->errstr;
+    return 1;
+}
+
+sub create_sales_receipts {
+    my ($data, $id, $year) = @_;
+    my $type = "labor_organization";
+    die "No id" unless $id;
+    die "No type" unless $type;
+    die "No year" unless $year;
+    my $table_name = $type."_sale_receipt";
+    for my $receipt (@$data) {
+        my $create_sale_receipt = "insert into $table_name ($type,year,amount_received,book_value,cost,description,gross_sales_price) values (?,?,?,?,?,?,?)";
+        $sth = $dbh->prepare($create_sale_receipt);
+        $sth->execute($id,$year,@{$receipt}{qw/amount_received book_value cost description gross_sales_price/}) or die $sth->errstr;
+    }
+    return 1;
+}
+
+sub create_other_receipts {
+    my ($data, $id, $year,$payees) = @_;
+    my $type = "labor_organization";
+    die "No id" unless $id;
+    die "No type" unless $type;
+    die "No year" unless $year;
+    die "No payees" unless $payees;
+    my $table_name = $type."_other_receipt";
+    for my $receipt (@$data) {
+        my $receipt_date = $receipt->{receipt_date} ? DateTimeX::Easy->new($receipt->{receipt_date}) : undef;
+        my $payee_name = identify_payee($receipt->{payee},$payees);
+        my $create_other_receipt = qq{insert into $table_name ($type,year,payee,receipt_date,amount,purpose) values (?,?,(select id from labor_organization_payee where name = '$payee_name' and labor_organization = $id),?,?,?)};
+        $sth = $dbh->prepare($create_other_receipt);
+        $sth->execute($id,$year,$receipt_date,@{$receipt}{qw/amount purpose/}) or die $sth->errstr;
+    }
+    return 1;
+}
+
+sub create_total_assets {
+    my ($data, $id, $year) = @_;
+    my $type = "labor_organization";
+    die "No id"   unless $id;
+    die "No type" unless $type;
+    die "No year" unless $year;
+    my $table_name = $type . "_total_asset";
+    my $create_total_asset =
+        "insert into $table_name ($type,year,accounts_receivable_end,accounts_receivable_start,cash_end,cash_start,fixed_assets_end,fixed_assets_start,investments_end,investments_start,loans_receivable_end,loans_receivable_start,other_assets_end,other_assets_start,other_investments_book_value,other_investments_cost,securities_book_value,securities_cost,total_start,treasuries_end,treasuries_start) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    $sth = $dbh->prepare($create_total_asset);
+    $sth->execute(
+        $id, $year,
+        @{$data}{
+            qw/accounts_receivable_end accounts_receivable_start cash_end cash_start fixed_assets_end fixed_assets_start investments_end investments_start loans_receivable_end loans_receivable_start other_assets_end other_assets_start other_investments_book_value other_investments_cost securities_book_value securities_cost total_start treasuries_end treasuries_start/
+        }
+    ) or die $sth->errstr;
+    return 1;
+}
+
+sub create_total_liabilities {
+    my ($data, $id, $year) = @_;
+    my $type = "labor_organization";
+    die "No id"   unless $id;
+    die "No type" unless $type;
+    die "No year" unless $year;
+    my $table_name = $type . "_total_liability";
+    my $create_total_liability =
+        "insert into $table_name ($type,year,accounts_payable_end,accounts_payable_start,loans_payable_end,loans_payable_start,mortgages_payable_end,mortgages_payable_start,other_liabilities_end,other_liabilities_start,total_start) values (?,?,?,?,?,?,?,?,?,?,?)";
+    $sth = $dbh->prepare($create_total_liability);
+    $sth->execute( $id, $year, @{$data}{qw/accounts_payable_end accounts_payable_start loans_payable_end loans_payable_start mortgages_payable_end mortgages_payable_start other_liabilities_end other_liabilities_start total_start/}) or die $sth->errstr;
+    return 1;
+}
+
+sub create_other_liabilities {
+    my ($data, $id, $year) = @_;
+    my $type = "labor_organization";
+    die "No id" unless $id;
+    die "No type" unless $type;
+    die "No year" unless $year;
+    my $table_name = $type."_other_liability";
+    for my $liability (@$data) {
+        my $create_other_liability = "insert into $table_name ($type,year,amount,description) values (?,?,?,?)";
+        $sth = $dbh->prepare($create_other_liability);
+        $sth->execute($id,$year,@{$liability}{qw/amount description/}) or die $sth->errstr;
+    }
+    return 1;
+}
+
+sub create_accounts_receivable {
+    my ($data, $id, $year) = @_;
+    my $type = "labor_organization";
+    die "No id" unless $id;
+    die "No type" unless $type;
+    die "No year" unless $year;
+    my $table_name = $type."_account_receivable";
+    for my $account (@$data) {
+        my $create_account_receivable = "insert into $table_name ($type,year,account_type,liquidated,name,past_due_90,past_due_180,total) values (?,?,?,?,?,?,?,?)";
+        $sth = $dbh->prepare($create_account_receivable);
+        my $account_type = $account_type{$account->{account_type}};
+        $sth->execute($id,$year,$account_type,@{$account}{qw/liquidated name past_due_90 past_due_180 total/}) or die $sth->errstr;
+    }
+    return 1;
+}
+sub create_accounts_payable {
+    my ($data, $id, $year) = @_;
+    my $type = "labor_organization";
+    die "No id" unless $id;
+    die "No type" unless $type;
+    die "No year" unless $year;
+    my $table_name = $type."_account_payable";
+    for my $account (@$data) {
+        my $create_account_payable = "insert into $table_name ($type,year,account_type,liquidated,name,past_due_90,past_due_180,total) values (?,?,?,?,?,?,?,?)";
+        $sth = $dbh->prepare($create_account_payable);
+        my $account_type = $account_type{$account->{account_type}};
+        $sth->execute($id,$year,$account_type,@{$account}{qw/liquidated name past_due_90 past_due_180 total/}) or die $sth->errstr;
+    }
+    return 1;
+}
+
+sub create_loans_payable {
+    my ($data, $id, $year) = @_;
+    my $type = "labor_organization";
+    die "No id" unless $id;
+    die "No type" unless $type;
+    die "No year" unless $year;
+    my $table_name = $type."_loan_payable";
+    for my $loan (@$data) {
+        my $create_loan_payable = "insert into $table_name ($type,year,cash_repayment,loans_obtained,loans_owed_end,loans_owed_start,non_cash_repayment,source) values (?,?,?,?,?,?,?,?)";
+        $sth = $dbh->prepare($create_loan_payable);
+        $sth->execute($id,$year,@{$loan}{qw/cash_repayment loans_obtained loans_owed_end loans_owed_start non_cash_repayment source/}) or die $sth->errstr;
+    }
+    return 1;
+}
+
+sub create_loans_receivable {
+    my ($data, $id, $year) = @_;
+    my $type = "labor_organization";
+    die "No id" unless $id;
+    die "No type" unless $type;
+    die "No year" unless $year;
+    my $table_name = $type."_loan_receivable";
+    for my $loan (@$data) {
+        my $create_loan_receivable = "insert into $table_name ($type,year,loan_type,cash_repayments,name,new_loan_amount,non_cash_repayments,outstanding_end_amount,outstanding_start_amount,purpose,security,terms) values (?,?,?,?,?,?,?,?,?,?,?,?)";
+        $sth = $dbh->prepare($create_loan_receivable);
+        my $loan_type = $loan_type{$loan->{loan_type}};
+        $sth->execute($id, $year, $loan_type, @{$loan}{qw/cash_repayments name new_loan_amount non_cash_repayments outstanding_end_amount outstanding_start_amount purpose security terms/}) or die $sth->errstr;
+    }
+    return 1;
+}
+
+sub create_investment_assets {
+    my ($data, $id, $year) = @_;
+    my $type = "labor_organization";
+    die "No id" unless $id;
+    die "No type" unless $type;
+    die "No year" unless $year;
+    my $table_name = $type."_investment_asset";
+    for my $asset (@$data) {
+        my $create_investment_asset = "insert into $table_name ($type,year,amount,name,investment_type) values (?,?,?,?,?)";
+        $sth = $dbh->prepare($create_investment_asset);
+        my $investment_type = $investment_type{$asset->{investment_type}};
+        $sth->execute($id,$year,@{$asset}{qw/amount name/},$investment_type) or die $sth->errstr;
+    }
+    return 1;
+}
+
+sub create_other_assets {
+    my ($data, $id, $year) = @_;
+    my $type = "labor_organization";
+    die "No id" unless $id;
+    die "No type" unless $type;
+    die "No year" unless $year;
+    my $table_name = $type."_other_asset";
+    for my $asset (@$data) {
+        my $create_other_asset = "insert into $table_name ($type,year,book_value,description,value) values (?,?,?,?,?)";
+        $sth = $dbh->prepare($create_other_asset);
+        $sth->execute($id,$year,@{$asset}{qw/book_value description value/}) or die $sth->errstr;
+    }
+    return 1;
+}
+
+sub create_fixed_assets {
+    my ($data, $id, $year) = @_;
+    my $type = "labor_organization";
+    die "No id" unless $id;
+    die "No type" unless $type;
+    die "No year" unless $year;
+    my $table_name = $type."_fixed_asset";
+    for my $asset (@$data) {
+        my $create_fixed_asset = "insert into $table_name ($type,year,book_value,cost_basis,depreciation,description,value) values (?,?,?,?,?,?,?)";
+        $sth = $dbh->prepare($create_fixed_asset);
+        $sth->execute($id,$year,@{$asset}{qw/book_value cost_basis depreciation description value/}) or die $sth->errstr;
+    }
+    return 1;
+}
+
+sub create_labor_address {
+    my ($data, $id, $year) = @_;
+    my $type = "labor_organization";
+    die "No id"   unless $id;
+    die "No type" unless $type;
+    die "No year" unless $year;
+    my $table_name = $type . "_address";
+    my $address_id = create_address({
+        street_address => $data->{street_address},
+        city           => $data->{city},
+        state          => $data->{state},
+        postal_code    => $data->{zip},
+        country        => 'US'
+    });
+    my $labor_address_id;
+    if ($address_id) {
+        my $create_labor_address = "insert into $table_name ($type,address,year) values (?,?,?)";
+        $sth = $dbh->prepare($create_labor_address);
+        $sth->execute($id, $address_id, $year) or die $sth->errstr;
+        $labor_address_id = $dbh->last_insert_id(undef, undef, $table_name, undef);
+    }
+    return $labor_address_id;
+}
+
+sub create_address {
+    my $data = shift;
+    my $address_id;
+    if ($data->{street_address}) {
+        my $create_address = 'insert into address (street_address,city,state,postal_code,country) values (?,?,?,?,?)';
+        $sth = $dbh->prepare($create_address);
+        $sth->execute(@{$data}{qw/street_address city state postal_code country/}) or die $sth->errstr;
+        $address_id = $dbh->last_insert_id( undef, undef, "address", undef );
+    }
+    return $address_id;
+}
 
 
-         ## Receipts
-         #$record{total_receipts} = $process{total_receipts}->($union_data_for_year->{$year}{total_receipts}); #if any {defined $union_data_for_year->{$year}{total_receipts}{$_}} keys %{$union_data_for_year->{$year}{total_receipts}};
-         #$record{sales_receipts} = $process{sales_receipts}->($union_data_for_year->{$year}{sales_receipts}); #if any {defined $union_data_for_year->{$year}{sales_receipts}{$_}} keys %{$union_data_for_year->{$year}{sales_receipts}};
-         #$record{other_receipts} = $process{other_receipts}->($union_data_for_year->{$year}{other_receipts}); #if any {defined $union_data_for_year->{$year}{other_receipts}{$_}} keys %{$union_data_for_year->{$year}{other_receipts}};
-         #my $receipts = collate_record_type('receipts', [qw/sales_receipts other_receipts total_receipts/],\%record);
-
-
-         ## Disbursements
-         #$record{total_disbursements} = $process{total_disbursements}->($union_data_for_year->{$year}{total_disbursements}); #if any {defined $union_data_for_year->{$year}{total_disbursements}{$_}} keys %{$union_data_for_year->{$year}{total_disbursements}};
-         #$record{general_disbursements} = $process{general_disbursements}->($union_data_for_year->{$year}{general_disbursements}); #if any {defined $union_data_for_year->{$year}{general_disbursements}{$_}} keys %{$union_data_for_year->{$year}{general_disbursements}};
-         #$record{investment_purchases} = $process{investment_purchases}->($union_data_for_year->{$year}{investment_purchases}); #if any {defined $union_data_for_year->{$year}{investment_purchases}{$_}} keys %{$union_data_for_year->{$year}{investment_purchases}};
-         #$record{officer_disbursements} = $process{officer_disbursements}->($union_data_for_year->{$year}{officer_disbursements}); #if any {defined $union_data_for_year->{$year}{officer_disbursements}{$_}} keys %{$union_data_for_year->{$year}{officer_disbursements}};
-         #$record{benefits_disbursements} = $process{benefits_disbursements}->($union_data_for_year->{$year}{benefits_disbursements}); #if any {defined $union_data_for_year->{$year}{benefits_disbursements}{$_}} keys %{$union_data_for_year->{$year}{benefits_disbursements}};
-         #$record{payees} = $process{payees}->($union_data_for_year->{$year}{payees}); #if any {defined $union_data_for_year->{$year}{payees}{$_}} keys %{$union_data_for_year->{$year}{payees}};
-         #my $disbursements = collate_record_type('disbursements', [qw/officer_disbursements benefits_disbursements investment_purchases general_disbursements total_disbursements/],\%record);
-
-         #$record{dues} = $process{dues}->($union_data_for_year->{$year}{dues}); #if any {defined $union_data_for_year->{$year}{dues}{$_}} keys %{$union_data_for_year->{$year}{dues}};
-         #$record{membership} = $process{membership}->($union_data_for_year->{$year}{membership}); #if any {defined $union_data_for_year->{$year}{membership}{$_}} keys %{$union_data_for_year->{$year}{membership}};
-
-        ## Records to make.
-        ## PK is year and union id for the details.
-        ##address
-        ##members
-        ##assets
-        ##accounts
-        ##disbursements
-        ##receipts
-
-        ##say p %record;
-        ##say "Assets: ", p $assets;
-        ##say "Accounts: ", p $accounts;
-        ##say "Loans: ", p $loans;
-        ##say "Liabilities: ", p $liabilities;
-        ##say "Receipts: ", p $receipts;
-        ##say "Disbursements: ", p $disbursements;
-        ##my %finance_record = ();
-        ##@finance_record{keys %$_} = values %$_ for ($assets,$accounts,$loans,$liabilities,$receipts,$disbursements);
-        ##say p %finance_record;
-    #}
-#}
-
-#$dbh->commit or die "Could not commit txn: ", $dbh->errstr;
+$dbh->commit or die "Could not commit txn: ", $dbh->errstr;
 
 1;
-

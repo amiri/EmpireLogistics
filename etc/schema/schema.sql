@@ -110,8 +110,8 @@ create table rail_subdivision_state (
     delete_time timestamptz default null,
     primary key (subdivision, state)
 );
-alter table rail_subdivision_state add foreign key (state) references state(id);
-alter table rail_subdivision_state add foreign key (subdivision) references rail_subdivision(id);
+alter table rail_subdivision_state add foreign key (state) references state(id) on delete cascade;
+alter table rail_subdivision_state add foreign key (subdivision) references rail_subdivision(id) on delete cascade;
 
 drop table if exists rail_track_type cascade;
 create table rail_track_type (
@@ -490,7 +490,7 @@ create table port_tonnage (
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
-    port integer not null references port(id),
+    port integer not null references port(id) on delete cascade,
     year integer not null,
     domestic_tonnage integer,
     foreign_tonnage integer,
@@ -591,9 +591,46 @@ create table company (
     description text
 );
 
-drop type if exists labor_organization_type cascade;
-create type labor_organization_type as enum ('federation', 'union', 'hybrid','reform','other');
+--Labor
 
+drop type if exists labor_organization_type cascade;
+create type labor_organization_type as enum ('federation', 'union', 'hybrid','reform','local','unaffiliated','other');
+
+drop type if exists payee_type cascade;
+create type payee_type as enum ('payee', 'payer');
+
+drop type if exists asset_type cascade;
+create type asset_type as enum ('land', 'building','automobile','furniture','other');
+
+drop type if exists investment_type cascade;
+create type investment_type as enum (
+    'marketable securities',
+    'other securities',
+    'marketable securities cost',
+    'marketable securities book value',
+    'other securities cost',
+    'other securities book value'
+);
+
+drop type if exists loan_type cascade;
+create type loan_type as enum ('itemized','non-itemized');
+
+drop type if exists account_type cascade;
+create type account_type as enum ('itemized','non-itemized');
+
+drop type if exists disbursement_type cascade;
+create type disbursement_type as enum (
+    'representation',
+    'political',
+    'contributions',
+    'overhead',
+    'administration',
+    'general',
+    'non-itemized'
+);
+
+
+-- Organization
 drop table if exists labor_organization cascade;
 create table labor_organization (
     id serial not null primary key,
@@ -601,102 +638,19 @@ create table labor_organization (
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
     name text,
+    usdol_filing_number integer,
     abbreviation text,
     date_established date,
     url text,
-    organization_type labor_organization_type,
-    description text
+    organization_type labor_organization_type not null default 'union',
+    local_prefix text,
+    local_suffix text,
+    local_type text,
+    local_number text,
+    description text,
+    unique(name,usdol_filing_number)
 );
 
-drop table if exists labor_organization_members;
-create table labor_organization_members (
-    id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
-    delete_time timestamptz default null,
-    labor_organization integer not null references labor_organization(id),
-    year integer not null,
-    members integer,
-    unique (labor_organization,year)
-);
-
-drop table if exists labor_organization_assets cascade;
-create table labor_organization_assets (
-    id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
-    delete_time timestamptz default null,
-    labor_organization integer not null references labor_organization(id),
-    year integer not null,
-    unique (labor_organization,year)
-);
-drop table if exists labor_organization_accounts cascade;
-create table labor_organization_accounts (
-    id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
-    delete_time timestamptz default null,
-    labor_organization integer not null references labor_organization(id),
-    year integer not null,
-    unique (labor_organization,year)
-);
-drop table if exists labor_organization_disbursements cascade;
-create table labor_organization_disbursements (
-    id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
-    delete_time timestamptz default null,
-    labor_organization integer not null references labor_organization(id),
-    year integer not null,
-    unique (labor_organization,year)
-);
-drop table if exists labor_organization_receipts cascade;
-create table labor_organization_receipts (
-    id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
-    delete_time timestamptz default null,
-    labor_organization integer not null references labor_organization(id),
-    year integer not null,
-    unique (labor_organization,year)
-);
-drop table if exists labor_organization_dues cascade;
-create table labor_organization_dues (
-    id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
-    delete_time timestamptz default null,
-    labor_organization integer not null references labor_organization(id),
-    year integer not null,
-    unique (labor_organization,year)
-);
-
-drop table if exists labor_local cascade;
-create table labor_local (
-    id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
-    delete_time timestamptz default null,
-    name text,
-    date_established date,
-    url text,
-    description text
-);
-
-drop table if exists labor_local_members;
-create table labor_local_members (
-    id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
-    delete_time timestamptz default null,
-    labor_local integer not null references labor_local(id),
-    year integer not null,
-    members integer,
-    unique (labor_local,year)
-);
-
-
--- labor_organization_affiliation
 drop table if exists labor_organization_affiliation cascade;
 create table labor_organization_affiliation (
     id serial not null primary key,
@@ -705,28 +659,25 @@ create table labor_organization_affiliation (
     delete_time timestamptz default null,
     child integer not null,
     parent integer not null,
-    unique (child,parent),
+    year integer,
+    unique (child,parent,year),
     check (child <> parent)
 );
-alter table labor_organization_affiliation add foreign key (child) references labor_organization(id);
-alter table labor_organization_affiliation add foreign key (parent) references labor_organization(id);
+alter table labor_organization_affiliation add foreign key (child) references labor_organization(id) on delete cascade;
+alter table labor_organization_affiliation add foreign key (parent) references labor_organization(id) on delete cascade;
 
--- labor_local_affiliation
-drop table if exists labor_local_affiliation cascade;
-create table labor_local_affiliation (
-    id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
-    delete_time timestamptz default null,
-    labor_local integer not null,
-    labor_organization integer not null,
-    year integer not null,
-    unique (labor_local,labor_organization,year)
+drop table if exists labor_organization_membership;
+create table labor_organization_membership (
+	id serial not null primary key,
+	create_time timestamptz not null default 'now',
+	update_time timestamptz not null default 'now',
+	delete_time timestamptz default null,
+	labor_organization integer not null references labor_organization(id) on delete cascade,
+	year integer not null,
+    members integer not null,
+	unique (labor_organization,year)
 );
-alter table labor_local_affiliation add foreign key (labor_local) references labor_local(id);
-alter table labor_local_affiliation add foreign key (labor_organization) references labor_organization(id);
 
--- labor_organization_address
 drop table if exists labor_organization_address cascade;
 create table labor_organization_address (
     id serial not null primary key,
@@ -738,23 +689,411 @@ create table labor_organization_address (
     year integer not null,
     unique (labor_organization,address,year)
 );
-alter table labor_organization_address add foreign key (labor_organization) references labor_organization(id);
-alter table labor_organization_address add foreign key (address) references address(id);
+alter table labor_organization_address add foreign key (labor_organization) references labor_organization(id) on delete cascade;
+alter table labor_organization_address add foreign key (address) references address(id) on delete cascade;
 
--- labor_local_address
-drop table if exists labor_local_address cascade;
-create table labor_local_address (
+drop table if exists labor_organization_total_disbursement;
+create table labor_organization_total_disbursement (
+	id serial not null primary key,
+	create_time timestamptz not null default 'now',
+	update_time timestamptz not null default 'now',
+	delete_time timestamptz default null,
+	labor_organization integer not null references labor_organization(id) on delete cascade,
+	year integer not null,
+    administration integer,
+    affiliates integer,
+    benefits integer,
+    contributions integer,
+    education integer,
+    employee_salaries integer,
+    employees_total integer,
+    fees integer,
+    general_overhead integer,
+    investments integer,
+    loans_made integer,
+    loans_paid integer,
+    members integer,
+    officer_administration integer,
+    officer_salaries integer,
+    officers_total integer,
+    office_supplies integer,
+    other integer,
+    other_contributions integer,
+    other_general_overhead integer,
+    other_political integer,
+    other_representation integer,
+    other_union_administration integer,
+    per_capita_tax integer,
+    political integer,
+    professional_services integer,
+    representation integer,
+    strike_benefits integer,
+    taxes integer,
+    union_administration integer,
+    withheld integer,
+    withheld_not_disbursed integer,
+	unique (labor_organization,year)
+);
+drop table if exists labor_organization_total_liability;
+create table labor_organization_total_liability (
+	id serial not null primary key,
+	create_time timestamptz not null default 'now',
+	update_time timestamptz not null default 'now',
+	delete_time timestamptz default null,
+	labor_organization integer not null references labor_organization(id) on delete cascade,
+	year integer not null,
+    accounts_payable_end integer,
+    accounts_payable_start integer,
+    loans_payable_end integer,
+    loans_payable_start integer,
+    mortgages_payable_end integer,
+    mortgages_payable_start integer,
+    other_liabilities_end integer,
+    other_liabilities_start integer,
+    total_start integer,
+	unique (labor_organization,year)
+);
+drop table if exists labor_organization_total_receipt;
+create table labor_organization_total_receipt (
+	id serial not null primary key,
+	create_time timestamptz not null default 'now',
+	update_time timestamptz not null default 'now',
+	delete_time timestamptz default null,
+	labor_organization integer not null references labor_organization(id) on delete cascade,
+	year integer not null,
+    affiliates integer,
+    all_other_receipts integer,
+    dividends integer,
+    dues integer,
+    fees integer,
+    interest integer,
+    investments integer,
+    loans_made integer,
+    loans_taken integer,
+    members integer,
+    office_supplies integer,
+    other_receipts integer,
+    rents integer,
+    tax integer,
+	unique (labor_organization,year)
+);
+
+drop table if exists labor_organization_payee;
+create table labor_organization_payee (
+	id serial not null primary key,
+	create_time timestamptz not null default 'now',
+	update_time timestamptz not null default 'now',
+	delete_time timestamptz default null,
+	labor_organization integer not null references labor_organization(id) on delete cascade,
+	year integer not null,
+    name text not null,
+    payee_type payee_type,
+    payment_type text,
+    amount integer,
+	unique (labor_organization,name,amount,year)
+);
+drop table if exists labor_organization_payee_address cascade;
+create table labor_organization_payee_address (
     id serial not null primary key,
     create_time timestamptz not null default 'now',
     update_time timestamptz not null default 'now',
     delete_time timestamptz default null,
-    labor_local integer not null,
+    labor_organization_payee integer not null,
     address integer not null,
     year integer not null,
-    unique (labor_local,address,year)
+    unique (labor_organization_payee,address,year)
 );
-alter table labor_local_address add foreign key (labor_local) references labor_local(id);
-alter table labor_local_address add foreign key (address) references address(id);
+alter table labor_organization_payee_address add foreign key (labor_organization_payee) references labor_organization_payee(id) on delete cascade;
+alter table labor_organization_payee_address add foreign key (address) references address(id) on delete cascade;
+
+drop table if exists labor_organization_other_asset;
+create table labor_organization_other_asset (
+	id serial not null primary key,
+	create_time timestamptz not null default 'now',
+	update_time timestamptz not null default 'now',
+	delete_time timestamptz default null,
+	labor_organization integer not null references labor_organization(id) on delete cascade,
+	year integer not null,
+    book_value integer,
+    description text,
+    value integer,
+	unique (labor_organization,year,description,value)
+);
+
+drop table if exists labor_organization_fixed_asset;
+create table labor_organization_fixed_asset (
+	id serial not null primary key,
+	create_time timestamptz not null default 'now',
+	update_time timestamptz not null default 'now',
+	delete_time timestamptz default null,
+	labor_organization integer not null references labor_organization(id) on delete cascade,
+	year integer not null,
+    asset_type asset_type,
+    book_value integer,
+    cost_basis integer,
+    depreciation integer,
+    description text,
+    value integer,
+	unique (labor_organization,year,description,value)
+);
+
+drop table if exists labor_organization_investment_asset;
+create table labor_organization_investment_asset (
+	id serial not null primary key,
+	create_time timestamptz not null default 'now',
+	update_time timestamptz not null default 'now',
+	delete_time timestamptz default null,
+	labor_organization integer not null references labor_organization(id) on delete cascade,
+	year integer not null,
+    amount integer,
+    investment_type investment_type,
+    name text,
+	unique (labor_organization,year,name,amount)
+);
+
+drop table if exists labor_organization_total_asset;
+create table labor_organization_total_asset (
+	id serial not null primary key,
+	create_time timestamptz not null default 'now',
+	update_time timestamptz not null default 'now',
+	delete_time timestamptz default null,
+	labor_organization integer not null references labor_organization(id) on delete cascade,
+	year integer not null,
+    accounts_receivable_end integer,
+    accounts_receivable_start integer,
+    cash_end integer,
+    cash_start integer,
+    fixed_assets_end integer,
+    fixed_assets_start integer,
+    investments_end integer,
+    investments_start integer,
+    loans_receivable_end integer,
+    loans_receivable_start integer,
+    other_assets_end integer,
+    other_assets_start integer,
+    other_investments_book_value integer,
+    other_investments_cost integer,
+    securities_book_value integer,
+    securities_cost integer,
+    total_start integer,
+    treasuries_end integer,
+    treasuries_start integer,
+	unique (labor_organization,year)
+);
+
+drop table if exists labor_organization_account_payable;
+create table labor_organization_account_payable (
+	id serial not null primary key,
+	create_time timestamptz not null default 'now',
+	update_time timestamptz not null default 'now',
+	delete_time timestamptz default null,
+	labor_organization integer not null references labor_organization(id) on delete cascade,
+	year integer not null,
+    account_type account_type,
+    liquidated integer,
+    name text,
+    past_due_90 integer,
+    past_due_180 integer,
+    total integer,
+	unique (labor_organization,year,name,total)
+);
+
+drop table if exists labor_organization_account_receivable;
+create table labor_organization_account_receivable (
+	id serial not null primary key,
+	create_time timestamptz not null default 'now',
+	update_time timestamptz not null default 'now',
+	delete_time timestamptz default null,
+	labor_organization integer not null references labor_organization(id) on delete cascade,
+	year integer not null,
+    account_type account_type,
+    liquidated integer,
+    name text,
+    past_due_90 integer,
+    past_due_180 integer,
+    total integer,
+	unique (labor_organization,year,name,total)
+);
+
+drop table if exists labor_organization_loan_payable;
+create table labor_organization_loan_payable (
+	id serial not null primary key,
+	create_time timestamptz not null default 'now',
+	update_time timestamptz not null default 'now',
+	delete_time timestamptz default null,
+	labor_organization integer not null references labor_organization(id) on delete cascade,
+	year integer not null,
+    cash_repayment integer,
+    loans_obtained integer,
+    loans_owed_end integer,
+    loans_owed_start integer,
+    non_cash_repayment integer,
+    source text,
+	unique (labor_organization,year,source,loans_owed_start)
+);
+drop table if exists labor_organization_loan_receivable;
+create table labor_organization_loan_receivable (
+	id serial not null primary key,
+	create_time timestamptz not null default 'now',
+	update_time timestamptz not null default 'now',
+	delete_time timestamptz default null,
+	labor_organization integer not null references labor_organization(id) on delete cascade,
+	year integer not null,
+    cash_repayments integer,
+    loan_type loan_type,
+    name text,
+    new_loan_amount integer,
+    non_cash_repayments integer,
+    outstanding_end_amount integer,
+    outstanding_start_amount integer,
+    purpose text,
+    security text,
+    terms text,
+	unique (labor_organization,year,name,outstanding_start_amount)
+);
+
+drop table if exists labor_organization_other_liability;
+create table labor_organization_other_liability (
+	id serial not null primary key,
+	create_time timestamptz not null default 'now',
+	update_time timestamptz not null default 'now',
+	delete_time timestamptz default null,
+	labor_organization integer not null references labor_organization(id) on delete cascade,
+	year integer not null,
+    amount integer,
+    description text,
+	unique (labor_organization,year,amount,description)
+);
+
+drop table if exists labor_organization_sale_receipt;
+create table labor_organization_sale_receipt (
+	id serial not null primary key,
+	create_time timestamptz not null default 'now',
+	update_time timestamptz not null default 'now',
+	delete_time timestamptz default null,
+	labor_organization integer not null references labor_organization(id) on delete cascade,
+	year integer not null,
+    amount_received integer,
+    book_value integer,
+    cost integer,
+    description text,
+    gross_sales_price integer,
+	unique (labor_organization,year,cost,description)
+);
+
+drop table if exists labor_organization_other_receipt;
+create table labor_organization_other_receipt (
+	id serial not null primary key,
+	create_time timestamptz not null default 'now',
+	update_time timestamptz not null default 'now',
+	delete_time timestamptz default null,
+	labor_organization integer not null references labor_organization(id) on delete cascade,
+	year integer not null,
+    amount integer,
+    receipt_date date,
+    payee integer not null references labor_organization_payee(id) on delete cascade,
+    purpose text,
+	unique (labor_organization,year,amount,payee,purpose)
+);
+
+drop table if exists labor_organization_total_receipt;
+create table labor_organization_total_receipt (
+	id serial not null primary key,
+	create_time timestamptz not null default 'now',
+	update_time timestamptz not null default 'now',
+	delete_time timestamptz default null,
+	labor_organization integer not null references labor_organization(id) on delete cascade,
+	year integer not null,
+    affiliates integer,
+    all_other_receipts integer,
+    dividends integer,
+    dues integer,
+    fees integer,
+    interest integer,
+    investments integer,
+    loans_made integer,
+    loans_taken integer,
+    members integer,
+    office_supplies integer,
+    other_receipts integer,
+    rents integer,
+    tax integer,
+	unique (labor_organization,year)
+);
+
+drop table if exists labor_organization_general_disbursement;
+create table labor_organization_general_disbursement (
+	id serial not null primary key,
+	create_time timestamptz not null default 'now',
+	update_time timestamptz not null default 'now',
+	delete_time timestamptz default null,
+	labor_organization integer not null references labor_organization(id) on delete cascade,
+	year integer not null,
+    amount integer,
+    disbursement_date date,
+    disbursement_type disbursement_type,
+    payee integer not null references labor_organization_payee(id) on delete cascade,
+    purpose text,
+	unique (labor_organization,year,amount,disbursement_date,payee,purpose)
+);
+
+drop table if exists labor_organization_investment_purchase;
+create table labor_organization_investment_purchase (
+	id serial not null primary key,
+	create_time timestamptz not null default 'now',
+	update_time timestamptz not null default 'now',
+	delete_time timestamptz default null,
+	labor_organization integer not null references labor_organization(id) on delete cascade,
+	year integer not null,
+    book_value integer,
+    cash_paid integer,
+    cost integer,
+    description text,
+    investment_type investment_type,
+	unique (labor_organization,year,cost,description)
+);
+
+drop table if exists labor_organization_officer_disbursement;
+create table labor_organization_officer_disbursement (
+	id serial not null primary key,
+	create_time timestamptz not null default 'now',
+	update_time timestamptz not null default 'now',
+	delete_time timestamptz default null,
+	labor_organization integer not null references labor_organization(id) on delete cascade,
+	year integer not null,
+    first_name text,
+    middle_name text,
+    last_name text,
+    title text,
+    administration_percent integer,
+    contributions_percent integer,
+    general_overhead_percent integer,
+    gross_salary integer,
+    political_percent integer,
+    representation_percent integer,
+    total integer,
+	unique (labor_organization,year,first_name,last_name,total)
+);
+
+drop table if exists labor_organization_benefit_disbursement;
+create table labor_organization_benefit_disbursement (
+	id serial not null primary key,
+	create_time timestamptz not null default 'now',
+	update_time timestamptz not null default 'now',
+	delete_time timestamptz default null,
+	labor_organization integer not null references labor_organization(id) on delete cascade,
+	year integer not null,
+    amount integer,
+    description text,
+    paid_to text,
+	unique (labor_organization,year,amount,description,paid_to)
+);
+
+--End Labor
+
+
+
+
 
 drop table if exists media cascade;
 create table media (
@@ -782,20 +1121,6 @@ create table work_stoppage (
     description text
 );
 
--- labor_local_work_stoppage
-drop table if exists labor_local_work_stoppage cascade;
-create table labor_local_work_stoppage (
-    id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
-    delete_time timestamptz default null,
-    labor_local integer not null,
-    work_stoppage integer not null,
-    unique (labor_local,work_stoppage)
-);
-alter table labor_local_work_stoppage add foreign key (labor_local) references labor_local(id);
-alter table labor_local_work_stoppage add foreign key (work_stoppage) references work_stoppage(id);
-
 -- labor_organization_work_stoppage
 drop table if exists labor_organization_work_stoppage cascade;
 create table labor_organization_work_stoppage (
@@ -807,8 +1132,8 @@ create table labor_organization_work_stoppage (
     work_stoppage integer not null,
     unique (labor_organization,work_stoppage)
 );
-alter table labor_organization_work_stoppage add foreign key (labor_organization) references labor_organization(id);
-alter table labor_organization_work_stoppage add foreign key (work_stoppage) references work_stoppage(id);
+alter table labor_organization_work_stoppage add foreign key (labor_organization) references labor_organization(id) on delete cascade;
+alter table labor_organization_work_stoppage add foreign key (work_stoppage) references work_stoppage(id) on delete cascade;
 
 -- port_work_stoppage
 drop table if exists port_work_stoppage cascade;
@@ -821,8 +1146,8 @@ create table port_work_stoppage (
     work_stoppage integer not null,
     unique (port,work_stoppage)
 );
-alter table port_work_stoppage add foreign key (port) references port(id);
-alter table port_work_stoppage add foreign key (work_stoppage) references work_stoppage(id);
+alter table port_work_stoppage add foreign key (port) references port(id) on delete cascade;
+alter table port_work_stoppage add foreign key (work_stoppage) references work_stoppage(id) on delete cascade;
 
 -- warehouse_work_stoppage
 drop table if exists warehouse_work_stoppage cascade;
@@ -835,8 +1160,8 @@ create table warehouse_work_stoppage (
     work_stoppage integer not null,
     unique (warehouse,work_stoppage)
 );
-alter table warehouse_work_stoppage add foreign key (warehouse) references warehouse(id);
-alter table warehouse_work_stoppage add foreign key (work_stoppage) references work_stoppage(id);
+alter table warehouse_work_stoppage add foreign key (warehouse) references warehouse(id) on delete cascade;
+alter table warehouse_work_stoppage add foreign key (work_stoppage) references work_stoppage(id) on delete cascade;
 
 -- rail_node_work_stoppage
 drop table if exists rail_node_work_stoppage cascade;
@@ -849,8 +1174,8 @@ create table rail_node_work_stoppage (
     work_stoppage integer not null,
     unique (rail_node,work_stoppage)
 );
-alter table rail_node_work_stoppage add foreign key (rail_node) references rail_node(id);
-alter table rail_node_work_stoppage add foreign key (work_stoppage) references work_stoppage(id);
+alter table rail_node_work_stoppage add foreign key (rail_node) references rail_node(id) on delete cascade;
+alter table rail_node_work_stoppage add foreign key (work_stoppage) references work_stoppage(id) on delete cascade;
 
 -- rail_line_work_stoppage
 drop table if exists rail_line_work_stoppage cascade;
@@ -863,8 +1188,8 @@ create table rail_line_work_stoppage (
     work_stoppage integer not null,
     unique (rail_line,work_stoppage)
 );
-alter table rail_line_work_stoppage add foreign key (rail_line) references rail_line(id);
-alter table rail_line_work_stoppage add foreign key (work_stoppage) references work_stoppage(id);
+alter table rail_line_work_stoppage add foreign key (rail_line) references rail_line(id) on delete cascade;
+alter table rail_line_work_stoppage add foreign key (work_stoppage) references work_stoppage(id) on delete cascade;
 
 -- osha_citation
 drop table if exists osha_citation cascade;
@@ -902,8 +1227,8 @@ create table company_address (
     address integer not null,
     unique (company,address)
 );
-alter table company_address add foreign key (company) references company(id);
-alter table company_address add foreign key (address) references address(id);
+alter table company_address add foreign key (company) references company(id) on delete cascade;
+alter table company_address add foreign key (address) references address(id) on delete cascade;
 
 -- warehouse_address
 drop table if exists warehouse_address cascade;
@@ -916,8 +1241,8 @@ create table warehouse_address (
     address integer not null,
     unique (warehouse,address)
 );
-alter table warehouse_address add foreign key (warehouse) references warehouse(id);
-alter table warehouse_address add foreign key (address) references address(id);
+alter table warehouse_address add foreign key (warehouse) references warehouse(id) on delete cascade;
+alter table warehouse_address add foreign key (address) references address(id) on delete cascade;
 
 -- port_address
 drop table if exists port_address cascade;
@@ -930,8 +1255,8 @@ create table port_address (
     address integer not null,
     unique (port,address)
 );
-alter table port_address add foreign key (port) references port(id);
-alter table port_address add foreign key (address) references address(id);
+alter table port_address add foreign key (port) references port(id) on delete cascade;
+alter table port_address add foreign key (address) references address(id) on delete cascade;
 
 -- company_osha_citation
 drop table if exists company_osha_citation cascade;
@@ -944,8 +1269,8 @@ create table company_osha_citation (
     osha_citation integer not null,
     unique (company,osha_citation)
 );
-alter table company_osha_citation add foreign key (company) references company(id);
-alter table company_osha_citation add foreign key (osha_citation) references osha_citation(id);
+alter table company_osha_citation add foreign key (company) references company(id) on delete cascade;
+alter table company_osha_citation add foreign key (osha_citation) references osha_citation(id) on delete cascade;
 
 -- labor_organization_osha_citation
 drop table if exists labor_organization_osha_citation cascade;
@@ -958,8 +1283,8 @@ create table labor_organization_osha_citation (
     osha_citation integer not null,
     unique (labor_organization,osha_citation)
 );
-alter table labor_organization_osha_citation add foreign key (labor_organization) references labor_organization(id);
-alter table labor_organization_osha_citation add foreign key (osha_citation) references osha_citation(id);
+alter table labor_organization_osha_citation add foreign key (labor_organization) references labor_organization(id) on delete cascade;
+alter table labor_organization_osha_citation add foreign key (osha_citation) references osha_citation(id) on delete cascade;
 
 -- company_nlrb_decision
 drop table if exists company_nlrb_decision cascade;
@@ -972,8 +1297,8 @@ create table company_nlrb_decision (
     nlrb_decision integer not null,
     unique (company,nlrb_decision)
 );
-alter table company_nlrb_decision add foreign key (company) references company(id);
-alter table company_nlrb_decision add foreign key (nlrb_decision) references nlrb_decision(id);
+alter table company_nlrb_decision add foreign key (company) references company(id) on delete cascade;
+alter table company_nlrb_decision add foreign key (nlrb_decision) references nlrb_decision(id) on delete cascade;
 
 -- labor_organization_nlrb_decision
 drop table if exists labor_organization_nlrb_decision cascade;
@@ -986,8 +1311,8 @@ create table labor_organization_nlrb_decision (
     nlrb_decision integer not null,
     unique (labor_organization,nlrb_decision)
 );
-alter table labor_organization_nlrb_decision add foreign key (labor_organization) references labor_organization(id);
-alter table labor_organization_nlrb_decision add foreign key (nlrb_decision) references nlrb_decision(id);
+alter table labor_organization_nlrb_decision add foreign key (labor_organization) references labor_organization(id) on delete cascade;
+alter table labor_organization_nlrb_decision add foreign key (nlrb_decision) references nlrb_decision(id) on delete cascade;
 
 
 -- labor_organization_port
@@ -1001,8 +1326,8 @@ create table labor_organization_port (
     port integer not null,
     unique (labor_organization,port)
 );
-alter table labor_organization_port add foreign key (labor_organization) references labor_organization(id);
-alter table labor_organization_port add foreign key (port) references port(id);
+alter table labor_organization_port add foreign key (labor_organization) references labor_organization(id) on delete cascade;
+alter table labor_organization_port add foreign key (port) references port(id) on delete cascade;
 
 -- labor_organization_warehouse
 drop table if exists labor_organization_warehouse cascade;
@@ -1015,8 +1340,8 @@ create table labor_organization_warehouse (
     warehouse integer not null,
     unique (labor_organization,warehouse)
 );
-alter table labor_organization_warehouse add foreign key (labor_organization) references labor_organization(id);
-alter table labor_organization_warehouse add foreign key (warehouse) references warehouse(id);
+alter table labor_organization_warehouse add foreign key (labor_organization) references labor_organization(id) on delete cascade;
+alter table labor_organization_warehouse add foreign key (warehouse) references warehouse(id) on delete cascade;
 
 -- labor_organization_rail_node
 drop table if exists labor_organization_rail_node cascade;
@@ -1029,8 +1354,8 @@ create table labor_organization_rail_node (
     rail_node integer not null,
     unique (labor_organization,rail_node)
 );
-alter table labor_organization_rail_node add foreign key (labor_organization) references labor_organization(id);
-alter table labor_organization_rail_node add foreign key (rail_node) references rail_node(id);
+alter table labor_organization_rail_node add foreign key (labor_organization) references labor_organization(id) on delete cascade;
+alter table labor_organization_rail_node add foreign key (rail_node) references rail_node(id) on delete cascade;
 
 -- company_port
 drop table if exists company_port cascade;
@@ -1043,8 +1368,8 @@ create table company_port (
     port integer not null,
     unique (company,port)
 );
-alter table company_port add foreign key (company) references company(id);
-alter table company_port add foreign key (port) references port(id);
+alter table company_port add foreign key (company) references company(id) on delete cascade;
+alter table company_port add foreign key (port) references port(id) on delete cascade;
 
 -- company_warehouse
 drop table if exists company_warehouse cascade;
@@ -1057,8 +1382,8 @@ create table company_warehouse (
     warehouse integer not null,
     unique (company,warehouse)
 );
-alter table company_warehouse add foreign key (company) references company(id);
-alter table company_warehouse add foreign key (warehouse) references warehouse(id);
+alter table company_warehouse add foreign key (company) references company(id) on delete cascade;
+alter table company_warehouse add foreign key (warehouse) references warehouse(id) on delete cascade;
 
 -- company_rail_node
 drop table if exists company_rail_node cascade;
@@ -1071,8 +1396,8 @@ create table company_rail_node (
     rail_node integer not null,
     unique (company,rail_node)
 );
-alter table company_rail_node add foreign key (company) references company(id);
-alter table company_rail_node add foreign key (rail_node) references rail_node(id);
+alter table company_rail_node add foreign key (company) references company(id) on delete cascade;
+alter table company_rail_node add foreign key (rail_node) references rail_node(id) on delete cascade;
 
 -- user
 drop table if exists "user" cascade;

@@ -1,10 +1,10 @@
 #!/bin/bash
 
 DB=empirelogistics
-SQL_FILE=data/warehouses/warehouse_data.sql
+SQL_FILE=data/warehouses/warehouse_data.sql.gz
 
 if test -f $SQL_FILE; then
-    psql -U el -q -d $DB < data/warehouses/warehouse_data.sql
+    zcat data/warehouses/warehouse_data.sql.gz | psql -U el -q -d $DB 
 else
     perl bin/import-walmart.pl
     perl bin/import-target.pl
@@ -14,5 +14,5 @@ else
     perl bin/import-amazon.pl
     perl bin/import-homedepot.pl
     perl bin/import-ikea.pl
-    pg_dump -U el -d $DB --data-only -t walmart -t walmart_id_seq -t warehouse -t warehouse_id_seq -t warehouse_type -t warehouse_type_id_seq -t warehouse_walmart -t address -t warehouse_address > etc/data/warehouses/warehouse_data.sql
+    pg_dump -U el -d $DB --data-only -t walmart -t walmart_id_seq -t warehouse -t warehouse_id_seq -t warehouse_type -t warehouse_type_id_seq -t warehouse_walmart -t address -t warehouse_address | gzip > etc/data/warehouses/warehouse_data.sql.gz
 fi
