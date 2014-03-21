@@ -32,7 +32,8 @@ my $dbh = DBI->connect(
 my $sth;
 
 my $dir   = "data/labor_organizations/";
-my @years = (2000 .. 2013);
+# All 13 years is too much data.
+my @years = (2013);
 
 # The order in which the files are read.
 my %key_for_filename = ();
@@ -1702,7 +1703,7 @@ sub create_other_receipts {
         {
             local $dbh->{RaiseError};
             try {
-                    $sth->execute($id,$year,$receipt_date,@{$receipt}{qw/amount purpose/});
+                $sth->execute($id,$year,$receipt_date,@{$receipt}{qw/amount purpose/});
             } catch {
                 say "Could not execute: $_";
                 $dbh->pg_rollback_to("other_receipt");
