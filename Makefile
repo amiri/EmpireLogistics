@@ -55,9 +55,9 @@ download-port-data: make-data-directories
 
 download-rail-data: make-data-directories $(rail_dir)/na-rail.zip $(rail_dir)/cta-sup/wconv.txt $(rail_dir)/qc28R.zip $(rail_dir)/QNdata.zip $(rail_dir)/cta-sup/subdiv.txt $(rail_dir)/shp/qn28n.shp $(rail_dir)/shp/qn28l.shp $(rail_dir)/na-rail-interlines.geojson $(rail_dir)/na-rail-ownership.json $(rail_dir)/na-rail-subdivisions.json
 
-download-warehouse-data: make-data-directories $(warehouse_dir)/walmart-distribution-centers.json $(warehouse_dir)/target-distribution-centers.json $(warehouse_dir)/costco.txt $(warehouse_dir)/krogers.txt $(warehouse_dir)/walgreens.csv $(warehouse_dir)/amazon.tsv $(warehouse_dir)/homedepot.csv $(warehouse_dir)/ikea.csv $(warehouse_dir)/warehouse_data.sql
+download-warehouse-data: make-data-directories $(warehouse_dir)/walmart-distribution-centers.json $(warehouse_dir)/target-distribution-centers.json $(warehouse_dir)/costco.txt $(warehouse_dir)/krogers.txt $(warehouse_dir)/walgreens.csv $(warehouse_dir)/amazon.tsv $(warehouse_dir)/homedepot.csv $(warehouse_dir)/ikea.csv $(warehouse_dir)/warehouse_data.sql.gz
 
-download-labor-data: make-data-directories $(labor_dir)/labor_organizations.html
+download-labor-data: make-data-directories $(labor_dir)/labor_organizations.html $(labor_dir)/labor_data.sql.gz
 	test -s $(labor_dir)/2000.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2000.zip&submitButton=Download" -o $(labor_dir)/2000.zip
 	test -s $(labor_dir)/2001.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2001.zip&submitButton=Download" -o $(labor_dir)/2001.zip
 	test -s $(labor_dir)/2002.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2002.zip&submitButton=Download" -o $(labor_dir)/2002.zip
@@ -122,6 +122,7 @@ import-labor: labor $(labor_dir)/labor-organizations.json
 	unzip -o $(labor_dir)/2011.zip -d $(labor_dir)/2011
 	unzip -o $(labor_dir)/2012.zip -d $(labor_dir)/2012
 	unzip -o $(labor_dir)/2013.zip -d $(labor_dir)/2013
+	bin/clean-labor-data
 	bin/import-labor-data
 
 
@@ -208,8 +209,8 @@ $(warehouse_dir)/homedepot.csv:
 $(warehouse_dir)/ikea.csv:
 	test -s $(warehouse_dir)/ikea.csv || cp 'etc/data/warehouses/ikea/ikea.csv' $(warehouse_dir)/ikea.csv
 
-$(warehouse_dir)/warehouse_data.sql:
-	test -s $(warehouse_dir)/warehouse_data.sql || cp 'etc/data/warehouses/warehouse_data.sql' $(warehouse_dir)/warehouse_data.sql || echo 0
+$(warehouse_dir)/warehouse_data.sql.gz:
+	test -s $(warehouse_dir)/warehouse_data.sql.gz || cp 'etc/data/warehouses/warehouse_data.sql.gz' $(warehouse_dir)/warehouse_data.sql.gz || echo 0
 
 ########## Media data download pieces
 
@@ -223,3 +224,6 @@ $(labor_dir)/labor_organizations.html:
 
 $(labor_dir)/labor-organizations.json: $(labor_dir)/labor_organizations.html
 	perl bin/extract-labor-organizations.pl
+
+$(labor_dir)/labor_data.sql.gz:
+	test -s $(labor_dir)/labor_data.sql.gz || cp 'etc/data/labor_organizations/labor_data.sql.gz' $(labor_dir)/labor_data.sql.gz || echo 0

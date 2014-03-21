@@ -609,14 +609,15 @@ create type investment_type as enum (
     'marketable securities cost',
     'marketable securities book value',
     'other securities cost',
-    'other securities book value'
+    'other securities book value',
+    'other'
 );
 
 drop type if exists loan_type cascade;
-create type loan_type as enum ('itemized','non-itemized');
+create type loan_type as enum ('itemized','non-itemized','other');
 
 drop type if exists account_type cascade;
-create type account_type as enum ('itemized','non-itemized');
+create type account_type as enum ('itemized','non-itemized','other');
 
 drop type if exists disbursement_type cascade;
 create type disbursement_type as enum (
@@ -626,7 +627,8 @@ create type disbursement_type as enum (
     'overhead',
     'administration',
     'general',
-    'non-itemized'
+    'non-itemized',
+    'other'
 );
 
 
@@ -666,7 +668,7 @@ create table labor_organization_affiliation (
 alter table labor_organization_affiliation add foreign key (child) references labor_organization(id) on delete cascade;
 alter table labor_organization_affiliation add foreign key (parent) references labor_organization(id) on delete cascade;
 
-drop table if exists labor_organization_membership;
+drop table if exists labor_organization_membership cascade;
 create table labor_organization_membership (
 	id serial not null primary key,
 	create_time timestamptz not null default 'now',
@@ -692,7 +694,7 @@ create table labor_organization_address (
 alter table labor_organization_address add foreign key (labor_organization) references labor_organization(id) on delete cascade;
 alter table labor_organization_address add foreign key (address) references address(id) on delete cascade;
 
-drop table if exists labor_organization_total_disbursement;
+drop table if exists labor_organization_total_disbursement cascade;
 create table labor_organization_total_disbursement (
 	id serial not null primary key,
 	create_time timestamptz not null default 'now',
@@ -734,7 +736,7 @@ create table labor_organization_total_disbursement (
     withheld_not_disbursed integer,
 	unique (labor_organization,year)
 );
-drop table if exists labor_organization_total_liability;
+drop table if exists labor_organization_total_liability cascade;
 create table labor_organization_total_liability (
 	id serial not null primary key,
 	create_time timestamptz not null default 'now',
@@ -753,7 +755,7 @@ create table labor_organization_total_liability (
     total_start integer,
 	unique (labor_organization,year)
 );
-drop table if exists labor_organization_total_receipt;
+drop table if exists labor_organization_total_receipt cascade;
 create table labor_organization_total_receipt (
 	id serial not null primary key,
 	create_time timestamptz not null default 'now',
@@ -778,7 +780,7 @@ create table labor_organization_total_receipt (
 	unique (labor_organization,year)
 );
 
-drop table if exists labor_organization_payee;
+drop table if exists labor_organization_payee cascade;
 create table labor_organization_payee (
 	id serial not null primary key,
 	create_time timestamptz not null default 'now',
@@ -790,7 +792,8 @@ create table labor_organization_payee (
     payee_type payee_type,
     payment_type text,
     amount integer,
-	unique (labor_organization,name,amount,year)
+    usdol_payee_id integer,
+	unique (labor_organization,year,usdol_payee_id,name)
 );
 drop table if exists labor_organization_payee_address cascade;
 create table labor_organization_payee_address (
@@ -806,7 +809,7 @@ create table labor_organization_payee_address (
 alter table labor_organization_payee_address add foreign key (labor_organization_payee) references labor_organization_payee(id) on delete cascade;
 alter table labor_organization_payee_address add foreign key (address) references address(id) on delete cascade;
 
-drop table if exists labor_organization_other_asset;
+drop table if exists labor_organization_other_asset cascade;
 create table labor_organization_other_asset (
 	id serial not null primary key,
 	create_time timestamptz not null default 'now',
@@ -817,10 +820,10 @@ create table labor_organization_other_asset (
     book_value integer,
     description text,
     value integer,
-	unique (labor_organization,year,description,value)
+	unique (labor_organization,year,book_value,description,value)
 );
 
-drop table if exists labor_organization_fixed_asset;
+drop table if exists labor_organization_fixed_asset cascade;
 create table labor_organization_fixed_asset (
 	id serial not null primary key,
 	create_time timestamptz not null default 'now',
@@ -834,10 +837,10 @@ create table labor_organization_fixed_asset (
     depreciation integer,
     description text,
     value integer,
-	unique (labor_organization,year,description,value)
+	unique (labor_organization,year,asset_type,book_value,cost_basis,depreciation,description,value)
 );
 
-drop table if exists labor_organization_investment_asset;
+drop table if exists labor_organization_investment_asset cascade;
 create table labor_organization_investment_asset (
 	id serial not null primary key,
 	create_time timestamptz not null default 'now',
@@ -848,10 +851,10 @@ create table labor_organization_investment_asset (
     amount integer,
     investment_type investment_type,
     name text,
-	unique (labor_organization,year,name,amount)
+	unique (labor_organization,year,amount,investment_type,name)
 );
 
-drop table if exists labor_organization_total_asset;
+drop table if exists labor_organization_total_asset cascade;
 create table labor_organization_total_asset (
 	id serial not null primary key,
 	create_time timestamptz not null default 'now',
@@ -881,7 +884,7 @@ create table labor_organization_total_asset (
 	unique (labor_organization,year)
 );
 
-drop table if exists labor_organization_account_payable;
+drop table if exists labor_organization_account_payable cascade;
 create table labor_organization_account_payable (
 	id serial not null primary key,
 	create_time timestamptz not null default 'now',
@@ -895,10 +898,10 @@ create table labor_organization_account_payable (
     past_due_90 integer,
     past_due_180 integer,
     total integer,
-	unique (labor_organization,year,name,total)
+    unique (labor_organization,year,account_type,liquidated,name,past_due_90,past_due_180,total)
 );
 
-drop table if exists labor_organization_account_receivable;
+drop table if exists labor_organization_account_receivable cascade;
 create table labor_organization_account_receivable (
 	id serial not null primary key,
 	create_time timestamptz not null default 'now',
@@ -912,10 +915,10 @@ create table labor_organization_account_receivable (
     past_due_90 integer,
     past_due_180 integer,
     total integer,
-	unique (labor_organization,year,name,total)
+	unique (labor_organization,year,account_type,liquidated,name,past_due_90,past_due_180,total)
 );
 
-drop table if exists labor_organization_loan_payable;
+drop table if exists labor_organization_loan_payable cascade;
 create table labor_organization_loan_payable (
 	id serial not null primary key,
 	create_time timestamptz not null default 'now',
@@ -929,9 +932,9 @@ create table labor_organization_loan_payable (
     loans_owed_start integer,
     non_cash_repayment integer,
     source text,
-	unique (labor_organization,year,source,loans_owed_start)
+	unique (labor_organization,year,cash_repayment,loans_obtained,loans_owed_end,loans_owed_start,non_cash_repayment,source)
 );
-drop table if exists labor_organization_loan_receivable;
+drop table if exists labor_organization_loan_receivable cascade;
 create table labor_organization_loan_receivable (
 	id serial not null primary key,
 	create_time timestamptz not null default 'now',
@@ -949,10 +952,10 @@ create table labor_organization_loan_receivable (
     purpose text,
     security text,
     terms text,
-	unique (labor_organization,year,name,outstanding_start_amount)
+	unique (labor_organization,year,name,new_loan_amount,non_cash_repayments,outstanding_end_amount,outstanding_start_amount,purpose,security,terms)
 );
 
-drop table if exists labor_organization_other_liability;
+drop table if exists labor_organization_other_liability cascade;
 create table labor_organization_other_liability (
 	id serial not null primary key,
 	create_time timestamptz not null default 'now',
@@ -965,7 +968,7 @@ create table labor_organization_other_liability (
 	unique (labor_organization,year,amount,description)
 );
 
-drop table if exists labor_organization_sale_receipt;
+drop table if exists labor_organization_sale_receipt cascade;
 create table labor_organization_sale_receipt (
 	id serial not null primary key,
 	create_time timestamptz not null default 'now',
@@ -978,10 +981,10 @@ create table labor_organization_sale_receipt (
     cost integer,
     description text,
     gross_sales_price integer,
-	unique (labor_organization,year,cost,description)
+	unique (labor_organization,year,amount_received,book_value,cost,description)
 );
 
-drop table if exists labor_organization_other_receipt;
+drop table if exists labor_organization_other_receipt cascade;
 create table labor_organization_other_receipt (
 	id serial not null primary key,
 	create_time timestamptz not null default 'now',
@@ -993,10 +996,10 @@ create table labor_organization_other_receipt (
     receipt_date date,
     payee integer not null references labor_organization_payee(id) on delete cascade,
     purpose text,
-	unique (labor_organization,year,amount,payee,purpose)
+	unique (labor_organization,year,amount,receipt_date,payee,purpose)
 );
 
-drop table if exists labor_organization_total_receipt;
+drop table if exists labor_organization_total_receipt cascade;
 create table labor_organization_total_receipt (
 	id serial not null primary key,
 	create_time timestamptz not null default 'now',
@@ -1021,7 +1024,7 @@ create table labor_organization_total_receipt (
 	unique (labor_organization,year)
 );
 
-drop table if exists labor_organization_general_disbursement;
+drop table if exists labor_organization_general_disbursement cascade;
 create table labor_organization_general_disbursement (
 	id serial not null primary key,
 	create_time timestamptz not null default 'now',
@@ -1037,7 +1040,7 @@ create table labor_organization_general_disbursement (
 	unique (labor_organization,year,amount,disbursement_date,payee,purpose)
 );
 
-drop table if exists labor_organization_investment_purchase;
+drop table if exists labor_organization_investment_purchase cascade;
 create table labor_organization_investment_purchase (
 	id serial not null primary key,
 	create_time timestamptz not null default 'now',
@@ -1050,10 +1053,10 @@ create table labor_organization_investment_purchase (
     cost integer,
     description text,
     investment_type investment_type,
-	unique (labor_organization,year,cost,description)
+	unique (labor_organization,year,book_value,cash_paid,cost,description,investment_type)
 );
 
-drop table if exists labor_organization_officer_disbursement;
+drop table if exists labor_organization_officer_disbursement cascade;
 create table labor_organization_officer_disbursement (
 	id serial not null primary key,
 	create_time timestamptz not null default 'now',
@@ -1075,7 +1078,7 @@ create table labor_organization_officer_disbursement (
 	unique (labor_organization,year,first_name,last_name,total)
 );
 
-drop table if exists labor_organization_benefit_disbursement;
+drop table if exists labor_organization_benefit_disbursement cascade;
 create table labor_organization_benefit_disbursement (
 	id serial not null primary key,
 	create_time timestamptz not null default 'now',

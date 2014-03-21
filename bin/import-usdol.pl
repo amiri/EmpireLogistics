@@ -25,9 +25,9 @@ my $dbh = DBI->connect(
     $dsn, $db_user, '3mp1r3',
     {   RaiseError    => 1,
         AutoCommit    => 0,
-        on_connect_do => ['set timezone = "America/Los Angeles"']
+        on_connect_do => ['set timezone = "America/Los Angeles"', 'set ON_ERROR_ROLLBACK 1'],
     }
-) || die "Error connecting to the database: $DBI::errstr\n";
+) || say "Error connecting to the database: $DBI::errstr\n";
 
 my $sth;
 
@@ -300,27 +300,34 @@ sub process_total_assets {
 sub process_accounts_receivable {
     my ($data) = shift;
     return undef unless $data;
-    my $return = {};
-    @{$return}{
-        qw/
-            account_type
-            liquidated
-            name
-            past_due_90
-            past_due_180
-            total
-            /
-        }
-        = map { my $datum = $_; my $return_datum = $datum eq "" ? undef : $datum; $return_datum } map { trim($_) } @{$data}{
-        qw/
-            ACCT_TYPE
-            LIQUIDATED
-            NAME
-            PAST_DUE_90
-            PAST_DUE_180
-            TOTAL
-            /
-        };
+    my $return = [];
+    $return = [
+        map {
+            my $each = {};
+            my $record = $_;
+        @{$each}{
+            qw/
+                account_type
+                liquidated
+                name
+                past_due_90
+                past_due_180
+                total
+                /
+            }
+            = map { my $datum = $_; my $return_datum = $datum eq "" ? undef : $datum; $return_datum } map { trim($_) } @{$record}{
+            qw/
+                ACCT_TYPE
+                LIQUIDATED
+                NAME
+                PAST_DUE_90
+                PAST_DUE_180
+                TOTAL
+                /
+            };
+            $each;
+        } @$data
+    ];
     return $return;
 }
 
@@ -342,7 +349,7 @@ sub process_fixed_assets {
                     value
                     /
                 }
-                = map {trim($_)} @{$record}{
+            = map { my $datum = $_; my $return_datum = $datum eq "" ? undef : $datum; $return_datum } map { trim($_) } @{$record}{
                 qw/
                     ASSET_TYPE
                     BOOK_VALUE
@@ -1308,9 +1315,17 @@ sub find_org {
     my $abbreviation = shift;
     my $find_org = 'select id from labor_organization where abbreviation = ?';
     $sth = $dbh->prepare($find_org);
-    $sth->execute($abbreviation) or die $sth->errstr;
-    my $id = $sth->fetchrow_arrayref;
-    my $org_id = defined($id) ? $id->[0] : undef;
+    my $org_id;
+    {
+        local $dbh->{RaiseError};
+        try {
+            $sth->execute($abbreviation);
+            my $id = $sth->fetchrow_arrayref;
+            $org_id = defined($id) ? $id->[0] : undef;
+        } catch {
+            say "Could not execute: $_";
+        };
+    }
     return $org_id;
 }
 
@@ -1328,8 +1343,18 @@ sub create_local {
     my $filing_number = $data->{usdol_filing_number};
     my $date_established = $data->{date_established} ? DateTimeX::Easy->new($data->{date_established}) : undef;
     $sth = $dbh->prepare($create_local);
-    $sth->execute($local_name,$filing_number,$local_prefix,$local_suffix,$local_type,$local_number,$date_established,'local') or die $sth->errstr;
-    my $local_id = $dbh->last_insert_id( undef, undef, "labor_organization", undef );
+    my $local_id;
+    $dbh->pg_savepoint("create_local");
+    {
+        local $dbh->{RaiseError};
+        try {
+            $sth->execute($local_name,$filing_number,$local_prefix,$local_suffix,$local_type,$local_number,$date_established,'local');
+            $local_id = $dbh->last_insert_id( undef, undef, "labor_organization", undef );
+        } catch {
+            say "Could not execute: $_";
+            $dbh->pg_rollback_to("create_local");
+        };
+    }
     return $local_id;
 }
 
@@ -1341,8 +1366,18 @@ sub create_organization {
     my $org_abbreviation = undef if $data->{abbreviation} =~ /unaff/i;
     my $date_established = $data->{date_established} ? DateTimeX::Easy->new($data->{date_established}) : undef;
     my $filing_number = $data->{usdol_filing_number};
-    $sth->execute($org_name,$filing_number,$org_abbreviation,$date_established) or die $sth->errstr;
-    my $org_id = $dbh->last_insert_id( undef, undef, "labor_organization", undef );
+    my $org_id;
+    $dbh->pg_savepoint("create_organization");
+    {
+        local $dbh->{RaiseError};
+        try {
+            $sth->execute($org_name,$filing_number,$org_abbreviation,$date_established);
+            $org_id = $dbh->last_insert_id( undef, undef, "labor_organization", undef );
+        } catch {
+            say "Could not execute: $_";
+            $dbh->pg_rollback_to("create_organization");
+        };
+    }
     return $org_id;
 }
 
@@ -1350,48 +1385,78 @@ sub create_affiliation {
     my ($local_id, $org_id, $year) = @_;
     my $create_affiliation = 'insert into labor_organization_affiliation (child,parent,year) values (?,?,?)';
     $sth = $dbh->prepare($create_affiliation);
-    $sth->execute($local_id,$org_id,$year) or die $sth->errstr;
-    my $affid = $dbh->last_insert_id( undef, undef, "labor_organization_affiliation", undef );
+    my $affid;
+    $dbh->pg_savepoint("create_affiliation");
+    {
+        local $dbh->{RaiseError};
+        try {
+            $sth->execute($local_id,$org_id,$year);
+            $affid = $dbh->last_insert_id( undef, undef, "labor_organization_affiliation", undef );
+        } catch {
+            say "Could not execute: $_";
+            $dbh->pg_rollback_to("create_affiliation");
+        };
+    }
     return $affid;
 }
 
 sub create_payee_address {
     my ($payee_id, $address_id,$year) = @_;
     my $type = "labor_organization";
-    die "No address" unless $address_id;
-    die "No year" unless $year;
+    say "No address" unless $address_id;
+    say "No year" unless $year;
     my $table_name = $type."_payee_address";
     my $rel_name = $type."_payee";
     my $create_address = "insert into $table_name ($rel_name,address,year) values (?,?,?)";
     $sth = $dbh->prepare($create_address);
-    $sth->execute($payee_id,$address_id,$year) or die $sth->errstr;
-    my $payee_address_id = $dbh->last_insert_id( undef, undef, $table_name, undef );
+    my $payee_address_id;
+    $dbh->pg_savepoint("create_payee_address");
+    {
+        local $dbh->{RaiseError};
+        try {
+            $sth->execute($payee_id,$address_id,$year);
+            $payee_address_id = $dbh->last_insert_id( undef, undef, $table_name, undef );
+        } catch {
+            say "Could not execute: $_";
+            $dbh->pg_rollback_to("create_payee_address");
+        };
+    }
     return $payee_address_id;
 }
 
 sub create_membership {
     my ($data,$id,$year) = @_;
     my $type = "labor_organization";
-    die "No id" unless $id;
-    die "No type" unless $type;
-    die "No year" unless $year;
+    say "No id" unless $id;
+    say "No type" unless $type;
+    say "No year" unless $year;
     my $table_name = $type."_membership";
     my $create_membership = "insert into $table_name ($type,year,members) values (?,?,?)";
     $sth = $dbh->prepare($create_membership);
-    $sth->execute($id,$year,$data->{members}) or die $sth->errstr;
-    my $membership_id = $dbh->last_insert_id( undef, undef, $table_name, undef );
+    my $membership_id;
+    $dbh->pg_savepoint("create_membership");
+    {
+        local $dbh->{RaiseError};
+        try {
+            $sth->execute($id,$year,$data->{members});
+            $membership_id = $dbh->last_insert_id( undef, undef, $table_name, undef );
+        } catch {
+            say "Could not execute: $_";
+            $dbh->pg_rollback_to("create_membership");
+        };
+    }
     return $membership_id;
 }
 
 sub create_payees {
     my ($data,$id,$year) = @_;
     my $type = "labor_organization";
-    die "No id" unless $id;
-    die "No type" unless $type;
-    die "No year" unless $year;
+    say "No id" unless $id;
+    say "No type" unless $type;
+    say "No year" unless $year;
     my $table_name = $type."_payee";
     for my $payee (@$data) {
-        my $create_payee = "insert into $table_name ($type,year,name,payee_type,payment_type,amount) values (?,?,?,?,?,?)";
+        my $create_payee = "insert into $table_name ($type,year,name,payee_type,payment_type,amount,usdol_payee_id) values (?,?,?,?,?,?,?)";
         $sth = $dbh->prepare($create_payee);
         my $amount = $payee->{total};
         my $payee_type = $payee_type{$payee->{payer_payee_type}};
@@ -1401,29 +1466,49 @@ sub create_payees {
         my $city = $payee->{city};
         my $state = $payee->{state};
         my $zip = $payee->{zip};
-        $sth->execute($id,$year,$name,$payee_type,$payment_type,$amount) or die $sth->errstr;
-        my $payee_id = $dbh->last_insert_id( undef, undef, $table_name, undef );
-        my $address_id = create_address({
-            street_address => $street_address,
-            city           => $city,
-            state          => $state,
-            postal_code    => $zip,
-            country        => 'US'
-        });
-        my $payee_address_id = create_payee_address($payee_id,$address_id,$year) if $address_id;
+        my $usdol_payee_id = $payee->{payee};
+        say "Id: $id, year: $year, name: $name, payee_type: $payee_type, payment_type: $payment_type, amount: $amount, payee_id: $usdol_payee_id";
+        $dbh->pg_savepoint("create_payee");
+        {
+            local $dbh->{RaiseError};
+            try {
+                $sth->execute($id,$year,$name,$payee_type,$payment_type,$amount,$usdol_payee_id);
+                my $payee_id = $dbh->last_insert_id( undef, undef, $table_name, undef );
+                my $address_id = create_address({
+                    street_address => $street_address,
+                    city           => $city,
+                    state          => $state,
+                    postal_code    => $zip,
+                    country        => 'US'
+                });
+                my $payee_address_id = create_payee_address($payee_id,$address_id,$year) if $address_id;
+            } catch {
+                say "Could not execute: $_";
+                $dbh->pg_rollback_to("create_payee");
+            };
+        }
     }
 }
 
 sub create_total_disbursements {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    die "No id"   unless $id;
-    die "No type" unless $type;
-    die "No year" unless $year;
+    say "No id"   unless $id;
+    say "No type" unless $type;
+    say "No year" unless $year;
     my $table_name = $type . "_total_disbursement";
     my $create_total_disbursement = "insert into $table_name ($type,year,administration,affiliates,benefits,contributions,education,employee_salaries,employees_total,fees,general_overhead,investments,loans_made,loans_paid,members,officer_administration,officer_salaries,officers_total,office_supplies,other,other_contributions,other_general_overhead,other_political,other_representation,other_union_administration,per_capita_tax,political,professional_services,representation,strike_benefits,taxes,union_administration,withheld,withheld_not_disbursed) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $sth = $dbh->prepare($create_total_disbursement);
-    $sth->execute($id, $year, @{$data}{qw/administration affiliates benefits contributions education employee_salaries employees_total fees general_overhead investments loans_made loans_paid members officer_administration officer_salaries officers_total office_supplies other other_contributions other_general_overhead other_political other_representation other_union_administration per_capita_tax political professional_services representation strike_benefits taxes union_administration withheld withheld_not_disbursed/}) or die $sth->errstr;
+    $dbh->pg_savepoint("create_total_disbursements");
+    {
+        local $dbh->{RaiseError};
+        try {
+            $sth->execute($id, $year, @{$data}{qw/administration affiliates benefits contributions education employee_salaries employees_total fees general_overhead investments loans_made loans_paid members officer_administration officer_salaries officers_total office_supplies other other_contributions other_general_overhead other_political other_representation other_union_administration per_capita_tax political professional_services representation strike_benefits taxes union_administration withheld withheld_not_disbursed/});
+        } catch {
+            say "Could not execute: $_";
+            $dbh->pg_rollback_to("create_total_disbursements");
+        };
+    }
     return 1;
 }
 
@@ -1436,18 +1521,29 @@ sub identify_payee {
 sub create_general_disbursements {
     my ($data, $id, $year, $payees) = @_;
     my $type = "labor_organization";
-    die "No id" unless $id;
-    die "No type" unless $type;
-    die "No year" unless $year;
-    die "No payees" unless $payees;
+    say "No id" unless $id;
+    say "No type" unless $type;
+    say "No year" unless $year;
+    say "No payees" unless $payees;
     my $table_name = $type."_general_disbursement";
     for my $disbursement (@$data) {
         my $disbursement_date = $disbursement->{disbursement_date} ? DateTimeX::Easy->new($disbursement->{disbursement_date}) : undef;
         my $disbursement_type = $disbursement_type{$disbursement->{disbursement_type}};
         my $payee_name = identify_payee($disbursement->{payee},$payees);
-        my $create_general_disbursement = qq{insert into $table_name ($type,year,payee,disbursement_date,disbursement_type,amount,purpose) values (?,?,(select id from labor_organization_payee where name = '$payee_name' and labor_organization = $id),?,?,?,?)};
+        my $usdol_payee_id = $disbursement->{payee};
+        my $create_general_disbursement = qq{insert into $table_name ($type,year,payee,disbursement_date,disbursement_type,amount,purpose) values (?,?,(select id from labor_organization_payee where name = \$\$$payee_name\$\$ and usdol_payee_id = $usdol_payee_id and labor_organization = $id),?,?,?,?)};
+        say $create_general_disbursement;
         $sth = $dbh->prepare($create_general_disbursement);
-        $sth->execute($id,$year,$disbursement_date,$disbursement_type,@{$disbursement}{qw/amount purpose/}) or die $sth->errstr;
+        $dbh->pg_savepoint("general_disbursement");
+        {
+            local $dbh->{RaiseError};
+            try {
+                $sth->execute($id,$year,$disbursement_date,$disbursement_type,@{$disbursement}{qw/amount purpose/});
+            } catch {
+                say "Could not execute: $_";
+                $dbh->pg_rollback_to("general_disbursement");
+            };
+        }
     }
     return 1;
 }
@@ -1455,15 +1551,24 @@ sub create_general_disbursements {
 sub create_officer_disbursements {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    die "No id" unless $id;
-    die "No type" unless $type;
-    die "No year" unless $year;
+    say "No id" unless $id;
+    say "No type" unless $type;
+    say "No year" unless $year;
     my $table_name = $type."_officer_disbursement";
     for my $disbursement (@$data) {
         my $create_officer_disbursement = "insert into $table_name ($type,year,first_name,middle_name,last_name,administration_percent,contributions_percent,general_overhead_percent,gross_salary,political_percent,representation_percent,title,total) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $sth = $dbh->prepare($create_officer_disbursement);
         my $disbursement_type = $disbursement_type{$disbursement->{disbursement_type}};
-        $sth->execute($id,$year,@{$disbursement}{qw/first_name middle_name last_name administration_percent contributions_percent general_overhead_percent gross_salary political_percent representation_percent title total/}) or die $sth->errstr;
+        $dbh->pg_savepoint("officer_disbursement");
+        {
+            local $dbh->{RaiseError};
+            try {
+                $sth->execute($id,$year,@{$disbursement}{qw/first_name middle_name last_name administration_percent contributions_percent general_overhead_percent gross_salary political_percent representation_percent title total/});
+            } catch {
+                say "Could not execute: $_";
+                $dbh->pg_rollback_to("officer_disbursement");
+            };
+        }
     }
     return 1;
 }
@@ -1471,14 +1576,23 @@ sub create_officer_disbursements {
 sub create_benefit_disbursements {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    die "No id" unless $id;
-    die "No type" unless $type;
-    die "No year" unless $year;
+    say "No id" unless $id;
+    say "No type" unless $type;
+    say "No year" unless $year;
     my $table_name = $type."_benefit_disbursement";
     for my $disbursement (@$data) {
         my $create_benefit_disbursement = "insert into $table_name ($type,year,amount,description,paid_to) values (?,?,?,?,?)";
         $sth = $dbh->prepare($create_benefit_disbursement);
-        $sth->execute($id,$year,@{$disbursement}{qw/amount description paid_to/}) or die $sth->errstr;
+        $dbh->pg_savepoint("benefit_disbursement");
+        {
+            local $dbh->{RaiseError};
+            try {
+                $sth->execute($id,$year,@{$disbursement}{qw/amount description paid_to/});
+            } catch {
+                say "Could not execute: $_";
+                $dbh->pg_rollback_to("benefit_disbursement");
+            };
+        }
     }
     return 1;
 }
@@ -1486,15 +1600,24 @@ sub create_benefit_disbursements {
 sub create_investment_purchases {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    die "No id" unless $id;
-    die "No type" unless $type;
-    die "No year" unless $year;
+    say "No id" unless $id;
+    say "No type" unless $type;
+    say "No year" unless $year;
     my $table_name = $type."_investment_purchase";
     for my $investment_purchase (@$data) {
         my $create_investment_purchase = "insert into $table_name ($type,year,book_value,cash_paid,cost,description,investment_type) values (?,?,?,?,?,?,?)";
         $sth = $dbh->prepare($create_investment_purchase);
         my $investment_type = $investment_type{$investment_purchase->{investment_type}};
-        $sth->execute($id,$year,@{$investment_purchase}{qw/book_value cash_paid cost description/},$investment_type) or die $sth->errstr;
+        $dbh->pg_savepoint("investment_purchase");
+        {
+            local $dbh->{RaiseError};
+            try {
+                $sth->execute($id,$year,@{$investment_purchase}{qw/book_value cash_paid cost description/},$investment_type);
+            } catch {
+                say "Could not execute: $_";
+                $dbh->pg_rollback_to("investment_purchase");
+            };
+        }
     }
     return 1;
 }
@@ -1502,27 +1625,45 @@ sub create_investment_purchases {
 sub create_total_receipts {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    die "No id"   unless $id;
-    die "No type" unless $type;
-    die "No year" unless $year;
+    say "No id"   unless $id;
+    say "No type" unless $type;
+    say "No year" unless $year;
     my $table_name = $type . "_total_receipt";
     my $create_total_receipt = "insert into $table_name ($type,year,affiliates,all_other_receipts,dividends,dues,fees,interest,investments,loans_made,loans_taken,members,office_supplies,other_receipts,rents,tax) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $sth = $dbh->prepare($create_total_receipt);
-    $sth->execute($id, $year, @{$data}{qw/affiliates all_other_receipts dividends dues fees interest investments loans_made loans_taken members office_supplies other_receipts rents tax/}) or die $sth->errstr;
+    $dbh->pg_savepoint("create_total_receipt");
+    {
+        local $dbh->{RaiseError};
+        try {
+            $sth->execute($id, $year, @{$data}{qw/affiliates all_other_receipts dividends dues fees interest investments loans_made loans_taken members office_supplies other_receipts rents tax/});
+        } catch {
+            say "Could not execute: $_";
+            $dbh->pg_rollback_to("create_total_receipt");
+        };
+    }
     return 1;
 }
 
 sub create_sales_receipts {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    die "No id" unless $id;
-    die "No type" unless $type;
-    die "No year" unless $year;
+    say "No id" unless $id;
+    say "No type" unless $type;
+    say "No year" unless $year;
     my $table_name = $type."_sale_receipt";
     for my $receipt (@$data) {
         my $create_sale_receipt = "insert into $table_name ($type,year,amount_received,book_value,cost,description,gross_sales_price) values (?,?,?,?,?,?,?)";
         $sth = $dbh->prepare($create_sale_receipt);
-        $sth->execute($id,$year,@{$receipt}{qw/amount_received book_value cost description gross_sales_price/}) or die $sth->errstr;
+        $dbh->pg_savepoint("sale_receipt");
+        {
+            local $dbh->{RaiseError};
+            try {
+                $sth->execute($id,$year,@{$receipt}{qw/amount_received book_value cost description gross_sales_price/});
+            } catch {
+                say "Could not execute: $_";
+                $dbh->pg_rollback_to("sale_receipt");
+            };
+        }
     }
     return 1;
 }
@@ -1530,17 +1671,27 @@ sub create_sales_receipts {
 sub create_other_receipts {
     my ($data, $id, $year,$payees) = @_;
     my $type = "labor_organization";
-    die "No id" unless $id;
-    die "No type" unless $type;
-    die "No year" unless $year;
-    die "No payees" unless $payees;
+    say "No id" unless $id;
+    say "No type" unless $type;
+    say "No year" unless $year;
+    say "No payees" unless $payees;
     my $table_name = $type."_other_receipt";
     for my $receipt (@$data) {
         my $receipt_date = $receipt->{receipt_date} ? DateTimeX::Easy->new($receipt->{receipt_date}) : undef;
         my $payee_name = identify_payee($receipt->{payee},$payees);
-        my $create_other_receipt = qq{insert into $table_name ($type,year,payee,receipt_date,amount,purpose) values (?,?,(select id from labor_organization_payee where name = '$payee_name' and labor_organization = $id),?,?,?)};
+        my $usdol_payee_id = $receipt->{payee};
+        my $create_other_receipt = qq{insert into $table_name ($type,year,payee,receipt_date,amount,purpose) values (?,?,(select id from labor_organization_payee where name = \$\$$payee_name\$\$ and usdol_payee_id = $usdol_payee_id and labor_organization = $id),?,?,?)};
         $sth = $dbh->prepare($create_other_receipt);
-        $sth->execute($id,$year,$receipt_date,@{$receipt}{qw/amount purpose/}) or die $sth->errstr;
+        $dbh->pg_savepoint("other_receipt");
+        {
+            local $dbh->{RaiseError};
+            try {
+                    $sth->execute($id,$year,$receipt_date,@{$receipt}{qw/amount purpose/});
+            } catch {
+                say "Could not execute: $_";
+                $dbh->pg_rollback_to("other_receipt");
+            };
+        }
     }
     return 1;
 }
@@ -1548,47 +1699,74 @@ sub create_other_receipts {
 sub create_total_assets {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    die "No id"   unless $id;
-    die "No type" unless $type;
-    die "No year" unless $year;
+    say "No id"   unless $id;
+    say "No type" unless $type;
+    say "No year" unless $year;
     my $table_name = $type . "_total_asset";
     my $create_total_asset =
         "insert into $table_name ($type,year,accounts_receivable_end,accounts_receivable_start,cash_end,cash_start,fixed_assets_end,fixed_assets_start,investments_end,investments_start,loans_receivable_end,loans_receivable_start,other_assets_end,other_assets_start,other_investments_book_value,other_investments_cost,securities_book_value,securities_cost,total_start,treasuries_end,treasuries_start) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $sth = $dbh->prepare($create_total_asset);
-    $sth->execute(
-        $id, $year,
-        @{$data}{
-            qw/accounts_receivable_end accounts_receivable_start cash_end cash_start fixed_assets_end fixed_assets_start investments_end investments_start loans_receivable_end loans_receivable_start other_assets_end other_assets_start other_investments_book_value other_investments_cost securities_book_value securities_cost total_start treasuries_end treasuries_start/
-        }
-    ) or die $sth->errstr;
+    $dbh->pg_savepoint("create_total_asset");
+    {
+        local $dbh->{RaiseError};
+        try {
+            $sth->execute(
+                $id, $year,
+                @{$data}{
+                    qw/accounts_receivable_end accounts_receivable_start cash_end cash_start fixed_assets_end fixed_assets_start investments_end investments_start loans_receivable_end loans_receivable_start other_assets_end other_assets_start other_investments_book_value other_investments_cost securities_book_value securities_cost total_start treasuries_end treasuries_start/
+                }
+            );
+        } catch {
+            say "Could not execute: $_";
+            $dbh->pg_rollback_to("create_total_asset");
+        };
+    }
     return 1;
 }
 
 sub create_total_liabilities {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    die "No id"   unless $id;
-    die "No type" unless $type;
-    die "No year" unless $year;
+    say "No id"   unless $id;
+    say "No type" unless $type;
+    say "No year" unless $year;
     my $table_name = $type . "_total_liability";
     my $create_total_liability =
         "insert into $table_name ($type,year,accounts_payable_end,accounts_payable_start,loans_payable_end,loans_payable_start,mortgages_payable_end,mortgages_payable_start,other_liabilities_end,other_liabilities_start,total_start) values (?,?,?,?,?,?,?,?,?,?,?)";
     $sth = $dbh->prepare($create_total_liability);
-    $sth->execute( $id, $year, @{$data}{qw/accounts_payable_end accounts_payable_start loans_payable_end loans_payable_start mortgages_payable_end mortgages_payable_start other_liabilities_end other_liabilities_start total_start/}) or die $sth->errstr;
+    $dbh->pg_savepoint("total_liability");
+    {
+        local $dbh->{RaiseError};
+        try {
+            $sth->execute( $id, $year, @{$data}{qw/accounts_payable_end accounts_payable_start loans_payable_end loans_payable_start mortgages_payable_end mortgages_payable_start other_liabilities_end other_liabilities_start total_start/});
+        } catch {
+            say "Could not execute: $_";
+            $dbh->pg_rollback_to("total_liability");
+        };
+    }
     return 1;
 }
 
 sub create_other_liabilities {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    die "No id" unless $id;
-    die "No type" unless $type;
-    die "No year" unless $year;
+    say "No id" unless $id;
+    say "No type" unless $type;
+    say "No year" unless $year;
     my $table_name = $type."_other_liability";
     for my $liability (@$data) {
         my $create_other_liability = "insert into $table_name ($type,year,amount,description) values (?,?,?,?)";
         $sth = $dbh->prepare($create_other_liability);
-        $sth->execute($id,$year,@{$liability}{qw/amount description/}) or die $sth->errstr;
+        $dbh->pg_savepoint("other_liability");
+        {
+            local $dbh->{RaiseError};
+            try {
+                $sth->execute($id,$year,@{$liability}{qw/amount description/});
+            } catch {
+                say "Could not execute: $_";
+                $dbh->pg_rollback_to("other_liability");
+            };
+        }
     }
     return 1;
 }
@@ -1596,30 +1774,54 @@ sub create_other_liabilities {
 sub create_accounts_receivable {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    die "No id" unless $id;
-    die "No type" unless $type;
-    die "No year" unless $year;
+    say "No id" unless $id;
+    say "No type" unless $type;
+    say "No year" unless $year;
     my $table_name = $type."_account_receivable";
+    my $i = 0;
     for my $account (@$data) {
         my $create_account_receivable = "insert into $table_name ($type,year,account_type,liquidated,name,past_due_90,past_due_180,total) values (?,?,?,?,?,?,?,?)";
         $sth = $dbh->prepare($create_account_receivable);
         my $account_type = $account_type{$account->{account_type}};
-        $sth->execute($id,$year,$account_type,@{$account}{qw/liquidated name past_due_90 past_due_180 total/}) or die $sth->errstr;
+        $dbh->pg_savepoint("account_receivable");
+        {
+            local $dbh->{RaiseError};
+            try {
+                $sth->execute($id,$year,$account_type,@{$account}{qw/liquidated name past_due_90 past_due_180 total/});
+            } catch {
+                say "Could not execute: $_";
+                $dbh->pg_rollback_to("account_receivable");
+            };
+        }
+        say "$i accounts_receivable";
+        $i++;
     }
     return 1;
 }
 sub create_accounts_payable {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    die "No id" unless $id;
-    die "No type" unless $type;
-    die "No year" unless $year;
+    say "No id" unless $id;
+    say "No type" unless $type;
+    say "No year" unless $year;
     my $table_name = $type."_account_payable";
+    my $i = 0;
     for my $account (@$data) {
         my $create_account_payable = "insert into $table_name ($type,year,account_type,liquidated,name,past_due_90,past_due_180,total) values (?,?,?,?,?,?,?,?)";
         $sth = $dbh->prepare($create_account_payable);
         my $account_type = $account_type{$account->{account_type}};
-        $sth->execute($id,$year,$account_type,@{$account}{qw/liquidated name past_due_90 past_due_180 total/}) or die $sth->errstr;
+        $dbh->pg_savepoint("account_payable");
+        {
+            local $dbh->{RaiseError};
+            try {
+                $sth->execute($id,$year,$account_type,@{$account}{qw/liquidated name past_due_90 past_due_180 total/});
+            } catch {
+                say "Could not execute: $_";
+                $dbh->pg_rollback_to("account_payable");
+            };
+        }
+        say "$i accounts_payable";
+        $i++;
     }
     return 1;
 }
@@ -1627,14 +1829,23 @@ sub create_accounts_payable {
 sub create_loans_payable {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    die "No id" unless $id;
-    die "No type" unless $type;
-    die "No year" unless $year;
+    say "No id" unless $id;
+    say "No type" unless $type;
+    say "No year" unless $year;
     my $table_name = $type."_loan_payable";
     for my $loan (@$data) {
         my $create_loan_payable = "insert into $table_name ($type,year,cash_repayment,loans_obtained,loans_owed_end,loans_owed_start,non_cash_repayment,source) values (?,?,?,?,?,?,?,?)";
         $sth = $dbh->prepare($create_loan_payable);
-        $sth->execute($id,$year,@{$loan}{qw/cash_repayment loans_obtained loans_owed_end loans_owed_start non_cash_repayment source/}) or die $sth->errstr;
+        $dbh->pg_savepoint("loan_payable");
+        {
+            local $dbh->{RaiseError};
+            try {
+                $sth->execute($id,$year,@{$loan}{qw/cash_repayment loans_obtained loans_owed_end loans_owed_start non_cash_repayment source/});
+            } catch {
+                say "Could not execute: $_";
+                $dbh->pg_rollback_to("loan_payable");
+            };
+        }
     }
     return 1;
 }
@@ -1642,15 +1853,24 @@ sub create_loans_payable {
 sub create_loans_receivable {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    die "No id" unless $id;
-    die "No type" unless $type;
-    die "No year" unless $year;
+    say "No id" unless $id;
+    say "No type" unless $type;
+    say "No year" unless $year;
     my $table_name = $type."_loan_receivable";
     for my $loan (@$data) {
         my $create_loan_receivable = "insert into $table_name ($type,year,loan_type,cash_repayments,name,new_loan_amount,non_cash_repayments,outstanding_end_amount,outstanding_start_amount,purpose,security,terms) values (?,?,?,?,?,?,?,?,?,?,?,?)";
         $sth = $dbh->prepare($create_loan_receivable);
         my $loan_type = $loan_type{$loan->{loan_type}};
-        $sth->execute($id, $year, $loan_type, @{$loan}{qw/cash_repayments name new_loan_amount non_cash_repayments outstanding_end_amount outstanding_start_amount purpose security terms/}) or die $sth->errstr;
+        $dbh->pg_savepoint("loan_receivable");
+        {
+            local $dbh->{RaiseError};
+            try {
+                $sth->execute($id, $year, $loan_type, @{$loan}{qw/cash_repayments name new_loan_amount non_cash_repayments outstanding_end_amount outstanding_start_amount purpose security terms/});
+            } catch {
+                say "Could not execute: $_";
+                $dbh->pg_rollback_to("loan_receivable");
+            };
+        }
     }
     return 1;
 }
@@ -1658,15 +1878,24 @@ sub create_loans_receivable {
 sub create_investment_assets {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    die "No id" unless $id;
-    die "No type" unless $type;
-    die "No year" unless $year;
+    say "No id" unless $id;
+    say "No type" unless $type;
+    say "No year" unless $year;
     my $table_name = $type."_investment_asset";
     for my $asset (@$data) {
         my $create_investment_asset = "insert into $table_name ($type,year,amount,name,investment_type) values (?,?,?,?,?)";
         $sth = $dbh->prepare($create_investment_asset);
         my $investment_type = $investment_type{$asset->{investment_type}};
-        $sth->execute($id,$year,@{$asset}{qw/amount name/},$investment_type) or die $sth->errstr;
+        $dbh->pg_savepoint("investment_asset");
+        {
+            local $dbh->{RaiseError};
+            try {
+                $sth->execute($id,$year,@{$asset}{qw/amount name/},$investment_type);
+            } catch {
+                say "Could not execute: $_";
+                $dbh->pg_rollback_to("investment_asset");
+            };
+        }
     }
     return 1;
 }
@@ -1674,14 +1903,23 @@ sub create_investment_assets {
 sub create_other_assets {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    die "No id" unless $id;
-    die "No type" unless $type;
-    die "No year" unless $year;
+    say "No id" unless $id;
+    say "No type" unless $type;
+    say "No year" unless $year;
     my $table_name = $type."_other_asset";
     for my $asset (@$data) {
         my $create_other_asset = "insert into $table_name ($type,year,book_value,description,value) values (?,?,?,?,?)";
         $sth = $dbh->prepare($create_other_asset);
-        $sth->execute($id,$year,@{$asset}{qw/book_value description value/}) or die $sth->errstr;
+        $dbh->pg_savepoint("other_asset");
+        {
+            local $dbh->{RaiseError};
+            try {
+                $sth->execute($id,$year,@{$asset}{qw/book_value description value/});
+            } catch {
+                say "Could not execute: $_";
+                $dbh->pg_rollback_to("other_asset");
+            };
+        }
     }
     return 1;
 }
@@ -1689,14 +1927,23 @@ sub create_other_assets {
 sub create_fixed_assets {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    die "No id" unless $id;
-    die "No type" unless $type;
-    die "No year" unless $year;
+    say "No id" unless $id;
+    say "No type" unless $type;
+    say "No year" unless $year;
     my $table_name = $type."_fixed_asset";
     for my $asset (@$data) {
         my $create_fixed_asset = "insert into $table_name ($type,year,book_value,cost_basis,depreciation,description,value) values (?,?,?,?,?,?,?)";
         $sth = $dbh->prepare($create_fixed_asset);
-        $sth->execute($id,$year,@{$asset}{qw/book_value cost_basis depreciation description value/}) or die $sth->errstr;
+        $dbh->pg_savepoint("fixed_asset");
+        {
+            local $dbh->{RaiseError};
+            try {
+                $sth->execute($id,$year,@{$asset}{qw/book_value cost_basis depreciation description value/});
+            } catch {
+                say "Could not execute: $_";
+                $dbh->pg_rollback_to("fixed_asset");
+            };
+        }
     }
     return 1;
 }
@@ -1704,9 +1951,9 @@ sub create_fixed_assets {
 sub create_labor_address {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    die "No id"   unless $id;
-    die "No type" unless $type;
-    die "No year" unless $year;
+    say "No id"   unless $id;
+    say "No type" unless $type;
+    say "No year" unless $year;
     my $table_name = $type . "_address";
     my $address_id = create_address({
         street_address => $data->{street_address},
@@ -1719,8 +1966,15 @@ sub create_labor_address {
     if ($address_id) {
         my $create_labor_address = "insert into $table_name ($type,address,year) values (?,?,?)";
         $sth = $dbh->prepare($create_labor_address);
-        $sth->execute($id, $address_id, $year) or die $sth->errstr;
-        $labor_address_id = $dbh->last_insert_id(undef, undef, $table_name, undef);
+        {
+            local $dbh->{RaiseError};
+            try {
+                $sth->execute($id, $address_id, $year);
+                $labor_address_id = $dbh->last_insert_id(undef, undef, $table_name, undef);
+            } catch {
+                say "Could not execute: $_";
+            };
+        }
     }
     return $labor_address_id;
 }
@@ -1731,13 +1985,21 @@ sub create_address {
     if ($data->{street_address}) {
         my $create_address = 'insert into address (street_address,city,state,postal_code,country) values (?,?,?,?,?)';
         $sth = $dbh->prepare($create_address);
-        $sth->execute(@{$data}{qw/street_address city state postal_code country/}) or die $sth->errstr;
-        $address_id = $dbh->last_insert_id( undef, undef, "address", undef );
+        {
+            local $dbh->{RaiseError};
+            try {
+                $sth->execute(@{$data}{qw/street_address city state postal_code country/});
+                $address_id = $dbh->last_insert_id( undef, undef, "address", undef );
+            } catch {
+                say "Could not execute: $_";
+            };
+        }
     }
     return $address_id;
 }
 
 
-$dbh->commit or die "Could not commit txn: ", $dbh->errstr;
+say "All done with USDOL labor organizations!";
+$dbh->commit or say "Could not commit txn: ", $dbh->errstr;
 
 1;
