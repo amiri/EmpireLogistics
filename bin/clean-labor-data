@@ -1,4 +1,4 @@
 #!/bin/bash
 
 find data/labor_organizations/ -wholename "*.txt" -print | grep -v "meta" | grep -v "ar_erds_codes" | xargs pcregrep -lMn "\n\n" | xargs perl -0777 -pi -e "s/\n+/\n/g"
-find data/labor_organizations/ -wholename "*.txt" -print | grep -v "meta" | grep -v "ar_erds_codes" | xargs grep -A5 -B5 -Pr "([^0-9\|-\|RPT_ID\|TOTAL_START\|OTHER_INV_TOTAL_BOOK_VALUE\|ALL_OTHER_RECEIPTS\|CODE_DESCRIPTION\|FORM_TYPE\|ITEM_NUM])$" | xargs perl -0777 -pi -e "s/([^0-9|-|RPT_ID|TOTAL_START|OTHER_INV_TOTAL_BOOK_VALUE|ALL_OTHER_RECEIPTS|CODE_DESCRIPTION|FORM_TYPE|ITEM_NUM])\n/\1 /g"
+find data/labor_organizations/ -wholename "*.txt" -print | grep -v "meta" | grep -v "ar_erds_codes" | xargs grep -lPr "([^0-9\|-\|RPT_ID\|TOTAL_START\|OTHER_INV_TOTAL_BOOK_VALUE\|ALL_OTHER_RECEIPTS\|CODE_DESCRIPTION\|FORM_TYPE\|ITEM_NUM])$" | xargs perl -0777 -pi -e "s/([^0-9|-|RPT_ID|TOTAL_START|OTHER_INV_TOTAL_BOOK_VALUE|ALL_OTHER_RECEIPTS|CODE_DESCRIPTION|FORM_TYPE|ITEM_NUM])\n/\1 /g"

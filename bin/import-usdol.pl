@@ -1259,6 +1259,7 @@ UNION: for my $key ((sort {$a <=> $b} keys %union_data)) {
         create_benefit_disbursements($record{benefits_disbursements},$id,$year);
         #   Total
         create_total_disbursements($record{total_disbursements},$id,$year);
+        $dbh->commit;
     }
 }
 
@@ -1308,6 +1309,7 @@ sub save_local_or_organization {
         # Set our return vars
         $id = $organization_id;
     }
+    $dbh->commit;
     return $id;
 }
 
@@ -1326,6 +1328,7 @@ sub find_org {
             say "Could not execute: $_";
         };
     }
+    $dbh->commit;
     return $org_id;
 }
 
@@ -1355,6 +1358,7 @@ sub create_local {
             $dbh->pg_rollback_to("create_local");
         };
     }
+    $dbh->commit;
     return $local_id;
 }
 
@@ -1378,6 +1382,7 @@ sub create_organization {
             $dbh->pg_rollback_to("create_organization");
         };
     }
+    $dbh->commit;
     return $org_id;
 }
 
@@ -1397,6 +1402,7 @@ sub create_affiliation {
             $dbh->pg_rollback_to("create_affiliation");
         };
     }
+    $dbh->commit;
     return $affid;
 }
 
@@ -1421,6 +1427,7 @@ sub create_payee_address {
             $dbh->pg_rollback_to("create_payee_address");
         };
     }
+    $dbh->commit;
     return $payee_address_id;
 }
 
@@ -1445,6 +1452,7 @@ sub create_membership {
             $dbh->pg_rollback_to("create_membership");
         };
     }
+    $dbh->commit;
     return $membership_id;
 }
 
@@ -1487,6 +1495,7 @@ sub create_payees {
                 $dbh->pg_rollback_to("create_payee");
             };
         }
+        $dbh->commit;
     }
 }
 
@@ -1509,6 +1518,7 @@ sub create_total_disbursements {
             $dbh->pg_rollback_to("create_total_disbursements");
         };
     }
+    $dbh->commit;
     return 1;
 }
 
@@ -1544,6 +1554,7 @@ sub create_general_disbursements {
                 $dbh->pg_rollback_to("general_disbursement");
             };
         }
+        $dbh->commit;
     }
     return 1;
 }
@@ -1569,6 +1580,7 @@ sub create_officer_disbursements {
                 $dbh->pg_rollback_to("officer_disbursement");
             };
         }
+        $dbh->commit;
     }
     return 1;
 }
@@ -1593,6 +1605,7 @@ sub create_benefit_disbursements {
                 $dbh->pg_rollback_to("benefit_disbursement");
             };
         }
+        $dbh->commit;
     }
     return 1;
 }
@@ -1618,6 +1631,7 @@ sub create_investment_purchases {
                 $dbh->pg_rollback_to("investment_purchase");
             };
         }
+        $dbh->commit;
     }
     return 1;
 }
@@ -1641,6 +1655,7 @@ sub create_total_receipts {
             $dbh->pg_rollback_to("create_total_receipt");
         };
     }
+    $dbh->commit;
     return 1;
 }
 
@@ -1664,6 +1679,7 @@ sub create_sales_receipts {
                 $dbh->pg_rollback_to("sale_receipt");
             };
         }
+        $dbh->commit;
     }
     return 1;
 }
@@ -1692,6 +1708,7 @@ sub create_other_receipts {
                 $dbh->pg_rollback_to("other_receipt");
             };
         }
+        $dbh->commit;
     }
     return 1;
 }
@@ -1721,6 +1738,7 @@ sub create_total_assets {
             $dbh->pg_rollback_to("create_total_asset");
         };
     }
+    $dbh->commit;
     return 1;
 }
 
@@ -1744,6 +1762,7 @@ sub create_total_liabilities {
             $dbh->pg_rollback_to("total_liability");
         };
     }
+    $dbh->commit;
     return 1;
 }
 
@@ -1767,6 +1786,7 @@ sub create_other_liabilities {
                 $dbh->pg_rollback_to("other_liability");
             };
         }
+        $dbh->commit;
     }
     return 1;
 }
@@ -1795,6 +1815,7 @@ sub create_accounts_receivable {
         }
         say "$i accounts_receivable";
         $i++;
+        $dbh->commit;
     }
     return 1;
 }
@@ -1822,6 +1843,7 @@ sub create_accounts_payable {
         }
         say "$i accounts_payable";
         $i++;
+        $dbh->commit;
     }
     return 1;
 }
@@ -1846,6 +1868,7 @@ sub create_loans_payable {
                 $dbh->pg_rollback_to("loan_payable");
             };
         }
+        $dbh->commit;
     }
     return 1;
 }
@@ -1871,6 +1894,7 @@ sub create_loans_receivable {
                 $dbh->pg_rollback_to("loan_receivable");
             };
         }
+        $dbh->commit;
     }
     return 1;
 }
@@ -1896,6 +1920,7 @@ sub create_investment_assets {
                 $dbh->pg_rollback_to("investment_asset");
             };
         }
+        $dbh->commit;
     }
     return 1;
 }
@@ -1920,6 +1945,7 @@ sub create_other_assets {
                 $dbh->pg_rollback_to("other_asset");
             };
         }
+        $dbh->commit;
     }
     return 1;
 }
@@ -1944,6 +1970,7 @@ sub create_fixed_assets {
                 $dbh->pg_rollback_to("fixed_asset");
             };
         }
+        $dbh->commit;
     }
     return 1;
 }
@@ -1976,6 +2003,7 @@ sub create_labor_address {
             };
         }
     }
+    $dbh->commit;
     return $labor_address_id;
 }
 
@@ -1995,6 +2023,7 @@ sub create_address {
             };
         }
     }
+    $dbh->commit;
     return $address_id;
 }
 

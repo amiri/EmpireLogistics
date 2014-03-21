@@ -93,7 +93,8 @@
       "libmagickcore-dev",
       "libmagickwand5",
       "perlmagick",
-      "libperl-dev"
+      "libperl-dev",
+      "pcregrep"
     ],
     "system_perl_packages": [
       "DBD::Pg",
@@ -122,6 +123,8 @@
     "user": "el"
   },
   "postgresql": {
+    "max_locks_per_transaction": 100000,
+    "max_pred_locks_per_transaction": 100000,
     "conf": {
       "data_directory": "/var/lib/postgresql/9.3/main",
       "timezone": "UTC"
