@@ -70,8 +70,9 @@ create table rail_ownership (
     flag text,
     reporting_mark text
 );
-CREATE INDEX reporting_mark_idx ON rail_ownership (reporting_mark);
-CREATE INDEX name_idx ON rail_ownership (name);
+create index on rail_ownership (reporting_mark);
+create index on rail_ownership (name);
+create index on rail_ownership (aar_code);
 
 drop table if exists rail_subdivision cascade;
 create table rail_subdivision (
@@ -85,8 +86,8 @@ create table rail_subdivision (
     subdivision_type text,
     comments text
 );
-create index subdiv_name_idx on rail_subdivision (name);
-create index subdiv_wmark_idx on rail_subdivision (wmark);
+create index on rail_subdivision (name);
+create index on rail_subdivision (wmark);
 
 drop sequence if exists state_id_seq cascade;
 drop table if exists state cascade;
@@ -98,8 +99,8 @@ create table state (
     abbreviation text,
     name text
 );
-CREATE INDEX state_abbreviation_idx ON state (abbreviation);
-CREATE INDEX state_name_idx ON state (name);
+create index on state (abbreviation);
+create index on state (name);
 
 drop table if exists rail_subdivision_state cascade;
 create table rail_subdivision_state (
@@ -110,6 +111,8 @@ create table rail_subdivision_state (
     delete_time timestamptz default null,
     primary key (subdivision, state)
 );
+create index on rail_subdivision_state (state);
+create index on rail_subdivision_state (subdivision);
 alter table rail_subdivision_state add foreign key (state) references state(id) on delete cascade;
 alter table rail_subdivision_state add foreign key (subdivision) references rail_subdivision(id) on delete cascade;
 
@@ -122,6 +125,8 @@ create table rail_track_type (
     name text not null,
     detail text not null
 );
+create index on rail_track_type (name);
+
 insert into rail_track_type (name,detail) values
     ('A', 'Main'),
     ('S', 'Siding'),
@@ -142,6 +147,8 @@ create table rail_track_grade (
     name text not null,
     detail text not null
 );
+create index on rail_track_grade (name);
+
 insert into rail_track_grade (name,detail) values
     ('G', 'At Grade'),
     ('F', 'Controlled Access'),
@@ -162,6 +169,8 @@ create table rail_track_gauge (
     name text not null,
     detail text not null
 );
+create index on rail_track_gauge (name);
+
 insert into rail_track_gauge (name,detail) values
     ('S', 'Standard'),
     ('E', 'Electrified, Standard'),
@@ -178,6 +187,8 @@ create table rail_status (
     name text not null,
     detail text not null
 );
+create index on rail_status (name);
+
 insert into rail_status (name,detail) values
     ('K', 'Active'),
     ('A', 'Abandoned'),
@@ -193,6 +204,8 @@ create table rail_density (
     name integer not null,
     detail text not null
 );
+create index on rail_density (name);
+
 insert into rail_density (name,detail) values
     (0,'Unknown'),
     (1,'≥ 5m tons/year'),
@@ -212,6 +225,8 @@ create table rail_signal (
     name text not null,
     detail text not null
 );
+create index on rail_signal (name);
+
 insert into rail_signal (name,detail) values
     ('S', 'Automatic Control System'),
     ('T', 'Automatic Train Control'),
@@ -231,6 +246,8 @@ create table rail_passenger (
     name text not null,
     detail text not null
 );
+create index on rail_passenger (name);
+
 insert into rail_passenger (name,detail) values
     ('A', 'Amtrak'),
     ('C', 'Commuter'),
@@ -251,6 +268,8 @@ create table rail_military (
     name text not null,
     detail text not null
 );
+create index on rail_military (name);
+
 insert into rail_military (name,detail) values
     ('S', 'STRACNET System'),
     ('C', 'STRACNET Connector');
@@ -264,6 +283,7 @@ create table rail_line_class (
     name text not null,
     detail text not null
 );
+create index on rail_line_class (name);
 
 insert into rail_line_class (name,detail) values
     ('A', 'A-Main'),
@@ -349,6 +369,11 @@ create table port (
     longitude double precision,
     geometry geometry(Point,900913)
 );
+create index on port (port_name);
+create index on port (country);
+create index on port (harbor_size);
+create index on port (harbor_type);
+
 drop table if exists port_depth_feet cascade;
 create table port_depth_feet (
     id serial not null primary key,
@@ -358,6 +383,8 @@ create table port_depth_feet (
     name text not null,
     detail text not null
 );
+create index on port_depth_feet (name);
+
 insert into port_depth_feet (name,detail) values
     ('A', '76+ feet'),
     ('B', '71-75 feet'),
@@ -385,6 +412,8 @@ create table port_depth_meters (
     name text not null,
     detail text not null
 );
+create index on port_depth_meters (name);
+
 insert into port_depth_meters (name,detail) values
     ('A', '23.2+ meters'),
     ('B', '21.6–22.9 meters'),
@@ -412,6 +441,8 @@ create table port_drydock (
     name text not null,
     detail text not null
 );
+create index on port_drydock (name);
+
 insert into port_drydock (name,detail) values
     ('L', 'Large'),
     ('M', 'Medium'),
@@ -426,6 +457,8 @@ create table port_harbor_size (
     name text not null,
     detail text not null
 );
+create index on port_harbor_size (name);
+
 insert into port_harbor_size (name,detail) values
     ('L', 'Large'),
     ('M', 'Medium'),
@@ -441,6 +474,8 @@ create table port_harbor_type (
     name text not null,
     detail text not null
 );
+create index on port_harbor_type (name);
+
 insert into port_harbor_type (name,detail) values
     ('CB', 'Coastal Breakwater'),
     ('CN', 'Coastal Natural'),
@@ -461,6 +496,8 @@ create table port_repair (
     name text not null,
     detail text not null
 );
+create index on port_repair (name);
+
 insert into port_repair (name,detail) values
     ('A', 'Major'),
     ('B', 'Moderate'),
@@ -477,6 +514,8 @@ create table port_shelter (
     name text not null,
     detail text not null
 );
+create index on port_shelter (name);
+
 insert into port_shelter (name,detail) values
     ('E', 'EXCELLENT'),
     ('F', 'FAIR'),
@@ -499,6 +538,7 @@ create table port_tonnage (
     total_tonnage integer,
     unique (port,year)
 );
+create index on port_tonnage (port);
 
 drop table if exists port_vessel_size cascade;
 create table port_vessel_size (
@@ -509,6 +549,8 @@ create table port_vessel_size (
     name text not null,
     detail text not null
 );
+create index on port_vessel_size (name);
+
 insert into port_vessel_size (name,detail) values
     ('L', '500+ feet'),
     ('M', '≥ 500 feet');
@@ -527,6 +569,7 @@ create table warehouse_type (
     delete_time timestamptz default null,
     name text
 );
+create index on warehouse_type (name);
 
 drop table if exists warehouse cascade;
 create table warehouse (
@@ -544,8 +587,11 @@ create table warehouse (
     longitude double precision,
     geometry geometry(Point,900913)
 );
+create index on warehouse (name);
+create index on warehouse (status);
+create index on warehouse (owner);
 
-drop table if exists walmart;
+drop table if exists walmart cascade;
 create table walmart (
     id serial not null primary key,
     create_time timestamptz not null default 'now',
@@ -554,7 +600,7 @@ create table walmart (
     walmart_id text
 );
 
-drop table if exists warehouse_walmart;
+drop table if exists warehouse_walmart cascade;
 create table warehouse_walmart (
     warehouse integer not null,
     walmart integer not null,
@@ -563,6 +609,10 @@ create table warehouse_walmart (
     delete_time timestamptz default null,
     primary key (warehouse, walmart)
 );
+create index on warehouse_walmart (warehouse);
+create index on warehouse_walmart (walmart);
+alter table warehouse_walmart add foreign key (warehouse) references warehouse (id) on delete cascade;
+alter table warehouse_walmart add foreign key (walmart) references walmart(id) on delete cascade;
 
 drop table if exists address cascade;
 create table address (
@@ -576,6 +626,11 @@ create table address (
     postal_code text,
     country text
 );
+create index on address (street_address);
+create index on address (city);
+create index on address (state);
+create index on address (postal_code);
+create index on address (country);
 
 drop type if exists company_type cascade;
 create type company_type as enum ('3PL', 'commercial', 'financial', 'industrial');
@@ -590,6 +645,8 @@ create table company (
     company_type company_type,
     description text
 );
+create index on company (name);
+create index on company (company_type);
 
 --Labor
 
@@ -652,6 +709,10 @@ create table labor_organization (
     description text,
     unique(name,usdol_filing_number,abbreviation,organization_type,local_prefix,local_suffix,local_type,local_number,description)
 );
+create index on labor_organization (name);
+create index on labor_organization (usdol_filing_number);
+create index on labor_organization (abbreviation);
+create index on labor_organization (organization_type);
 
 drop table if exists labor_organization_affiliation cascade;
 create table labor_organization_affiliation (
@@ -665,6 +726,8 @@ create table labor_organization_affiliation (
     unique (child,parent,year),
     check (child <> parent)
 );
+create index on labor_organization_affiliation (child);
+create index on labor_organization_affiliation (parent);
 alter table labor_organization_affiliation add foreign key (child) references labor_organization(id) on delete cascade;
 alter table labor_organization_affiliation add foreign key (parent) references labor_organization(id) on delete cascade;
 
@@ -679,6 +742,7 @@ create table labor_organization_membership (
     members integer not null,
 	unique (labor_organization,year)
 );
+create index on labor_organization_membership (labor_organization);
 
 drop table if exists labor_organization_address cascade;
 create table labor_organization_address (
@@ -691,6 +755,8 @@ create table labor_organization_address (
     year integer not null,
     unique (labor_organization,address,year)
 );
+create index on labor_organization_address (labor_organization);
+create index on labor_organization_address (address);
 alter table labor_organization_address add foreign key (labor_organization) references labor_organization(id) on delete cascade;
 alter table labor_organization_address add foreign key (address) references address(id) on delete cascade;
 
@@ -736,6 +802,8 @@ create table labor_organization_total_disbursement (
     withheld_not_disbursed integer,
 	unique (labor_organization,year)
 );
+create index on labor_organization_total_disbursement (labor_organization);
+
 drop table if exists labor_organization_total_liability cascade;
 create table labor_organization_total_liability (
 	id serial not null primary key,
@@ -755,6 +823,8 @@ create table labor_organization_total_liability (
     total_start integer,
 	unique (labor_organization,year)
 );
+create index on labor_organization_total_liability (labor_organization);
+
 drop table if exists labor_organization_total_receipt cascade;
 create table labor_organization_total_receipt (
 	id serial not null primary key,
@@ -779,6 +849,7 @@ create table labor_organization_total_receipt (
     tax integer,
 	unique (labor_organization,year)
 );
+create index on labor_organization_total_receipt (labor_organization);
 
 drop table if exists labor_organization_payee cascade;
 create table labor_organization_payee (
@@ -795,6 +866,10 @@ create table labor_organization_payee (
     usdol_payee_id integer,
 	unique (labor_organization,year,usdol_payee_id,name)
 );
+create index on labor_organization_payee (labor_organization);
+create index on labor_organization_payee (name);
+create index on labor_organization_payee (payee_type);
+
 drop table if exists labor_organization_payee_address cascade;
 create table labor_organization_payee_address (
     id serial not null primary key,
@@ -806,6 +881,8 @@ create table labor_organization_payee_address (
     year integer not null,
     unique (labor_organization_payee,address,year)
 );
+create index on labor_organization_payee_address (labor_organization_payee);
+create index on labor_organization_payee_address (address);
 alter table labor_organization_payee_address add foreign key (labor_organization_payee) references labor_organization_payee(id) on delete cascade;
 alter table labor_organization_payee_address add foreign key (address) references address(id) on delete cascade;
 
@@ -822,6 +899,7 @@ create table labor_organization_other_asset (
     value integer,
 	unique (labor_organization,year,book_value,description,value)
 );
+create index on labor_organization_other_asset (labor_organization);
 
 drop table if exists labor_organization_fixed_asset cascade;
 create table labor_organization_fixed_asset (
@@ -839,6 +917,7 @@ create table labor_organization_fixed_asset (
     value integer,
 	unique (labor_organization,year,asset_type,book_value,cost_basis,depreciation,description,value)
 );
+create index on labor_organization_fixed_asset (labor_organization);
 
 drop table if exists labor_organization_investment_asset cascade;
 create table labor_organization_investment_asset (
@@ -853,6 +932,7 @@ create table labor_organization_investment_asset (
     name text,
 	unique (labor_organization,year,amount,investment_type,name)
 );
+create index on labor_organization_investment_asset (labor_organization);
 
 drop table if exists labor_organization_total_asset cascade;
 create table labor_organization_total_asset (
@@ -883,6 +963,7 @@ create table labor_organization_total_asset (
     treasuries_start integer,
 	unique (labor_organization,year)
 );
+create index on labor_organization_total_asset (labor_organization);
 
 drop table if exists labor_organization_account_payable cascade;
 create table labor_organization_account_payable (
@@ -900,6 +981,7 @@ create table labor_organization_account_payable (
     total integer,
     unique (labor_organization,year,account_type,liquidated,name,past_due_90,past_due_180,total)
 );
+create index on labor_organization_account_payable (labor_organization);
 
 drop table if exists labor_organization_account_receivable cascade;
 create table labor_organization_account_receivable (
@@ -917,6 +999,7 @@ create table labor_organization_account_receivable (
     total integer,
 	unique (labor_organization,year,account_type,liquidated,name,past_due_90,past_due_180,total)
 );
+create index on labor_organization_account_receivable (labor_organization);
 
 drop table if exists labor_organization_loan_payable cascade;
 create table labor_organization_loan_payable (
@@ -934,6 +1017,8 @@ create table labor_organization_loan_payable (
     source text,
 	unique (labor_organization,year,cash_repayment,loans_obtained,loans_owed_end,loans_owed_start,non_cash_repayment,source)
 );
+create index on labor_organization_loan_payable (labor_organization);
+
 drop table if exists labor_organization_loan_receivable cascade;
 create table labor_organization_loan_receivable (
 	id serial not null primary key,
@@ -954,6 +1039,7 @@ create table labor_organization_loan_receivable (
     terms text,
 	unique (labor_organization,year,name,new_loan_amount,non_cash_repayments,outstanding_end_amount,outstanding_start_amount,purpose,security,terms)
 );
+create index on labor_organization_loan_receivable (labor_organization);
 
 drop table if exists labor_organization_other_liability cascade;
 create table labor_organization_other_liability (
@@ -967,6 +1053,7 @@ create table labor_organization_other_liability (
     description text,
 	unique (labor_organization,year,amount,description)
 );
+create index on labor_organization_other_liability (labor_organization);
 
 drop table if exists labor_organization_sale_receipt cascade;
 create table labor_organization_sale_receipt (
@@ -983,6 +1070,7 @@ create table labor_organization_sale_receipt (
     gross_sales_price integer,
 	unique (labor_organization,year,amount_received,book_value,cost,description)
 );
+create index on labor_organization_sale_receipt (labor_organization);
 
 drop table if exists labor_organization_other_receipt cascade;
 create table labor_organization_other_receipt (
@@ -998,6 +1086,8 @@ create table labor_organization_other_receipt (
     purpose text,
 	unique (labor_organization,year,amount,receipt_date,payee,purpose)
 );
+create index on labor_organization_other_receipt (labor_organization);
+create index on labor_organization_other_receipt (payee);
 
 drop table if exists labor_organization_total_receipt cascade;
 create table labor_organization_total_receipt (
@@ -1023,6 +1113,7 @@ create table labor_organization_total_receipt (
     tax integer,
 	unique (labor_organization,year)
 );
+create index on labor_organization_total_receipt (labor_organization);
 
 drop table if exists labor_organization_general_disbursement cascade;
 create table labor_organization_general_disbursement (
@@ -1039,6 +1130,8 @@ create table labor_organization_general_disbursement (
     purpose text,
 	unique (labor_organization,year,amount,disbursement_date,payee,purpose)
 );
+create index on labor_organization_general_disbursement (labor_organization);
+create index on labor_organization_general_disbursement (payee);
 
 drop table if exists labor_organization_investment_purchase cascade;
 create table labor_organization_investment_purchase (
@@ -1055,6 +1148,7 @@ create table labor_organization_investment_purchase (
     investment_type investment_type,
 	unique (labor_organization,year,book_value,cash_paid,cost,description,investment_type)
 );
+create index on labor_organization_investment_purchase (labor_organization);
 
 drop table if exists labor_organization_officer_disbursement cascade;
 create table labor_organization_officer_disbursement (
@@ -1077,6 +1171,7 @@ create table labor_organization_officer_disbursement (
     total integer,
 	unique (labor_organization,year,first_name,last_name,total)
 );
+create index on labor_organization_officer_disbursement (labor_organization);
 
 drop table if exists labor_organization_benefit_disbursement cascade;
 create table labor_organization_benefit_disbursement (
@@ -1091,6 +1186,7 @@ create table labor_organization_benefit_disbursement (
     paid_to text,
 	unique (labor_organization,year,amount,description,paid_to)
 );
+create index on labor_organization_benefit_disbursement (labor_organization);
 
 --End Labor
 
@@ -1135,6 +1231,8 @@ create table labor_organization_work_stoppage (
     work_stoppage integer not null,
     unique (labor_organization,work_stoppage)
 );
+create index on labor_organization_work_stoppage (labor_organization);
+create index on labor_organization_work_stoppage (work_stoppage);
 alter table labor_organization_work_stoppage add foreign key (labor_organization) references labor_organization(id) on delete cascade;
 alter table labor_organization_work_stoppage add foreign key (work_stoppage) references work_stoppage(id) on delete cascade;
 
@@ -1149,6 +1247,8 @@ create table port_work_stoppage (
     work_stoppage integer not null,
     unique (port,work_stoppage)
 );
+create index on port_work_stoppage (port);
+create index on port_work_stoppage (work_stoppage);
 alter table port_work_stoppage add foreign key (port) references port(id) on delete cascade;
 alter table port_work_stoppage add foreign key (work_stoppage) references work_stoppage(id) on delete cascade;
 
@@ -1163,6 +1263,8 @@ create table warehouse_work_stoppage (
     work_stoppage integer not null,
     unique (warehouse,work_stoppage)
 );
+create index on warehouse_work_stoppage (warehouse);
+create index on warehouse_work_stoppage (work_stoppage);
 alter table warehouse_work_stoppage add foreign key (warehouse) references warehouse(id) on delete cascade;
 alter table warehouse_work_stoppage add foreign key (work_stoppage) references work_stoppage(id) on delete cascade;
 
@@ -1177,6 +1279,8 @@ create table rail_node_work_stoppage (
     work_stoppage integer not null,
     unique (rail_node,work_stoppage)
 );
+create index on rail_node_work_stoppage (rail_node);
+create index on rail_node_work_stoppage (work_stoppage);
 alter table rail_node_work_stoppage add foreign key (rail_node) references rail_node(id) on delete cascade;
 alter table rail_node_work_stoppage add foreign key (work_stoppage) references work_stoppage(id) on delete cascade;
 
@@ -1191,6 +1295,8 @@ create table rail_line_work_stoppage (
     work_stoppage integer not null,
     unique (rail_line,work_stoppage)
 );
+create index on rail_line_work_stoppage (rail_line);
+create index on rail_line_work_stoppage (work_stoppage);
 alter table rail_line_work_stoppage add foreign key (rail_line) references rail_line(id) on delete cascade;
 alter table rail_line_work_stoppage add foreign key (work_stoppage) references work_stoppage(id) on delete cascade;
 
@@ -1205,6 +1311,7 @@ create table osha_citation (
     issuance_date date not null,
     url text not null
 );
+create index on osha_citation (inspection_number);
 
 -- nlrb_decision
 drop table if exists nlrb_decision cascade;
@@ -1218,6 +1325,7 @@ create table nlrb_decision (
     issuance_date date not null,
     url text not null
 );
+create index on nlrb_decision (citation_number);
 
 -- company_address
 drop table if exists company_address cascade;
@@ -1230,6 +1338,8 @@ create table company_address (
     address integer not null,
     unique (company,address)
 );
+create index on company_address (company);
+create index on company_address (address);
 alter table company_address add foreign key (company) references company(id) on delete cascade;
 alter table company_address add foreign key (address) references address(id) on delete cascade;
 
@@ -1244,6 +1354,8 @@ create table warehouse_address (
     address integer not null,
     unique (warehouse,address)
 );
+create index on warehouse_address (warehouse);
+create index on warehouse_address (address);
 alter table warehouse_address add foreign key (warehouse) references warehouse(id) on delete cascade;
 alter table warehouse_address add foreign key (address) references address(id) on delete cascade;
 
@@ -1258,6 +1370,8 @@ create table port_address (
     address integer not null,
     unique (port,address)
 );
+create index on port_address (port);
+create index on port_address (address);
 alter table port_address add foreign key (port) references port(id) on delete cascade;
 alter table port_address add foreign key (address) references address(id) on delete cascade;
 
@@ -1272,6 +1386,8 @@ create table company_osha_citation (
     osha_citation integer not null,
     unique (company,osha_citation)
 );
+create index on company_osha_citation (company);
+create index on company_osha_citation (osha_citation);
 alter table company_osha_citation add foreign key (company) references company(id) on delete cascade;
 alter table company_osha_citation add foreign key (osha_citation) references osha_citation(id) on delete cascade;
 
@@ -1286,6 +1402,8 @@ create table labor_organization_osha_citation (
     osha_citation integer not null,
     unique (labor_organization,osha_citation)
 );
+create index on labor_organization_osha_citation (labor_organization);
+create index on labor_organization_osha_citation (osha_citation);
 alter table labor_organization_osha_citation add foreign key (labor_organization) references labor_organization(id) on delete cascade;
 alter table labor_organization_osha_citation add foreign key (osha_citation) references osha_citation(id) on delete cascade;
 
@@ -1300,6 +1418,8 @@ create table company_nlrb_decision (
     nlrb_decision integer not null,
     unique (company,nlrb_decision)
 );
+create index on company_nlrb_decision (company);
+create index on company_nlrb_decision (nlrb_decision);
 alter table company_nlrb_decision add foreign key (company) references company(id) on delete cascade;
 alter table company_nlrb_decision add foreign key (nlrb_decision) references nlrb_decision(id) on delete cascade;
 
@@ -1314,6 +1434,8 @@ create table labor_organization_nlrb_decision (
     nlrb_decision integer not null,
     unique (labor_organization,nlrb_decision)
 );
+create index on labor_organization_nlrb_decision (labor_organization);
+create index on labor_organization_nlrb_decision (nlrb_decision);
 alter table labor_organization_nlrb_decision add foreign key (labor_organization) references labor_organization(id) on delete cascade;
 alter table labor_organization_nlrb_decision add foreign key (nlrb_decision) references nlrb_decision(id) on delete cascade;
 
@@ -1329,6 +1451,8 @@ create table labor_organization_port (
     port integer not null,
     unique (labor_organization,port)
 );
+create index on labor_organization_port (labor_organization);
+create index on labor_organization_port (port);
 alter table labor_organization_port add foreign key (labor_organization) references labor_organization(id) on delete cascade;
 alter table labor_organization_port add foreign key (port) references port(id) on delete cascade;
 
@@ -1343,6 +1467,8 @@ create table labor_organization_warehouse (
     warehouse integer not null,
     unique (labor_organization,warehouse)
 );
+create index on labor_organization_warehouse (labor_organization);
+create index on labor_organization_warehouse (warehouse);
 alter table labor_organization_warehouse add foreign key (labor_organization) references labor_organization(id) on delete cascade;
 alter table labor_organization_warehouse add foreign key (warehouse) references warehouse(id) on delete cascade;
 
@@ -1357,6 +1483,8 @@ create table labor_organization_rail_node (
     rail_node integer not null,
     unique (labor_organization,rail_node)
 );
+create index on labor_organization_rail_node (labor_organization);
+create index on labor_organization_rail_node (rail_node);
 alter table labor_organization_rail_node add foreign key (labor_organization) references labor_organization(id) on delete cascade;
 alter table labor_organization_rail_node add foreign key (rail_node) references rail_node(id) on delete cascade;
 
@@ -1371,6 +1499,8 @@ create table company_port (
     port integer not null,
     unique (company,port)
 );
+create index on company_port (company);
+create index on company_port (port);
 alter table company_port add foreign key (company) references company(id) on delete cascade;
 alter table company_port add foreign key (port) references port(id) on delete cascade;
 
@@ -1385,6 +1515,8 @@ create table company_warehouse (
     warehouse integer not null,
     unique (company,warehouse)
 );
+create index on company_warehouse (company);
+create index on company_warehouse (warehouse);
 alter table company_warehouse add foreign key (company) references company(id) on delete cascade;
 alter table company_warehouse add foreign key (warehouse) references warehouse(id) on delete cascade;
 
@@ -1399,6 +1531,8 @@ create table company_rail_node (
     rail_node integer not null,
     unique (company,rail_node)
 );
+create index on company_rail_node (company);
+create index on company_rail_node (rail_node);
 alter table company_rail_node add foreign key (company) references company(id) on delete cascade;
 alter table company_rail_node add foreign key (rail_node) references rail_node(id) on delete cascade;
 
@@ -1411,7 +1545,9 @@ create table "user" (
     delete_time timestamptz default null,
     email text not null,
     nickname text not null,
-    password text not null
+    password text not null,
+    description text,
+    notes text
 );
 
 -- object type
@@ -1425,13 +1561,38 @@ create type object_type as enum (
     'company_port',
     'company_rail_node',
     'company_warehouse',
+    'edit_history',
+    'edit_history_field',
     'labor_organization',
+    'labor_organization_account_payable',
+    'labor_organization_account_receivable',
     'labor_organization_address',
+    'labor_organization_affiliation',
+    'labor_organization_benefit_disbursement',
+    'labor_organization_fixed_asset',
+    'labor_organization_general_disbursement',
+    'labor_organization_investment_asset',
+    'labor_organization_investment_purchase',
+    'labor_organization_loan_payable',
+    'labor_organization_loan_receivable',
+    'labor_organization_membership',
     'labor_organization_nlrb_decision',
+    'labor_organization_officer_disbursement',
     'labor_organization_osha_citation',
+    'labor_organization_other_asset',
+    'labor_organization_other_liability',
+    'labor_organization_other_receipt',
+    'labor_organization_payee',
+    'labor_organization_payee_address',
     'labor_organization_port',
     'labor_organization_rail_node',
+    'labor_organization_sale_receipt',
+    'labor_organization_total_asset',
+    'labor_organization_total_disbursement',
+    'labor_organization_total_liability',
+    'labor_organization_total_receipt',
     'labor_organization_warehouse',
+    'labor_organization_work_stoppage',
     'media',
     'nlrb_decision',
     'osha_citation',
@@ -1446,12 +1607,15 @@ create type object_type as enum (
     'port_shelter',
     'port_tonnage',
     'port_vessel_size',
+    'port_work_stoppage',
     'rail_density',
     'rail_interline',
     'rail_line',
     'rail_line_class',
+    'rail_line_work_stoppage',
     'rail_military',
     'rail_node',
+    'rail_node_work_stoppage',
     'rail_ownership',
     'rail_passenger',
     'rail_signal',
@@ -1469,6 +1633,7 @@ create type object_type as enum (
     'warehouse_address',
     'warehouse_type',
     'warehouse_walmart',
+    'warehouse_work_stoppage',
     'work_stoppage'
 );
 
@@ -1482,17 +1647,22 @@ create table edit_history (
     "user" integer not null,
     notes text
 );
-create index edit_history_object_object_type on edit_history (object_type,object);
+create index on edit_history (object_type);
+create index on edit_history (object);
+create index on edit_history (object_type,object);
+create index on edit_history ("user");
 
 -- edit history field
 drop table if exists edit_history_field cascade;
 create table edit_history_field (
-    edit_history integer not null,
+    edit_history integer not null references edit_history(id),
     field text not null,
     original_value text,
     new_value text,
     primary key (edit_history, field)
 );
+create index on edit_history_field (edit_history);
+create index on edit_history_field (field);
 
 CREATE OR REPLACE FUNCTION update_timestamp() RETURNS TRIGGER
 LANGUAGE plpgsql
@@ -1516,13 +1686,38 @@ create trigger update_time before update on company_osha_citation for each row e
 create trigger update_time before update on company_port for each row execute procedure update_timestamp();
 create trigger update_time before update on company_rail_node for each row execute procedure update_timestamp();
 create trigger update_time before update on company_warehouse for each row execute procedure update_timestamp();
+create trigger update_time before update on edit_history for each row execute procedure update_timestamp();
+create trigger update_time before update on edit_history_field for each row execute procedure update_timestamp();
 create trigger update_time before update on labor_organization for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_account_payable for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_account_receivable for each row execute procedure update_timestamp();
 create trigger update_time before update on labor_organization_address for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_affiliation for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_benefit_disbursement for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_fixed_asset for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_general_disbursement for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_investment_asset for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_investment_purchase for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_loan_payable for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_loan_receivable for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_membership for each row execute procedure update_timestamp();
 create trigger update_time before update on labor_organization_nlrb_decision for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_officer_disbursement for each row execute procedure update_timestamp();
 create trigger update_time before update on labor_organization_osha_citation for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_other_asset for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_other_liability for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_other_receipt for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_payee for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_payee_address for each row execute procedure update_timestamp();
 create trigger update_time before update on labor_organization_port for each row execute procedure update_timestamp();
 create trigger update_time before update on labor_organization_rail_node for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_sale_receipt for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_total_asset for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_total_disbursement for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_total_liability for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_total_receipt for each row execute procedure update_timestamp();
 create trigger update_time before update on labor_organization_warehouse for each row execute procedure update_timestamp();
+create trigger update_time before update on labor_organization_work_stoppage for each row execute procedure update_timestamp();
 create trigger update_time before update on media for each row execute procedure update_timestamp();
 create trigger update_time before update on nlrb_decision for each row execute procedure update_timestamp();
 create trigger update_time before update on osha_citation for each row execute procedure update_timestamp();
@@ -1537,12 +1732,15 @@ create trigger update_time before update on port_repair for each row execute pro
 create trigger update_time before update on port_shelter for each row execute procedure update_timestamp();
 create trigger update_time before update on port_tonnage for each row execute procedure update_timestamp();
 create trigger update_time before update on port_vessel_size for each row execute procedure update_timestamp();
+create trigger update_time before update on port_work_stoppage for each row execute procedure update_timestamp();
 create trigger update_time before update on rail_density for each row execute procedure update_timestamp();
 create trigger update_time before update on rail_interline for each row execute procedure update_timestamp();
 create trigger update_time before update on rail_line for each row execute procedure update_timestamp();
 create trigger update_time before update on rail_line_class for each row execute procedure update_timestamp();
+create trigger update_time before update on rail_line_work_stoppage for each row execute procedure update_timestamp();
 create trigger update_time before update on rail_military for each row execute procedure update_timestamp();
 create trigger update_time before update on rail_node for each row execute procedure update_timestamp();
+create trigger update_time before update on rail_node_work_stoppage for each row execute procedure update_timestamp();
 create trigger update_time before update on rail_ownership for each row execute procedure update_timestamp();
 create trigger update_time before update on rail_passenger for each row execute procedure update_timestamp();
 create trigger update_time before update on rail_signal for each row execute procedure update_timestamp();
@@ -1558,4 +1756,5 @@ create trigger update_time before update on warehouse for each row execute proce
 create trigger update_time before update on warehouse_address for each row execute procedure update_timestamp();
 create trigger update_time before update on warehouse_type for each row execute procedure update_timestamp();
 create trigger update_time before update on warehouse_walmart for each row execute procedure update_timestamp();
+create trigger update_time before update on warehouse_work_stoppage for each row execute procedure update_timestamp();
 create trigger update_time before update on work_stoppage for each row execute procedure update_timestamp();
