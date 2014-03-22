@@ -226,4 +226,4 @@ $(labor_dir)/labor-organizations.json: $(labor_dir)/labor_organizations.html
 	perl bin/extract-labor-organizations.pl
 
 $(labor_dir)/labor_data.sql.gz:
-	test -s $(labor_dir)/labor_data.sql.gz || cp 'etc/data/labor_organizations/labor_data.sql.gz' $(labor_dir)/labor_data.sql.gz || echo 0
+	cp 'etc/data/labor_organizations/labor_data.sql.gz' $(labor_dir)/labor_data.sql.gz || echo 0

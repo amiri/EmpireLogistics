@@ -4,8 +4,10 @@ DB=empirelogistics
 SQL_FILE=data/labor_organization/labor_data.sql.gz
 
 if test -f $SQL_FILE; then
+    echo "Importing compressed labor data archive"
     zcat data/labor_organizations/labor_data.sql.gz | psql -U el -q -d $DB
 else
+    echo "Importing data from raw sources"
     perl bin/import-labor.pl
     perl bin/import-usdol.pl
     pg_dump -U el -d $DB --data-only -t labor_organization_membership -t labor_organization_address -t labor_organization_total_disbursement -t labor_organization -t labor_organization_investment_asset -t labor_organization_total_asset -t labor_organization_other_receipt -t labor_organization_work_stoppage -t labor_organization_osha_citation -t labor_organization_affiliation -t labor_organization_total_liability -t labor_organization_payee -t labor_organization_other_asset -t labor_organization_fixed_asset -t labor_organization_account_payable -t labor_organization_account_receivable -t labor_organization_loan_payable -t labor_organization_loan_receivable -t labor_organization_other_liability -t labor_organization_sale_receipt -t labor_organization_total_receipt -t labor_organization_general_disbursement -t labor_organization_investment_purchase -t labor_organization_officer_disbursement -t labor_organization_benefit_disbursement -t labor_organization_nlrb_decision -t labor_organization_port -t labor_organization_warehouse -t labor_organization_rail_node -t labor_organization_payee_address -t address | gzip > etc/data/labor_organizations/labor_data.sql.gz

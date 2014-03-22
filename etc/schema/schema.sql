@@ -650,7 +650,7 @@ create table labor_organization (
     local_type text,
     local_number text,
     description text,
-    unique(name,usdol_filing_number)
+    unique(name,usdol_filing_number,abbreviation,organization_type,local_prefix,local_suffix,local_type,local_number,description)
 );
 
 drop table if exists labor_organization_affiliation cascade;

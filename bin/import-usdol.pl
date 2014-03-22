@@ -1124,6 +1124,7 @@ say p %labor_orgs;
 # piece appropriately.
 UNION: for my $key ((sort {$a <=> $b} keys %union_data)) {
     my $union_data_for_year = $union_data{$key};
+    #next unless $key == 14910;
 
     my ($first_basic) = map {$union_data_for_year->{$_}{basic}}
         first {defined($union_data_for_year->{$_}{basic})}
@@ -1131,6 +1132,7 @@ UNION: for my $key ((sort {$a <=> $b} keys %union_data)) {
     my $first_basic_year = first {defined($union_data_for_year->{$_}{basic})}
     sort keys %$union_data_for_year;
     $first_basic = $process{basic}->($first_basic);
+    #die p $first_basic if $first_basic->{usdol_filing_number} == 14910;
     
     # We need the labor_organization already defined
     # before we enter the year loop.
@@ -1272,15 +1274,18 @@ sub save_local_or_organization {
     # If there is an abbreviation and it is not UNAFF
     if ($data->{abbreviation} && $data->{abbreviation} !~ /unaff/i) {
         # Try to find the labor_organization to which the local belongs
+        say "I have an abbrev and it is not unaff";
         my $org_id = find_org($data->{abbreviation});
         my ($local_id, $new_org_id);
         # If we found the labor_organization
         $data->{labor_organization_type} = 'local';
         if ($org_id) {
+        say "I have an org id $org_id";
             $local_id = create_local($data);
             my $aff_id = create_affiliation($local_id, $org_id, $year);
         # If we did not find the organization
         } else {
+        say "I do not have an org id and will create one";
             $new_org_id = create_organization($data);
             $local_id   = create_local($data);
             my $aff_id = create_affiliation($local_id, $new_org_id, $year);
@@ -1297,6 +1302,7 @@ sub save_local_or_organization {
             || $data->{designation_suffix})
         )
     {
+        say "I have an unaff local";
         # Create an unaffiliated local
         $data->{labor_organization_type} = 'unaffiliated';
         my $local_id = create_local($data);
@@ -1304,6 +1310,7 @@ sub save_local_or_organization {
         $id = $local_id;
     # If there is no abbreviation
     } else {
+        say "I have an new organization";
         # Create an organization
         $data->{labor_organization_type} = 'union';
         my $organization_id = create_organization($data);
@@ -1330,6 +1337,7 @@ sub find_org {
         };
     }
     $dbh->commit;
+    say "Found an org: $org_id" if $org_id;
     return $org_id;
 }
 
@@ -1346,20 +1354,38 @@ sub create_local {
     my $local_suffix = $data->{designation_suffix};
     my $filing_number = $data->{usdol_filing_number};
     my $date_established = $data->{date_established} ? DateTimeX::Easy->new($data->{date_established}) : undef;
-    $sth = $dbh->prepare($create_local);
     my $local_id;
-    $dbh->pg_savepoint("create_local");
+    my $find_local = "select id from labor_organization where name = ? and usdol_filing_number = ? and organization_type = 'local' and abbreviation is null and local_prefix = ? and local_suffix = ? and local_number = ?";
+    # Find the local first
+    $sth = $dbh->prepare($find_local);
     {
         local $dbh->{RaiseError};
         try {
-            $sth->execute($local_name,$filing_number,$local_prefix,$local_suffix,$local_type,$local_number,$date_established,'local');
-            $local_id = $dbh->last_insert_id( undef, undef, "labor_organization", undef );
+            $sth->execute($local_name,$filing_number,$local_prefix,$local_suffix,$local_number);
+            my $id = $sth->fetchrow_arrayref;
+            $local_id = defined($id) ? $id->[0] : undef;
         } catch {
             say "Could not execute: $_";
-            $dbh->pg_rollback_to("create_local");
         };
     }
-    $dbh->commit;
+    say "I found a local: $local_id" if $local_id;
+    # Only create it if we have to
+    unless ($local_id) {
+        say "Did not find a local; creating..";
+        $sth = $dbh->prepare($create_local);
+        $dbh->pg_savepoint("create_local");
+        {
+            local $dbh->{RaiseError};
+            try {
+                $sth->execute($local_name,$filing_number,$local_prefix,$local_suffix,$local_type,$local_number,$date_established,'local');
+                $local_id = $dbh->last_insert_id( undef, undef, "labor_organization", undef );
+            } catch {
+                say "Could not execute: $_";
+                $dbh->pg_rollback_to("create_local");
+            };
+        }
+        $dbh->commit;
+    }
     return $local_id;
 }
 
@@ -1368,7 +1394,8 @@ sub create_organization {
     my $create_organization = 'insert into labor_organization (name,usdol_filing_number,abbreviation,date_established) values (?,?,?,?)';
     my $org_name = join(" ", (map {ucfirst lc} (split(/ /, $data->{union_name}))));
     $sth = $dbh->prepare($create_organization);
-    my $org_abbreviation = undef if $data->{abbreviation} =~ /unaff/i;
+    my $org_abbreviation = $data->{abbreviation};
+    $org_abbreviation = undef if $org_abbreviation =~ /unaff/i;
     my $date_established = $data->{date_established} ? DateTimeX::Easy->new($data->{date_established}) : undef;
     my $filing_number = $data->{usdol_filing_number};
     my $org_id;
@@ -1468,6 +1495,7 @@ sub create_payees {
         my $create_payee = "insert into $table_name ($type,year,name,payee_type,payment_type,amount,usdol_payee_id) values (?,?,?,?,?,?,?)";
         $sth = $dbh->prepare($create_payee);
         my $amount = $payee->{total};
+        $amount = undef if defined($amount) and !$amount;
         my $payee_type = $payee_type{$payee->{payer_payee_type}};
         my $name = $payee->{name};
         my $payment_type = $payee->{type_or_class};
@@ -1476,7 +1504,7 @@ sub create_payees {
         my $state = $payee->{state};
         my $zip = $payee->{zip};
         my $usdol_payee_id = $payee->{payee};
-        say "Id: $id, year: $year, name: $name, payee_type: $payee_type, payment_type: $payment_type, amount: $amount, payee_id: $usdol_payee_id";
+        #say "Id: $id, year: $year, name: $name, payee_type: $payee_type, payment_type: $payment_type, amount: $amount, payee_id: $usdol_payee_id";
         $dbh->pg_savepoint("create_payee");
         {
             local $dbh->{RaiseError};
@@ -1542,6 +1570,8 @@ sub create_general_disbursements {
         my $disbursement_type = $disbursement_type{$disbursement->{disbursement_type}};
         my $payee_name = identify_payee($disbursement->{payee},$payees);
         my $usdol_payee_id = $disbursement->{payee};
+        my $amount = $disbursement->{amount};
+        $amount = undef if defined($amount) and !$amount;
         my $create_general_disbursement = qq{insert into $table_name ($type,year,payee,disbursement_date,disbursement_type,amount,purpose) values (?,?,(select id from labor_organization_payee where name = \$\$$payee_name\$\$ and usdol_payee_id = $usdol_payee_id and labor_organization = $id),?,?,?,?)};
         say $create_general_disbursement;
         $sth = $dbh->prepare($create_general_disbursement);
@@ -1549,7 +1579,7 @@ sub create_general_disbursements {
         {
             local $dbh->{RaiseError};
             try {
-                $sth->execute($id,$year,$disbursement_date,$disbursement_type,@{$disbursement}{qw/amount purpose/});
+                $sth->execute($id,$year,$disbursement_date,$disbursement_type,$amount,@{$disbursement}{qw/purpose/});
             } catch {
                 say "Could not execute: $_";
                 $dbh->pg_rollback_to("general_disbursement");
@@ -1595,12 +1625,14 @@ sub create_benefit_disbursements {
     my $table_name = $type."_benefit_disbursement";
     for my $disbursement (@$data) {
         my $create_benefit_disbursement = "insert into $table_name ($type,year,amount,description,paid_to) values (?,?,?,?,?)";
+        my $amount = $disbursement->{amount};
+        $amount = undef if defined($amount) and !$amount;
         $sth = $dbh->prepare($create_benefit_disbursement);
         $dbh->pg_savepoint("benefit_disbursement");
         {
             local $dbh->{RaiseError};
             try {
-                $sth->execute($id,$year,@{$disbursement}{qw/amount description paid_to/});
+                $sth->execute($id,$year,$amount,@{$disbursement}{qw/description paid_to/});
             } catch {
                 say "Could not execute: $_";
                 $dbh->pg_rollback_to("benefit_disbursement");
@@ -1669,12 +1701,20 @@ sub create_sales_receipts {
     my $table_name = $type."_sale_receipt";
     for my $receipt (@$data) {
         my $create_sale_receipt = "insert into $table_name ($type,year,amount_received,book_value,cost,description,gross_sales_price) values (?,?,?,?,?,?,?)";
+        my $amount = $receipt->{amount_received};
+        $amount = undef if defined($amount) and !$amount;
+        my $book_value = $receipt->{book_value};
+        $book_value = undef if defined($book_value) and !$book_value;
+        my $cost = $receipt->{cost};
+        $cost = undef if defined($cost) and !$cost;
+        my $gross_sales_price = $receipt->{gross_sales_price};
+        $gross_sales_price = undef if defined($gross_sales_price) and !$gross_sales_price;
         $sth = $dbh->prepare($create_sale_receipt);
         $dbh->pg_savepoint("sale_receipt");
         {
             local $dbh->{RaiseError};
             try {
-                $sth->execute($id,$year,@{$receipt}{qw/amount_received book_value cost description gross_sales_price/});
+                $sth->execute($id,$year,$amount,$book_value,$cost,@{$receipt}{qw/description/},$gross_sales_price);
             } catch {
                 say "Could not execute: $_";
                 $dbh->pg_rollback_to("sale_receipt");
@@ -1814,7 +1854,7 @@ sub create_accounts_receivable {
                 $dbh->pg_rollback_to("account_receivable");
             };
         }
-        say "$i accounts_receivable";
+        #say "$i accounts_receivable";
         $i++;
         $dbh->commit;
     }
@@ -1842,7 +1882,7 @@ sub create_accounts_payable {
                 $dbh->pg_rollback_to("account_payable");
             };
         }
-        say "$i accounts_payable";
+        #say "$i accounts_payable";
         $i++;
         $dbh->commit;
     }
