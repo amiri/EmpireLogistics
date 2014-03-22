@@ -41,7 +41,7 @@ $PARAMETERS{default} = {
 
 $PARAMETERS{"development"} = {
     %{ clone $PARAMETERS{'default'} },
-    srcroot  => "/home/amiri/EmpireLogistics",
+    srcroot  => get_current_srcroot(),
     hostname => "akbuntu",
     tiles_url => 'localhost',
 };
@@ -54,6 +54,7 @@ $PARAMETERS{"akbuntu"} = {
 
 $PARAMETERS{"vagrant-ubuntu-saucy-"} = {
     %{ clone $PARAMETERS{'development'} },
+    hostname => "vagrant-ubuntu-saucy-64",
 };
 
 sub mk_package_accessors {

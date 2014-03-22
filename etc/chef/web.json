@@ -5,7 +5,7 @@
   "perlbrew": {
     "cpanm_options": "--notest",
     "self_upgrade": true,
-    "install_options": "--thread --notest --noman -j 4 --64all --multi",
+    "install_options": "--thread --notest --noman -j 4 --64all --multi --switch",
     "perls": [
       "perl-5.18.2"
     ],
