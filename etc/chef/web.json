@@ -123,6 +123,7 @@
     "user": "el"
   },
   "postgresql": {
+    "client_min_messages": "warning",
     "max_locks_per_transaction": 100000,
     "max_pred_locks_per_transaction": 100000,
     "conf": {

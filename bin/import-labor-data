@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DB=empirelogistics
-SQL_FILE=data/labor_organization/labor_data.sql.gz
+SQL_FILE=data/labor_organizations/labor_data.sql.gz
 
 if test -f $SQL_FILE; then
     echo "Importing compressed labor data archive"

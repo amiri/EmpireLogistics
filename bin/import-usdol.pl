@@ -1274,18 +1274,18 @@ sub save_local_or_organization {
     # If there is an abbreviation and it is not UNAFF
     if ($data->{abbreviation} && $data->{abbreviation} !~ /unaff/i) {
         # Try to find the labor_organization to which the local belongs
-        say "I have an abbrev and it is not unaff";
+        #say "I have an abbrev and it is not unaff";
         my $org_id = find_org($data->{abbreviation});
         my ($local_id, $new_org_id);
         # If we found the labor_organization
         $data->{labor_organization_type} = 'local';
         if ($org_id) {
-        say "I have an org id $org_id";
+        #say "I have an org id $org_id";
             $local_id = create_local($data);
             my $aff_id = create_affiliation($local_id, $org_id, $year);
         # If we did not find the organization
         } else {
-        say "I do not have an org id and will create one";
+        #say "I do not have an org id and will create one";
             $new_org_id = create_organization($data);
             $local_id   = create_local($data);
             my $aff_id = create_affiliation($local_id, $new_org_id, $year);
@@ -1302,7 +1302,7 @@ sub save_local_or_organization {
             || $data->{designation_suffix})
         )
     {
-        say "I have an unaff local";
+        #say "I have an unaff local";
         # Create an unaffiliated local
         $data->{labor_organization_type} = 'unaffiliated';
         my $local_id = create_local($data);
@@ -1310,7 +1310,7 @@ sub save_local_or_organization {
         $id = $local_id;
     # If there is no abbreviation
     } else {
-        say "I have an new organization";
+        #say "I have an new organization";
         # Create an organization
         $data->{labor_organization_type} = 'union';
         my $organization_id = create_organization($data);
@@ -1337,7 +1337,7 @@ sub find_org {
         };
     }
     $dbh->commit;
-    say "Found an org: $org_id" if $org_id;
+    #say "Found an org: $org_id" if $org_id;
     return $org_id;
 }
 
@@ -1368,10 +1368,10 @@ sub create_local {
             say "Could not execute: $_";
         };
     }
-    say "I found a local: $local_id" if $local_id;
+    #say "I found a local: $local_id" if $local_id;
     # Only create it if we have to
     unless ($local_id) {
-        say "Did not find a local; creating..";
+        #say "Did not find a local; creating..";
         $sth = $dbh->prepare($create_local);
         $dbh->pg_savepoint("create_local");
         {
@@ -1437,8 +1437,8 @@ sub create_affiliation {
 sub create_payee_address {
     my ($payee_id, $address_id,$year) = @_;
     my $type = "labor_organization";
-    say "No address" unless $address_id;
-    say "No year" unless $year;
+    #say "No address" unless $address_id;
+    #say "No year" unless $year;
     my $table_name = $type."_payee_address";
     my $rel_name = $type."_payee";
     my $create_address = "insert into $table_name ($rel_name,address,year) values (?,?,?)";
@@ -1462,9 +1462,9 @@ sub create_payee_address {
 sub create_membership {
     my ($data,$id,$year) = @_;
     my $type = "labor_organization";
-    say "No id" unless $id;
-    say "No type" unless $type;
-    say "No year" unless $year;
+    #say "No id" unless $id;
+    #say "No type" unless $type;
+    #say "No year" unless $year;
     my $table_name = $type."_membership";
     my $create_membership = "insert into $table_name ($type,year,members) values (?,?,?)";
     $sth = $dbh->prepare($create_membership);
@@ -1487,9 +1487,9 @@ sub create_membership {
 sub create_payees {
     my ($data,$id,$year) = @_;
     my $type = "labor_organization";
-    say "No id" unless $id;
-    say "No type" unless $type;
-    say "No year" unless $year;
+    #say "No id" unless $id;
+    #say "No type" unless $type;
+    #say "No year" unless $year;
     my $table_name = $type."_payee";
     for my $payee (@$data) {
         my $create_payee = "insert into $table_name ($type,year,name,payee_type,payment_type,amount,usdol_payee_id) values (?,?,?,?,?,?,?)";
@@ -1531,9 +1531,9 @@ sub create_payees {
 sub create_total_disbursements {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    say "No id"   unless $id;
-    say "No type" unless $type;
-    say "No year" unless $year;
+    #say "No id"   unless $id;
+    #say "No type" unless $type;
+    #say "No year" unless $year;
     my $table_name = $type . "_total_disbursement";
     my $create_total_disbursement = "insert into $table_name ($type,year,administration,affiliates,benefits,contributions,education,employee_salaries,employees_total,fees,general_overhead,investments,loans_made,loans_paid,members,officer_administration,officer_salaries,officers_total,office_supplies,other,other_contributions,other_general_overhead,other_political,other_representation,other_union_administration,per_capita_tax,political,professional_services,representation,strike_benefits,taxes,union_administration,withheld,withheld_not_disbursed) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $sth = $dbh->prepare($create_total_disbursement);
@@ -1560,10 +1560,10 @@ sub identify_payee {
 sub create_general_disbursements {
     my ($data, $id, $year, $payees) = @_;
     my $type = "labor_organization";
-    say "No id" unless $id;
-    say "No type" unless $type;
-    say "No year" unless $year;
-    say "No payees" unless $payees;
+    #say "No id" unless $id;
+    #say "No type" unless $type;
+    #say "No year" unless $year;
+    #say "No payees" unless $payees;
     my $table_name = $type."_general_disbursement";
     for my $disbursement (@$data) {
         my $disbursement_date = $disbursement->{disbursement_date} ? DateTimeX::Easy->new($disbursement->{disbursement_date}) : undef;
@@ -1593,9 +1593,9 @@ sub create_general_disbursements {
 sub create_officer_disbursements {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    say "No id" unless $id;
-    say "No type" unless $type;
-    say "No year" unless $year;
+    #say "No id" unless $id;
+    #say "No type" unless $type;
+    #say "No year" unless $year;
     my $table_name = $type."_officer_disbursement";
     for my $disbursement (@$data) {
         my $create_officer_disbursement = "insert into $table_name ($type,year,first_name,middle_name,last_name,administration_percent,contributions_percent,general_overhead_percent,gross_salary,political_percent,representation_percent,title,total) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -1619,9 +1619,9 @@ sub create_officer_disbursements {
 sub create_benefit_disbursements {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    say "No id" unless $id;
-    say "No type" unless $type;
-    say "No year" unless $year;
+    #say "No id" unless $id;
+    #say "No type" unless $type;
+    #say "No year" unless $year;
     my $table_name = $type."_benefit_disbursement";
     for my $disbursement (@$data) {
         my $create_benefit_disbursement = "insert into $table_name ($type,year,amount,description,paid_to) values (?,?,?,?,?)";
@@ -1646,9 +1646,9 @@ sub create_benefit_disbursements {
 sub create_investment_purchases {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    say "No id" unless $id;
-    say "No type" unless $type;
-    say "No year" unless $year;
+    #say "No id" unless $id;
+    #say "No type" unless $type;
+    #say "No year" unless $year;
     my $table_name = $type."_investment_purchase";
     for my $investment_purchase (@$data) {
         my $create_investment_purchase = "insert into $table_name ($type,year,book_value,cash_paid,cost,description,investment_type) values (?,?,?,?,?,?,?)";
@@ -1672,9 +1672,9 @@ sub create_investment_purchases {
 sub create_total_receipts {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    say "No id"   unless $id;
-    say "No type" unless $type;
-    say "No year" unless $year;
+    #say "No id"   unless $id;
+    #say "No type" unless $type;
+    #say "No year" unless $year;
     my $table_name = $type . "_total_receipt";
     my $create_total_receipt = "insert into $table_name ($type,year,affiliates,all_other_receipts,dividends,dues,fees,interest,investments,loans_made,loans_taken,members,office_supplies,other_receipts,rents,tax) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $sth = $dbh->prepare($create_total_receipt);
@@ -1695,9 +1695,9 @@ sub create_total_receipts {
 sub create_sales_receipts {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    say "No id" unless $id;
-    say "No type" unless $type;
-    say "No year" unless $year;
+    #say "No id" unless $id;
+    #say "No type" unless $type;
+    #say "No year" unless $year;
     my $table_name = $type."_sale_receipt";
     for my $receipt (@$data) {
         my $create_sale_receipt = "insert into $table_name ($type,year,amount_received,book_value,cost,description,gross_sales_price) values (?,?,?,?,?,?,?)";
@@ -1728,10 +1728,10 @@ sub create_sales_receipts {
 sub create_other_receipts {
     my ($data, $id, $year,$payees) = @_;
     my $type = "labor_organization";
-    say "No id" unless $id;
-    say "No type" unless $type;
-    say "No year" unless $year;
-    say "No payees" unless $payees;
+    #say "No id" unless $id;
+    #say "No type" unless $type;
+    #say "No year" unless $year;
+    #say "No payees" unless $payees;
     my $table_name = $type."_other_receipt";
     for my $receipt (@$data) {
         my $receipt_date = $receipt->{receipt_date} ? DateTimeX::Easy->new($receipt->{receipt_date}) : undef;
@@ -1757,9 +1757,9 @@ sub create_other_receipts {
 sub create_total_assets {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    say "No id"   unless $id;
-    say "No type" unless $type;
-    say "No year" unless $year;
+    #say "No id"   unless $id;
+    #say "No type" unless $type;
+    #say "No year" unless $year;
     my $table_name = $type . "_total_asset";
     my $create_total_asset =
         "insert into $table_name ($type,year,accounts_receivable_end,accounts_receivable_start,cash_end,cash_start,fixed_assets_end,fixed_assets_start,investments_end,investments_start,loans_receivable_end,loans_receivable_start,other_assets_end,other_assets_start,other_investments_book_value,other_investments_cost,securities_book_value,securities_cost,total_start,treasuries_end,treasuries_start) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -1786,9 +1786,9 @@ sub create_total_assets {
 sub create_total_liabilities {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    say "No id"   unless $id;
-    say "No type" unless $type;
-    say "No year" unless $year;
+    #say "No id"   unless $id;
+    #say "No type" unless $type;
+    #say "No year" unless $year;
     my $table_name = $type . "_total_liability";
     my $create_total_liability =
         "insert into $table_name ($type,year,accounts_payable_end,accounts_payable_start,loans_payable_end,loans_payable_start,mortgages_payable_end,mortgages_payable_start,other_liabilities_end,other_liabilities_start,total_start) values (?,?,?,?,?,?,?,?,?,?,?)";
@@ -1810,9 +1810,9 @@ sub create_total_liabilities {
 sub create_other_liabilities {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    say "No id" unless $id;
-    say "No type" unless $type;
-    say "No year" unless $year;
+    #say "No id" unless $id;
+    #say "No type" unless $type;
+    #say "No year" unless $year;
     my $table_name = $type."_other_liability";
     for my $liability (@$data) {
         my $create_other_liability = "insert into $table_name ($type,year,amount,description) values (?,?,?,?)";
@@ -1835,9 +1835,9 @@ sub create_other_liabilities {
 sub create_accounts_receivable {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    say "No id" unless $id;
-    say "No type" unless $type;
-    say "No year" unless $year;
+    #say "No id" unless $id;
+    #say "No type" unless $type;
+    #say "No year" unless $year;
     my $table_name = $type."_account_receivable";
     my $i = 0;
     for my $account (@$data) {
@@ -1863,11 +1863,11 @@ sub create_accounts_receivable {
 sub create_accounts_payable {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    say "No id" unless $id;
-    say "No type" unless $type;
-    say "No year" unless $year;
+    #say "No id" unless $id;
+    #say "No type" unless $type;
+    #say "No year" unless $year;
     my $table_name = $type."_account_payable";
-    my $i = 0;
+    #my $i = 0;
     for my $account (@$data) {
         my $create_account_payable = "insert into $table_name ($type,year,account_type,liquidated,name,past_due_90,past_due_180,total) values (?,?,?,?,?,?,?,?)";
         $sth = $dbh->prepare($create_account_payable);
@@ -1883,7 +1883,7 @@ sub create_accounts_payable {
             };
         }
         #say "$i accounts_payable";
-        $i++;
+        #$i++;
         $dbh->commit;
     }
     return 1;
@@ -1892,9 +1892,9 @@ sub create_accounts_payable {
 sub create_loans_payable {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    say "No id" unless $id;
-    say "No type" unless $type;
-    say "No year" unless $year;
+    #say "No id" unless $id;
+    #say "No type" unless $type;
+    #say "No year" unless $year;
     my $table_name = $type."_loan_payable";
     for my $loan (@$data) {
         my $create_loan_payable = "insert into $table_name ($type,year,cash_repayment,loans_obtained,loans_owed_end,loans_owed_start,non_cash_repayment,source) values (?,?,?,?,?,?,?,?)";
@@ -1917,9 +1917,9 @@ sub create_loans_payable {
 sub create_loans_receivable {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    say "No id" unless $id;
-    say "No type" unless $type;
-    say "No year" unless $year;
+    #say "No id" unless $id;
+    #say "No type" unless $type;
+    #say "No year" unless $year;
     my $table_name = $type."_loan_receivable";
     for my $loan (@$data) {
         my $create_loan_receivable = "insert into $table_name ($type,year,loan_type,cash_repayments,name,new_loan_amount,non_cash_repayments,outstanding_end_amount,outstanding_start_amount,purpose,security,terms) values (?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -1943,9 +1943,9 @@ sub create_loans_receivable {
 sub create_investment_assets {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    say "No id" unless $id;
-    say "No type" unless $type;
-    say "No year" unless $year;
+    #say "No id" unless $id;
+    #say "No type" unless $type;
+    #say "No year" unless $year;
     my $table_name = $type."_investment_asset";
     for my $asset (@$data) {
         my $create_investment_asset = "insert into $table_name ($type,year,amount,name,investment_type) values (?,?,?,?,?)";
@@ -1969,9 +1969,9 @@ sub create_investment_assets {
 sub create_other_assets {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    say "No id" unless $id;
-    say "No type" unless $type;
-    say "No year" unless $year;
+    #say "No id" unless $id;
+    #say "No type" unless $type;
+    #say "No year" unless $year;
     my $table_name = $type."_other_asset";
     for my $asset (@$data) {
         my $create_other_asset = "insert into $table_name ($type,year,book_value,description,value) values (?,?,?,?,?)";
@@ -1994,9 +1994,9 @@ sub create_other_assets {
 sub create_fixed_assets {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    say "No id" unless $id;
-    say "No type" unless $type;
-    say "No year" unless $year;
+    #say "No id" unless $id;
+    #say "No type" unless $type;
+    #say "No year" unless $year;
     my $table_name = $type."_fixed_asset";
     for my $asset (@$data) {
         my $create_fixed_asset = "insert into $table_name ($type,year,book_value,cost_basis,depreciation,description,value) values (?,?,?,?,?,?,?)";
@@ -2019,9 +2019,9 @@ sub create_fixed_assets {
 sub create_labor_address {
     my ($data, $id, $year) = @_;
     my $type = "labor_organization";
-    say "No id"   unless $id;
-    say "No type" unless $type;
-    say "No year" unless $year;
+    #say "No id"   unless $id;
+    #say "No type" unless $type;
+    #say "No year" unless $year;
     my $table_name = $type . "_address";
     my $address_id = create_address({
         street_address => $data->{street_address},
@@ -2069,7 +2069,7 @@ sub create_address {
 }
 
 
-say "All done with USDOL labor organizations!";
+#say "All done with USDOL labor organizations!";
 $dbh->commit or say "Could not commit txn: ", $dbh->errstr;
 
 1;
