@@ -12,6 +12,11 @@ use EmpireLogistics::Web;
 my $path = `which perl`;
 warn "Perl interp path: $path";
 warn map { "$_ " } @INC;
+warn "PERL_MB_OPT: ",  $ENV{PERL_MB_OPT};
+warn "PERL_MM_OPT: ",  $ENV{PERL_MM_OPT};
+warn "PERL5LIB: ",  $ENV{PERL5LIB};
+warn "PATH: ",  $ENV{PATH};
+warn "PERL_LOCAL_LIB_ROOT: ",  $ENV{PERL_LOCAL_LIB_ROOT};
 
 my $app = EmpireLogistics::Web->apply_default_middlewares(EmpireLogistics::Web->psgi_app(@_));
 
