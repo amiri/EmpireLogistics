@@ -28,13 +28,13 @@ __PACKAGE__->add_columns(
   "create_time",
   {
     data_type     => "timestamp with time zone",
-    default_value => "2014-02-27 14:49:06.29529+00",
+    default_value => "2014-03-22 19:27:40.056257+00",
     is_nullable   => 0,
   },
   "update_time",
   {
     data_type     => "timestamp with time zone",
-    default_value => "2014-02-27 14:49:06.29529+00",
+    default_value => "2014-03-22 19:27:40.056257+00",
     is_nullable   => 0,
   },
   "delete_time",
@@ -47,8 +47,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-03-03 01:14:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:g1Z4cCqqorDSClimhZJqvg
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-03-22 19:28:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:v6/EoKeATslww+QYGgt3hQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

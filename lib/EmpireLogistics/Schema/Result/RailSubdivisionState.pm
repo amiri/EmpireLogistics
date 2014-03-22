@@ -25,13 +25,13 @@ __PACKAGE__->add_columns(
   "create_time",
   {
     data_type     => "timestamp with time zone",
-    default_value => "2014-02-27 14:49:06.236402+00",
+    default_value => "2014-03-22 19:27:39.94998+00",
     is_nullable   => 0,
   },
   "update_time",
   {
     data_type     => "timestamp with time zone",
-    default_value => "2014-02-27 14:49:06.236402+00",
+    default_value => "2014-03-22 19:27:39.94998+00",
     is_nullable   => 0,
   },
   "delete_time",
@@ -42,18 +42,18 @@ __PACKAGE__->belongs_to(
   "state",
   "EmpireLogistics::Schema::Result::State",
   { id => "state" },
-  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
+  { is_deferrable => 0, on_delete => "CASCADE", on_update => "NO ACTION" },
 );
 __PACKAGE__->belongs_to(
   "subdivision",
   "EmpireLogistics::Schema::Result::RailSubdivision",
   { id => "subdivision" },
-  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
+  { is_deferrable => 0, on_delete => "CASCADE", on_update => "NO ACTION" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-03-03 01:14:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZHdPENZaMeL1VqvDXMYhag
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-03-22 19:28:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wekuMdHsefyNKdhUSa+NMA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

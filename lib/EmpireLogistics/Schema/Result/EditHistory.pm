@@ -28,7 +28,7 @@ __PACKAGE__->add_columns(
   "create_time",
   {
     data_type     => "timestamp with time zone",
-    default_value => "2014-02-27 14:49:06.665894+00",
+    default_value => "2014-03-22 19:27:40.989982+00",
     is_nullable   => 0,
   },
   "object_type",
@@ -45,13 +45,38 @@ __PACKAGE__->add_columns(
         "company_port",
         "company_rail_node",
         "company_warehouse",
+        "edit_history",
+        "edit_history_field",
         "labor_organization",
+        "labor_organization_account_payable",
+        "labor_organization_account_receivable",
         "labor_organization_address",
+        "labor_organization_affiliation",
+        "labor_organization_benefit_disbursement",
+        "labor_organization_fixed_asset",
+        "labor_organization_general_disbursement",
+        "labor_organization_investment_asset",
+        "labor_organization_investment_purchase",
+        "labor_organization_loan_payable",
+        "labor_organization_loan_receivable",
+        "labor_organization_membership",
         "labor_organization_nlrb_decision",
+        "labor_organization_officer_disbursement",
         "labor_organization_osha_citation",
+        "labor_organization_other_asset",
+        "labor_organization_other_liability",
+        "labor_organization_other_receipt",
+        "labor_organization_payee",
+        "labor_organization_payee_address",
         "labor_organization_port",
         "labor_organization_rail_node",
+        "labor_organization_sale_receipt",
+        "labor_organization_total_asset",
+        "labor_organization_total_disbursement",
+        "labor_organization_total_liability",
+        "labor_organization_total_receipt",
         "labor_organization_warehouse",
+        "labor_organization_work_stoppage",
         "media",
         "nlrb_decision",
         "osha_citation",
@@ -66,12 +91,15 @@ __PACKAGE__->add_columns(
         "port_shelter",
         "port_tonnage",
         "port_vessel_size",
+        "port_work_stoppage",
         "rail_density",
         "rail_interline",
         "rail_line",
         "rail_line_class",
+        "rail_line_work_stoppage",
         "rail_military",
         "rail_node",
+        "rail_node_work_stoppage",
         "rail_ownership",
         "rail_passenger",
         "rail_signal",
@@ -89,6 +117,7 @@ __PACKAGE__->add_columns(
         "warehouse_address",
         "warehouse_type",
         "warehouse_walmart",
+        "warehouse_work_stoppage",
         "work_stoppage",
       ],
     },
@@ -102,10 +131,16 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("id");
+__PACKAGE__->has_many(
+  "edit_history_fields",
+  "EmpireLogistics::Schema::Result::EditHistoryField",
+  { "foreign.edit_history" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-03-03 01:14:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:tKVB61+aEcRGnjIT03gX+g
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-03-22 19:28:52
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:oFYmyIk9+Adq9b6QhlddfA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
