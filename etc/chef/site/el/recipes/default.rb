@@ -6,6 +6,26 @@
 #
 # All rights reserved - Do Not Redistribute
 
+execute "apt_get_update" do
+  command "apt-get update"
+  ignore_failure true
+  action :nothing
+end
+
+node["el"]["apt_packages"].each do |package|
+  apt_package package do
+    action :install
+  end
+end
+
+ENV['LANGUAGE'] = ENV['LANG'] = ENV['LC_ALL'] = "en_US.UTF-8"
+
+execute "fix_locale" do
+  command "export LANGUAGE=en_US.UTF-8 && export LANG=en_US.UTF-8 && export LC_ALL=en_US.UTF-8 && locale-gen en_US.UTF-8 && dpkg-reconfigure locales"
+end
+
+include_recipe "locale"
+
 node["authorization"]["sudo"]["groups"].each do |group|
   group group do
     action :create
@@ -42,18 +62,6 @@ directory "/var/uwsgi" do
   group "el"
   mode 00774
   action :create
-end
-
-execute "apt_get_update" do
-  command "apt-get update"
-  ignore_failure true
-  action :nothing
-end
-
-node["el"]["apt_packages"].each do |package|
-  apt_package package do
-    action :install
-  end
 end
 
 remote_directory "/var/local/EmpireLogistics" do

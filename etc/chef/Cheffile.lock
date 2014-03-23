@@ -25,6 +25,7 @@ SITE
       windows (>= 0.0.0)
       yum (~> 3.0)
       yum-epel (>= 0.0.0)
+    locale (0.0.2)
     mysql (4.0.18)
       build-essential (~> 1.4)
       openssl (~> 1.1)
@@ -112,6 +113,7 @@ PATH
 DEPENDENCIES
   carton (>= 0)
   el (>= 0)
+  locale (>= 0)
   nginx (>= 0)
   nodejs (>= 0)
   npm (>= 0)

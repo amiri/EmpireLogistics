@@ -1,4 +1,8 @@
 {
+  "locale": {
+    "lang": "en_US.UTF-8",
+    "lc_all": "en_US.UTF-8"
+  },
   "carton": {
     "perlbrew": "perl-5.18.2"
   },
@@ -65,6 +69,7 @@
       "postgresql-server-dev-9.3"
     ],
     "apt_packages": [
+      "locales",
       "uwsgi",
       "uwsgi-app-integration-plugins",
       "uwsgi-core",
