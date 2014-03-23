@@ -1,3 +1,5 @@
+requires 'perl', '5.18.2';
+
 requires "Catalyst";
 requires "Catalyst::Action::RenderView";
 requires "Catalyst::Authentication::Store::DBIx::Class";
