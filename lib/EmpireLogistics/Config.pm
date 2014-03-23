@@ -13,6 +13,17 @@ $PARAMETERS{default} = {
     srcroot  => "/var/local/EmpireLogistics/current/",
     hostname => 'li431-25',
     tiles_url => '50.116.5.25',
+    database => {
+        db_name => 'empirelogistics',
+        db_pass => '3mp1r3',
+        db_user => 'el',
+        db_host => 'localhost', 
+        db_port => 5432,
+        db_opts => {   RaiseError    => 1,
+            AutoCommit    => 0,
+            on_connect_do => ['set timezone = "America/Los Angeles"']
+        },
+    },
     catalyst => {
         name => 'EmpireLogistics::Web',
         disable_component_resolution_regex_fallback => 1,
@@ -262,6 +273,13 @@ sub canonical_installation_name {
     return $NICKNAMES{$nickname} if $NICKNAMES{$nickname};
 
     die "Can't find installation '$nickname'";
+}
+
+sub dsn {
+    my $class = shift;
+    my ($db_name,$db_host,$db_port) = $class->database->{$_} for qw/db_name db_host db_port/;
+    my $dsn = "dbi:Pg:dbname=$db_name;host=$db_host;port=$db_port";
+    return $dsn;
 }
 
 1;

@@ -3,6 +3,12 @@
 use strict;
 use warnings::everywhere qw/all/;
 no goddamn::warnings::anywhere qw/uninitialized/;
+use Cwd 'abs_path';
+use File::Spec::Functions qw(catpath splitpath);
+use local::lib catpath((splitpath(abs_path $0))[0, 1], '../local');
+use lib catpath((splitpath(abs_path $0))[0, 1], '../lib');
+use EmpireLogistics::Util::Script;
+
 use IO::All -utf8;
 use Text::CSV_XS;
 use DBI;
@@ -15,19 +21,7 @@ use Tie::IxHash;
 use Text::CSV::Encoded  coder_class => 'Text::CSV::Encoded::Coder::EncodeGuess';
 use feature qw/say/;
 
-my $db_host = 'localhost';
-my $db_user = 'el';
-my $db_name = 'empirelogistics';
-
-my $dsn = "dbi:Pg:dbname=$db_name;host=$db_host";
-
-my $dbh = DBI->connect(
-    $dsn, $db_user, '3mp1r3',
-    {   RaiseError    => 1,
-        AutoCommit    => 0,
-        on_connect_do => ['set timezone = "America/Los Angeles"', 'set ON_ERROR_ROLLBACK 1'],
-    }
-) || say "Error connecting to the database: $DBI::errstr\n";
+my $dbh = dbh();
 
 my $sth;
 

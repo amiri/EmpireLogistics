@@ -2,6 +2,11 @@
 
 use strict;
 use warnings;
+use Cwd 'abs_path';
+use File::Spec::Functions qw(catpath splitpath);
+use local::lib catpath((splitpath(abs_path $0))[0, 1], '../local');
+use lib catpath((splitpath(abs_path $0))[0, 1], '../lib');
+use EmpireLogistics::Util::Script;
 use Text::CSV_XS;
 use Data::Printer;
 use IO::All -utf8;

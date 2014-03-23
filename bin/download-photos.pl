@@ -2,6 +2,11 @@
 
 use strict;
 use warnings;
+use Cwd 'abs_path';
+use File::Spec::Functions qw(catpath splitpath);
+use local::lib catpath((splitpath(abs_path $0))[0, 1], '../local');
+use lib catpath((splitpath(abs_path $0))[0, 1], '../lib');
+use EmpireLogistics::Util::Script;
 use IO::All;
 use Text::CSV_XS;
 use DBI;
@@ -20,19 +25,7 @@ tie my %cache, 'DBM::Deep', "etc/data/photo_cache.db";
 use feature qw/say/;
 no warnings qw/uninitialized/;
 
-my $db_host = 'localhost';
-my $db_user = 'el';
-my $db_name = 'empirelogistics';
-
-my $dsn = "dbi:Pg:dbname=$db_name;host=$db_host";
-
-my $dbh = DBI->connect(
-    $dsn, $db_user, '3mp1r3',
-    {   RaiseError    => 1,
-        AutoCommit    => 0,
-        on_connect_do => ['set timezone = "America/Los Angeles"']
-    }
-) || die "Error connecting to the database: $DBI::errstr\n";
+my $dbh = dbh();
 
 my $dir = "root/images/";
 

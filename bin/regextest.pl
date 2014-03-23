@@ -20,6 +20,10 @@
 
 use strict;
 use warnings;
+use Cwd 'abs_path';
+use File::Spec::Functions qw(catpath splitpath);
+use local::lib catpath((splitpath(abs_path $0))[0, 1], '../local');
+use lib catpath((splitpath(abs_path $0))[0, 1], '../lib');
 
 my $string = #"%1996.5 Xd  %";
 "# oper by CR 1976.3-1977.8, then MINT";
