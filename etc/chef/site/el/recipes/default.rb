@@ -97,11 +97,6 @@ end
 
 include_recipe "perlbrew"
 
-#perlbrew_perl "5.18.2" do
-  #version 'perl-5.18.2'
-  #action :remove
-#end
-
 perlbrew_perl "5.18.2" do
   version 'perl-5.18.2'
   action :install
@@ -113,17 +108,17 @@ perlbrew_cpanm "el" do
   options "-n"
 end
 
-# Could not install these with Carton
-#perlbrew_cpanm "el" do
-  #perlbrew "perl-5.18.2"
-  #modules ["Spiffy","Web::Scraper"]
-  #options "-n -L /var/local/EmpireLogistics/shared/local"
-#end
+# Could not install this with Carton
+perlbrew_cpanm "el" do
+  perlbrew "perl-5.18.2"
+  modules ["Spiffy"]
+  options "-n -L /var/local/EmpireLogistics/shared/local"
+end
 
 perlbrew_run 'install_app_local_lib' do
   perlbrew 'perl-5.18.2'
   cwd "/var/local/EmpireLogistics/current/"
-  command "carton install --cached"
+  command "carton install --deployment --cached"
 end
 
 bash "el_perl_env" do
