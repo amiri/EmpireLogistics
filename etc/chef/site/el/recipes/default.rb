@@ -157,16 +157,10 @@ bash "extract_geolib" do
   cwd ::File.dirname(geolib_filepath)
 end
 
-execute "python_dev_packages" do
-  command "sudo apt-get -y build-dep python2.7 python-stdlib-extensions"
-end
-
-include_recipe "python"
-
 directory "/var/run/postgresql" do
-  owner "postgres"
-  group "postgres"
-  mode 2775
+  owner "root"
+  group "root"
+  mode '777'
   action :create
 end
 
@@ -179,6 +173,9 @@ pg_database "pgloader" do
 end
 
 include_recipe "postgresql"
+execute "chmod" do
+  command "chown -Rf postgres:postgres /var/run/postgresql"
+end
 include_recipe "postgresql::apt_repository"
 include_recipe "postgresql::postgis"
 include_recipe "postgresql::server"
@@ -197,6 +194,13 @@ include_recipe "nodejs"
 include_recipe "npm"
 include_recipe "sudo"
 include_recipe "perl"
+
+execute "python_dev_packages" do
+  command "sudo apt-get -y build-dep python2.7 python-stdlib-extensions"
+end
+
+include_recipe "python"
+
 
 node["el"]["hold_packages"].each do |package|
   execute "hold_package" do
