@@ -45,6 +45,7 @@ requires "Plack::Builder";
 requires "Spiffy";
 requires "Sys::Hostname";
 requires "Sys::Hostname::Long";
+requires "Test::Base";
 requires "Test::Class::Most";
 requires "Test::Moose";
 requires "Text::CSV::Encoded";

@@ -44,6 +44,12 @@ directory "/var/uwsgi" do
   action :create
 end
 
+execute "apt_get_update" do
+  command "apt-get update"
+  ignore_failure true
+  action :nothing
+end
+
 node["el"]["apt_packages"].each do |package|
   apt_package package do
     action :install
@@ -91,10 +97,10 @@ end
 
 include_recipe "perlbrew"
 
-perlbrew_perl "5.18.2" do
-  version 'perl-5.18.2'
-  action :remove
-end
+#perlbrew_perl "5.18.2" do
+  #version 'perl-5.18.2'
+  #action :remove
+#end
 
 perlbrew_perl "5.18.2" do
   version 'perl-5.18.2'
@@ -106,6 +112,13 @@ perlbrew_cpanm "el" do
   modules ["Carton","local::lib"]
   options "-n"
 end
+
+# Could not install these with Carton
+#perlbrew_cpanm "el" do
+  #perlbrew "perl-5.18.2"
+  #modules ["Spiffy","Web::Scraper"]
+  #options "-n -L /var/local/EmpireLogistics/shared/local"
+#end
 
 perlbrew_run 'install_app_local_lib' do
   perlbrew 'perl-5.18.2'
