@@ -110,7 +110,7 @@ end
 perlbrew_run 'install_app_local_lib' do
   perlbrew 'perl-5.18.2'
   cwd "/var/local/EmpireLogistics/current/"
-  command "carton install --deployment --cached"
+  command "carton install --cached"
 end
 
 bash "el_perl_env" do
