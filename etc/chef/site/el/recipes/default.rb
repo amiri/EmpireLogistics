@@ -110,7 +110,6 @@ perlbrew_perl "5.18.2" do
   action :install
 end
 
-# 
 perlbrew_cpanm "basics" do
   perlbrew "perl-5.18.2"
   modules ["Carton","local::lib"]
@@ -133,17 +132,20 @@ end
 bash "el_perl_env" do
   action :run
   user "el"
-  user "el"
+  group "el"
+  cwd "/home/el"
   code <<-EOH
   cd /home/el/ && echo 'source "/var/local/EmpireLogistics/shared/perl/etc/bashrc"' >> /home/el/.bashrc && source /home/el/.bashrc
   EOH
 end
 
-execute "compile_uwsgi" do
+bash "compile_uwsgi" do
   user "el"
-  user "el"
-  command <<-EOH
-  perlbrew switch perl-5.18.2 && curl http://uwsgi.it/install | bash -s psgi /var/local/EmpireLogistics/shared/local/bin/uwsgi 
+  group "el"
+  cwd "/home/el"
+  code <<-EOH
+    cd /home/el && source /home/el/.bashrc && perlbrew switch perl-5.18.2
+    curl http://uwsgi.it/install | bash -s psgi /var/local/EmpireLogistics/shared/local/bin/uwsgi
   EOH
   creates "/var/local/EmpireLogistics/shared/local/bin/uwsgi"
   action :run
@@ -163,7 +165,7 @@ remote_file geolib_filepath do
 end
 
 bash "extract_geolib" do
-  action "run"
+  action :run
   code <<-EOH
     tar xzvf #{geolib_filepath} -C #{::File.dirname(geolib_filepath)}
     cd GeoIP-#{node['nginx']['geoip']['lib_version']}
