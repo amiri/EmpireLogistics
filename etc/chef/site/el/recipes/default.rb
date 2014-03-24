@@ -105,7 +105,7 @@ end
 
 include_recipe "perlbrew"
 
-perlbrew_perl "5.18.2" do
+perlbrew_perl "perl-5.18.2" do
   version 'perl-5.18.2'
   action :install
 end
@@ -134,15 +134,23 @@ bash "el_perl_env" do
   user "el"
   group "el"
   cwd "/home/el"
+  environment ({ 'HOME' => ::Dir.home('el'), 'USER' => 'el' })
   code <<-EOH
   cd /home/el/ && echo 'source "/var/local/EmpireLogistics/shared/perl/etc/bashrc"' >> /home/el/.bashrc && source /home/el/.bashrc
   EOH
+end
+
+perlbrew_run 'switch' do
+  perlbrew 'perl-5.18.2'
+  environment ({ 'HOME' => ::Dir.home('el'), 'USER' => 'el' })
+  command "perlbrew switch perl-5.18.2"
 end
 
 bash "compile_uwsgi" do
   user "el"
   group "el"
   cwd "/home/el"
+  environment ({ 'HOME' => ::Dir.home('el'), 'USER' => 'el' })
   code <<-EOH
     cd /home/el && source /home/el/.bashrc && perlbrew switch perl-5.18.2
     curl http://uwsgi.it/install | bash -s psgi /var/local/EmpireLogistics/shared/local/bin/uwsgi
