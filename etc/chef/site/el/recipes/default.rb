@@ -141,7 +141,7 @@ end
 execute "compile_uwsgi" do
   user "el"
   user "el"
-  code <<-EOH
+  command <<-EOH
   perlbrew switch perl-5.18.2 && curl http://uwsgi.it/install | bash -s psgi /var/local/EmpireLogistics/shared/local/bin/uwsgi 
   EOH
   creates "/var/local/EmpireLogistics/shared/local/bin/uwsgi"
