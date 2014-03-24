@@ -6,6 +6,12 @@
 #
 # All rights reserved - Do Not Redistribute
 
+if File.exists?("/home/el/.bashrc")
+    node['env']['user'] = 'el'
+else
+    node['env']['user'] = 'root'
+end
+
 execute "apt_get_update" do
   command "apt-get update"
   ignore_failure true
@@ -39,6 +45,7 @@ user "el" do
   gid "admin"
   home "/home/el"
   shell "/bin/bash"
+  action :create
 end
 
 user "amiri" do
@@ -48,6 +55,7 @@ user "amiri" do
   gid "admin"
   home "/home/amiri"
   shell "/bin/bash"
+  action :create
 end
 
 group "el" do
@@ -55,6 +63,7 @@ group "el" do
   gid 1917
   members ["amiri","el","www-data"]
   append true
+  action :create
 end
 
 directory "/var/uwsgi" do
@@ -114,6 +123,7 @@ perlbrew_cpanm "basics" do
   perlbrew "perl-5.18.2"
   modules ["Carton","local::lib"]
   options "-n"
+  action :run
 end
 
 # Could not install this with Carton
@@ -121,12 +131,14 @@ perlbrew_cpanm "Spiffy" do
   perlbrew "perl-5.18.2"
   modules ["Spiffy"]
   options "-n -L /var/local/EmpireLogistics/shared/local"
+  action :run
 end
 
 perlbrew_run 'install_app_local_lib' do
   perlbrew 'perl-5.18.2'
   cwd "/var/local/EmpireLogistics/current/"
   command "carton install --deployment --cached"
+  action :run
 end
 
 bash "el_perl_env" do
@@ -134,35 +146,37 @@ bash "el_perl_env" do
   user "el"
   group "el"
   cwd "/home/el"
-  environment ({ 'HOME' => ::Dir.home('el'), 'USER' => 'el' })
+  environment ({ 'HOME' => ::Dir.home(node['env']['user']), 'USER' => node['env']['user'] })
   code <<-EOH
   cd /home/el/ && echo 'source "/var/local/EmpireLogistics/shared/perl/etc/bashrc"' >> /home/el/.bashrc && source /home/el/.bashrc
   EOH
+  action :run
 end
 
 perlbrew_run 'switch' do
   perlbrew 'perl-5.18.2'
-  environment ({ 'HOME' => ::Dir.home('el'), 'USER' => 'el' })
+  environment ({ 'HOME' => ::Dir.home(node['env']['user']), 'USER' => node['env']['user'] })
   command "perlbrew switch perl-5.18.2"
+  action :run
 end
 
 bash "compile_uwsgi" do
   user "el"
   group "el"
   cwd "/home/el"
-  environment ({ 'HOME' => ::Dir.home('el'), 'USER' => 'el' })
+  environment ({ 'HOME' => ::Dir.home(node['env']['user']), 'USER' => node['env']['user'] })
   code <<-EOH
     cd /home/el && source /home/el/.bashrc && perlbrew switch perl-5.18.2
     curl http://uwsgi.it/install | bash -s psgi /var/local/EmpireLogistics/shared/local/bin/uwsgi
   EOH
-  creates "/var/local/EmpireLogistics/shared/local/bin/uwsgi"
+  #creates "/var/local/EmpireLogistics/shared/local/bin/uwsgi"
   action :run
 end
 
 # Install libGeoIP.so.1.4.8 so nginx::source doesn't have to.
 node.default['nginx']['geoip']['lib_url'] = "http://geolite.maxmind.com/download/geoip/api/c/GeoIP-#{node['nginx']['geoip']['lib_version']}.tar.gz"
 geolib_filename = ::File.basename(node['nginx']['geoip']['lib_url'])
-geolib_filepath = "#{Chef::Config['file_cache_path']}/#{geolib_filename}"
+geolib_filepath = "#{Chef::Config['file_cache_path']}#{geolib_filename}"
 
 remote_file geolib_filepath do
   source   "http://geolite.maxmind.com/download/geoip/api/c/GeoIP-#{node['nginx']['geoip']['lib_version']}.tar.gz"
