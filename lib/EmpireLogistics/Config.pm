@@ -291,7 +291,9 @@ sub canonical_installation_name {
 
 sub dsn {
     my $class = shift;
-    my ($db_name,$db_host,$db_port) = $class->database->{$_} for qw/db_name db_host db_port/;
+    my $db_name = $class->database->{db_name};
+    my $db_host = $class->database->{db_host};
+    my $db_port = $class->database->{db_port};
     my $dsn = "dbi:Pg:dbname=$db_name;host=$db_host;port=$db_port";
     return $dsn;
 }

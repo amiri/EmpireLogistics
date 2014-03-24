@@ -21,7 +21,7 @@ use Tie::IxHash;
 use Text::CSV::Encoded  coder_class => 'Text::CSV::Encoded::Coder::EncodeGuess';
 use feature qw/say/;
 
-my $dbh = dbh();
+my $dbh = EmpireLogistics::Util::Script->dbh();
 
 my $sth;
 

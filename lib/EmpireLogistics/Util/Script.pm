@@ -3,15 +3,21 @@ package EmpireLogistics::Util::Script;
 use EmpireLogistics::Config;
 use DBI;
 use Moose ();
+use Try::Tiny;
+use Data::Dumper;
 use Moose::Exporter;
 
 Moose::Exporter->setup_import_methods(
     as_is     => [ 'dbh', 'schema'],
 );
 
+sub db_user {
+    my $self = shift;
+    return $EmpireLogistics::Config::database->{db_user};
+}
 sub db_pass {
     my $self = shift;
-    return $EmpireLogistics::Config::database::db_pass;
+    return $EmpireLogistics::Config::database->{db_pass};
 }
 sub dsn {
     my $self = shift;
@@ -19,7 +25,7 @@ sub dsn {
 }
 sub db_opts {
     my $self = shift;
-    return $EmpireLogistics::Config::database::db_opts;
+    return $EmpireLogistics::Config::database->{db_opts};
 }
 
 sub schema {
@@ -31,8 +37,10 @@ sub schema {
 
 sub dbh {
     my $self = shift;
-    my ($db_name,$db_host,$db_user,$db_pass,$db_port,$db_opts) = $self->$_ for qw/db_name db_host db_user db_pass db_port/;
-    my $dsn = "dbi:Pg:dbname=$db_name;host=$db_host;port=$db_port";
+    my $db_user = $self->db_user;
+    my $db_pass = $self->db_pass;
+    my $db_opts = $self->db_opts;
+    my $dsn = $self->dsn;
 
     my $dbh;
     try {

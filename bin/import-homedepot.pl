@@ -19,7 +19,7 @@ use DateTimeX::Easy;
 use feature qw/say/;
 no warnings qw/uninitialized/;
 
-my $dbh = dbh();
+my $dbh = EmpireLogistics::Util::Script->dbh();
 
 my $geocoder = Geo::Coder::Google->new( apiver => 3 );
 

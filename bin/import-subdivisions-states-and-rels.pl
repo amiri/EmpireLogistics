@@ -15,7 +15,7 @@ use List::MoreUtils qw/uniq/;
 use feature qw/say/;
 no warnings qw/uninitialized/;
 
-my $dbh = dbh();
+my $dbh = EmpireLogistics::Util::Script->dbh();
 
 # Truncate subdivisions
 my $truncate_subdiv = "truncate rail_subdivision restart identity cascade";

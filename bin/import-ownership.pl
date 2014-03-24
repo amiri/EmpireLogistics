@@ -29,7 +29,7 @@ use feature qw/say/;
 no warnings qw/uninitialized/;
 
 
-my $dbh = dbh();
+my $dbh = EmpireLogistics::Util::Script->dbh();
 
 my $truncate = "truncate rail_ownership restart identity cascade";
 

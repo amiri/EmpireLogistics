@@ -25,7 +25,7 @@ tie my %cache, 'DBM::Deep', "etc/data/photo_cache.db";
 use feature qw/say/;
 no warnings qw/uninitialized/;
 
-my $dbh = dbh();
+my $dbh = EmpireLogistics::Util::Script->dbh();
 
 my $dir = "root/images/";
 
