@@ -110,14 +110,14 @@ perlbrew_perl "5.18.2" do
   action :install
 end
 
-perlbrew_cpanm "el" do
+perlbrew_cpanm "basics" do
   perlbrew "perl-5.18.2"
   modules ["Carton","local::lib"]
   options "-n"
 end
 
 # Could not install this with Carton
-perlbrew_cpanm "el" do
+perlbrew_cpanm "Spiffy" do
   perlbrew "perl-5.18.2"
   modules ["Spiffy"]
   options "-n -L /var/local/EmpireLogistics/shared/local"
@@ -136,6 +136,16 @@ bash "el_perl_env" do
   code <<-EOH
   cd /home/el/ && echo 'source "/var/local/EmpireLogistics/shared/perl/etc/bashrc"' >> /home/el/.bashrc && source /home/el/.bashrc
   EOH
+end
+
+execute "compile_uwsgi" do
+  user "el"
+  user "el"
+  code <<-EOH
+  perlbrew switch perl-5.18.2 && curl http://uwsgi.it/install | bash -s psgi /var/local/EmpireLogistics/shared/local/bin/uwsgi 
+  EOH
+  creates "/var/local/EmpireLogistics/shared/local/bin/uwsgi"
+  action :run
 end
 
 # Install libGeoIP.so.1.4.8 so nginx::source doesn't have to.
