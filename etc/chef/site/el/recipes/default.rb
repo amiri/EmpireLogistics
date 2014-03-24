@@ -165,19 +165,19 @@ bash "extract_geolib" do
   cwd ::File.dirname(geolib_filepath)
 end
 
-directory "/var/run/postgresql" do
-  owner "root"
-  group "root"
-  mode '777'
-  action :create
-end
-
 pg_database "empirelogistics" do
   action :drop
 end
 
 pg_database "pgloader" do
   action :drop
+end
+
+directory "/var/run/postgresql" do
+  owner "root"
+  group "root"
+  mode '777'
+  action :create
 end
 
 include_recipe "postgresql"

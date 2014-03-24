@@ -115,6 +115,8 @@
       "LWP::UserAgent",
       "List::AllUtils",
       "List::MoreUtils",
+      "Moose",
+      "Moose::Exporter",
       "Parallel::ForkManager",
       "Text::CSV_XS",
       "Try::Tiny",

@@ -1,6 +1,20 @@
 package EmpireLogistics::Config;
 
 #use Moose;
+warn map { "$_ " } @INC;
+my $path = `which perl`;
+warn "Perl interp path: $path";
+warn "Perl: $^V";
+warn "PERL_MB_OPT: ",  $ENV{PERL_MB_OPT};
+warn "PERL_MM_OPT: ",  $ENV{PERL_MM_OPT};
+warn "PERL5LIB: ",  $ENV{PERL5LIB};
+warn "PATH: ",  $ENV{PATH};
+warn "PERL_LOCAL_LIB_ROOT: ",  $ENV{PERL_LOCAL_LIB_ROOT};
+warn "GID",  $(;
+warn "EGID",  $);
+warn "UID",  $<;
+warn "EUID",  $>;
+warn "Archname: ",  $Config::archname;
 use Clone qw/clone/;
 use Sys::Hostname       ();
 use Sys::Hostname::Long ();

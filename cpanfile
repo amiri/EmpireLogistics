@@ -37,6 +37,7 @@ requires "List::AllUtils";
 requires "List::MoreUtils";
 requires "Module::Runtime", "0.014";
 requires "Moose";
+requires "Moose::Exporter";
 requires "MooseX::Role::WithOverloading";
 requires "Parallel::ForkManager";
 requires "Plack";

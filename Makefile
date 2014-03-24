@@ -86,8 +86,8 @@ labor: download-labor-data
 ########## Import data
 
 import-rail-data: rail
-	perl bin/import-ownership.pl
-	perl bin/import-subdivisions-states-and-rels.pl
+	bin/import-ownership.pl
+	bin/import-subdivisions-states-and-rels.pl
 	ogr2ogr -f PostgreSQL PG:"dbname='empirelogistics' host='localhost' port='5432' user='el'" $(rail_dir)/na-rail-interlines.geojson -s_srs EPSG:4326 -t_srs EPSG:900913 -overwrite -nln raw_rail_interline
 	shp2pgsql -s 4326:900913 -t 2d -I $(rail_dir)/shp/qn28l raw_rail_line | psql -q -U el -d empirelogistics
 	shp2pgsql -s 4326:900913 -t 2d -I $(rail_dir)/shp/qn28n raw_rail_node | psql -q -U el -d empirelogistics
@@ -162,15 +162,15 @@ $(rail_dir)/na-rail-lines.geojson: $(rail_dir)/shp/qn28l.shp $(rail_dir)/cta-sup
 
 # Create interlines geojson
 $(rail_dir)/na-rail-interlines.geojson: $(rail_dir)/cta-sup/qc28.iln
-	test -s $(rail_dir)/na-rail-interlines.geojson || perl bin/interlineparser.pl
+	test -s $(rail_dir)/na-rail-interlines.geojson || bin/interlineparser.pl
 
 # Create ancestry/ownership json
 $(rail_dir)/na-rail-ownership.json: $(rail_dir)/cta-sup/wconv.txt
-	test -s $(rail_dir)/na-rail-ownership.json || perl bin/ownershipparser.pl
+	test -s $(rail_dir)/na-rail-ownership.json || bin/ownershipparser.pl
 
 # Create subdivisions json
 $(rail_dir)/na-rail-subdivisions.json: $(rail_dir)/cta-sup/subdiv.txt $(rail_dir)/na-rail-ownership.json
-	test -s $(rail_dir)/na-rail-subdivisions.json || perl bin/subdivisionparser.pl
+	test -s $(rail_dir)/na-rail-subdivisions.json || bin/subdivisionparser.pl
 
 ########## Port data download pieces
 
@@ -186,7 +186,7 @@ $(warehouse_dir)/walmart.html:
 	test -s $(warehouse_dir)/walmart.html || cp 'etc/data/warehouses/walmart/Walmart Distribution Center Network USA   MWPVL.html' $(warehouse_dir)/walmart.html
 
 $(warehouse_dir)/walmart-distribution-centers.json: $(warehouse_dir)/walmart.html
-	perl bin/extract-walmart-tables.pl
+	bin/extract-walmart-tables.pl
 
 $(warehouse_dir)/target-distribution-centers.json:
 	test -s $(warehouse_dir)/target-distribution-centers.json || cp 'etc/data/warehouses/target/target-distribution-centers.json' $(warehouse_dir)/target-distribution-centers.json
@@ -223,7 +223,7 @@ $(labor_dir)/labor_organizations.html:
 	test -s $(labor_dir)/labor_organizations.html || cp 'etc/data/labor_organizations/wikipedia_labor_unions.html' $(labor_dir)/labor_organizations.html
 
 $(labor_dir)/labor-organizations.json: $(labor_dir)/labor_organizations.html
-	perl bin/extract-labor-organizations.pl
+	bin/extract-labor-organizations.pl
 
 $(labor_dir)/labor_data.sql.gz:
 	cp 'etc/data/labor_organizations/labor_data.sql.gz' $(labor_dir)/labor_data.sql.gz || echo 0
