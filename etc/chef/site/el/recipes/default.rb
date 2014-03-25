@@ -6,10 +6,16 @@
 #
 # All rights reserved - Do Not Redistribute
 
-if File.exists?("/home/el/.bashrc")
-    node['env']['user'] = 'el'
+if ::Dir.exists?("/home/el/")
+    node.default['env']['user'] = 'el'
 else
-    node['env']['user'] = 'root'
+    node.default['env']['user'] = 'root'
+end
+
+bash "print_env_user" do
+   code <<-EOF
+     echo "Env user: #{node['env']['user']}"
+   EOF
 end
 
 execute "apt_get_update" do
@@ -146,16 +152,17 @@ bash "el_perl_env" do
   user "el"
   group "el"
   cwd "/home/el"
-  environment ({ 'HOME' => ::Dir.home(node['env']['user']), 'USER' => node['env']['user'] })
+  environment ({ 'HOME' => ::Dir.home(node['env']['user']), 'USER' => node['env']['user'], 'PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games', 'PERLBREW_PERL' => 'perl-5.18.2', 'PERLBREW_ROOT' => '/var/local/EmpireLogistics/shared/perl', 'PERLBREW_HOME' => '/home/el/.perlbrew', 'PERLBREW_PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin' })
   code <<-EOH
-  cd /home/el/ && echo 'source "/var/local/EmpireLogistics/shared/perl/etc/bashrc"' >> /home/el/.bashrc && source /home/el/.bashrc
+  cd /home/el/ && echo 'source "/var/local/EmpireLogistics/shared/perl/etc/bashrc"' >> /home/el/.bashrc && source /home/el/.profile
   EOH
   action :run
 end
 
-perlbrew_run 'switch' do
-  perlbrew 'perl-5.18.2'
-  environment ({ 'HOME' => ::Dir.home(node['env']['user']), 'USER' => node['env']['user'] })
+bash 'switch' do
+  environment ({ 'HOME' => ::Dir.home(node['env']['user']), 'USER' => node['env']['user'], 'PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games', 'PERLBREW_PERL' => 'perl-5.18.2', 'PERLBREW_ROOT' => '/var/local/EmpireLogistics/shared/perl', 'PERLBREW_HOME' => '/home/el/.perlbrew', 'PERLBREW_PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin' })
+  user "el"
+  group "el"
   command "perlbrew switch perl-5.18.2"
   action :run
 end
@@ -164,12 +171,16 @@ bash "compile_uwsgi" do
   user "el"
   group "el"
   cwd "/home/el"
-  environment ({ 'HOME' => ::Dir.home(node['env']['user']), 'USER' => node['env']['user'] })
+  environment ({ 'HOME' => ::Dir.home(node['env']['user']), 'USER' => node['env']['user'], 'PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games', 'PERLBREW_PERL' => 'perl-5.18.2', 'PERLBREW_ROOT' => '/var/local/EmpireLogistics/shared/perl', 'PERLBREW_HOME' => '/home/el/.perlbrew', 'PERLBREW_PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin' })
   code <<-EOH
-    cd /home/el && source /home/el/.bashrc && perlbrew switch perl-5.18.2
+    cd /home/el
+    source /home/el/.profile
+    source /home/el/.bashrc
+    perlbrew switch perl-5.18.2
+    rm -rf /home/el/uwsgi_latest_from_installer
     curl http://uwsgi.it/install | bash -s psgi /var/local/EmpireLogistics/shared/local/bin/uwsgi
   EOH
-  #creates "/var/local/EmpireLogistics/shared/local/bin/uwsgi"
+  creates "/var/local/EmpireLogistics/shared/local/bin/uwsgi"
   action :run
 end
 
