@@ -9,7 +9,7 @@
   "perlbrew": {
     "cpanm_options": "--notest",
     "self_upgrade": true,
-    "install_options": "--thread --notest --noman -j 4 --64all --multi --switch -Darchname=x86_64-linux-gnu-thread-multi",
+    "install_options": "--thread --notest --noman -j 4 --64all --multi --switch -Darchname=x86_64-linux-gnu-thread-multi -Accflags='-fPIC'",
     "perls": [
       "perl-5.18.2"
     ],
@@ -18,6 +18,7 @@
   "python": {
     "configure_options": [
       "--enable-unicode=ucs4",
+      "--enable-shared",
       "--prefix=/var/local/EmpireLogistics/shared/python"
     ],
     "install_method": "source",
@@ -275,6 +276,7 @@
     "emperor": {
       "conf_dir": "/var/local/EmpireLogistics/current/etc/uwsgi_emperor",
       "service": "upstart"
-    }
+    },
+    "source_url": "http://projects.unbit.it/downloads/uwsgi-latest.tar.gz"
   }
 }

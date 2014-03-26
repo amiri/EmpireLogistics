@@ -93,7 +93,7 @@ end
 
 # This is stupid, because chef won't change perms of parent directories
 # in recipe above
-execute "chmod" do
+execute "chown" do
   cwd '/var/local/EmpireLogistics'
   command "chown -Rf el:el /var/local/EmpireLogistics"
 end
@@ -119,6 +119,11 @@ deploy_revision "empirelogistics" do
 end
 
 include_recipe "perlbrew"
+
+perlbrew_perl "perl-5.18.2" do
+  version 'perl-5.18.2'
+  action :remove
+end
 
 perlbrew_perl "perl-5.18.2" do
   version 'perl-5.18.2'
@@ -152,7 +157,7 @@ bash "el_perl_env" do
   user "el"
   group "el"
   cwd "/home/el"
-  environment ({ 'HOME' => ::Dir.home(node['env']['user']), 'USER' => node['env']['user'], 'PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games', 'PERLBREW_PERL' => 'perl-5.18.2', 'PERLBREW_ROOT' => '/var/local/EmpireLogistics/shared/perl', 'PERLBREW_HOME' => '/home/el/.perlbrew', 'PERLBREW_PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin' })
+  environment ({ 'HOME' => ::Dir.home(node['env']['user']), 'USER' => node['env']['user'], 'PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/local/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin:/var/local/EmpireLogistics/shared/python/bin:usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games', 'PERLBREW_PERL' => 'perl-5.18.2', 'PERLBREW_ROOT' => '/var/local/EmpireLogistics/shared/perl', 'PERLBREW_HOME' => '/home/el/.perlbrew', 'PERLBREW_PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin' })
   code <<-EOH
   cd /home/el/ && echo 'source "/var/local/EmpireLogistics/shared/perl/etc/bashrc"' >> /home/el/.bashrc && source /home/el/.profile
   EOH
@@ -160,28 +165,16 @@ bash "el_perl_env" do
 end
 
 bash 'switch' do
-  environment ({ 'HOME' => ::Dir.home(node['env']['user']), 'USER' => node['env']['user'], 'PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games', 'PERLBREW_PERL' => 'perl-5.18.2', 'PERLBREW_ROOT' => '/var/local/EmpireLogistics/shared/perl', 'PERLBREW_HOME' => '/home/el/.perlbrew', 'PERLBREW_PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin' })
+  environment ({ 'HOME' => ::Dir.home(node['env']['user']), 'USER' => node['env']['user'], 'PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/local/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin:/var/local/EmpireLogistics/shared/python/bin:usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games', 'PERLBREW_PERL' => 'perl-5.18.2', 'PERLBREW_ROOT' => '/var/local/EmpireLogistics/shared/perl', 'PERLBREW_HOME' => '/home/el/.perlbrew', 'PERLBREW_PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin' })
   user "el"
   group "el"
   command "perlbrew switch perl-5.18.2"
   action :run
 end
 
-bash "compile_uwsgi" do
-  user "el"
-  group "el"
-  cwd "/home/el"
-  environment ({ 'HOME' => ::Dir.home(node['env']['user']), 'USER' => node['env']['user'], 'PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games', 'PERLBREW_PERL' => 'perl-5.18.2', 'PERLBREW_ROOT' => '/var/local/EmpireLogistics/shared/perl', 'PERLBREW_HOME' => '/home/el/.perlbrew', 'PERLBREW_PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin' })
-  code <<-EOH
-    cd /home/el
-    source /home/el/.profile
-    source /home/el/.bashrc
-    perlbrew switch perl-5.18.2
-    rm -rf /home/el/uwsgi_latest_from_installer
-    curl http://uwsgi.it/install | bash -s psgi /var/local/EmpireLogistics/shared/local/bin/uwsgi
-  EOH
-  creates "/var/local/EmpireLogistics/shared/local/bin/uwsgi"
-  action :run
+execute "chown" do
+  cwd '/var/local/EmpireLogistics'
+  command "chown -Rf el:el /var/local/EmpireLogistics"
 end
 
 # Install libGeoIP.so.1.4.8 so nginx::source doesn't have to.
@@ -190,7 +183,7 @@ geolib_filename = ::File.basename(node['nginx']['geoip']['lib_url'])
 geolib_filepath = "#{Chef::Config['file_cache_path']}#{geolib_filename}"
 
 remote_file geolib_filepath do
-  source   "http://geolite.maxmind.com/download/geoip/api/c/GeoIP-#{node['nginx']['geoip']['lib_version']}.tar.gz"
+  source   "#{node['nginx']['geoip']['lib_url']}.tar.gz"
   checksum node['nginx']['geoip']['lib_checksum']
   owner    'root'
   group    'root'
@@ -249,12 +242,19 @@ include_recipe "npm"
 include_recipe "sudo"
 include_recipe "perl"
 
+cookbook_file "etc/init/uwsgi.conf" do
+  path "/etc/init/uwsgi.conf"
+  owner    'root'
+  group    'root'
+  mode     '0644'
+  action :run
+end
+
 execute "python_dev_packages" do
   command "sudo apt-get -y build-dep python2.7 python-stdlib-extensions"
 end
 
 include_recipe "python"
-
 
 node["el"]["hold_packages"].each do |package|
   execute "hold_package" do
@@ -273,6 +273,123 @@ node["el"]["pip_packages"].each do |package|
       options "-U --allow-all-external --process-dependency-links --allow-unverified psycopg2 --allow-unverified PIL --allow-unverified Shapely --allow-unverified ModestMaps --allow-unverified simplejson --allow-unverified werkzeug --allow-unverified #{package}"
     end
 end
+
+# Install uwsgi with psgi and python plugins
+uwsgi_filename = ::File.basename(node['uwsgi']['source_url'])
+uwsgi_filepath = "#{Chef::Config['file_cache_path']}#{uwsgi_filename}"
+
+remote_file uwsgi_filepath do
+  source   "#{node['uwsgi']['source_url']}"
+  owner    'root'
+  group    'root'
+  mode     '0644'
+end
+
+bash "extract_uwsgi" do
+  action :run
+  cwd ::File.dirname(uwsgi_filepath)
+  environment ({ 'HOME' => ::Dir.home(node['env']['user']), 'USER' => node['env']['user'], 'PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/local/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin:/var/local/EmpireLogistics/shared/python/bin:usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games', 'PERLBREW_PERL' => 'perl-5.18.2', 'PERLBREW_ROOT' => '/var/local/EmpireLogistics/shared/perl', 'PERLBREW_HOME' => '/home/el/.perlbrew', 'PERLBREW_PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin' })
+  code <<-EOH
+    tar xzvf #{uwsgi_filepath} -C /home/el/uwsgi_latest
+  EOH
+  creates "/home/el/uwsgi_latest"
+  notifies :run, "cookbook_file[uwsgi_latest/buildconf/el.ini]", :immediately
+  notifies :run, "cookbook_file[uwsgi_latest/plugins/psgi/uwsgiplugin.py]", :immediately
+  notifies :run, "cookbook_file[uwsgi_latest/plugins/python/uwsgiplugin.py]", :immediately
+end
+
+cookbook_file "uwsgi_latest/buildconf/el.ini" do
+  path "/home/el/uwsgi_latest/buildconf/el.ini"
+  owner    'el'
+  group    'el'
+  mode     '0775'
+  action :nothing
+end
+
+cookbook_file "uwsgi_latest/plugins/psgi/uwsgiplugin.py" do
+  path "/home/el/uwsgi_latest/plugins/psgi/uwsgiplugin.py"
+  owner    'el'
+  group    'el'
+  mode     '0775'
+  action :nothing
+end
+
+cookbook_file "uwsgi_latest/plugins/python/uwsgiplugin.py" do
+  path "/home/el/uwsgi_latest/plugins/python/uwsgiplugin.py"
+  owner    'el'
+  group    'el'
+  mode     '0775'
+  action :nothing
+end
+
+bash "compile_uwsgi" do
+  user "el"
+  group "el"
+  cwd "/home/el/uwsgi_latest"
+  environment ({ 'HOME' => ::Dir.home(node['env']['user']), 'USER' => node['env']['user'], 'PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/local/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin:/var/local/EmpireLogistics/shared/python/bin:usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games', 'PERLBREW_PERL' => 'perl-5.18.2', 'PERLBREW_ROOT' => '/var/local/EmpireLogistics/shared/perl', 'PERLBREW_HOME' => '/home/el/.perlbrew', 'PERLBREW_PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin' })
+  code <<-EOH
+    cd /home/el/uwsgi_latest
+    source /home/el/.profile
+    source /home/el/.bashrc
+    perlbrew switch perl-5.18.2
+    UWSGI_BIN_NAME=/var/local/EmpireLogistics/shared/local/bin/uwsgi UWSGI_FORCE_REBUILD=1 /var/local/EmpireLogistics/shared/python/bin/python uwsgiconfig.py --build el
+  EOH
+  creates "/var/local/EmpireLogistics/shared/local/bin/uwsgi"
+  notifies :run, "bash[compile_psgi_plugin]", :immediately
+  notifies :run, "bash[compile_python_plugin]", :immediately
+  action :run
+end
+
+bash "compile_psgi_plugin" do
+  user "el"
+  group "el"
+  cwd "/home/el/uwsgi_latest"
+  environment ({ 'HOME' => ::Dir.home(node['env']['user']), 'USER' => node['env']['user'], 'PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/local/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin:/var/local/EmpireLogistics/shared/python/bin:usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games', 'PERLBREW_PERL' => 'perl-5.18.2', 'PERLBREW_ROOT' => '/var/local/EmpireLogistics/shared/perl', 'PERLBREW_HOME' => '/home/el/.perlbrew', 'PERLBREW_PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin' })
+  code <<-EOH
+    cd /home/el/uwsgi_latest
+    source /home/el/.profile
+    source /home/el/.bashrc
+    perlbrew switch perl-5.18.2
+    /var/local/EmpireLogistics/shared/python/bin/python uwsgiconfig.py --plugin plugins/psgi el
+    mv ./psgi_plugin.so /var/local/EmpireLogistics/shared/local/uwsgi_plugins
+  EOH
+  creates "/var/local/EmpireLogistics/shared/local/uwsgi_plugins/psgi_plugin.so"
+  action :run
+end
+
+bash "compile_python_plugin" do
+  user "el"
+  group "el"
+  cwd "/home/el/uwsgi_latest"
+  environment ({ 'HOME' => ::Dir.home(node['env']['user']), 'USER' => node['env']['user'], 'PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/local/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin:/var/local/EmpireLogistics/shared/python/bin:usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games', 'PERLBREW_PERL' => 'perl-5.18.2', 'PERLBREW_ROOT' => '/var/local/EmpireLogistics/shared/perl', 'PERLBREW_HOME' => '/home/el/.perlbrew', 'PERLBREW_PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin' })
+  code <<-EOH
+    cd /home/el/uwsgi_latest
+    source /home/el/.profile
+    source /home/el/.bashrc
+    perlbrew switch perl-5.18.2
+    /var/local/EmpireLogistics/shared/python/bin/python uwsgiconfig.py --plugin plugins/python el
+    mv ./python_plugin.so /var/local/EmpireLogistics/shared/local/uwsgi_plugins
+  EOH
+  creates "/var/local/EmpireLogistics/shared/local/uwsgi_plugins/python_plugin.so"
+  action :run
+end
+
+#bash "compile_uwsgi" do
+  #user "el"
+  #group "el"
+  #cwd "/home/el"
+  #environment ({ 'HOME' => ::Dir.home(node['env']['user']), 'USER' => node['env']['user'], 'PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/local/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin:/var/local/EmpireLogistics/shared/python/bin:usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games', 'PERLBREW_PERL' => 'perl-5.18.2', 'PERLBREW_ROOT' => '/var/local/EmpireLogistics/shared/perl', 'PERLBREW_HOME' => '/home/el/.perlbrew', 'PERLBREW_PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin' })
+  #code <<-EOH
+    #cd /home/el
+    #source /home/el/.profile
+    #source /home/el/.bashrc
+    #perlbrew switch perl-5.18.2
+    #if [ -d /home/el/uwsgi_latest_from_installer ]; then rm -rf /home/el/uwsgi_latest_from_installer; fi
+    #curl http://uwsgi.it/install | bash -s psgi /var/local/EmpireLogistics/shared/local/bin/uwsgi
+  #EOH
+  #creates "/var/local/EmpireLogistics/shared/local/bin/uwsgi"
+  #action :run
+#end
 
 node["el"]["npm_packages"].each do |package|
   npm_package package do
