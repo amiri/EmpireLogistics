@@ -242,12 +242,12 @@ include_recipe "npm"
 include_recipe "sudo"
 include_recipe "perl"
 
-cookbook_file "etc/init/uwsgi.conf" do
+cookbook_file "/etc/init/uwsgi.conf" do
   path "/etc/init/uwsgi.conf"
   owner    'root'
   group    'root'
   mode     '0644'
-  action :run
+  action :create
 end
 
 execute "python_dev_packages" do
@@ -293,12 +293,12 @@ bash "extract_uwsgi" do
     tar xzvf #{uwsgi_filepath} -C /home/el/uwsgi_latest
   EOH
   creates "/home/el/uwsgi_latest"
-  notifies :run, "cookbook_file[uwsgi_latest/buildconf/el.ini]", :immediately
-  notifies :run, "cookbook_file[uwsgi_latest/plugins/psgi/uwsgiplugin.py]", :immediately
-  notifies :run, "cookbook_file[uwsgi_latest/plugins/python/uwsgiplugin.py]", :immediately
+  notifies :run, "cookbook_file[/uwsgi_latest/buildconf/el.ini]", :immediately
+  notifies :run, "cookbook_file[/uwsgi_latest/plugins/psgi/uwsgiplugin.py]", :immediately
+  notifies :run, "cookbook_file[/uwsgi_latest/plugins/python/uwsgiplugin.py]", :immediately
 end
 
-cookbook_file "uwsgi_latest/buildconf/el.ini" do
+cookbook_file "/uwsgi_latest/buildconf/el.ini" do
   path "/home/el/uwsgi_latest/buildconf/el.ini"
   owner    'el'
   group    'el'
@@ -306,7 +306,7 @@ cookbook_file "uwsgi_latest/buildconf/el.ini" do
   action :nothing
 end
 
-cookbook_file "uwsgi_latest/plugins/psgi/uwsgiplugin.py" do
+cookbook_file "/uwsgi_latest/plugins/psgi/uwsgiplugin.py" do
   path "/home/el/uwsgi_latest/plugins/psgi/uwsgiplugin.py"
   owner    'el'
   group    'el'
@@ -314,7 +314,7 @@ cookbook_file "uwsgi_latest/plugins/psgi/uwsgiplugin.py" do
   action :nothing
 end
 
-cookbook_file "uwsgi_latest/plugins/python/uwsgiplugin.py" do
+cookbook_file "/uwsgi_latest/plugins/python/uwsgiplugin.py" do
   path "/home/el/uwsgi_latest/plugins/python/uwsgiplugin.py"
   owner    'el'
   group    'el'
@@ -399,7 +399,7 @@ end
 
 cookbook_file "nginx.conf" do
   path "#{node["nginx"]["dir"]}/sites-enabled/empirelogistics"
-  action :create_if_missing
+  action :create
 end
 
 %w{uwsgi nginx}.each do |service|
