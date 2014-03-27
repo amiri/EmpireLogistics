@@ -21,6 +21,7 @@
       "--enable-shared",
       "--prefix=/var/local/EmpireLogistics/shared/python"
     ],
+    "version": "2.7.6",
     "install_method": "source",
     "prefix_dir": "/var/local/EmpireLogistics/shared/python"
   },
@@ -71,13 +72,6 @@
     ],
     "apt_packages": [
       "locales",
-      "uwsgi",
-      "uwsgi-app-integration-plugins",
-      "uwsgi-core",
-      "uwsgi-emperor",
-      "uwsgi-extra",
-      "uwsgi-infrastructure-plugins",
-      "uwsgi-plugins-all",
       "libgeos-dev",
       "libgeos++-dev",
       "gdal-bin",

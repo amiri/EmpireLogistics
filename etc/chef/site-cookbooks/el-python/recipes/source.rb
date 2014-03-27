@@ -49,10 +49,11 @@ end
 bash "build-and-install-python" do
   cwd Chef::Config[:file_cache_path]
   code <<-EOF
+  [ -d /var/local/EmpireLogistics/shared/python ] && rm -rf /var/local/EmpireLogistics/shared/python/{lib,bin,include,share}
+  [ -d Python-#{version} ] && rm -rf Python-#{version}
   tar -zxvf Python-#{version}.tgz
   cd Python-#{version}
   make clean; make distclean
-  perl -pi -e 's/import sys, os, imp, re, optparse/import sys, os, imp, re, optparse\ndel os.link/' setup.py
   ./configure #{configure_options}
   perl -pi -e 's/^LN=.+?$/LN= ln -s/' Makefile
   make && make #{make_options}

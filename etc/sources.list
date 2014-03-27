@@ -1,0 +1,21 @@
+#############################################################
+################### OFFICIAL UBUNTU REPOS ###################
+#############################################################
+
+###### Ubuntu Main Repos
+deb http://02.archive.ubuntu.com/ubuntu/ saucy main restricted universe multiverse 
+deb-src http://02.archive.ubuntu.com/ubuntu/ saucy main restricted universe multiverse 
+
+###### Ubuntu Update Repos
+deb http://02.archive.ubuntu.com/ubuntu/ saucy-security main restricted universe multiverse 
+deb http://02.archive.ubuntu.com/ubuntu/ saucy-updates main restricted universe multiverse 
+deb-src http://02.archive.ubuntu.com/ubuntu/ saucy-security main restricted universe multiverse 
+deb-src http://02.archive.ubuntu.com/ubuntu/ saucy-updates main restricted universe multiverse 
+
+###### Ubuntu Partner Repo
+deb http://archive.canonical.com/ubuntu saucy partner
+deb-src http://archive.canonical.com/ubuntu saucy partner
+
+###### Ubuntu Extras Repo
+deb http://extras.ubuntu.com/ubuntu saucy main
+deb-src http://extras.ubuntu.com/ubuntu saucy main
