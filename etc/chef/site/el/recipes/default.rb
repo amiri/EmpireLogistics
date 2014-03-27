@@ -120,10 +120,10 @@ end
 
 include_recipe "perlbrew"
 
-perlbrew_perl "perl-5.18.2" do
-  version 'perl-5.18.2'
-  action :remove
-end
+#perlbrew_perl "perl-5.18.2" do
+  #version 'perl-5.18.2'
+  #action :remove
+#end
 
 perlbrew_perl "perl-5.18.2" do
   version 'perl-5.18.2'
@@ -242,7 +242,8 @@ include_recipe "npm"
 include_recipe "sudo"
 include_recipe "perl"
 
-cookbook_file "/etc/init/uwsgi.conf" do
+cookbook_file "uwsgi.conf" do
+  source "/etc/init/uwsgi.conf"
   path "/etc/init/uwsgi.conf"
   owner    'root'
   group    'root'
@@ -254,7 +255,7 @@ execute "python_dev_packages" do
   command "sudo apt-get -y build-dep python2.7 python-stdlib-extensions"
 end
 
-include_recipe "python"
+include_recipe "el-python"
 
 node["el"]["hold_packages"].each do |package|
   execute "hold_package" do
@@ -290,15 +291,16 @@ bash "extract_uwsgi" do
   cwd ::File.dirname(uwsgi_filepath)
   environment ({ 'HOME' => ::Dir.home(node['env']['user']), 'USER' => node['env']['user'], 'PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/local/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin:/var/local/EmpireLogistics/shared/python/bin:usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games', 'PERLBREW_PERL' => 'perl-5.18.2', 'PERLBREW_ROOT' => '/var/local/EmpireLogistics/shared/perl', 'PERLBREW_HOME' => '/home/el/.perlbrew', 'PERLBREW_PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin' })
   code <<-EOH
-    tar xzvf #{uwsgi_filepath} -C /home/el/uwsgi_latest
+    mkdir /home/el/uwsgi_latest && tar xzvf #{uwsgi_filepath} -C /home/el/uwsgi_latest --strip-components 1
   EOH
   creates "/home/el/uwsgi_latest"
-  notifies :run, "cookbook_file[/uwsgi_latest/buildconf/el.ini]", :immediately
-  notifies :run, "cookbook_file[/uwsgi_latest/plugins/psgi/uwsgiplugin.py]", :immediately
-  notifies :run, "cookbook_file[/uwsgi_latest/plugins/python/uwsgiplugin.py]", :immediately
+  notifies :create, "cookbook_file[buildconf/el.ini]", :immediately
+  notifies :create, "cookbook_file[plugins/psgi/uwsgiplugin.py]", :immediately
+  notifies :create, "cookbook_file[plugins/python/uwsgiplugin.py]", :immediately
 end
 
-cookbook_file "/uwsgi_latest/buildconf/el.ini" do
+cookbook_file "buildconf/el.ini" do
+  source "/uwsgi_latest/buildconf/el.ini"
   path "/home/el/uwsgi_latest/buildconf/el.ini"
   owner    'el'
   group    'el'
@@ -306,7 +308,8 @@ cookbook_file "/uwsgi_latest/buildconf/el.ini" do
   action :nothing
 end
 
-cookbook_file "/uwsgi_latest/plugins/psgi/uwsgiplugin.py" do
+cookbook_file "plugins/psgi/uwsgiplugin.py" do
+  source "/uwsgi_latest/plugins/psgi/uwsgiplugin.py"
   path "/home/el/uwsgi_latest/plugins/psgi/uwsgiplugin.py"
   owner    'el'
   group    'el'
@@ -314,7 +317,8 @@ cookbook_file "/uwsgi_latest/plugins/psgi/uwsgiplugin.py" do
   action :nothing
 end
 
-cookbook_file "/uwsgi_latest/plugins/python/uwsgiplugin.py" do
+cookbook_file "plugins/python/uwsgiplugin.py" do
+  source "/uwsgi_latest/plugins/python/uwsgiplugin.py"
   path "/home/el/uwsgi_latest/plugins/python/uwsgiplugin.py"
   owner    'el'
   group    'el'
@@ -373,23 +377,6 @@ bash "compile_python_plugin" do
   creates "/var/local/EmpireLogistics/shared/local/uwsgi_plugins/python_plugin.so"
   action :run
 end
-
-#bash "compile_uwsgi" do
-  #user "el"
-  #group "el"
-  #cwd "/home/el"
-  #environment ({ 'HOME' => ::Dir.home(node['env']['user']), 'USER' => node['env']['user'], 'PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/local/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin:/var/local/EmpireLogistics/shared/python/bin:usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games', 'PERLBREW_PERL' => 'perl-5.18.2', 'PERLBREW_ROOT' => '/var/local/EmpireLogistics/shared/perl', 'PERLBREW_HOME' => '/home/el/.perlbrew', 'PERLBREW_PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin' })
-  #code <<-EOH
-    #cd /home/el
-    #source /home/el/.profile
-    #source /home/el/.bashrc
-    #perlbrew switch perl-5.18.2
-    #if [ -d /home/el/uwsgi_latest_from_installer ]; then rm -rf /home/el/uwsgi_latest_from_installer; fi
-    #curl http://uwsgi.it/install | bash -s psgi /var/local/EmpireLogistics/shared/local/bin/uwsgi
-  #EOH
-  #creates "/var/local/EmpireLogistics/shared/local/bin/uwsgi"
-  #action :run
-#end
 
 node["el"]["npm_packages"].each do |package|
   npm_package package do

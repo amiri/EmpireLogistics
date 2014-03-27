@@ -27,6 +27,7 @@ prereqs:
 	sudo apt-get -y install git ruby1.9.1-dev build-essential unzip
 	sudo gem install rdoc
 	sudo gem install librarian-chef
+	sudo gem install chef-rewind
 
 .PHONY: chef
 
