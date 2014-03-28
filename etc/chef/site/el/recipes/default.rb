@@ -186,6 +186,7 @@ remote_file geolib_filepath do
   owner    'root'
   group    'root'
   mode     '0644'
+  not_if { ::File.exists?("/usr/local/lib/libGeoIP.so.1.4.8") }
 end
 
 bash "extract_geolib" do

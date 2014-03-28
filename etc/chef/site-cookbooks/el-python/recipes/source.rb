@@ -39,7 +39,7 @@ remote_file "#{Chef::Config[:file_cache_path]}/Python-#{version}.tgz" do
   source "#{node['python']['url']}/#{version}/Python-#{version}.tgz"
   checksum node['python']['checksum']
   mode "0644"
-  not_if { ::File.exists?(install_path) }
+  not_if { ::File.exists?("#{node['python']['url']}/#{version}/Python-#{version}.tgz") }
 end
 
 # We inject two regexes to delete os.link capability
@@ -59,10 +59,10 @@ bash "build-and-install-python" do
   make && make #{make_options}
   EOF
   environment({
-      "LDFLAGS" => "-L#{node['python']['prefix_dir']} -L/usr/lib",
+      "LDFLAGS"  => "-L#{node['python']['prefix_dir']} -L/usr/lib",
       "CPPFLAGS" => "-I#{node['python']['prefix_dir']} -I/usr/lib",
       "CXXFLAGS" => "-I#{node['python']['prefix_dir']} -I/usr/lib",
-      "CFLAGS" => "-I#{node['python']['prefix_dir']} -I/usr/lib"
+      "CFLAGS"   => "-I#{node['python']['prefix_dir']} -I/usr/lib"
   }) if platform?("ubuntu") && node['platform_version'].to_f >= 12.04
   not_if { ::File.exists?(install_path) }
 end

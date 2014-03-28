@@ -24,6 +24,7 @@ clean:
 prereqs:
 	sudo perl -pi.orig -e "s/%admin ALL=\(ALL\) ALL/%admin ALL=(ALL) NOPASSWD: ALL/" /etc/sudoers
 	sudo cp etc/sources.list /etc/apt/sources.list
+	sudo apt-get update && sudo apt-get -y dist-upgrade
 	curl -L https://www.opscode.com/chef/install.sh | sudo bash
 	sudo apt-get -y install git ruby1.9.1-dev build-essential unzip
 	sudo gem install rdoc
