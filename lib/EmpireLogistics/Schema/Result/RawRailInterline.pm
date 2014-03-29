@@ -1,21 +1,10 @@
-use utf8;
 package EmpireLogistics::Schema::Result::RawRailInterline;
 
-# Created by DBIx::Class::Schema::Loader
-# DO NOT MODIFY THE FIRST PART OF THIS FILE
 
-use strict;
-use warnings;
 
 use Moose;
-use MooseX::NonMoose;
-use MooseX::MarkAsMethods autoclean => 1;
-extends 'DBIx::Class::Core';
-__PACKAGE__->load_components(
-  "InflateColumn::DateTime",
-  "TimeStamp",
-  "InflateColumn::DateTime::Duration",
-);
+extends 'EmpireLogistics::Schema::Result';
+
 __PACKAGE__->table("raw_rail_interline");
 __PACKAGE__->add_columns(
   "ogc_fid",
@@ -115,10 +104,7 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("ogc_fid");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-03-22 19:28:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jgb0V31rw1gSeVndVioXtg
 
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
 1;
