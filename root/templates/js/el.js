@@ -303,7 +303,7 @@
         "type": "LineString",
         "coordinates": [[0, 0], [0, 0]]
     }).addTo(map);
-    var geojsonURL = "http://[% tiles_url %]/tiles/rail_lines/{z}/{x}/{y}.json";
+    var geojsonURL = "http://[% tiles_url %]/rail_lines/{z}/{x}/{y}.json";
     var lineLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
         class: railLineClass,
         type: "path",
@@ -323,7 +323,7 @@
         "type": "LineString",
         "coordinates": [[0, 0], [0, 0]]
     }).addTo(map);
-    var geojsonURL = "http://[% tiles_url %]/tiles/rail_interlines/{z}/{x}/{y}.json";
+    var geojsonURL = "http://[% tiles_url %]/rail_interlines/{z}/{x}/{y}.json";
     var interlinesLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
         class: "rail-interline",
         type: "path",
@@ -341,7 +341,7 @@
         "type": "Point",
         "coordinates": [0, 0]
     }).addTo(map);
-    var geojsonURL = "http://[% tiles_url %]/tiles/ports/{z}/{x}/{y}.json";
+    var geojsonURL = "http://[% tiles_url %]/ports/{z}/{x}/{y}.json";
     var portLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
         class: "port",
         type: "circle",
@@ -361,7 +361,7 @@
         "type": "Point",
         "coordinates": [0, 0]
     }).addTo(map);
-    var geojsonURL = "http://[% tiles_url %]/tiles/warehouses/{z}/{x}/{y}.json";
+    var geojsonURL = "http://[% tiles_url %]/warehouses/{z}/{x}/{y}.json";
     var warehouseLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
         class: "warehouse",
         type: "circle",
@@ -380,7 +380,7 @@
         "type": "Point",
         "coordinates": [0, 0]
     }).addTo(map);
-    var geojsonURL = "http://[% tiles_url %]/tiles/rail_nodes/{z}/{x}/{y}.json";
+    var geojsonURL = "http://[% tiles_url %]/rail_nodes/{z}/{x}/{y}.json";
     var nodesLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
         class: "rail-node",
         type: "circle",

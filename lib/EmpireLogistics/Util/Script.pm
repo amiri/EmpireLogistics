@@ -31,7 +31,7 @@ sub db_opts {
 sub schema {
     my $self = shift;
     return EmpireLogistics::Schema->connect(
-       $self->dsn,$self->db_user,$self->db_pass,$self->db_opts, 
+       $self->dsn,$self->db_user,$self->db_pass,$self->db_opts,
     );
 }
 

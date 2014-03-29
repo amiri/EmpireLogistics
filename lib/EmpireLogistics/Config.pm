@@ -26,12 +26,12 @@ our %NICKNAMES  = ();
 $PARAMETERS{default} = {
     srcroot  => "/var/local/EmpireLogistics/current/",
     hostname => 'li431-25',
-    tiles_url => '50.116.5.25',
+    tiles_url => '50.116.5.25/tiles',
     database => {
         db_name => 'empirelogistics',
         db_pass => '3mp1r3',
         db_user => 'el',
-        db_host => 'localhost', 
+        db_host => 'localhost',
         db_port => 5432,
         db_opts => {   RaiseError    => 1,
             AutoCommit    => 0,
@@ -68,13 +68,13 @@ $PARAMETERS{"development"} = {
     %{ clone $PARAMETERS{'default'} },
     srcroot  => get_current_srcroot(),
     hostname => "akbuntu",
-    tiles_url => 'localhost',
+    tiles_url => 'localhost/tiles',
 };
-$PARAMETERS{"akbuntu"} = { 
+$PARAMETERS{"akbuntu"} = {
     %{ clone $PARAMETERS{'development'} },
     srcroot  => "/home/amiri/EmpireLogistics",
     hostname => "akbuntu",
-    tiles_url => 'localhost',
+    tiles_url => 'localhost:8889',
 };
 
 $PARAMETERS{"vagrant-ubuntu-saucy-"} = {
