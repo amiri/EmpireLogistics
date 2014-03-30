@@ -15,8 +15,11 @@ use Catalyst qw/
     Authorization::Roles
     Authorization::ACL
     RedirectAndDetach
-    Unicode::Encoding
     I18N
+    Session
+    Session::Store::DBIC
+    Session::State::Cookie
+
     /;
 
 extends 'Catalyst';

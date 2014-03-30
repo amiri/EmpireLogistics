@@ -6,10 +6,12 @@ use MooseX::NonMoose;
 use MooseX::MarkAsMethods autoclean => 1;
 extends 'DBIx::Class::Core';
 __PACKAGE__->load_components(
+  "EncodedColumn",
   "InflateColumn::DateTime",
   "TimeStamp",
   "InflateColumn::DateTime::Duration",
-  "EncodedColumn",
+  "Helper::Row::ToJSON",
+  "Core",
 );
 
 __PACKAGE__->meta->make_immutable;

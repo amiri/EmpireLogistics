@@ -33,9 +33,11 @@ $PARAMETERS{default} = {
         db_user => 'el',
         db_host => 'localhost',
         db_port => 5432,
-        db_opts => {   RaiseError    => 1,
+        db_opts => {
+            RaiseError    => 1,
             AutoCommit    => 0,
-            on_connect_do => ['set timezone = "America/Los Angeles"']
+            on_connect_do => ['set timezone = "America/Los Angeles"'],
+            pg_enable_utf8 => 1,
         },
     },
     catalyst => {
@@ -59,6 +61,29 @@ $PARAMETERS{default} = {
         },
         "Plugin::Static::Simple" => {
             ignore_extensions => [qw/tt/],
+        },
+        "Plugin::Authentication" => {
+            default_realm => "users",
+            realms => {
+                users => {
+                    credential => {
+                        class => "Password",
+                        password_field => "password",
+                        password_type => "self_check",
+                    },
+                    store => {
+                        class => "DBIx::Class",
+                        user_model => "EmpireLogistics::Schema::User",
+                        role_relation => "roles",
+                        role_field => "name",
+                    },
+                },
+            },
+        },
+        "Plugin::Session" => {
+            dbic_class     => "DB::Session",
+            expires        => 3600,
+            flash_to_stash => 1,
         },
     },
 };
@@ -99,7 +124,7 @@ sub make_package_accessor {
         my $class = shift;
         no strict 'refs';
         return @_ ? ( ${$varname} = $_[0] ) : ${$varname};
-        }
+    }
 }
 
 __PACKAGE__->mk_package_accessors( keys %{ $PARAMETERS{"default"} } );
@@ -108,12 +133,12 @@ __PACKAGE__->mk_package_accessors('all_parameters');
 __PACKAGE__->mk_package_accessors('installation');
 
 sub import {
-    my ( $class, %options ) = @_;
+    my ($class, %options) = @_;
     use Data::Printer;
     warn "In import class is $class";
     warn "In import options are: ", p %options;
-    $class->init( exists $options{installation} ? $options{installation} : (),
-    ) unless $class->initialized;
+    $class->init(exists $options{installation} ? $options{installation} : ())
+        unless $class->initialized;
 }
 
 sub init {
@@ -147,7 +172,6 @@ sub get_running_installation {
 }
 
 sub get_system_hostname {
-    my $class    = shift;
     my $hostname = Sys::Hostname::Long::hostname_long();
     return $hostname;
 }
@@ -260,8 +284,6 @@ sub canonical_installation_name {
         . ': no installation passed to canonical_installation_name'
         unless $installation;
 
-    # For /tmp/cepush installations, strip out hostname
-    $installation =~ s%^.+(/tmp/cepush)$%$1%;
     return $installation if $PARAMETERS{$installation};
 
     my $nickname = $installation;
@@ -296,6 +318,21 @@ sub dsn {
     my $db_port = $class->database->{db_port};
     my $dsn = "dbi:Pg:dbname=$db_name;host=$db_host;port=$db_port";
     return $dsn;
+}
+
+sub connect_info {
+    my $class = shift;
+    my $dsn = $class->dsn();
+    my $user = $class->database->{db_user};
+    my $password = $class->database->{db_pass};
+    my $opts = $class->database->{db_opts};
+    my $connect_info = {
+        dsn => $dsn,
+        user => $user,
+        password => $password,
+        %$opts,
+    };
+    return $connect_info;
 }
 
 1;

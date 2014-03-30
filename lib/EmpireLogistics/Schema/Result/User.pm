@@ -47,6 +47,24 @@ __PACKAGE__->add_columns(
   "notes",
   { data_type => "text", is_nullable => 1 },
 );
+
+__PACKAGE__->has_many(
+    "user_roles",
+    "EmpireLogistics::Schema::Result::UserRole",
+    { "foreign.user" => "self.id" },
+);
+
+__PACKAGE__->many_to_many(
+    "roles" => "user_roles",
+    "role"
+);
+
+#sub check_password {
+    #my ($self, $raw_pass) = @_;
+    #return $self
+        #if (EmpireLogistics::Model::PBKDF2->new->validate($self->password, $raw_pass));
+#}
+
 __PACKAGE__->set_primary_key("id");
 
 

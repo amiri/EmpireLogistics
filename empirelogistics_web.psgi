@@ -26,6 +26,4 @@ warn "Archname: ",  $Config::archname;
 
 my $app = EmpireLogistics::Web->apply_default_middlewares(EmpireLogistics::Web->psgi_app(@_));
 
-#my $app = Plack::App::File->new(root => catpath((splitpath(abs_path $0))[0, 1], './root'))->to_app;
-
 $app;

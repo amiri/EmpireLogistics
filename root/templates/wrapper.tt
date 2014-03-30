@@ -24,9 +24,6 @@
     <script src="//d3js.org/d3.geo.tile.v0.min.js"></script>
     <script src="/js/lib/d3-bootstrap.min.js"></script>
     [% INCLUDE 'js/el.tt' %]
-    <!--
-    <script src="/js/el.js"></script>
-    -->
 </body>
 </html>
 

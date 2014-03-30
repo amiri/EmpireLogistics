@@ -1550,6 +1550,38 @@ create table "user" (
     notes text
 );
 
+drop table if exists role cascade;
+create table role (
+    id serial not null primary key,
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    name text not null
+);
+
+drop table if exists user_role cascade;
+create table user_role (
+    "user" integer not null references "user"(id) on delete cascade,
+    role integer not null references role(id) on delete cascade,
+    create_time timestamptz not null default 'now',
+    update_time timestamptz not null default 'now',
+    delete_time timestamptz default null,
+    primary key ("user", role)
+);
+create index on user_role("user");
+create index on user_role(role);
+
+insert into role (name) values
+    ('user'),
+    ('admin');
+
+drop table if exists session;
+create table session (
+    id character varying (72) not null primary key,
+    session_data text not null,
+    expires integer not null
+);
+
 -- object type
 drop type if exists object_type cascade;
 create type object_type as enum (
@@ -1625,9 +1657,11 @@ create type object_type as enum (
     'rail_track_gauge',
     'rail_track_grade',
     'rail_track_type',
+    'role',
     'state',
     'topology',
     'user',
+    'user_role',
     'walmart',
     'warehouse',
     'warehouse_address',
@@ -1750,7 +1784,9 @@ create trigger update_time before update on rail_subdivision_state for each row 
 create trigger update_time before update on rail_track_gauge for each row execute procedure update_timestamp();
 create trigger update_time before update on rail_track_grade for each row execute procedure update_timestamp();
 create trigger update_time before update on rail_track_type for each row execute procedure update_timestamp();
+create trigger update_time before update on role for each row execute procedure update_timestamp();
 create trigger update_time before update on state for each row execute procedure update_timestamp();
+create trigger update_time before update on user_role for each row execute procedure update_timestamp();
 create trigger update_time before update on walmart for each row execute procedure update_timestamp();
 create trigger update_time before update on warehouse for each row execute procedure update_timestamp();
 create trigger update_time before update on warehouse_address for each row execute procedure update_timestamp();
