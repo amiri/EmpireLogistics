@@ -13,17 +13,7 @@
 </head>
 
 <body>
-    <div id="map"></div>
-    <script src="//code.jquery.com/jquery-latest.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-    <script src="//cdn.leafletjs.com/leaflet-0.7.1/leaflet.js"></script>
-    <script src="//d3js.org/d3.v3.min.js"></script>
-    <script src="//d3js.org/topojson.v1.min.js"></script>
-    <script src="/js/lib/leaflet-hash.js"></script>
-    <script src="/js/lib/TileLayer.custom_d3_geoJSON.js"></script>
-    <script src="//d3js.org/d3.geo.tile.v0.min.js"></script>
-    <script src="/js/lib/d3-bootstrap.min.js"></script>
-    [% INCLUDE 'js/el.tt' %]
+[% content %]
 </body>
 </html>
 

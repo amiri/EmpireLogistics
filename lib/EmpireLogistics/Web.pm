@@ -19,7 +19,6 @@ use Catalyst qw/
     Session
     Session::Store::DBIC
     Session::State::Cookie
-
     /;
 
 extends 'Catalyst';

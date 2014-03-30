@@ -1422,6 +1422,21 @@ DISTRIBUTIONS
       DBIx::Class 0
       ExtUtils::MakeMaker 6.92
       Test::More 0
+  DBIx-Class-ResultSet-RecursiveUpdate-0.34
+    pathname: G/GS/GSHANK/DBIx-Class-ResultSet-RecursiveUpdate-0.34.tar.gz
+    provides:
+      DBIx::Class::ResultSet::RecursiveUpdate 0.34
+      DBIx::Class::ResultSet::RecursiveUpdate::Functions 0.34
+    requirements:
+      Carp::Clan 6.04
+      DBD::SQLite 1.21
+      DBIx::Class 0.08103
+      DBIx::Class::IntrospectableM2M 0
+      DateTime 0
+      ExtUtils::MakeMaker 6.30
+      List::MoreUtils 0.22
+      Readonly 1.03
+      SQL::Translator 0.11016
   DBIx-Class-Schema-Loader-0.07039
     pathname: I/IL/ILMARI/DBIx-Class-Schema-Loader-0.07039.tar.gz
     provides:
@@ -1841,6 +1856,14 @@ DISTRIBUTIONS
       Params::Validate 0.64
       strict 0
       vars 0
+  DateTime-Format-W3CDTF-0.06
+    pathname: G/GW/GWILLIAMS/DateTime-Format-W3CDTF-0.06.tar.gz
+    provides:
+      DateTime::Format::W3CDTF 0.06
+    requirements:
+      DateTime 0
+      ExtUtils::MakeMaker 6.42
+      Test::More 0.61
   DateTime-Locale-0.45
     pathname: D/DR/DROLSKY/DateTime-Locale-0.45.tar.gz
     provides:
@@ -3359,6 +3382,64 @@ DISTRIBUTIONS
       Sub::Name 0
       Try::Tiny 0
       aliased 0
+      namespace::autoclean 0.09
+  HTML-FormHandler-Model-DBIC-0.28
+    pathname: G/GS/GSHANK/HTML-FormHandler-Model-DBIC-0.28.tar.gz
+    provides:
+      BookDB 0.02
+      BookDB::Field::BookOwnerAlt undef
+      BookDB::Form::Author undef
+      BookDB::Form::AuthorOld undef
+      BookDB::Form::Book undef
+      BookDB::Form::Book2PK undef
+      BookDB::Form::BookHTML undef
+      BookDB::Form::BookM2M undef
+      BookDB::Form::BookOwner undef
+      BookDB::Form::BookOwnerAlt undef
+      BookDB::Form::BookView undef
+      BookDB::Form::BookWithOwner undef
+      BookDB::Form::BookWithOwnerAlt undef
+      BookDB::Form::Borrower undef
+      BookDB::Form::BorrowerX undef
+      BookDB::Form::Field::AltText undef
+      BookDB::Form::Field::Book undef
+      BookDB::Form::Profile undef
+      BookDB::Form::User undef
+      BookDB::Form::Widget::Wrapper::Para undef
+      BookDB::Schema undef
+      BookDB::Schema::Result::Address undef
+      BookDB::Schema::Result::Author undef
+      BookDB::Schema::Result::AuthorBooks undef
+      BookDB::Schema::Result::AuthorOld undef
+      BookDB::Schema::Result::Book undef
+      BookDB::Schema::Result::Book2PK undef
+      BookDB::Schema::Result::BooksGenres undef
+      BookDB::Schema::Result::Borrower undef
+      BookDB::Schema::Result::Country undef
+      BookDB::Schema::Result::Employer undef
+      BookDB::Schema::Result::Format undef
+      BookDB::Schema::Result::Genre undef
+      BookDB::Schema::Result::License undef
+      BookDB::Schema::Result::Options undef
+      BookDB::Schema::Result::User undef
+      BookDB::Schema::Result::UserEmployer undef
+      HTML::FormHandler::Generator::DBIC 0.04
+      HTML::FormHandler::Generator::DBIC::Cmd 0.04
+      HTML::FormHandler::Model::DBIC 0.28
+      HTML::FormHandler::Model::DBIC::TypeMap undef
+      HTML::FormHandler::TraitFor::DBICFields undef
+      HTML::FormHandler::TraitFor::Model::DBIC 0.26
+    requirements:
+      DBIx::Class 0.08250
+      DBIx::Class::ResultSet::RecursiveUpdate 0.25
+      DateTime::Format::MySQL 0
+      DateTime::Format::SQLite 0
+      DateTime::Format::W3CDTF 0
+      ExtUtils::MakeMaker 6.30
+      HTML::FormHandler 0.40016
+      Moose 2.0007
+      Test::Exception 0
+      Test::More 0.94
       namespace::autoclean 0.09
   HTML-Parser-3.71
     pathname: G/GA/GAAS/HTML-Parser-3.71.tar.gz
@@ -5266,6 +5347,19 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 6.30
       File::Spec 0
       strict 0
+  Readonly-1.04
+    pathname: S/SA/SANKO/Readonly-1.04.tar.gz
+    provides:
+      Readonly 1.04
+      Readonly::Array 1.04
+      Readonly::Hash 1.04
+      Readonly::Scalar 1.04
+    requirements:
+      CPAN::Meta 0
+      CPAN::Meta::Prereqs 0
+      ExtUtils::CBuilder 0
+      Module::Build 0.38
+      perl 5.006
   Role-Tiny-1.003003
     pathname: H/HA/HAARG/Role-Tiny-1.003003.tar.gz
     provides:

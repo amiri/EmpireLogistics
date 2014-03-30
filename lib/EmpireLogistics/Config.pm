@@ -64,19 +64,17 @@ $PARAMETERS{default} = {
         },
         "Plugin::Authentication" => {
             default_realm => "users",
-            realms => {
-                users => {
-                    credential => {
-                        class => "Password",
-                        password_field => "password",
-                        password_type => "self_check",
-                    },
-                    store => {
-                        class => "DBIx::Class",
-                        user_model => "EmpireLogistics::Schema::User",
-                        role_relation => "roles",
-                        role_field => "name",
-                    },
+            users => {
+                credential => {
+                    class => "Password",
+                    password_field => "password",
+                    password_type => "self_check",
+                },
+                store => {
+                    class => "DBIx::Class",
+                    user_model => "DB::User",
+                    role_relation => "roles",
+                    role_field => "name",
                 },
             },
         },
@@ -87,7 +85,6 @@ $PARAMETERS{default} = {
         },
     },
 };
-
 
 $PARAMETERS{"development"} = {
     %{ clone $PARAMETERS{'default'} },
