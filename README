@@ -1,6 +1,6 @@
 INSTALLATION
 
-These instructions will change as we build the data and the server.
+BARE METAL
 
 If you are running a Debian-derived distribution, preferably Ubuntu 13.10,
 Saucy Salamander, you can run the following on the command line:
@@ -19,23 +19,77 @@ If you want to break it down, you can build the parts individually:
     make chef
     make database
 
-Now you should have a mostly populated PostgreSQL database with
+Now you should have a populated PostgreSQL database with
 a lot of data in place. You also have nginx, PostgreSQL, and uwsgi
 installed, but unconfigured.
 
-We have all the rail, warehouse, and port data importing now. Remaining
-is original data from the current site.
+VAGRANT/VIRTUALBOX
+
+This installation is more complicated. Here is the Mac installation:
+
+    - Download https://dl.bintray.com/mitchellh/vagrant/vagrant_1.5.1.dmg
+    - Install it.
+
+Now you need to open a Terminal and cd to the directory where you
+checked out the repository. Once inside that directory, you need to
+look at https://cloud-images.ubuntu.com/vagrant/saucy/current/
+and choose a base box image. Your Mac is most likely a 64-bit machine, so
+run the following commands in the Terminal.
+
+    vagrant box add base http://cloud-images.ubuntu.com/vagrant/saucy/current/saucy-server-cloudimg-amd64-vagrant-disk1.box
+    vagrant up
+
+You should see some setup information as this is working. You may
+have to answer some questions. The defaults should be fine. Once
+the setup is done, you can ssh to the machine.
+
+    vagrant ssh -- -A
+
+Now you are inside the virtual machine. Run the following commands:
+
+    cd /vagrant
+
+Now you are in a shared directory, the directory of the repository.
+
+    ls
+
+These are the files in the repository. Now run the installation commands:
+
+    make prereqs && make all
+
+When that is done, open up another Terminal, cd to the repo directory,
+and ssh into the machine again:
+
+    vagrant ssh -- -A
+    cd /vagrant
+    sudo apt-get install chromium-browser
+    chromium-browser --disable-accelerated-compositing --blacklist-accelerated-compositing
+
+Now you are running a browser inside the virtual machine. Visit
+http://localhost and you will see the application running.
+
+The idea here is that now you have 2 Terminal windows open. One
+is running chromium, and the other is sitting at the /vagrant
+directory inside the virtual machine. You can open up a text
+editor on your Mac and edit files inside the repo directory. When you
+are done editing, you can reinstall the application and check it.
+Reinstallation, again, is make all, which you will run inside the
+first Terminal window. It takes a much shorter time each time after
+the first.
 
 OVERVIEW
 
-We have four major data layers we want:
+We have all the rail, warehouse, and port data importing now. Remaining
+is original data from the current site, which must be imported
+manually.
+
+We have three major data layers:
 
     - rail
     - ports
     - warehouses
-    - roads/highways
 
-And we want them in North America:
+In North America:
 
     - USA
     - Mexico
