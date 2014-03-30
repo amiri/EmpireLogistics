@@ -158,6 +158,64 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::Exception 0
+  Catalyst-Action-REST-1.14
+    pathname: F/FR/FREW/Catalyst-Action-REST-1.14.tar.gz
+    provides:
+      Catalyst::Action::Deserialize 1.14
+      Catalyst::Action::Deserialize::Callback 1.14
+      Catalyst::Action::Deserialize::JSON 1.14
+      Catalyst::Action::Deserialize::JSON::XS 1.14
+      Catalyst::Action::Deserialize::View 1.14
+      Catalyst::Action::Deserialize::XML::Simple 1.14
+      Catalyst::Action::Deserialize::YAML 1.14
+      Catalyst::Action::DeserializeMultiPart 1.14
+      Catalyst::Action::REST 1.14
+      Catalyst::Action::REST::ForBrowsers 1.14
+      Catalyst::Action::Serialize 1.14
+      Catalyst::Action::Serialize::Callback 1.14
+      Catalyst::Action::Serialize::JSON 1.14
+      Catalyst::Action::Serialize::JSON::XS 1.14
+      Catalyst::Action::Serialize::JSONP 1.14
+      Catalyst::Action::Serialize::View 1.14
+      Catalyst::Action::Serialize::XML::Simple 1.14
+      Catalyst::Action::Serialize::YAML 1.14
+      Catalyst::Action::Serialize::YAML::HTML 1.14
+      Catalyst::Action::SerializeBase 1.14
+      Catalyst::Action::Serializer::Broken undef
+      Catalyst::Controller::REST 1.14
+      Catalyst::Request::REST 1.14
+      Catalyst::Request::REST::ForBrowsers 1.14
+      Catalyst::TraitFor::Request::REST 1.14
+      Catalyst::TraitFor::Request::REST::ForBrowsers 1.14
+      Test::Action::Class undef
+      Test::Action::Class::Sub undef
+      Test::Catalyst::Action::REST undef
+      Test::Catalyst::Action::REST::Controller::Actions undef
+      Test::Catalyst::Action::REST::Controller::ActionsForBrowsers undef
+      Test::Catalyst::Action::REST::Controller::Deserialize undef
+      Test::Catalyst::Action::REST::Controller::DeserializeMultiPart undef
+      Test::Catalyst::Action::REST::Controller::Override undef
+      Test::Catalyst::Action::REST::Controller::REST undef
+      Test::Catalyst::Action::REST::Controller::Root undef
+      Test::Catalyst::Action::REST::Controller::Serialize undef
+      Test::Catalyst::Log undef
+      Test::Rest undef
+      Test::Serialize undef
+      Test::Serialize::Controller::JSON undef
+      Test::Serialize::Controller::REST undef
+      Test::Serialize::View::Awful undef
+      Test::Serialize::View::Simple undef
+    requirements:
+      Catalyst::Runtime 5.80030
+      Class::Inspector 1.13
+      ExtUtils::MakeMaker 6.30
+      LWP::UserAgent 2.033
+      MRO::Compat 0.10
+      Module::Pluggable::Object 0
+      Moose 1.03
+      Params::Validate 0.76
+      URI::Find 0
+      namespace::autoclean 0
   Catalyst-Action-RenderView-0.16
     pathname: B/BO/BOBTFISH/Catalyst-Action-RenderView-0.16.tar.gz
     provides:
@@ -169,6 +227,18 @@ DISTRIBUTIONS
       HTTP::Request::AsCGI 0
       MRO::Compat 0
       Test::More 0.88
+  Catalyst-ActionRole-ACL-0.07
+    pathname: B/BO/BOBTFISH/Catalyst-ActionRole-ACL-0.07.tar.gz
+    provides:
+      Catalyst::Action::Role::ACL 0.07
+      Catalyst::ActionRole::ACL 0.07
+    requirements:
+      Catalyst::Controller::ActionRole 0
+      Catalyst::Runtime 5.90013
+      ExtUtils::MakeMaker 6.36
+      Moose 0
+      Test::More 0
+      namespace::autoclean 0
   Catalyst-Authentication-Store-DBIx-Class-0.1505
     pathname: B/BO/BOBTFISH/Catalyst-Authentication-Store-DBIx-Class-0.1505.tar.gz
     provides:
@@ -197,6 +267,50 @@ DISTRIBUTIONS
       Moose 0
       Scalar::Util 0
       Test::More 0
+  Catalyst-Controller-ActionRole-0.15
+    pathname: F/FL/FLORA/Catalyst-Controller-ActionRole-0.15.tar.gz
+    provides:
+      Catalyst::Action::TestActionClass undef
+      Catalyst::ActionRole::Moo undef
+      Catalyst::ActionRole::Zoo undef
+      Catalyst::Controller::ActionRole 0.15
+      Moo undef
+      TestApp undef
+      TestApp::ActionRole::Boo undef
+      TestApp::ActionRole::First undef
+      TestApp::ActionRole::Kooh undef
+      TestApp::ActionRole::Moo undef
+      TestApp::ActionRole::Second undef
+      TestApp::ActionRole::Shared undef
+      TestApp::Controller::ActionClass undef
+      TestApp::Controller::Bar undef
+      TestApp::Controller::Boo undef
+      TestApp::Controller::ExecutionViaConfig undef
+      TestApp::Controller::ExecutionViaDoes undef
+      TestApp::Controller::Foo undef
+      TestAppREST undef
+      TestAppREST::ActionRole::Moo undef
+      TestAppREST::Controller::Foo undef
+    requirements:
+      Catalyst 0
+      Catalyst::Action 0
+      Catalyst::Action::REST 0
+      Catalyst::Controller 0
+      Catalyst::Runtime 5.80025
+      Catalyst::Test 0
+      Catalyst::Utils 0
+      Class::MOP 0
+      ExtUtils::MakeMaker 6.31
+      FindBin 0
+      List::Util 0
+      Moose 0
+      Moose::Meta::Class 0
+      Moose::Role 0
+      MooseX::Types::Moose 0
+      String::RewritePrefix 0.004
+      Test::More 0
+      namespace::clean 0
+      parent 0
   Catalyst-Model-DBIC-Schema-0.62
     pathname: I/IL/ILMARI/Catalyst-Model-DBIC-Schema-0.62.tar.gz
     provides:
@@ -219,6 +333,7 @@ DISTRIBUTIONS
       List::MoreUtils 0
       Module::Runtime 0.012
       Moose 1.12
+      MooseX::MarkAsMethods 0.13
       MooseX::NonMoose 0.16
       MooseX::Types 0
       MooseX::Types::LoadableClass 0.009
@@ -384,6 +499,39 @@ DISTRIBUTIONS
       Moose 0
       Test::More 0
       namespace::autoclean 0
+  Catalyst-Plugin-Session-Store-DBIC-0.14
+    pathname: B/BO/BOBTFISH/Catalyst-Plugin-Session-Store-DBIC-0.14.tar.gz
+    provides:
+      Catalyst::Plugin::Session::Store::DBIC 0.14
+      Catalyst::Plugin::Session::Store::DBIC::Delegate undef
+    requirements:
+      Carp 0
+      Catalyst 5.65
+      Catalyst::Exception 0
+      Catalyst::Plugin::Session::Store::Delegate 0.05
+      Class::Accessor::Fast 0
+      DBIx::Class 0.07000
+      ExtUtils::MakeMaker 0
+      FindBin 0
+      MIME::Base64 0
+      MRO::Compat 0
+      Scalar::Util 0
+      Storable 0
+      Test::More 0
+      Test::Warn 0.20
+  Catalyst-Plugin-Session-Store-Delegate-0.06
+    pathname: B/BO/BOBTFISH/Catalyst-Plugin-Session-Store-Delegate-0.06.tar.gz
+    provides:
+      Catalyst::Plugin::Session::Store::Delegate 0.06
+    requirements:
+      Catalyst::Plugin::Session 0.27
+      ExtUtils::MakeMaker 6.42
+      MRO::Compat 0
+      Moose 0
+      MooseX::Emulate::Class::Accessor::Fast 0
+      Test::More 0
+      Test::use::ok 0
+      namespace::clean 0
   Catalyst-Plugin-Static-Simple-0.31
     pathname: A/AB/ABRAXXA/Catalyst-Plugin-Static-Simple-0.31.tar.gz
     provides:
@@ -970,6 +1118,19 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 6.48
       Test::Simple 0.90
       perl 5.008
+  DBICx-TestDatabase-0.05
+    pathname: J/JR/JROCKWAY/DBICx-TestDatabase-0.05.tar.gz
+    provides:
+      DBICx::TestDatabase 0.05
+      DBICx::TestDatabase::Subclass undef
+    requirements:
+      DBD::SQLite 1.29
+      DBIx::Class 0
+      ExtUtils::MakeMaker 6.36
+      File::Temp 0
+      SQL::Translator 0
+      Test::More 0
+      ok 0
   DBIx-Class-0.08270
     pathname: R/RI/RIBASUSHI/DBIx-Class-0.08270.tar.gz
     provides:
@@ -1092,6 +1253,47 @@ DISTRIBUTIONS
       Try::Tiny 0.07
       namespace::clean 0.24
       perl 5.008001
+  DBIx-Class-Candy-0.002104
+    pathname: F/FR/FREW/DBIx-Class-Candy-0.002104.tar.gz
+    provides:
+      A::Result undef
+      A::Schema undef
+      A::Schema::Candy undef
+      A::Schema::Result undef
+      A::Schema::Result::Album undef
+      A::Schema::Result::Artist undef
+      A::Schema::Result::Song undef
+      A::Schema::Result::Statistic undef
+      DBIx::Class::Candy 0.002104
+      DBIx::Class::Candy::Exports 0.002104
+      IRC::Schema undef
+      IRC::Schema::Candy undef
+      IRC::Schema::Result undef
+      IRC::Schema::Result::Channel undef
+      IRC::Schema::Result::Message undef
+      IRC::Schema::Result::Mode undef
+      IRC::Schema::Result::Network undef
+      IRC::Schema::Result::User undef
+      IRC::Schema::ResultSet undef
+    requirements:
+      DBIx::Class 0.08123
+      ExtUtils::MakeMaker 6.30
+      Lingua::EN::Inflect 0
+      MRO::Compat 0.11
+      String::CamelCase 0
+      Sub::Exporter 0.982
+      Test::Deep 0
+      Test::Fatal 0
+      Test::More 0.94
+      namespace::clean 0.18
+  DBIx-Class-DynamicDefault-0.04
+    pathname: M/MS/MSTROUT/DBIx-Class-DynamicDefault-0.04.tar.gz
+    provides:
+      DBIx::Class::DynamicDefault 0.04
+    requirements:
+      DBICx::TestDatabase 0
+      DBIx::Class 0.08127
+      ExtUtils::MakeMaker 6.36
   DBIx-Class-EncodedColumn-0.00013
     pathname: W/WR/WREIS/DBIx-Class-EncodedColumn-0.00013.tar.gz
     provides:
@@ -1110,6 +1312,96 @@ DISTRIBUTIONS
       File::Temp 0
       Sub::Name 0.04
       Test::More 0
+  DBIx-Class-Helpers-2.020001
+    pathname: F/FR/FREW/DBIx-Class-Helpers-2.020001.tar.gz
+    provides:
+      A::ResultSet::DateMethods1 undef
+      DBIx::Class::Helper::IgnoreWantarray 2.020001
+      DBIx::Class::Helper::JoinTable 2.020001
+      DBIx::Class::Helper::Random 2.020001
+      DBIx::Class::Helper::ResultSet 2.020001
+      DBIx::Class::Helper::ResultSet::AutoRemoveColumns 2.020001
+      DBIx::Class::Helper::ResultSet::CorrelateRelationship 2.020001
+      DBIx::Class::Helper::ResultSet::DateMethods1 2.020001
+      DBIx::Class::Helper::ResultSet::IgnoreWantarray 2.020001
+      DBIx::Class::Helper::ResultSet::Me 2.020001
+      DBIx::Class::Helper::ResultSet::NoColumns 2.020001
+      DBIx::Class::Helper::ResultSet::Random 2.020001
+      DBIx::Class::Helper::ResultSet::RemoveColumns 2.020001
+      DBIx::Class::Helper::ResultSet::ResultClassDWIM 2.020001
+      DBIx::Class::Helper::ResultSet::SearchOr 2.020001
+      DBIx::Class::Helper::ResultSet::SetOperations 2.020001
+      DBIx::Class::Helper::ResultSet::Shortcut 2.020001
+      DBIx::Class::Helper::ResultSet::Shortcut::AddColumns 2.020001
+      DBIx::Class::Helper::ResultSet::Shortcut::Columns 2.020001
+      DBIx::Class::Helper::ResultSet::Shortcut::Distinct 2.020001
+      DBIx::Class::Helper::ResultSet::Shortcut::GroupBy 2.020001
+      DBIx::Class::Helper::ResultSet::Shortcut::HRI 2.020001
+      DBIx::Class::Helper::ResultSet::Shortcut::HasRows 2.020001
+      DBIx::Class::Helper::ResultSet::Shortcut::Limit 2.020001
+      DBIx::Class::Helper::ResultSet::Shortcut::OrderBy 2.020001
+      DBIx::Class::Helper::ResultSet::Shortcut::OrderByMagic 2.020001
+      DBIx::Class::Helper::ResultSet::Shortcut::Prefetch 2.020001
+      DBIx::Class::Helper::ResultSet::Shortcut::Rows 2.020001
+      DBIx::Class::Helper::ResultSet::Union 2.020001
+      DBIx::Class::Helper::ResultSet::VirtualView 2.020001
+      DBIx::Class::Helper::Row::CleanResultSet 2.020001
+      DBIx::Class::Helper::Row::JoinTable 2.020001
+      DBIx::Class::Helper::Row::NumifyGet 2.020001
+      DBIx::Class::Helper::Row::OnColumnChange 2.020001
+      DBIx::Class::Helper::Row::ProxyResultSetMethod 2.020001
+      DBIx::Class::Helper::Row::ProxyResultSetUpdate 2.020001
+      DBIx::Class::Helper::Row::RelationshipDWIM 2.020001
+      DBIx::Class::Helper::Row::SelfResultSet 2.020001
+      DBIx::Class::Helper::Row::StorageValues 2.020001
+      DBIx::Class::Helper::Row::SubClass 2.020001
+      DBIx::Class::Helper::Row::ToJSON 2.020001
+      DBIx::Class::Helper::Schema::DateTime 2.020001
+      DBIx::Class::Helper::Schema::GenerateSource 2.020001
+      DBIx::Class::Helper::Schema::LintContents 2.020001
+      DBIx::Class::Helper::Schema::QuoteNames 2.020001
+      DBIx::Class::Helper::SubClass 2.020001
+      DBIx::Class::Helper::VirtualView 2.020001
+      DBIx::Class::Helpers 2.020001
+      DBIx::Class::Helpers::Util 2.020001
+      Lolbot undef
+      ParentRS undef
+      ParentSchema undef
+      ParentSchema::Result undef
+      ParentSchema::Result::Bar undef
+      ParentSchema::Result::Foo undef
+      RS undef
+      TestSchema 0.001
+      TestSchema::Result::Bar undef
+      TestSchema::Result::Bloaty undef
+      TestSchema::Result::Foo undef
+      TestSchema::Result::Foo_Bar undef
+      TestSchema::Result::Gnarly undef
+      TestSchema::Result::Gnarly_Station undef
+      TestSchema::Result::HasDateOps undef
+      TestSchema::Result::Station undef
+      TestSchema::ResultSet undef
+      TestSchema::ResultSet::Bloaty undef
+      TestSchema::ResultSet::Foo undef
+      TestSchema::ResultSet::Gnarly undef
+      TestSchema::ResultSet::HasDateOps undef
+      TestSchema::ResultSet::Station undef
+      inc::Dist::Zilla::Plugin::DBICSgen undef
+    requirements:
+      Carp::Clan 6.04
+      DBIx::Class 0.0826
+      DBIx::Class::Candy 0.001003
+      DBIx::Introspector 0.001002
+      ExtUtils::MakeMaker 6.30
+      Lingua::EN::Inflect 0
+      List::Util 0
+      Module::Runtime 0
+      Safe::Isa 0
+      String::CamelCase 0
+      Sub::Exporter::Progressive 0.001006
+      Try::Tiny 0
+      namespace::clean 0.23
+      parent 0
   DBIx-Class-InflateColumn-DateTime-Duration-0.01002
     pathname: C/CU/CUBABIT/DBIx-Class-InflateColumn-DateTime-Duration-0.01002.tar.gz
     provides:
@@ -1202,6 +1494,29 @@ DISTRIBUTIONS
       Try::Tiny 0
       namespace::clean 0.23
       perl 5.008001
+  DBIx-Class-TimeStamp-0.14
+    pathname: R/RI/RIBASUSHI/DBIx-Class-TimeStamp-0.14.tar.gz
+    provides:
+      DBIx::Class::TimeStamp 0.14
+    requirements:
+      Class::Accessor::Grouped 0
+      DBIx::Class 0.08009
+      DBIx::Class::DynamicDefault 0.03
+      DateTime 0.55
+      DateTime::Format::MySQL 0
+      DateTime::Format::SQLite 0
+      ExtUtils::MakeMaker 6.42
+      Time::HiRes 0
+      Time::Warp 0
+      perl 5.008001
+  DBIx-Introspector-0.001002
+    pathname: F/FR/FREW/DBIx-Introspector-0.001002.tar.gz
+    provides:
+      DBIx::Introspector 0.001002
+    requirements:
+      DBI 1.628
+      ExtUtils::MakeMaker 6.30
+      Moo 1.003001
   DBM-Deep-2.0011
     pathname: R/RK/RKINYON/DBM-Deep-2.0011.tar.gz
     provides:
@@ -1459,6 +1774,13 @@ DISTRIBUTIONS
       DateTime::TimeZone 0.22
       Module::Build 0
       Params::Validate 0.59
+  DateTime-Format-MySQL-0.04
+    pathname: D/DR/DROLSKY/DateTime-Format-MySQL-0.04.tar.gz
+    provides:
+      DateTime::Format::MySQL 0.04
+    requirements:
+      DateTime 0
+      DateTime::Format::Builder 0.6
   DateTime-Format-Natural-1.02
     pathname: S/SC/SCHUBIGER/DateTime-Format-Natural-1.02.tar.gz
     provides:
@@ -1497,6 +1819,14 @@ DISTRIBUTIONS
       Test::MockTime 0
       Test::More 0
       boolean 0
+  DateTime-Format-SQLite-0.11
+    pathname: C/CF/CFAERBER/DateTime-Format-SQLite-0.11.tar.gz
+    provides:
+      DateTime::Format::SQLite 0.11
+    requirements:
+      DateTime 0.1
+      DateTime::Format::Builder 0.6
+      ExtUtils::MakeMaker 0
   DateTime-Format-Strptime-1.54
     pathname: D/DR/DROLSKY/DateTime-Format-Strptime-1.54.tar.gz
     provides:
@@ -2520,18 +2850,17 @@ DISTRIBUTIONS
       Digest::SHA 1
       ExtUtils::MakeMaker 0
       perl 5.004
-  Digest-PBKDF2-0.009
-    pathname: A/AM/AMIRI/Digest-PBKDF2-0.009.tar.gz
+  Digest-PBKDF2-0.010
+    pathname: A/AM/AMIRI/Digest-PBKDF2-0.010.tar.gz
     provides:
-      Digest::PBKDF2 0.009
+      Digest::PBKDF2 0.010
     requirements:
       Crypt::PBKDF2 0.112020
       Digest::base 0
       ExtUtils::MakeMaker 6.30
-      Scalar::Util 0
-      Test::Exception 0
-      Test::More 0
       parent 0
+      strict 0
+      warnings 0
   Dir-Self-0.11
     pathname: M/MA/MAUKE/Dir-Self-0.11.tar.gz
     provides:
@@ -4638,6 +4967,18 @@ DISTRIBUTIONS
       XSLoader 0
       strict 0
       warnings 0
+  Package-Variant-1.002000
+    pathname: H/HA/HAARG/Package-Variant-1.002000.tar.gz
+    provides:
+      Package::Variant 1.002000
+      string 1.002000
+    requirements:
+      Carp 0
+      ExtUtils::MakeMaker 6.55_01
+      Import::Into 1
+      Module::Runtime 0.013
+      Test::Fatal 0
+      strictures 1
   Parallel-ForkManager-1.06
     pathname: S/SZ/SZABGAB/Parallel-ForkManager-1.06.tar.gz
     provides:
@@ -4709,6 +5050,13 @@ DISTRIBUTIONS
       File::Spec 0.80
       JSON::PP 2.27200
       strict 0
+  Parse-RecDescent-1.967009
+    pathname: J/JT/JTBRAUN/Parse-RecDescent-1.967009.tar.gz
+    provides:
+      Parse::RecDescent 1.967009
+    requirements:
+      Test::More 0
+      Text::Balanced 1.95
   Path-Class-0.33
     pathname: K/KW/KWILLIAMS/Path-Class-0.33.tar.gz
     provides:
@@ -4946,6 +5294,108 @@ DISTRIBUTIONS
       Test::More 0.92
       Test::Warn 0
       perl 5.006002
+  SQL-Translator-0.11018
+    pathname: F/FR/FREW/SQL-Translator-0.11018.tar.gz
+    provides:
+      Parse::RecDescent::SQL::Translator::Parser::DB2::Grammar undef
+      SQL::Translator 0.11018
+      SQL::Translator::Diff undef
+      SQL::Translator::Filter::DefaultExtra 1.59
+      SQL::Translator::Filter::Globals 1.59
+      SQL::Translator::Filter::Names 1.59
+      SQL::Translator::Generator::DDL::PostgreSQL undef
+      SQL::Translator::Generator::DDL::SQLServer undef
+      SQL::Translator::Generator::DDL::SQLite undef
+      SQL::Translator::Generator::Role::DDL undef
+      SQL::Translator::Generator::Role::Quote undef
+      SQL::Translator::Parser 1.60
+      SQL::Translator::Parser::Access 1.59
+      SQL::Translator::Parser::DB2 undef
+      SQL::Translator::Parser::DB2::Grammar undef
+      SQL::Translator::Parser::DBI 1.59
+      SQL::Translator::Parser::DBI::DB2 undef
+      SQL::Translator::Parser::DBI::MySQL 1.59
+      SQL::Translator::Parser::DBI::Oracle 1.59
+      SQL::Translator::Parser::DBI::PostgreSQL 1.59
+      SQL::Translator::Parser::DBI::SQLServer 1.59
+      SQL::Translator::Parser::DBI::SQLite 1.59
+      SQL::Translator::Parser::DBI::Sybase 1.59
+      SQL::Translator::Parser::Excel 1.59
+      SQL::Translator::Parser::JSON 1.00
+      SQL::Translator::Parser::MySQL 1.59
+      SQL::Translator::Parser::Oracle 1.59
+      SQL::Translator::Parser::PostgreSQL 1.59
+      SQL::Translator::Parser::SQLServer 1.59
+      SQL::Translator::Parser::SQLite 1.59
+      SQL::Translator::Parser::Storable 1.59
+      SQL::Translator::Parser::Sybase 1.59
+      SQL::Translator::Parser::XML 1.59
+      SQL::Translator::Parser::XML::SQLFairy 1.59
+      SQL::Translator::Parser::YAML 1.59
+      SQL::Translator::Parser::xSV 1.59
+      SQL::Translator::Producer 1.59
+      SQL::Translator::Producer::ClassDBI 1.59
+      SQL::Translator::Producer::DB2 1.59
+      SQL::Translator::Producer::DiaUml 1.59
+      SQL::Translator::Producer::Diagram 1.59
+      SQL::Translator::Producer::Dumper 1.59
+      SQL::Translator::Producer::GraphViz 1.59
+      SQL::Translator::Producer::HTML 1.59
+      SQL::Translator::Producer::JSON 1.00
+      SQL::Translator::Producer::Latex 1.59
+      SQL::Translator::Producer::MySQL 1.59
+      SQL::Translator::Producer::Oracle 1.59
+      SQL::Translator::Producer::POD 1.59
+      SQL::Translator::Producer::PostgreSQL 1.59
+      SQL::Translator::Producer::SQLServer 1.59
+      SQL::Translator::Producer::SQLite 1.59
+      SQL::Translator::Producer::Storable 1.59
+      SQL::Translator::Producer::Sybase 1.59
+      SQL::Translator::Producer::TT::Base 1.59
+      SQL::Translator::Producer::TT::Table 1.59
+      SQL::Translator::Producer::TTSchema 1.59
+      SQL::Translator::Producer::XML 1.59
+      SQL::Translator::Producer::XML::SQLFairy 1.59
+      SQL::Translator::Producer::YAML 1.59
+      SQL::Translator::Role::BuildArgs undef
+      SQL::Translator::Role::Debug undef
+      SQL::Translator::Role::Error undef
+      SQL::Translator::Role::ListAttr undef
+      SQL::Translator::Schema 1.59
+      SQL::Translator::Schema::Constants 1.59
+      SQL::Translator::Schema::Constraint 1.59
+      SQL::Translator::Schema::Field 1.59
+      SQL::Translator::Schema::Index 1.59
+      SQL::Translator::Schema::Object 1.59
+      SQL::Translator::Schema::Procedure 1.59
+      SQL::Translator::Schema::Role::Compare undef
+      SQL::Translator::Schema::Role::Extra undef
+      SQL::Translator::Schema::Table 1.59
+      SQL::Translator::Schema::Trigger 1.59
+      SQL::Translator::Schema::View 1.59
+      SQL::Translator::Types undef
+      SQL::Translator::Utils 1.59
+      SQL::Translator::Utils::Error 1.59
+      Test::SQL::Translator 1.59
+    requirements:
+      Carp::Clan 0
+      DBI 1.54
+      Digest::SHA 0
+      ExtUtils::MakeMaker 6.59
+      File::ShareDir 1.0
+      JSON 2.0
+      List::MoreUtils 0.09
+      Moo 1.000003
+      Package::Variant 1.001001
+      Parse::RecDescent 1.967009
+      Sub::Quote 0
+      Test::Differences 0
+      Test::Exception 0.31
+      Test::More 0.88
+      Try::Tiny 0.04
+      XML::Writer 0.500
+      YAML 0.66
+      perl 5.008001
   Safe-Isa-1.000004
     pathname: E/ET/ETHER/Safe-Isa-1.000004.tar.gz
     provides:
@@ -5744,6 +6194,12 @@ DISTRIBUTIONS
       Test::More 0
       Test::use::ok 0
       Tie::RefHash 0
+  Time-Warp-0.5
+    pathname: J/JP/JPRIT/Time-Warp-0.5.tar.gz
+    provides:
+      Time::Warp 0.5
+    requirements:
+      ExtUtils::MakeMaker 0
   TimeDate-2.30
     pathname: G/GB/GBARR/TimeDate-2.30.tar.gz
     provides:
@@ -5939,6 +6395,17 @@ DISTRIBUTIONS
       Test 0
       Test::More 0
       perl 5.008001
+  URI-Find-20111103
+    pathname: M/MS/MSCHWERN/URI-Find-20111103.tar.gz
+    provides:
+      URI::Find 20111103
+      URI::Find::Schemeless 20111103
+    requirements:
+      Module::Build 0.30
+      Test::More 0.88
+      URI 1.00
+      URI::URL 5.00
+      perl v5.6.0
   Variable-Magic-0.53
     pathname: V/VP/VPIT/Variable-Magic-0.53.tar.gz
     provides:
@@ -6018,6 +6485,15 @@ DISTRIBUTIONS
       XML::XPathEngine 0.08
       YAML 0
       perl 5.008001
+  XML-Writer-0.624
+    pathname: J/JO/JOSEPHW/XML-Writer-0.624.tar.gz
+    provides:
+      XML::Writer 0.624
+      XML::Writer::Namespaces 0.624
+      XML::Writer::_PrintChecker 0.624
+      XML::Writer::_String 0.624
+    requirements:
+      ExtUtils::MakeMaker 0
   XML-XPathEngine-0.14
     pathname: M/MI/MIROD/XML-XPathEngine-0.14.tar.gz
     provides:
