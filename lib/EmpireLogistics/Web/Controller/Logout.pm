@@ -10,10 +10,11 @@ sub base :Chained('/') PathPart('logout') CaptureArg(0) {
     $c->stash->{template} = 'logout.tt';
 }
 
-sub get_index : Chained('base') GET {
+sub get_index : Chained('base') PathPart('') Args(0) GET {
     my ($self,$c) = @_;
     $c->logout;
     $c->redirect_and_detach('/');
+    return 1;
 }
 
 __PACKAGE__->meta->make_immutable;
