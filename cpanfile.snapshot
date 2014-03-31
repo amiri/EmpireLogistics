@@ -327,13 +327,11 @@ DISTRIBUTIONS
       CatalystX::Component::Traits 0.14
       DBD::SQLite 0
       DBIx::Class 0.08114
-      DBIx::Class::Schema::Loader 0.04005
       ExtUtils::MakeMaker 6.59
       Hash::Merge 0
       List::MoreUtils 0
       Module::Runtime 0.012
       Moose 1.12
-      MooseX::MarkAsMethods 0.13
       MooseX::NonMoose 0.16
       MooseX::Types 0
       MooseX::Types::LoadableClass 0.009
@@ -1012,14 +1010,14 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  Crypt-PBKDF2-0.133330
-    pathname: A/AR/ARODLAND/Crypt-PBKDF2-0.133330.tar.gz
+  Crypt-PBKDF2-0.140890
+    pathname: A/AR/ARODLAND/Crypt-PBKDF2-0.140890.tar.gz
     provides:
-      Crypt::PBKDF2 0.133330
-      Crypt::PBKDF2::Hash 0.133330
-      Crypt::PBKDF2::Hash::DigestHMAC 0.133330
-      Crypt::PBKDF2::Hash::HMACSHA1 0.133330
-      Crypt::PBKDF2::Hash::HMACSHA2 0.133330
+      Crypt::PBKDF2 0.140890
+      Crypt::PBKDF2::Hash 0.140890
+      Crypt::PBKDF2::Hash::DigestHMAC 0.140890
+      Crypt::PBKDF2::Hash::HMACSHA1 0.140890
+      Crypt::PBKDF2::Hash::HMACSHA2 0.140890
     requirements:
       Carp 0
       Digest 1.16
@@ -1027,7 +1025,6 @@ DISTRIBUTIONS
       Digest::SHA 0
       ExtUtils::MakeMaker 6.30
       MIME::Base64 0
-      Method::Signatures::Simple 0
       Module::Runtime 0
       Moose 1
       Moose::Role 0
@@ -2844,21 +2841,6 @@ DISTRIBUTIONS
       Scalar::Util 0
       Test::Most 0
       Time::Zone 0
-  Devel-Declare-0.006015
-    pathname: E/ET/ETHER/Devel-Declare-0.006015.tar.gz
-    provides:
-      Devel::Declare 0.006015
-      Devel::Declare::Context::Simple 0.006015
-      Devel::Declare::MethodInstaller::Simple 0.006015
-    requirements:
-      B::Hooks::EndOfScope 0.05
-      B::Hooks::OP::Check 0.19
-      ExtUtils::Depends 0.302
-      Scalar::Util 1.11
-      Sub::Name 0
-      Test::More 0.88
-      Test::Requires 0
-      perl 5.008001
   Devel-GlobalDestruction-0.12
     pathname: H/HA/HAARG/Devel-GlobalDestruction-0.12.tar.gz
     provides:
@@ -4073,13 +4055,6 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Memoize 0.52
-  Method-Signatures-Simple-1.07
-    pathname: R/RH/RHESA/Method-Signatures-Simple-1.07.tar.gz
-    provides:
-      Method::Signatures::Simple 1.07
-    requirements:
-      Devel::Declare 0.003001
-      ExtUtils::MakeMaker 6.30
   Module-Build-0.4205
     pathname: L/LE/LEONT/Module-Build-0.4205.tar.gz
     provides:
