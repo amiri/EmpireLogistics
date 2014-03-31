@@ -35,17 +35,17 @@ __PACKAGE__->add_columns(
   "password",
   {   data_type     => "text",
       is_nullable   => 0,
-      encode_enable => 1,
-      encode_column => 1,
-      encode_class  => "Digest",
-      encode_args =>
-          { algorithm => "PBKDF2", format => "binary", salt_length => 10, },
-      encode_check_method => "check_password",
   },
   "description",
   { data_type => "text", is_nullable => 1 },
   "notes",
   { data_type => "text", is_nullable => 1 },
+);
+
+__PACKAGE__->filter_column(
+    password => {
+        filter_to_storage => 'encrypt_password',
+    },
 );
 
 __PACKAGE__->has_many(
@@ -59,11 +59,17 @@ __PACKAGE__->many_to_many(
     "role"
 );
 
-#sub check_password {
-    #my ($self, $raw_pass) = @_;
-    #return $self
-        #if (EmpireLogistics::Model::PBKDF2->new->validate($self->password, $raw_pass));
-#}
+sub encrypt_password {
+    my ($self,$raw_pass) = @_;
+    my $hash = EmpireLogistics::Web::Model::PBKDF2->new->encrypt($raw_pass);
+    return $hash;
+}
+
+sub check_password {
+    my ($self, $raw_pass) = @_;
+    return $self if (EmpireLogistics::Web::Model::PBKDF2->new->validate($self->password, $raw_pass));
+}
+
 
 __PACKAGE__->set_primary_key("id");
 

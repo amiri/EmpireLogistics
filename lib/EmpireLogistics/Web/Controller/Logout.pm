@@ -5,12 +5,12 @@ use MooseX::MethodAttributes;
 use namespace::autoclean;
 extends 'Catalyst::Controller';
 
-sub base :Chained('/') PathPart('logout') CaptureArg(0) {
+sub base :Chained('/') PathPart('logout') CaptureArgs(0) {
     my ($self,$c) = @_;
     $c->stash->{template} = 'logout.tt';
 }
 
-sub get_index : Chained('base') PathPart('') Args(0) GET {
+sub get_logout : Chained('base') PathPart('') Args(0) GET {
     my ($self,$c) = @_;
     $c->logout;
     $c->redirect_and_detach('/');

@@ -6,6 +6,7 @@ use MooseX::NonMoose;
 use MooseX::MarkAsMethods autoclean => 1;
 extends 'DBIx::Class::Core';
 __PACKAGE__->load_components(
+  "FilterColumn",
   "EncodedColumn",
   "InflateColumn::DateTime",
   "TimeStamp",

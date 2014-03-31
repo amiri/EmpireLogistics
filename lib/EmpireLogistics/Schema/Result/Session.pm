@@ -8,7 +8,7 @@ __PACKAGE__->add_columns(
   "id",
   { data_type => "varchar", is_nullable => 0, size => 72 },
   "session_data",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "text", is_nullable => 1 },
   "expires",
   { data_type => "integer", is_nullable => 0 },
 );

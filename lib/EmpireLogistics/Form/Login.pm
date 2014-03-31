@@ -4,7 +4,9 @@ use HTML::FormHandler::Moose;
 use namespace::autoclean;
 extends 'EmpireLogistics::Form::Base';
 
-has_field 'email_address' => (
+has '+name' => (default => 'login');
+
+has_field 'email' => (
     type => 'Email',
     required => 1,
 );

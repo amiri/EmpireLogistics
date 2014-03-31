@@ -35,9 +35,9 @@ $PARAMETERS{default} = {
         db_port => 5432,
         db_opts => {
             RaiseError    => 1,
-            AutoCommit    => 0,
-            on_connect_do => ['set timezone = "America/Los Angeles"'],
-            pg_enable_utf8 => 1,
+            on_connect_do => ['set timezone = "America/Los_Angeles"'],
+            pg_enable_utf8 => -1,
+            quote_names => 1,
         },
     },
     catalyst => {

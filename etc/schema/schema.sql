@@ -1578,8 +1578,8 @@ insert into role (name) values
 drop table if exists session;
 create table session (
     id character varying (72) not null primary key,
-    session_data text not null,
-    expires integer not null
+    session_data text,
+    expires integer
 );
 
 -- object type

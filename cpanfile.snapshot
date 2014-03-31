@@ -875,6 +875,22 @@ DISTRIBUTIONS
       base 0
       strict 0
       warnings 0
+  Class-Mix-0.005
+    pathname: Z/ZE/ZEFRAM/Class-Mix-0.005.tar.gz
+    provides:
+      Class::Mix 0.005
+    requirements:
+      Carp 0
+      Exporter 0
+      Module::Build 0
+      Params::Classify 0
+      Test::More 0
+      constant 0
+      if 0
+      parent 0
+      perl 5.006
+      strict 0
+      warnings 0
   Class-Singleton-1.4
     pathname: A/AB/ABW/Class-Singleton-1.4.tar.gz
     provides:
@@ -974,6 +990,28 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Pod::Text 2.08
       Pod::Usage 1.33
+  Crypt-Eksblowfish-0.009
+    pathname: Z/ZE/ZEFRAM/Crypt-Eksblowfish-0.009.tar.gz
+    provides:
+      Crypt::Eksblowfish 0.009
+      Crypt::Eksblowfish::Bcrypt 0.009
+      Crypt::Eksblowfish::Blowfish 0.009
+      Crypt::Eksblowfish::Family 0.009
+      Crypt::Eksblowfish::Subkeyed 0.009
+      Crypt::Eksblowfish::Uklblowfish 0.009
+    requirements:
+      Carp 0
+      Class::Mix 0.001
+      Exporter 0
+      ExtUtils::CBuilder 0.15
+      MIME::Base64 2.21
+      Module::Build 0
+      Test::More 0
+      XSLoader 0
+      parent 0
+      perl 5.006
+      strict 0
+      warnings 0
   Crypt-PBKDF2-0.133330
     pathname: A/AR/ARODLAND/Crypt-PBKDF2-0.133330.tar.gz
     provides:
@@ -4939,6 +4977,14 @@ DISTRIBUTIONS
       IO::Socket 1.24
       MIME::Base64 2.11
       Test::More 0.52
+  Net-Domain-TLD-1.72
+    pathname: A/AL/ALEXP/Net-Domain-TLD-1.72.tar.gz
+    provides:
+      Net::Domain::TLD 1.72
+    requirements:
+      Carp 0
+      ExtUtils::MakeMaker 0
+      Storable 0
   Net-HTTP-6.06
     pathname: G/GA/GAAS/Net-HTTP-6.06.tar.gz
     provides:
@@ -5072,6 +5118,20 @@ DISTRIBUTIONS
       POSIX 0
       Storable 0
       Test::More 0.80
+  Params-Classify-0.013
+    pathname: Z/ZE/ZEFRAM/Params-Classify-0.013.tar.gz
+    provides:
+      Params::Classify 0.013
+    requirements:
+      Exporter 0
+      ExtUtils::ParseXS 2.2006
+      Module::Build 0
+      Scalar::Util 1.01
+      Test::More 0
+      parent 0
+      perl 5.006001
+      strict 0
+      warnings 0
   Params-Util-1.07
     pathname: A/AD/ADAMK/Params-Util-1.07.tar.gz
     provides:

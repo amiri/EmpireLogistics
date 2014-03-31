@@ -17,18 +17,17 @@ sub base : Chained('/') PathPart('login') CaptureArgs(0) {
 sub post_index : Chained('base') PathPart('') Args(0) POST {
     my ( $self, $c ) = @_;
     my $form = $c->stash->{login_form};
-    return unless $form->process( $c->req->params );
+    return unless $form->process( $c->req->body_params );
     if ( $form->validated ) {
-        my $email_address = $form->field('email_address')->value;
-        my $password      = $form->field('password')->value;
+        my $email    = $form->field('email')->value;
+        my $password = $form->field('password')->value;
         my $authenticated;
-        $authenticated = $c->authenticate(
-            {   email    => $email_address,
-                password => $password,
-            }
-        );
+        $authenticated = $c->authenticate({
+            email    => $email,
+            password => $password,
+        });
         if ($authenticated) {
-            $c->res->redirect_and_detach('/');
+            $c->redirect_and_detach('/');
         } else {
             $form->add_form_error("Invalid email or password");
         }

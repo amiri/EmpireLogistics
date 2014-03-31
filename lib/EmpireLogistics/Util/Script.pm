@@ -44,7 +44,7 @@ sub dbh {
 
     my $dbh;
     try {
-        $dbh = DBI->connect($dsn, $db_user, $db_pass, $db_opts);
+        $dbh = DBI->connect($dsn, $db_user, $db_pass, { %$db_opts, AutoCommit => 0, });
     } catch {
         warn "Could not connect to database: $_";
     };
