@@ -13,7 +13,12 @@
 </head>
 
 <body>
+<div id="control-bar">
+[% INCLUDE 'topnav.tt' %]
+[% FOREACH alert IN c.stash.alert %]
+  <div class="alert alert-[% alert.class %]">[% alert.message %]</div>
+[% END %]
+</div>
 [% content %]
 </body>
 </html>
-

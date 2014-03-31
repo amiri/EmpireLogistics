@@ -1,1 +1,2 @@
 [% login_form.render %]
+<p><a href="/register">Register</a></p>
