@@ -119,7 +119,9 @@
       "URI",
       "Web::Scraper",
       "local::lib",
-      "warnings::everywhere"
+      "warnings::everywhere",
+      "Sys::Hostname",
+      "Sys::Hostname::Long"
     ],
     "perl_version": "perl-5.18.2",
     "deploy_dir": "/var/local/EmpireLogistics/shared/perl",
