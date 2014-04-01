@@ -327,11 +327,13 @@ DISTRIBUTIONS
       CatalystX::Component::Traits 0.14
       DBD::SQLite 0
       DBIx::Class 0.08114
+      DBIx::Class::Schema::Loader 0.04005
       ExtUtils::MakeMaker 6.59
       Hash::Merge 0
       List::MoreUtils 0
       Module::Runtime 0.012
       Moose 1.12
+      MooseX::MarkAsMethods 0.13
       MooseX::NonMoose 0.16
       MooseX::Types 0
       MooseX::Types::LoadableClass 0.009
@@ -3943,10 +3945,10 @@ DISTRIBUTIONS
       Lingua::Stem::Snowball::Da 1.01
     requirements:
       ExtUtils::MakeMaker 0
-  List-AllUtils-0.07
-    pathname: D/DR/DROLSKY/List-AllUtils-0.07.tar.gz
+  List-AllUtils-0.08
+    pathname: D/DR/DROLSKY/List-AllUtils-0.08.tar.gz
     provides:
-      List::AllUtils 0.07
+      List::AllUtils 0.08
     requirements:
       Exporter 0
       ExtUtils::MakeMaker 6.30
