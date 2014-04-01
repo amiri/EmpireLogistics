@@ -340,7 +340,7 @@ bash "compile_uwsgi" do
     perlbrew switch perl-5.18.2
     UWSGI_BIN_NAME=/var/local/EmpireLogistics/shared/local/bin/uwsgi UWSGI_FORCE_REBUILD=1 /var/local/EmpireLogistics/shared/python/bin/python uwsgiconfig.py --build el
   EOH
-  creates "/var/local/EmpireLogistics/shared/local/bin/uwsgi"
+  #creates "/var/local/EmpireLogistics/shared/local/bin/uwsgi"
   notifies :run, "bash[compile_psgi_plugin]", :immediately
   notifies :run, "bash[compile_python_plugin]", :immediately
   action :run
@@ -358,7 +358,7 @@ bash "compile_psgi_plugin" do
     perlbrew switch perl-5.18.2
     /var/local/EmpireLogistics/shared/python/bin/python uwsgiconfig.py --plugin plugins/psgi el
   EOH
-  creates "/var/local/EmpireLogistics/shared/local/uwsgi_plugins/psgi_plugin.so"
+  #creates "/var/local/EmpireLogistics/shared/local/uwsgi_plugins/psgi_plugin.so"
   action :run
 end
 
@@ -374,7 +374,7 @@ bash "compile_python_plugin" do
     perlbrew switch perl-5.18.2
     /var/local/EmpireLogistics/shared/python/bin/python uwsgiconfig.py --plugin plugins/python el
   EOH
-  creates "/var/local/EmpireLogistics/shared/local/uwsgi_plugins/python_plugin.so"
+  #creates "/var/local/EmpireLogistics/shared/local/uwsgi_plugins/python_plugin.so"
   action :run
 end
 

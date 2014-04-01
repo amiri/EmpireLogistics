@@ -104,6 +104,10 @@ $PARAMETERS{"vagrant-ubuntu-saucy-"} = {
     hostname => "vagrant-ubuntu-saucy-64",
 };
 
+$PARAMETERS{"localhost"} = {
+    %{ clone $PARAMETERS{'default'} },
+};
+
 sub mk_package_accessors {
     my ( $self, @fields ) = @_;
     no strict 'refs';
