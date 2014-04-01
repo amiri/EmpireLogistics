@@ -118,10 +118,10 @@ end
 
 include_recipe "perlbrew"
 
-#perlbrew_perl "perl-5.18.2" do
-  #version 'perl-5.18.2'
-  #action :remove
-#end
+perlbrew_perl "perl-5.18.2" do
+  version 'perl-5.18.2'
+  action :remove
+end
 
 perlbrew_perl "perl-5.18.2" do
   version 'perl-5.18.2'
