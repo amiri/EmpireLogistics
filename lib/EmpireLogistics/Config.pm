@@ -25,7 +25,7 @@ our %NICKNAMES  = ();
 
 $PARAMETERS{default} = {
     srcroot  => "/var/local/EmpireLogistics/current/",
-    hostname => 'li431-25',
+    hostname => 'localhost',
     tiles_url => '50.116.5.25/tiles',
     database => {
         db_name => 'empirelogistics',
