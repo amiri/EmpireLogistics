@@ -61,19 +61,19 @@ download-rail-data: make-data-directories $(rail_dir)/na-rail.zip $(rail_dir)/ct
 download-warehouse-data: make-data-directories $(warehouse_dir)/walmart-distribution-centers.json $(warehouse_dir)/target-distribution-centers.json $(warehouse_dir)/costco.txt $(warehouse_dir)/krogers.txt $(warehouse_dir)/walgreens.csv $(warehouse_dir)/amazon.tsv $(warehouse_dir)/homedepot.csv $(warehouse_dir)/ikea.csv $(warehouse_dir)/warehouse_data.sql.gz
 
 download-labor-data: make-data-directories $(labor_dir)/labor_organizations.html $(labor_dir)/labor_data.sql.gz
-	test -s $(labor_dir)/2000.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2000.zip&submitButton=Download" -o $(labor_dir)/2000.zip
-	test -s $(labor_dir)/2001.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2001.zip&submitButton=Download" -o $(labor_dir)/2001.zip
-	test -s $(labor_dir)/2002.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2002.zip&submitButton=Download" -o $(labor_dir)/2002.zip
-	test -s $(labor_dir)/2003.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2003.zip&submitButton=Download" -o $(labor_dir)/2003.zip
-	test -s $(labor_dir)/2004.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2004.zip&submitButton=Download" -o $(labor_dir)/2004.zip
-	test -s $(labor_dir)/2005.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2005.zip&submitButton=Download" -o $(labor_dir)/2005.zip
-	test -s $(labor_dir)/2006.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2006.zip&submitButton=Download" -o $(labor_dir)/2006.zip
-	test -s $(labor_dir)/2007.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2007.zip&submitButton=Download" -o $(labor_dir)/2007.zip
-	test -s $(labor_dir)/2008.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2008.zip&submitButton=Download" -o $(labor_dir)/2008.zip
-	test -s $(labor_dir)/2009.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2009.zip&submitButton=Download" -o $(labor_dir)/2009.zip
-	test -s $(labor_dir)/2010.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2010.zip&submitButton=Download" -o $(labor_dir)/2010.zip
-	test -s $(labor_dir)/2011.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2011.zip&submitButton=Download" -o $(labor_dir)/2011.zip
-	test -s $(labor_dir)/2012.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2012.zip&submitButton=Download" -o $(labor_dir)/2012.zip
+	#test -s $(labor_dir)/2000.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2000.zip&submitButton=Download" -o $(labor_dir)/2000.zip
+	#test -s $(labor_dir)/2001.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2001.zip&submitButton=Download" -o $(labor_dir)/2001.zip
+	#test -s $(labor_dir)/2002.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2002.zip&submitButton=Download" -o $(labor_dir)/2002.zip
+	#test -s $(labor_dir)/2003.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2003.zip&submitButton=Download" -o $(labor_dir)/2003.zip
+	#test -s $(labor_dir)/2004.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2004.zip&submitButton=Download" -o $(labor_dir)/2004.zip
+	#test -s $(labor_dir)/2005.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2005.zip&submitButton=Download" -o $(labor_dir)/2005.zip
+	#test -s $(labor_dir)/2006.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2006.zip&submitButton=Download" -o $(labor_dir)/2006.zip
+	#test -s $(labor_dir)/2007.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2007.zip&submitButton=Download" -o $(labor_dir)/2007.zip
+	#test -s $(labor_dir)/2008.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2008.zip&submitButton=Download" -o $(labor_dir)/2008.zip
+	#test -s $(labor_dir)/2009.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2009.zip&submitButton=Download" -o $(labor_dir)/2009.zip
+	#test -s $(labor_dir)/2010.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2010.zip&submitButton=Download" -o $(labor_dir)/2010.zip
+	#test -s $(labor_dir)/2011.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2011.zip&submitButton=Download" -o $(labor_dir)/2011.zip
+	#test -s $(labor_dir)/2012.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2012.zip&submitButton=Download" -o $(labor_dir)/2012.zip
 	test -s $(labor_dir)/2013.zip || curl -XPOST "http://kcerds.dol-esa.gov/query/getYearlyDataFile.do" -d "selectedFileName=/esa/olms/local/queryweb/yearlydata/2013.zip&submitButton=Download" -o $(labor_dir)/2013.zip
 
 ########## Process data
@@ -111,19 +111,19 @@ import-media: $(media_dir)/media.sql
 	bin/import-media
 
 import-labor: labor $(labor_dir)/labor-organizations.json
-	unzip -o $(labor_dir)/2000.zip -d $(labor_dir)/2000
-	unzip -o $(labor_dir)/2001.zip -d $(labor_dir)/2001
-	unzip -o $(labor_dir)/2002.zip -d $(labor_dir)/2002
-	unzip -o $(labor_dir)/2003.zip -d $(labor_dir)/2003
-	unzip -o $(labor_dir)/2004.zip -d $(labor_dir)/2004
-	unzip -o $(labor_dir)/2005.zip -d $(labor_dir)/2005
-	unzip -o $(labor_dir)/2006.zip -d $(labor_dir)/2006
-	unzip -o $(labor_dir)/2007.zip -d $(labor_dir)/2007
-	unzip -o $(labor_dir)/2008.zip -d $(labor_dir)/2008
-	unzip -o $(labor_dir)/2009.zip -d $(labor_dir)/2009
-	unzip -o $(labor_dir)/2010.zip -d $(labor_dir)/2010
-	unzip -o $(labor_dir)/2011.zip -d $(labor_dir)/2011
-	unzip -o $(labor_dir)/2012.zip -d $(labor_dir)/2012
+	#unzip -o $(labor_dir)/2000.zip -d $(labor_dir)/2000
+	#unzip -o $(labor_dir)/2001.zip -d $(labor_dir)/2001
+	#unzip -o $(labor_dir)/2002.zip -d $(labor_dir)/2002
+	#unzip -o $(labor_dir)/2003.zip -d $(labor_dir)/2003
+	#unzip -o $(labor_dir)/2004.zip -d $(labor_dir)/2004
+	#unzip -o $(labor_dir)/2005.zip -d $(labor_dir)/2005
+	#unzip -o $(labor_dir)/2006.zip -d $(labor_dir)/2006
+	#unzip -o $(labor_dir)/2007.zip -d $(labor_dir)/2007
+	#unzip -o $(labor_dir)/2008.zip -d $(labor_dir)/2008
+	#unzip -o $(labor_dir)/2009.zip -d $(labor_dir)/2009
+	#unzip -o $(labor_dir)/2010.zip -d $(labor_dir)/2010
+	#unzip -o $(labor_dir)/2011.zip -d $(labor_dir)/2011
+	#unzip -o $(labor_dir)/2012.zip -d $(labor_dir)/2012
 	unzip -o $(labor_dir)/2013.zip -d $(labor_dir)/2013
 	bin/clean-labor-data
 	bin/import-labor-data
