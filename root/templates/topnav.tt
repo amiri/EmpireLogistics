@@ -48,9 +48,22 @@
           </ul>
         </li>
         [% ELSE %]
-        <li><a href="/login">Login</a></li>
+        <li><a href="/login" data-toggle="modal" data-target="#login-modal">Login</a></li>
         [% END %]
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
+
+<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="reg-modal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>

@@ -1547,7 +1547,9 @@ create table "user" (
     nickname text not null,
     password text not null,
     description text,
-    notes text
+    notes text,
+    unique(email),
+    unique(nickname)
 );
 
 drop table if exists role cascade;

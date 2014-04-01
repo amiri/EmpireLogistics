@@ -9,7 +9,10 @@ extends 'Catalyst::Controller';
 
 sub base : Chained('/') PathPart('register') CaptureArgs(0) {
     my ($self,$c) = @_;
-    my $form = Register->new(action => '/register');
+    my $form = Register->new(
+        action => '/register',
+        schema => $c->model('DB')->schema,
+    );
     $c->stash->{registration_form} = $form;
     $c->stash->{template} = 'register.tt';
     return 1;

@@ -4,9 +4,10 @@ use HTML::FormHandler::Moose;
 use HTML::FormHandler::Types ('NoSpaces', 'Printable', 'NotAllDigits' );
 use MooseX::Types::Common::String ('StrongPassword');
 use namespace::autoclean;
-extends 'EmpireLogistics::Form::Base';
+extends 'EmpireLogistics::Form::BaseDB';
 
 has '+name' => (default => 'register');
+has '+item_class' => ( default => 'User');
 
 has_field 'email' => (
     type => 'Email',
@@ -14,6 +15,8 @@ has_field 'email' => (
         -mxcheck => 1,
         -tldcheck => 1,
     },
+    unique => 1,
+    messages => { unique => "That email is already registered" },
     required => 1,
 );
 has_field 'password' => (
@@ -31,10 +34,14 @@ has_field 'nickname' => (
     type => 'Text',
     required => 1,
     label => "Display Name",
+    unique => 1,
+    messages => { unique => "That nickname is already taken" },
 );
 has_field 'submit' => (
     type => 'Submit',
-    label => 'Register',
+    widget => 'ButtonTag',
+    value => 'Register',
+    element_class => ['btn','btn-primary'],
 );
 
 __PACKAGE__->meta->make_immutable;

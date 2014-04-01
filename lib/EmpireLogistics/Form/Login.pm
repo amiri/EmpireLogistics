@@ -16,7 +16,9 @@ has_field 'password' => (
 );
 has_field 'submit' => (
     type => 'Submit',
-    label => 'Login',
+    widget => 'ButtonTag',
+    value => 'Login',
+    element_class => ['btn','btn-primary'],
 );
 
 __PACKAGE__->meta->make_immutable;
