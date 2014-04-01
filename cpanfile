@@ -19,6 +19,7 @@ requires "Catalyst::Plugin::StatusMessage";
 requires "Catalyst::TraitFor::Request::XMLHttpRequest";
 requires "Catalyst::View::JSON";
 requires "Catalyst::View::TT";
+requires "Clone";
 requires "Config::General";
 requires "Crypt::Eksblowfish::Bcrypt";
 requires "DBD::Pg", ">= 3.0.0";
