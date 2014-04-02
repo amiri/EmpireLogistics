@@ -1,5 +1,6 @@
 requires 'perl', '5.18.2';
 
+requires "App::Sqitch";
 requires "Catalyst";
 requires "Catalyst::Action::RenderView";
 requires "Catalyst::ActionRole::ACL";

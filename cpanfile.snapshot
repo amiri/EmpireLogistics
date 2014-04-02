@@ -16,6 +16,15 @@ DISTRIBUTIONS
       Algorithm::DiffOld 1.1
     requirements:
       ExtUtils::MakeMaker 0
+  Any-Moose-0.21
+    pathname: S/SA/SARTAK/Any-Moose-0.21.tar.gz
+    provides:
+      Any::Moose 0.21
+      AnyMooseTest undef
+      inc::MakeMaker undef
+    requirements:
+      ExtUtils::MakeMaker 6.30
+      Moose 0
   Apache-LogFormat-Compiler-0.30
     pathname: K/KA/KAZEBURO/Apache-LogFormat-Compiler-0.30.tar.gz
     provides:
@@ -29,6 +38,118 @@ DISTRIBUTIONS
       POSIX::strftime::Compiler 0.30
       Time::Local 0
       perl 5.008004
+  App-Sqitch-0.992
+    pathname: D/DW/DWHEELER/App-Sqitch-0.992.tar.gz
+    provides:
+      App::Sqitch 0.992
+      App::Sqitch::Command 0.992
+      App::Sqitch::Command::add 0.992
+      App::Sqitch::Command::bad undef
+      App::Sqitch::Command::bundle 0.992
+      App::Sqitch::Command::checkout 0.992
+      App::Sqitch::Command::config 0.992
+      App::Sqitch::Command::deploy 0.992
+      App::Sqitch::Command::good undef
+      App::Sqitch::Command::help 0.992
+      App::Sqitch::Command::init 0.992
+      App::Sqitch::Command::log 0.992
+      App::Sqitch::Command::plan 0.992
+      App::Sqitch::Command::rebase 0.992
+      App::Sqitch::Command::revert 0.992
+      App::Sqitch::Command::rework 0.992
+      App::Sqitch::Command::show 0.992
+      App::Sqitch::Command::status 0.992
+      App::Sqitch::Command::tag 0.992
+      App::Sqitch::Command::target 0.992
+      App::Sqitch::Command::verify 0.992
+      App::Sqitch::Config 0.992
+      App::Sqitch::DateTime 0.992
+      App::Sqitch::Engine 0.992
+      App::Sqitch::Engine::bad undef
+      App::Sqitch::Engine::firebird 0.992
+      App::Sqitch::Engine::good undef
+      App::Sqitch::Engine::mysql 0.992
+      App::Sqitch::Engine::oracle 0.992
+      App::Sqitch::Engine::pg 0.992
+      App::Sqitch::Engine::sqlite 0.992
+      App::Sqitch::ItemFormatter 0.992
+      App::Sqitch::Plan 0.992
+      App::Sqitch::Plan::Blank 0.992
+      App::Sqitch::Plan::Change 0.970
+      App::Sqitch::Plan::ChangeList 0.970
+      App::Sqitch::Plan::Depend 0.992
+      App::Sqitch::Plan::Line 0.992
+      App::Sqitch::Plan::LineList 0.992
+      App::Sqitch::Plan::Pragma 0.992
+      App::Sqitch::Plan::Tag 0.992
+      App::Sqitch::Role::DBIEngine 0.992
+      App::Sqitch::Role::RevertDeployCommand 0.992
+      App::Sqitch::X 0.992
+      DBIEngineTest undef
+      MockOutput undef
+      Module::Build::Sqitch undef
+    requirements:
+      Clone 0
+      Config::GitLike 1.09
+      DBI 0
+      DateTime 0
+      Devel::StackTrace 1.30
+      Digest::SHA1 0
+      Encode 0
+      Encode::Locale 0
+      File::Basename 0
+      File::Copy 0
+      File::HomeDir 0
+      File::Path 0
+      File::Temp 0
+      Getopt::Long 0
+      Hash::Merge 0
+      IO::Pager 0
+      IPC::Run3 0
+      IPC::System::Simple 1.17
+      List::MoreUtils 0
+      List::Util 0
+      Locale::Messages 0
+      Locale::TextDomain 1.20
+      Module::Build 0.35
+      Moose 0
+      Mouse 1.04
+      Mouse::Meta::Attribute::Native 1.04
+      Mouse::Role 0
+      Mouse::Util::TypeConstraints 0
+      MouseX::Types::Path::Class 0.06
+      POSIX 0
+      Path::Class 0
+      PerlIO::utf8_strict 0
+      Pod::Find 0
+      Pod::Usage 0
+      Role::HasMessage 0.005
+      Role::Identifiable::HasIdent 0.005
+      Role::Identifiable::HasTags 0.005
+      StackTrace::Auto 0
+      String::Formatter 0
+      String::ShellQuote 0
+      Sub::Exporter 0
+      Sub::Exporter::Util 0
+      Sys::Hostname 0
+      Template::Tiny 0.11
+      Term::ANSIColor 2.02
+      Throwable 0
+      Time::HiRes 0
+      Time::Local 0
+      Try::Tiny 0
+      URI 0
+      URI::db 0
+      User::pwent 0
+      constant 0
+      if 0
+      namespace::autoclean 0.11
+      overload 0
+      parent 0
+      perl 5.010
+      strict 0
+      utf8 0
+      warnings 0
   AppConfig-1.66
     pathname: A/AB/ABW/AppConfig-1.66.tar.gz
     provides:
@@ -972,6 +1093,18 @@ DISTRIBUTIONS
       File::Spec::Functions 0
       FileHandle 0
       IO::File 0
+  Config-GitLike-1.12
+    pathname: A/AL/ALEXMV/Config-GitLike-1.12.tar.gz
+    provides:
+      Config::GitLike 1.12
+      Config::GitLike::Cascaded undef
+      Config::GitLike::Git undef
+    requirements:
+      ExtUtils::MakeMaker 6.59
+      Moo 0
+      MooX::Types::MooseLike 0
+      Test::Exception 0
+      perl 5.008
   Context-Preserve-0.01
     pathname: J/JR/JROCKWAY/Context-Preserve-0.01.tar.gz
     provides:
@@ -2843,6 +2976,22 @@ DISTRIBUTIONS
       Scalar::Util 0
       Test::Most 0
       Time::Zone 0
+  Devel-CheckCompiler-0.05
+    pathname: S/SY/SYOHEX/Devel-CheckCompiler-0.05.tar.gz
+    provides:
+      Devel::AssertC99 undef
+      Devel::CheckCompiler 0.05
+    requirements:
+      CPAN::Meta 0
+      CPAN::Meta::Prereqs 0
+      Exporter 0
+      ExtUtils::CBuilder 0
+      File::Temp 0
+      Module::Build 0.38
+      Test::More 0.98
+      Test::Requires 0
+      parent 0
+      perl 5.008001
   Devel-GlobalDestruction-0.12
     pathname: H/HA/HAARG/Devel-GlobalDestruction-0.12.tar.gz
     provides:
@@ -2906,6 +3055,14 @@ DISTRIBUTIONS
       parent 0
       strict 0
       warnings 0
+  Digest-SHA1-2.13
+    pathname: G/GA/GAAS/Digest-SHA1-2.13.tar.gz
+    provides:
+      Digest::SHA1 2.13
+    requirements:
+      Digest::base 1.00
+      ExtUtils::MakeMaker 0
+      perl 5.004
   Dir-Self-0.11
     pathname: M/MA/MAUKE/Dir-Self-0.11.tar.gz
     provides:
@@ -3073,6 +3230,30 @@ DISTRIBUTIONS
       File::Spec 0.8
       Pod::Man 0
       perl 5.006
+  ExtUtils-ParseXS-3.24
+    pathname: S/SM/SMUELLER/ExtUtils-ParseXS-3.24.tar.gz
+    provides:
+      ExtUtils::ParseXS 3.24
+      ExtUtils::ParseXS::Constants 3.24
+      ExtUtils::ParseXS::CountLines 3.24
+      ExtUtils::ParseXS::Eval 3.24
+      ExtUtils::ParseXS::Utilities 3.24
+      ExtUtils::Typemaps 3.24
+      ExtUtils::Typemaps::Cmd 3.24
+      ExtUtils::Typemaps::InputMap 3.24
+      ExtUtils::Typemaps::OutputMap 3.24
+      ExtUtils::Typemaps::Type 3.24
+    requirements:
+      Carp 0
+      Cwd 0
+      DynaLoader 0
+      Exporter 5.57
+      ExtUtils::CBuilder 0
+      ExtUtils::MakeMaker 6.46
+      File::Basename 0
+      File::Spec 0
+      Symbol 0
+      Test::More 0.47
   File-Find-Rule-0.33
     pathname: R/RC/RCLAMP/File-Find-Rule-0.33.tar.gz
     provides:
@@ -3708,6 +3889,28 @@ DISTRIBUTIONS
       File::Temp 0
       Scalar::Util 0
       Test::More 0.88
+  IO-Pager-0.31
+    pathname: J/JP/JPIERCE/IO-Pager-0.31.tgz
+    provides:
+      IO::Pager 0.31
+      IO::Pager::Buffered 0.3
+      IO::Pager::Page 0.16
+      IO::Pager::Unbuffered 0.31
+    requirements:
+      Config 0
+      Env 0
+      Exporter 0
+      ExtUtils::MakeMaker 0
+      File::Spec 0
+      File::Temp 0
+      File::Which 0
+      IO::Handle 0
+      PerlIO 0
+      SelectSaver 0
+      Symbol 0
+      Test::More 0
+      Tie::Handle 0
+      base 0
   IO-Socket-SSL-1.973
     pathname: S/SU/SULLR/IO-Socket-SSL-1.973.tar.gz
     provides:
@@ -3747,6 +3950,21 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Test::More 0.31
       Time::HiRes 0
+  IPC-System-Simple-1.25
+    pathname: P/PJ/PJF/IPC-System-Simple-1.25.tar.gz
+    provides:
+      IPC::System::Simple 1.25
+    requirements:
+      Carp 0
+      Exporter 0
+      ExtUtils::MakeMaker 6.30
+      List::Util 0
+      POSIX 0
+      Scalar::Util 0
+      constant 0
+      re 0
+      strict 0
+      warnings 0
   Import-Into-1.002001
     pathname: H/HA/HAARG/Import-Into-1.002001.tar.gz
     provides:
@@ -4137,6 +4355,23 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
+  Module-Build-XSUtil-0.06
+    pathname: H/HI/HIDEAKIO/Module-Build-XSUtil-0.06.tar.gz
+    provides:
+      Module::Build::XSUtil 0.06
+    requirements:
+      CPAN::Meta 0
+      CPAN::Meta::Prereqs 0
+      Devel::CheckCompiler 0.02
+      Devel::PPPort 3.19
+      Exporter 0
+      ExtUtils::CBuilder 0
+      File::Basename 0
+      File::Path 0
+      Module::Build 0.4005
+      XSLoader 0.02
+      parent 0
+      perl 5.008005
   Module-Find-0.12
     pathname: C/CR/CRENZ/Module-Find-0.12.tar.gz
     provides:
@@ -4226,6 +4461,17 @@ DISTRIBUTIONS
       Role::Tiny 1.003002
       perl 5.008001
       strictures 1.004003
+  MooX-Types-MooseLike-0.25
+    pathname: M/MA/MATEU/MooX-Types-MooseLike-0.25.tar.gz
+    provides:
+      MooX::Types::MooseLike 0.25
+      MooX::Types::MooseLike::Base 0.25
+    requirements:
+      ExtUtils::MakeMaker 0
+      Module::Runtime 0.012
+      Moo 0.09101
+      Test::Fatal 0.003
+      Test::More 0.96
   Moose-2.1204
     pathname: E/ET/ETHER/Moose-2.1204.tar.gz
     provides:
@@ -4861,6 +5107,109 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
+  Mouse-2.1.1
+    pathname: G/GF/GFUJI/Mouse-2.1.1.tar.gz
+    provides:
+      Mouse 2.001001
+      Mouse::Exporter undef
+      Mouse::Meta::Attribute undef
+      Mouse::Meta::Class undef
+      Mouse::Meta::Method undef
+      Mouse::Meta::Method::Accessor undef
+      Mouse::Meta::Method::Constructor undef
+      Mouse::Meta::Method::Delegation undef
+      Mouse::Meta::Method::Destructor undef
+      Mouse::Meta::Module undef
+      Mouse::Meta::Role undef
+      Mouse::Meta::Role::Application undef
+      Mouse::Meta::Role::Composite undef
+      Mouse::Meta::Role::Method undef
+      Mouse::Meta::TypeConstraint undef
+      Mouse::Object undef
+      Mouse::PurePerl undef
+      Mouse::Role 2.001001
+      Mouse::Spec 2.001001
+      Mouse::TypeRegistry undef
+      Mouse::Util 2.001001
+      Mouse::Util::MetaRole undef
+      Mouse::Util::TypeConstraints undef
+      Squirrel undef
+      Squirrel::Role undef
+      Test::Mouse undef
+      ouse undef
+    requirements:
+      CPAN::Meta 0
+      CPAN::Meta::Prereqs 0
+      Devel::PPPort 3.19
+      ExtUtils::CBuilder 0
+      ExtUtils::ParseXS 3.22
+      Module::Build 0.4005
+      Module::Build::XSUtil 0.06
+      Scalar::Util 1.14
+      XSLoader 0.02
+      perl 5.008005
+  MouseX-NativeTraits-1.09
+    pathname: G/GF/GFUJI/MouseX-NativeTraits-1.09.tar.gz
+    provides:
+      Mouse::Meta::Attribute::Custom::Trait::Array undef
+      Mouse::Meta::Attribute::Custom::Trait::Bool undef
+      Mouse::Meta::Attribute::Custom::Trait::Code undef
+      Mouse::Meta::Attribute::Custom::Trait::Counter undef
+      Mouse::Meta::Attribute::Custom::Trait::Hash undef
+      Mouse::Meta::Attribute::Custom::Trait::Number undef
+      Mouse::Meta::Attribute::Custom::Trait::String undef
+      Mouse::Meta::Attribute::Native 1.09
+      MouseX::NativeTraits 1.09
+      MouseX::NativeTraits::ArrayRef undef
+      MouseX::NativeTraits::Bool undef
+      MouseX::NativeTraits::CodeRef undef
+      MouseX::NativeTraits::Counter undef
+      MouseX::NativeTraits::HashRef undef
+      MouseX::NativeTraits::MethodProvider undef
+      MouseX::NativeTraits::MethodProvider::ArrayRef undef
+      MouseX::NativeTraits::MethodProvider::Bool undef
+      MouseX::NativeTraits::MethodProvider::CodeRef undef
+      MouseX::NativeTraits::MethodProvider::Counter undef
+      MouseX::NativeTraits::MethodProvider::HashRef undef
+      MouseX::NativeTraits::MethodProvider::Num undef
+      MouseX::NativeTraits::MethodProvider::Str undef
+      MouseX::NativeTraits::Num undef
+      MouseX::NativeTraits::Str undef
+    requirements:
+      Any::Moose 0.13
+      ExtUtils::MakeMaker 6.59
+      Mouse 0.82
+      Test::Fatal 0.003
+      Test::More 0.88
+      perl 5.006002
+  MouseX-Types-0.06
+    pathname: G/GF/GFUJI/MouseX-Types-0.06.tar.gz
+    provides:
+      MouseX::Types 0.06
+      MouseX::Types::Base 0.06
+      MouseX::Types::Moose undef
+      MouseX::Types::Mouse undef
+      MouseX::Types::TypeDecorator undef
+    requirements:
+      Any::Moose 0.15
+      ExtUtils::MakeMaker 6.42
+      Mouse 0.77
+      Scalar::Util 0
+      Test::Exception 0
+      Test::More 0
+      perl 5.006002
+  MouseX-Types-Path-Class-0.07
+    pathname: M/MA/MASAKI/MouseX-Types-Path-Class-0.07.tar.gz
+    provides:
+      MouseX::Types::Path::Class 0.07
+    requirements:
+      ExtUtils::MakeMaker 6.59
+      Mouse 0.39
+      MouseX::Types 0.02
+      Path::Class 0
+      Test::More 0.94
+      Test::UseAllModules 0
+      perl 5.008001
   Mozilla-CA-20130114
     pathname: A/AB/ABH/Mozilla-CA-20130114.tar.gz
     provides:
@@ -5200,6 +5549,27 @@ DISTRIBUTIONS
       overload 0
       parent 0
       strict 0
+  PerlIO-utf8_strict-0.004
+    pathname: L/LE/LEONT/PerlIO-utf8_strict-0.004.tar.gz
+    provides:
+      PerlIO::utf8_strict 0.004
+      t::Util undef
+    requirements:
+      Carp 0
+      Exporter 0
+      ExtUtils::CBuilder 0
+      File::Find 0
+      File::Spec::Functions 0
+      File::Temp 0
+      IO::File 0
+      Module::Build 0.3601
+      Test::Exception 0
+      Test::More 0.88
+      XSLoader 0
+      perl 5.008
+      strict 0
+      utf8 0
+      warnings 0
   PerlMagick-6.77
     pathname: J/JC/JCRISTY/PerlMagick-6.77.tar.gz
     provides:
@@ -5397,6 +5767,28 @@ DISTRIBUTIONS
       ExtUtils::CBuilder 0
       Module::Build 0.38
       perl 5.006
+  Role-HasMessage-0.006
+    pathname: R/RJ/RJBS/Role-HasMessage-0.006.tar.gz
+    provides:
+      Role::HasMessage 0.006
+      Role::HasMessage::Errf 0.006
+    requirements:
+      ExtUtils::MakeMaker 6.30
+      Moose::Role 0
+      MooseX::Role::Parameterized 0
+      String::Errf 0
+      Try::Tiny 0
+      namespace::clean 0
+  Role-Identifiable-0.007
+    pathname: R/RJ/RJBS/Role-Identifiable-0.007.tar.gz
+    provides:
+      Role::Identifiable undef
+      Role::Identifiable::HasIdent 0.007
+      Role::Identifiable::HasTags 0.007
+    requirements:
+      ExtUtils::MakeMaker 6.30
+      Moose::Role 0
+      Moose::Util::TypeConstraints 0
   Role-Tiny-1.003003
     pathname: H/HA/HAARG/Role-Tiny-1.003003.tar.gz
     provides:
@@ -5616,6 +6008,32 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
+  String-Errf-0.007
+    pathname: R/RJ/RJBS/String-Errf-0.007.tar.gz
+    provides:
+      String::Errf 0.007
+    requirements:
+      Carp 0
+      ExtUtils::MakeMaker 6.30
+      Params::Util 0
+      Scalar::Util 0
+      String::Formatter 0.102081
+      Sub::Exporter 0
+      Time::Piece 0
+      parent 0
+      strict 0
+      warnings 0
+  String-Formatter-0.102084
+    pathname: R/RJ/RJBS/String-Formatter-0.102084.tar.gz
+    provides:
+      String::Formatter 0.102084
+      String::Formatter::Cookbook 0.102084
+    requirements:
+      ExtUtils::MakeMaker 6.30
+      Params::Util 0
+      Sub::Exporter 0
+      strict 0
+      warnings 0
   String-RewritePrefix-0.007
     pathname: R/RJ/RJBS/String-RewritePrefix-0.007.tar.gz
     provides:
@@ -5626,6 +6044,12 @@ DISTRIBUTIONS
       Sub::Exporter 0.972
       strict 0
       warnings 0
+  String-ShellQuote-1.04
+    pathname: R/RO/ROSCH/String-ShellQuote-1.04.tar.gz
+    provides:
+      String::ShellQuote 1.04
+    requirements:
+      ExtUtils::MakeMaker 0
   String-ToIdentifier-EN-0.11
     pathname: R/RK/RKITOVER/String-ToIdentifier-EN-0.11.tar.gz
     provides:
@@ -5724,6 +6148,14 @@ DISTRIBUTIONS
       Template 0
       Test::More 0
       Time::HiRes 0
+  Template-Tiny-1.12
+    pathname: A/AD/ADAMK/Template-Tiny-1.12.tar.gz
+    provides:
+      Template::Tiny 1.12
+    requirements:
+      ExtUtils::MakeMaker 0
+      Test::More 0.47
+      perl 5.00503
   Template-Toolkit-2.25
     pathname: A/AB/ABW/Template-Toolkit-2.25.tar.gz
     provides:
@@ -6131,6 +6563,16 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::Builder 0
+  Test-UseAllModules-0.14
+    pathname: I/IS/ISHIGAKI/Test-UseAllModules-0.14.tar.gz
+    provides:
+      Test::UseAllModules 0.14
+    requirements:
+      Exporter 0
+      ExtUtils::MakeMaker 0
+      ExtUtils::Manifest 0
+      Test::Builder 0.30
+      Test::More 0.60
   Test-Version-1.002004
     pathname: X/XE/XENO/Test-Version-1.002004.tar.gz
     provides:
@@ -6308,6 +6750,23 @@ DISTRIBUTIONS
       Text::Unidecode 0.04
     requirements:
       ExtUtils::MakeMaker 0
+  Throwable-0.200010
+    pathname: R/RJ/RJBS/Throwable-0.200010.tar.gz
+    provides:
+      StackTrace::Auto 0.200010
+      Throwable 0.200010
+      Throwable::Error 0.200010
+    requirements:
+      Carp 0
+      Class::Load 0.20
+      Devel::StackTrace 1.21
+      ExtUtils::MakeMaker 6.30
+      Moo 1.000001
+      Moo::Role 0
+      MooX::Types::MooseLike::Base 0
+      Scalar::Util 0
+      Sub::Quote 0
+      overload 0
   Tie-IxHash-1.23
     pathname: C/CH/CHORNY/Tie-IxHash-1.23.tar.gz
     provides:
@@ -6537,6 +6996,59 @@ DISTRIBUTIONS
       URI 1.00
       URI::URL 5.00
       perl v5.6.0
+  URI-Nested-0.10
+    pathname: D/DW/DWHEELER/URI-Nested-0.10.tar.gz
+    provides:
+      URI::Nested 0.10
+    requirements:
+      Module::Build 0.30
+      Test::More 0.88
+      URI 1.40
+      perl 5.008001
+  URI-db-0.12
+    pathname: D/DW/DWHEELER/URI-db-0.12.tar.gz
+    provides:
+      URI::cassandra 0.12
+      URI::couch 0.12
+      URI::couchdb 0.12
+      URI::cubrid 0.12
+      URI::db 0.12
+      URI::db2 0.12
+      URI::derby 0.12
+      URI::firebird 0.12
+      URI::hive 0.12
+      URI::impala 0.12
+      URI::informix 0.12
+      URI::ingres 0.12
+      URI::interbase 0.12
+      URI::maria 0.12
+      URI::mariadb 0.12
+      URI::max 0.12
+      URI::maxdb 0.12
+      URI::monet 0.12
+      URI::monetdb 0.12
+      URI::mongo 0.12
+      URI::mongodb 0.12
+      URI::mssql 0.12
+      URI::mysql 0.12
+      URI::oracle 0.12
+      URI::pg 0.12
+      URI::pgsql 0.12
+      URI::postgres 0.12
+      URI::postgresql 0.12
+      URI::sqlite 0.12
+      URI::sqlite3 0.12
+      URI::sqlserver 0.12
+      URI::sybase 0.12
+      URI::teradata 0.12
+      URI::unify 0.12
+      URI::vertica 0.12
+    requirements:
+      Module::Build 0.30
+      Test::More 0.88
+      URI 1.40
+      URI::Nested 0.10
+      perl 5.008001
   Variable-Magic-0.53
     pathname: V/VP/VPIT/Variable-Magic-0.53.tar.gz
     provides:
@@ -6725,6 +7237,164 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 6.59
       Test::More 0
       perl 5.006
+  libintl-perl-1.23
+    pathname: G/GU/GUIDO/libintl-perl-1.23.tar.gz
+    provides:
+      Locale::Messages 1.23
+      Locale::Recode undef
+      Locale::Recode::_Aliases undef
+      Locale::Recode::_Conversions undef
+      Locale::RecodeData undef
+      Locale::RecodeData::ASMO_449 undef
+      Locale::RecodeData::ATARI_ST undef
+      Locale::RecodeData::ATARI_ST_EURO undef
+      Locale::RecodeData::CP10007 undef
+      Locale::RecodeData::CP1250 undef
+      Locale::RecodeData::CP1251 undef
+      Locale::RecodeData::CP1252 undef
+      Locale::RecodeData::CP1253 undef
+      Locale::RecodeData::CP1254 undef
+      Locale::RecodeData::CP1256 undef
+      Locale::RecodeData::CP1257 undef
+      Locale::RecodeData::CSN_369103 undef
+      Locale::RecodeData::CWI undef
+      Locale::RecodeData::DEC_MCS undef
+      Locale::RecodeData::EBCDIC_AT_DE undef
+      Locale::RecodeData::EBCDIC_AT_DE_A undef
+      Locale::RecodeData::EBCDIC_CA_FR undef
+      Locale::RecodeData::EBCDIC_DK_NO undef
+      Locale::RecodeData::EBCDIC_DK_NO_A undef
+      Locale::RecodeData::EBCDIC_ES undef
+      Locale::RecodeData::EBCDIC_ES_A undef
+      Locale::RecodeData::EBCDIC_ES_S undef
+      Locale::RecodeData::EBCDIC_FI_SE undef
+      Locale::RecodeData::EBCDIC_FI_SE_A undef
+      Locale::RecodeData::EBCDIC_FR undef
+      Locale::RecodeData::EBCDIC_IS_FRISS undef
+      Locale::RecodeData::EBCDIC_IT undef
+      Locale::RecodeData::EBCDIC_PT undef
+      Locale::RecodeData::EBCDIC_UK undef
+      Locale::RecodeData::EBCDIC_US undef
+      Locale::RecodeData::ECMA_CYRILLIC undef
+      Locale::RecodeData::GEORGIAN_ACADEMY undef
+      Locale::RecodeData::GEORGIAN_PS undef
+      Locale::RecodeData::GOST_19768_74 undef
+      Locale::RecodeData::GREEK7 undef
+      Locale::RecodeData::GREEK7_OLD undef
+      Locale::RecodeData::GREEK_CCITT undef
+      Locale::RecodeData::HP_ROMAN8 undef
+      Locale::RecodeData::IBM037 undef
+      Locale::RecodeData::IBM038 undef
+      Locale::RecodeData::IBM1004 undef
+      Locale::RecodeData::IBM1026 undef
+      Locale::RecodeData::IBM1047 undef
+      Locale::RecodeData::IBM256 undef
+      Locale::RecodeData::IBM273 undef
+      Locale::RecodeData::IBM274 undef
+      Locale::RecodeData::IBM275 undef
+      Locale::RecodeData::IBM277 undef
+      Locale::RecodeData::IBM278 undef
+      Locale::RecodeData::IBM280 undef
+      Locale::RecodeData::IBM281 undef
+      Locale::RecodeData::IBM284 undef
+      Locale::RecodeData::IBM285 undef
+      Locale::RecodeData::IBM290 undef
+      Locale::RecodeData::IBM297 undef
+      Locale::RecodeData::IBM420 undef
+      Locale::RecodeData::IBM423 undef
+      Locale::RecodeData::IBM424 undef
+      Locale::RecodeData::IBM437 undef
+      Locale::RecodeData::IBM500 undef
+      Locale::RecodeData::IBM850 undef
+      Locale::RecodeData::IBM851 undef
+      Locale::RecodeData::IBM852 undef
+      Locale::RecodeData::IBM855 undef
+      Locale::RecodeData::IBM857 undef
+      Locale::RecodeData::IBM860 undef
+      Locale::RecodeData::IBM861 undef
+      Locale::RecodeData::IBM862 undef
+      Locale::RecodeData::IBM863 undef
+      Locale::RecodeData::IBM864 undef
+      Locale::RecodeData::IBM865 undef
+      Locale::RecodeData::IBM866 undef
+      Locale::RecodeData::IBM868 undef
+      Locale::RecodeData::IBM869 undef
+      Locale::RecodeData::IBM870 undef
+      Locale::RecodeData::IBM871 undef
+      Locale::RecodeData::IBM874 undef
+      Locale::RecodeData::IBM875 undef
+      Locale::RecodeData::IBM880 undef
+      Locale::RecodeData::IBM891 undef
+      Locale::RecodeData::IBM903 undef
+      Locale::RecodeData::IBM904 undef
+      Locale::RecodeData::IBM905 undef
+      Locale::RecodeData::IBM918 undef
+      Locale::RecodeData::IEC_P27_1 undef
+      Locale::RecodeData::INIS undef
+      Locale::RecodeData::INIS_8 undef
+      Locale::RecodeData::INIS_CYRILLIC undef
+      Locale::RecodeData::ISO_10367_BOX undef
+      Locale::RecodeData::ISO_2033_1983 undef
+      Locale::RecodeData::ISO_5427 undef
+      Locale::RecodeData::ISO_5427_EXT undef
+      Locale::RecodeData::ISO_5428 undef
+      Locale::RecodeData::ISO_8859_1 undef
+      Locale::RecodeData::ISO_8859_10 undef
+      Locale::RecodeData::ISO_8859_11 undef
+      Locale::RecodeData::ISO_8859_13 undef
+      Locale::RecodeData::ISO_8859_14 undef
+      Locale::RecodeData::ISO_8859_15 undef
+      Locale::RecodeData::ISO_8859_16 undef
+      Locale::RecodeData::ISO_8859_2 undef
+      Locale::RecodeData::ISO_8859_3 undef
+      Locale::RecodeData::ISO_8859_4 undef
+      Locale::RecodeData::ISO_8859_5 undef
+      Locale::RecodeData::ISO_8859_6 undef
+      Locale::RecodeData::ISO_8859_7 undef
+      Locale::RecodeData::ISO_8859_8 undef
+      Locale::RecodeData::ISO_8859_9 undef
+      Locale::RecodeData::KOI8_R undef
+      Locale::RecodeData::KOI8_RU undef
+      Locale::RecodeData::KOI8_T undef
+      Locale::RecodeData::KOI8_U undef
+      Locale::RecodeData::KOI_8 undef
+      Locale::RecodeData::LATIN_GREEK undef
+      Locale::RecodeData::LATIN_GREEK_1 undef
+      Locale::RecodeData::MACARABIC undef
+      Locale::RecodeData::MACCROATIAN undef
+      Locale::RecodeData::MACCYRILLIC undef
+      Locale::RecodeData::MACGREEK undef
+      Locale::RecodeData::MACHEBREW undef
+      Locale::RecodeData::MACICELAND undef
+      Locale::RecodeData::MACINTOSH undef
+      Locale::RecodeData::MACROMANIA undef
+      Locale::RecodeData::MACTHAI undef
+      Locale::RecodeData::MACTURKISH undef
+      Locale::RecodeData::MACUKRAINE undef
+      Locale::RecodeData::MAC_IS undef
+      Locale::RecodeData::MAC_SAMI undef
+      Locale::RecodeData::MAC_UK undef
+      Locale::RecodeData::NATS_DANO undef
+      Locale::RecodeData::NATS_SEFI undef
+      Locale::RecodeData::NEXTSTEP undef
+      Locale::RecodeData::SAMI_WS2 undef
+      Locale::RecodeData::TIS_620 undef
+      Locale::RecodeData::US_ASCII undef
+      Locale::RecodeData::UTF_8 undef
+      Locale::RecodeData::VISCII undef
+      Locale::RecodeData::_Encode undef
+      Locale::TextDomain 1.23
+      Locale::Util undef
+      Locale::gettext_dumb undef
+      Locale::gettext_pp undef
+      Locale::gettext_xs undef
+      MyInstall undef
+      SimpleCal undef
+      libintl::perl undef
+    requirements:
+      ExtUtils::MakeMaker 0
+      File::Spec 0
+      version 0.77
   libwww-perl-6.05
     pathname: G/GA/GAAS/libwww-perl-6.05.tar.gz
     provides:
