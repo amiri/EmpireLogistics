@@ -9,7 +9,7 @@ BEGIN { extends 'Catalyst::Controller' };
 
 sub auto :Private {
     my ($self,$c) = @_;
-    $c->assert_user_roles(qw/admin/);
+    $c->assert_user_roles(qw/admin/) or $c->redirect_and_detach('/access_denied');
 }
 
 sub base :Chained('/') PathPart('admin') CaptureArgs(0) {
