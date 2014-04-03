@@ -202,7 +202,7 @@ directory "/var/run/postgresql" do
   owner "root"
   group "root"
   mode '777'
-  action :create_if_missing
+  action :create
 end
 
 include_recipe "postgresql"
