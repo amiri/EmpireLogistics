@@ -1,20 +1,7 @@
 package EmpireLogistics::Config;
 
-#use Moose;
-warn map { "$_ " } @INC;
-my $path = `which perl`;
-warn "Perl interp path: $path";
-warn "Perl: $^V";
-warn "PERL_MB_OPT: ",  $ENV{PERL_MB_OPT};
-warn "PERL_MM_OPT: ",  $ENV{PERL_MM_OPT};
-warn "PERL5LIB: ",  $ENV{PERL5LIB};
-warn "PATH: ",  $ENV{PATH};
-warn "PERL_LOCAL_LIB_ROOT: ",  $ENV{PERL_LOCAL_LIB_ROOT};
-warn "GID",  $(;
-warn "EGID",  $);
-warn "UID",  $<;
-warn "EUID",  $>;
-warn "Archname: ",  $Config::archname;
+use strict;
+use warnings;
 use Clone qw/clone/;
 use Sys::Hostname       ();
 use Sys::Hostname::Long ();
@@ -40,6 +27,17 @@ $PARAMETERS{default} = {
             quote_names => 1,
         },
     },
+    app_plugins => [qw/
+        ConfigLoader
+        Authentication
+        Authorization::Roles
+        Authorization::ACL
+        RedirectAndDetach
+        I18N
+        Session
+        Session::Store::DBIC
+        Session::State::Cookie
+    /],
     catalyst => {
         name => 'EmpireLogistics::Web',
         disable_component_resolution_regex_fallback => 1,
@@ -86,14 +84,20 @@ $PARAMETERS{default} = {
     },
 };
 
-$PARAMETERS{"development"} = {
+$PARAMETERS{"localhost"} = {
     %{ clone $PARAMETERS{'default'} },
+};
+
+$PARAMETERS{development} = {
+    %{ clone $PARAMETERS{default} },
     srcroot  => get_current_srcroot(),
     hostname => "akbuntu",
     tiles_url => 'localhost/tiles',
 };
-$PARAMETERS{"akbuntu"} = {
-    %{ clone $PARAMETERS{'development'} },
+push @{$PARAMETERS{development}{app_plugins}}, ("-Debug", "Static::Simple");
+
+$PARAMETERS{akbuntu} = {
+    %{ clone $PARAMETERS{development} },
     srcroot  => "/home/amiri/EmpireLogistics",
     hostname => "akbuntu",
     tiles_url => 'localhost:9999',
@@ -102,10 +106,6 @@ $PARAMETERS{"akbuntu"} = {
 $PARAMETERS{"vagrant-ubuntu-saucy-"} = {
     %{ clone $PARAMETERS{'development'} },
     hostname => "vagrant-ubuntu-saucy-64",
-};
-
-$PARAMETERS{"localhost"} = {
-    %{ clone $PARAMETERS{'default'} },
 };
 
 sub mk_package_accessors {
@@ -135,18 +135,12 @@ __PACKAGE__->mk_package_accessors('installation');
 
 sub import {
     my ($class, %options) = @_;
-    use Data::Printer;
-    warn "In import class is $class";
-    warn "In import options are: ", p %options;
     $class->init(exists $options{installation} ? $options{installation} : ())
         unless $class->initialized;
 }
 
 sub init {
     my ( $class, $installation ) = @_;
-    warn "In init caller is ", caller;
-    warn "In init class is $class";
-    warn "In init installation is $installation";
 
    # if we aren't passed in the canonical installation name, go figure it out.
     $installation //= $class->get_running_installation();
@@ -167,7 +161,6 @@ sub get_running_installation {
     my $class = shift;
 
     my $hostname = get_system_hostname();
-    warn "Hostname in running installation: $hostname";
 
     return "$hostname";
 }
@@ -214,10 +207,6 @@ sub get_current_srcroot {
 sub get_parameters {
     my $class = shift;
     my ($name) = @_;
-
-    warn "In get_parameters caller is ", caller;
-    warn "In get parameters class is $class";
-    warn "In get parameters name is $name";
 
     die __PACKAGE__ . ': no installation passed to get_parameters'
         unless $name;
@@ -288,7 +277,6 @@ sub canonical_installation_name {
     return $installation if $PARAMETERS{$installation};
 
     my $nickname = $installation;
-    warn "Nickname is $nickname";
     if ( not %NICKNAMES ) {
         foreach my $key ( keys %PARAMETERS ) {
             my $nickname = $PARAMETERS{$key}{nickname};

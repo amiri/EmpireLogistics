@@ -120,11 +120,6 @@ include_recipe "perlbrew"
 
 perlbrew_perl "perl-5.18.2" do
   version 'perl-5.18.2'
-  action :remove
-end
-
-perlbrew_perl "perl-5.18.2" do
-  version 'perl-5.18.2'
   action :install
 end
 
@@ -203,19 +198,11 @@ bash "extract_geolib" do
   cwd ::File.dirname(geolib_filepath)
 end
 
-pg_database "empirelogistics" do
-  action :drop
-end
-
-pg_database "pgloader" do
-  action :drop
-end
-
 directory "/var/run/postgresql" do
   owner "root"
   group "root"
   mode '777'
-  action :create
+  action :create_if_missing
 end
 
 include_recipe "postgresql"

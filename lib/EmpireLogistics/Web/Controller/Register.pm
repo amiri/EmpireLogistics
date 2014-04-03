@@ -34,7 +34,7 @@ sub post_register : Chained('base') PathPart('') Args(0) POST {
                 nickname => $nickname,
             });
         } catch {
-            die "Could not create a new user: $_";
+            $c->error("Could not create a new user: $_");
         };
         if ($new_user) {
             $c->authenticate({

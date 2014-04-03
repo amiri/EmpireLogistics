@@ -25,15 +25,12 @@ sub random_salt {
 
 sub validate {
     my ( $self, $hash, $pass ) = @_;
-    warn "Hash: $hash";
-    warn "Pass: $pass";
     return $self->pbkdf2->validate( $hash, $pass );
 }
 
 sub encrypt {
     my ( $self, $pass) = @_;
     my $encrypted = $self->pbkdf2->generate( $pass, $self->random_salt );
-    warn "Encrypted: $encrypted";
     return $encrypted;
 }
 

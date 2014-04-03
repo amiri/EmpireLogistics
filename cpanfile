@@ -37,6 +37,8 @@ requires "Data::Printer";
 requires "DateTimeX::Easy";
 requires "Digest::PBKDF2", ">= 0.010";
 requires "Email::Valid";
+requires "Encode";
+requires "Encode::Guess";
 requires "Geo::Coder::Google";
 requires "HTML::FormHandler";
 requires "HTML::FormHandler::Model::DBIC";

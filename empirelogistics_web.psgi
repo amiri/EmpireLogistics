@@ -9,21 +9,6 @@ use Plack::Builder;
 use Plack::App::File;
 use EmpireLogistics::Web;
 
-warn map { "$_ " } @INC;
-my $path = `which perl`;
-warn "Perl interp path: $path";
-warn "Perl: $^V";
-warn "PERL_MB_OPT: ",  $ENV{PERL_MB_OPT};
-warn "PERL_MM_OPT: ",  $ENV{PERL_MM_OPT};
-warn "PERL5LIB: ",  $ENV{PERL5LIB};
-warn "PATH: ",  $ENV{PATH};
-warn "PERL_LOCAL_LIB_ROOT: ",  $ENV{PERL_LOCAL_LIB_ROOT};
-warn "GID",  $(;
-warn "EGID",  $);
-warn "UID",  $<;
-warn "EUID",  $>;
-warn "Archname: ",  $Config::archname;
-
 my $app = EmpireLogistics::Web->apply_default_middlewares(EmpireLogistics::Web->psgi_app(@_));
 
 $app;

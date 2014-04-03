@@ -23,11 +23,30 @@ sub index : Path : Args(0) {
 
 sub default : Path {
     my ( $self, $c ) = @_;
-    $c->response->body('Page not found');
+    $c->stash->{template} = 'error_404.tt';
     $c->response->status(404);
 }
 
-sub end : ActionClass('RenderView') { }
+sub access_denied : Private {
+    my ( $self, $c ) = @_;
+    $c->stash->{template} = 'error_401.tt';
+    $c->response->status(401);
+}
+
+sub render : ActionClass('RenderView') { }
+
+sub end : Private {
+    my ( $self, $c ) = @_;
+    if ( scalar( @{ $c->error } ) and not $c->debug ) {
+        $c->stash->{errors} = $c->error;
+        $c->log->error($_) for ( @{ $c->error } );
+        $c->response->status(500);
+        $c->stash->{template} = 'error_500.tt';
+        $c->clear_errors;
+    }
+    $c->forward('/render') or return;
+    return 1;
+}
 
 __PACKAGE__->meta->make_immutable;
 

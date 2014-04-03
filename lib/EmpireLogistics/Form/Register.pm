@@ -4,10 +4,14 @@ use HTML::FormHandler::Moose;
 use HTML::FormHandler::Types ('NoSpaces', 'Printable', 'NotAllDigits' );
 use MooseX::Types::Common::String ('StrongPassword');
 use namespace::autoclean;
-extends 'EmpireLogistics::Form::BaseDB';
+extends 'EmpireLogistics::Form::Base';
 
 has '+name' => (default => 'register');
-has '+item_class' => ( default => 'User');
+
+has 'schema' => (
+    is => 'ro',
+    isa => 'DBIx::Class::Schema',
+);
 
 has_field 'email' => (
     type => 'Email',
@@ -15,8 +19,6 @@ has_field 'email' => (
         -mxcheck => 1,
         -tldcheck => 1,
     },
-    unique => 1,
-    messages => { unique => "That email is already registered" },
     required => 1,
 );
 has_field 'password' => (
@@ -34,8 +36,6 @@ has_field 'nickname' => (
     type => 'Text',
     required => 1,
     label => "Display Name",
-    unique => 1,
-    messages => { unique => "That nickname is already taken" },
 );
 has_field 'submit' => (
     type => 'Submit',
@@ -44,7 +44,26 @@ has_field 'submit' => (
     element_class => ['btn','btn-primary'],
 );
 
+sub validate_email {
+    my $self = shift;
+    my $count =
+      $self->form->schema->resultset('User')
+      ->search({email_address => $self->value,})->count;
+    if ($count) {
+        $self->add_error("That email is already registered");
+    }
+}
+
+sub validate_nickname {
+    my $self = shift;
+    my $count =
+      $self->form->schema->resultset('User')
+      ->search({nickname => $self->value,})->count;
+    if ($count) {
+        $self->add_error("That nickname is already taken");
+    }
+}
+
 __PACKAGE__->meta->make_immutable;
 
 1;
-

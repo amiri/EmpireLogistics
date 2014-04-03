@@ -64,6 +64,7 @@ bash "build-and-install-python" do
       "CXXFLAGS" => "-I#{node['python']['prefix_dir']} -I/usr/lib",
       "CFLAGS"   => "-I#{node['python']['prefix_dir']} -I/usr/lib"
   }) if platform?("ubuntu") && node['platform_version'].to_f >= 12.04
+  not_if { ::File.exists?(install_path) }
 end
 
 # Link install as the default python, to support Python 3.x

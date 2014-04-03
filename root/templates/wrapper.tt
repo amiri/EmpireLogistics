@@ -19,6 +19,12 @@
   <div class="alert alert-[% alert.class %]">[% alert.message %]</div>
 [% END %]
 </div>
-[% content %]
+[% IF c.req.path == '' %]
+    [% content %]
+[% ELSE %]
+    <div class="container-fluid">
+    [% content %]
+    </div>
+[% END %]
 </body>
 </html>

@@ -10,6 +10,7 @@ has '+widget_wrapper' => ( default => 'Bootstrap3' );
 has '+is_html5' => (default => 1);
 has '+http_method' => (default => 'post');
 
+sub build_form_element_attr { { 'accept-charset' => 'utf-8' } }
 sub build_form_element_class { ['form-vertical'] }
 
 __PACKAGE__->meta->make_immutable;
