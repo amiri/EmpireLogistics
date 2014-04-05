@@ -75,9 +75,22 @@ $PARAMETERS{default} = {
                     role_field => "name",
                 },
             },
+            no_password => {
+                credential => {
+                    class => 'Password',
+                    password_type => 'none',
+                },
+                store => {
+                    class => "DBIx::Class",
+                    user_model => "DB::User",
+                    role_relation => "roles",
+                    role_field => "name",
+                },
+            },
         },
         "Plugin::Session" => {
             dbic_class     => "DB::Session",
+            cookie_expires => 0, # Session only cookie
             expires        => 3600,
             flash_to_stash => 1,
         },

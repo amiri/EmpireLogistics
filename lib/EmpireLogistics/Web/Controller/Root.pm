@@ -14,6 +14,7 @@ sub auto : Private {
     my $locale = $c->req->param('locale');
     $c->response->headers->push_header( 'Vary' => 'Accept-Language' );
     $c->language( $locale ? [$locale] : undef );
+    $c->forward('check_authentication');
 }
 
 sub index : Path : Args(0) {
@@ -31,6 +32,19 @@ sub access_denied : Private {
     my ( $self, $c ) = @_;
     $c->stash->{template} = 'error_401.tt';
     $c->response->status(401);
+}
+
+sub check_authentication :Private {
+    my ($self,$c) = @_;
+    # Try to login the user via the login cookie
+    my $login_cookie = $c->request->cookie('login');
+    if ($login_cookie && !$c->user_exists) {
+        my $id =
+            EmpireLogistics::Schema::Result::User->id_from_login_cookie($login_cookie->value);
+        $c->authenticate({ id => $id }, 'no_password')
+            if ($id);
+    }
+    return 1;
 }
 
 sub render : ActionClass('RenderView') { }

@@ -37,6 +37,10 @@ has_field 'nickname' => (
     required => 1,
     label    => "Display Name",
 );
+has_field 'remember' => (
+    type => 'Checkbox',
+    label => 'Remember me?',
+);
 has_field 'submit' => (
     type          => 'Submit',
     widget        => 'ButtonTag',

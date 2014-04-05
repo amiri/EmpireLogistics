@@ -13,7 +13,7 @@ sub base :Chained('/') PathPart('logout') CaptureArgs(0) {
 sub get_logout : Chained('base') PathPart('') Args(0) GET {
     my ($self,$c) = @_;
     $c->logout;
-    $c->redirect_and_detach('/');
+    $c->res->redirect('/');
     return 1;
 }
 

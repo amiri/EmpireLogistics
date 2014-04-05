@@ -70,6 +70,19 @@ sub check_password {
     return $self if (EmpireLogistics::Web::Model::PBKDF2->new->validate($self->password, $raw_pass));
 }
 
+sub encrypted_login_cookie {
+    my $self = shift;
+    my $cipher_text =
+        EmpireLogistics::Web::Model::AES->new->encrypt($self->id);
+    my $login_cookie_value = unpack('H*', $cipher_text);
+    return $login_cookie_value;
+}
+
+sub id_from_login_cookie {
+    my ($class, $login_cookie_value) = @_;
+    my $cipher_text = pack('H*', $login_cookie_value);
+    return EmpireLogistics::Web::Model::AES->new->decrypt($cipher_text);
+}
 
 __PACKAGE__->set_primary_key("id");
 

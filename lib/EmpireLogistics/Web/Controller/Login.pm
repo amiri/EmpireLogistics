@@ -8,7 +8,7 @@ extends 'Catalyst::Controller';
 
 sub base : Chained('/') PathPart('login') CaptureArgs(0) {
     my ( $self, $c ) = @_;
-    my $form = Login->new( action => '/login' );
+    my $form = Login->new( action => '/login', schema => $c->model('DB')->schema );
     $c->stash->{login_form} = $form;
     $c->stash->{template}   = 'login.tt';
     return 1;
@@ -21,13 +21,16 @@ sub post_index : Chained('base') PathPart('') Args(0) POST {
     if ( $form->validated ) {
         my $email    = $form->field('email')->value;
         my $password = $form->field('password')->value;
+        my $remember = $form->field('remember')->value;
         my $authenticated;
         $authenticated = $c->authenticate({
             email    => $email,
             password => $password,
+            remember => $remember,
         });
         if ($authenticated) {
-            $c->redirect_and_detach('/');
+            $c->res->redirect('/');
+            return 1;
         } else {
             $form->add_form_error("Invalid email or password");
         }
