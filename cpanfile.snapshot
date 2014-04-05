@@ -1123,6 +1123,13 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Pod::Text 2.08
       Pod::Usage 1.33
+  Crypt-CBC-2.33
+    pathname: L/LD/LDS/Crypt-CBC-2.33.tar.gz
+    provides:
+      Crypt::CBC 2.33
+    requirements:
+      Digest::MD5 2.00
+      ExtUtils::MakeMaker 0
   Crypt-Eksblowfish-0.009
     pathname: Z/ZE/ZEFRAM/Crypt-Eksblowfish-0.009.tar.gz
     provides:
@@ -1145,6 +1152,12 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
+  Crypt-OpenSSL-AES-0.02
+    pathname: T/TT/TTAR/Crypt-OpenSSL-AES-0.02.tar.gz
+    provides:
+      Crypt::OpenSSL::AES 0.02
+    requirements:
+      ExtUtils::MakeMaker 0
   Crypt-PBKDF2-0.140890
     pathname: A/AR/ARODLAND/Crypt-PBKDF2-0.140890.tar.gz
     provides:
@@ -4217,6 +4230,61 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 6.30
       Locale::Maketext 1.17
+  Log-Log4perl-1.43
+    pathname: M/MS/MSCHILLI/Log-Log4perl-1.43.tar.gz
+    provides:
+      L4pResurrectable 0.01
+      Log::Log4perl 1.43
+      Log::Log4perl::Appender undef
+      Log::Log4perl::Appender::DBI undef
+      Log::Log4perl::Appender::File undef
+      Log::Log4perl::Appender::RRDs undef
+      Log::Log4perl::Appender::Screen undef
+      Log::Log4perl::Appender::ScreenColoredLevels undef
+      Log::Log4perl::Appender::Socket undef
+      Log::Log4perl::Appender::String undef
+      Log::Log4perl::Appender::TestArrayBuffer undef
+      Log::Log4perl::Appender::TestBuffer undef
+      Log::Log4perl::Appender::TestFileCreeper undef
+      Log::Log4perl::Catalyst undef
+      Log::Log4perl::Config undef
+      Log::Log4perl::Config::BaseConfigurator undef
+      Log::Log4perl::Config::DOMConfigurator 0.03
+      Log::Log4perl::Config::PropertyConfigurator undef
+      Log::Log4perl::Config::Watch undef
+      Log::Log4perl::DateFormat undef
+      Log::Log4perl::Filter undef
+      Log::Log4perl::Filter::Boolean undef
+      Log::Log4perl::Filter::LevelMatch undef
+      Log::Log4perl::Filter::LevelRange undef
+      Log::Log4perl::Filter::MDC undef
+      Log::Log4perl::Filter::StringMatch undef
+      Log::Log4perl::InternalDebug undef
+      Log::Log4perl::JavaMap undef
+      Log::Log4perl::JavaMap::ConsoleAppender undef
+      Log::Log4perl::JavaMap::FileAppender undef
+      Log::Log4perl::JavaMap::JDBCAppender undef
+      Log::Log4perl::JavaMap::NTEventLogAppender undef
+      Log::Log4perl::JavaMap::RollingFileAppender undef
+      Log::Log4perl::JavaMap::SyslogAppender undef
+      Log::Log4perl::JavaMap::TestBuffer undef
+      Log::Log4perl::Layout undef
+      Log::Log4perl::Layout::NoopLayout undef
+      Log::Log4perl::Layout::PatternLayout undef
+      Log::Log4perl::Layout::PatternLayout::Multiline undef
+      Log::Log4perl::Layout::SimpleLayout undef
+      Log::Log4perl::Level undef
+      Log::Log4perl::Logger undef
+      Log::Log4perl::MDC undef
+      Log::Log4perl::NDC undef
+      Log::Log4perl::Resurrector undef
+      Log::Log4perl::Util undef
+      Log::Log4perl::Util::Semaphore undef
+      Log::Log4perl::Util::TimeTracker undef
+    requirements:
+      ExtUtils::MakeMaker 0
+      File::Spec 0.82
+      Test::More 0.45
   MIME-Types-2.04
     pathname: M/MA/MARKOV/MIME-Types-2.04.tar.gz
     provides:
