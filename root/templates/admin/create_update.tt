@@ -1,0 +1,9 @@
+[% title = (creation == 1 ? 'Create' : 'Edit') %]
+[% meta.title = title _ " " _ item_name %]
+<h2><a href="/admin">Back to Admin Page</a></h2>
+<h2><a href="/admin/[% item_name %]">Back to [% item_name | ucfirst %] Page</a></h2>
+[% page_title = (creation == 1 ? 'Create ' _ item_name : 'Edit ' _ item_name) %]
+<h3>[% page_title %]</h3>
+<div>
+    [% form.render %]
+</div>

@@ -1,10 +1,16 @@
+<span class="hidden hash" data-hash="[% c.stash.hash_location || c.user_session.hash_location %]"></span>
 <script>
     var map = L.map('map', {
         maxZoom: 16
     });
     var hash = new L.Hash(map);
     if (!window.location.hash) {
-        map.setView([29.7628, - 95.3831], 16);
+        var hash = $("span.hash").data("hash");
+        if (hash) {
+            window.location.hash = hash; 
+        } else {
+            map.setView([29.7628, - 95.3831], 16);
+        }
     }
     var openStreet = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 16,

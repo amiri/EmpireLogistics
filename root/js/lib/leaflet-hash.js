@@ -92,6 +92,12 @@
 		movingMap: false,
 		update: function() {
 			var hash = location.hash;
+            $.ajax({
+                url: "/update_map_location"
+              , data: { "hash": location.hash }
+              , dataType: "json"
+              , type: "POST"
+            });
 			if (hash === this.lastHash) {
 				return;
 			}

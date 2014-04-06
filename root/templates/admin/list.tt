@@ -1,0 +1,76 @@
+[% meta.title = item_rs.result_source.source_name _ " List" %]
+    <h2><a href="/admin">Back to Main Admin Page</a></h2>
+
+    <div>
+        <fieldset><legend>Create New</legend>
+            <a href="[% c.uri_for('create') %]">[% c.loc('New [_1]', item_rs.result_source.source_name) %]</a>
+        </fieldset>
+    </div>
+
+<div>
+    <fieldset><legend>Pages</legend>
+    <div>
+        [% IF pager.previous_page %]
+            <a href="[% c.request.uri_with( page => pager.previous_page ) %]">[% c.loc('Previous Page') %]</a>
+        [% END %]
+    </div>
+    <div>
+        [% IF pager.next_page %]
+            <a href="[% c.request.uri_with( page => pager.next_page ) %]">[% c.loc('Next Page') %]</a>
+        [% END %]
+    </div>
+    </fieldset>
+</div>
+
+<div>
+<table id="list"tablesorter">
+    <thead>
+        <tr>
+        [% FOREACH col IN item_rs.result_source.columns %]
+             [% UNLESS col == 'id' %]
+                <th class="header[% IF col == 'date_created' || col == 'begin_date' || col == 'end_date' %] { sorter: 'ymd' }[% END %]">[% col | ucfirst %]</th>
+             [% END %]
+        [% END %]
+        </tr>
+    </thead>
+[% # Display each item in a table row %]
+    <tbody>
+    [% FOREACH item IN items -%]
+        <tr>
+            [% FOREACH col IN item_rs.result_source.columns %]
+              [% UNLESS col == 'id' %]
+                <td>
+                    <a href="[% c.uri_for(c.controller("item"), item.id, 'edit' ) %]">
+                        [% IF item.$col.can('ymd') %]
+                            [% item.$col.ymd %]
+                        [% ELSE %]
+                            [% item.$col %]
+                        [% END %]
+                    </a>
+                </td>
+              [% END %]
+            [% END %]
+            <td>
+                <a href="[% c.uri_for(c.controller("item"), item.id, 'delete' )%]">[% c.loc('Delete') %]</a>
+            </td>
+        </tr>
+    [% END -%]
+    </tbody>
+</table>
+</div>
+
+<div>
+    <fieldset>
+    <legend>Pages</legend>
+    <div>
+        [% IF pager.previous_page %]
+            <a href="[% c.request.uri_with( page => pager.previous_page ) %]">[% c.loc('Previous Page') %]</a>
+        [% END %]
+    </div>
+    <div>
+        [% IF pager.next_page %]
+            <a href="[% c.request.uri_with( page => pager.next_page ) %]">[% c.loc('Next Page') %]</a>
+        [% END %]
+    </div>
+    </fieldset>
+</div>

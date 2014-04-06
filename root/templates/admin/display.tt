@@ -1,0 +1,14 @@
+[% name = object.result_source.source_name | lower %]
+[% meta.title = name _ ': Details' | ucfirst %]
+    
+    <h2><a href="/admin/[% name %]">Back to [% name | ucfirst %] Page</a></h2>
+
+    [% FOREACH col = item_rs.result_source.columns %]
+       [% UNLESS col == 'id' || col == 'date' %]
+
+         <div>
+            <span><strong>[% col %]</strong></span>
+            <span>[% object.$col %]</span>
+         </div>
+       [% END %] 
+    [% END %]
