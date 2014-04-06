@@ -1,18 +1,18 @@
-package EmpireLogistics::Form::BulkImport;
+package EmpireLogistics::Form::Admin::BulkImport;
 
 use HTML::FormHandler::Moose;
 use namespace::autoclean;
 extends 'EmpireLogistics::Form::BaseDB';
 
 has '+name'    => ( default => 'bulk-import' );
-has '+enctype' => ( default => 'multipart/form-data' )
+has '+enctype' => ( default => 'multipart/form-data' );
 
-    has_field 'object_type' => (
+has_field 'object_type' => (
     type         => 'Select',
     label        => 'Object Type',
     required     => 1,
     empty_select => '-- Choose One --',
-    );
+);
 
 has_field 'csv' => (
     type     => 'Upload',

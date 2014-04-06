@@ -17,9 +17,18 @@ sub auto : Private {
     $c->forward('check_authentication');
 }
 
-sub index : Path : Args(0) {
+sub index : Path : Args(0) GET {
     my ( $self, $c ) = @_;
     $c->stash->{tiles_url} = $EmpireLogistics::Config::tiles_url;
+}
+
+sub post_update_map_location :Chained('/') PathPart('update_map_location') Args(0) POST {
+    my ($self,$c) = @_;
+    return unless $c->req->is_xhr;
+    $c->stash->{current_view} = 'JSON';
+    my $hash = $c->req->param('hash');
+    $c->user_session->{hash_location} = $hash;
+    return 1;
 }
 
 sub default : Path {

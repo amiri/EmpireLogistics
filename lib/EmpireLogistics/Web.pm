@@ -3,6 +3,7 @@ package EmpireLogistics::Web;
 use Moose;
 use CatalystX::RoleApplicator;
 use EmpireLogistics::Config;
+use URI;
 use namespace::autoclean;
 
 use Catalyst::Runtime 5.90;
@@ -55,6 +56,11 @@ sub expire_cookie {
         expires => '-1d',
     };
     return 1;
+}
+
+sub build_backref {
+    my $c = shift;
+    return $c->req->uri_for(URI->new('/'.$c->req->path)); 
 }
 
 __PACKAGE__->meta->make_immutable;

@@ -37,6 +37,7 @@ $PARAMETERS{default} = {
         Session
         Session::Store::DBIC
         Session::State::Cookie
+        Session::PerEmpireLogisticsUser
     /],
     catalyst => {
         name => 'EmpireLogistics::Web',
@@ -93,6 +94,10 @@ $PARAMETERS{default} = {
             cookie_expires => 0, # Session only cookie
             expires        => 3600,
             flash_to_stash => 1,
+        },
+        # Catalyst::Plugin::Session::PerUser
+        user_session => {
+            migrate => 1,
         },
     },
 };

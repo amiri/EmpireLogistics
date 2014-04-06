@@ -16,6 +16,7 @@ sub base : Chained('/') PathPart('login') CaptureArgs(0) {
 
 sub post_index : Chained('base') PathPart('') Args(0) POST {
     my ( $self, $c ) = @_;
+    my $backref = $c->user_session->{backref} //= '/';
     my $form = $c->stash->{login_form};
     return unless $form->process( $c->req->body_params );
     if ( $form->validated ) {
@@ -29,8 +30,8 @@ sub post_index : Chained('base') PathPart('') Args(0) POST {
             remember => $remember,
         });
         if ($authenticated) {
-            $c->res->redirect('/');
-            return 1;
+            $c->flash->{hash_location} = $c->user_session->{hash_location};
+            $c->res->redirect($backref);
         } else {
             $form->add_form_error("Invalid email or password");
         }

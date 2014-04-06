@@ -5,6 +5,7 @@ use HTML::FormHandler::Types ( 'NoSpaces', 'Printable', 'NotAllDigits' );
 use MooseX::Types::Common::String ('StrongPassword');
 use namespace::autoclean;
 extends 'EmpireLogistics::Form::Base';
+with 'EmpireLogistics::Role::Form::Validate';
 
 has '+name' => ( default => 'register' );
 
@@ -47,24 +48,6 @@ has_field 'submit' => (
     value         => 'Register',
     element_class => [ 'btn', 'btn-primary' ],
 );
-
-sub validate_email {
-    my ( $self, $field ) = @_;
-    my $count = $self->form->schema->resultset('User')
-        ->search( { email => $field->value, } )->count;
-    if ($count) {
-        $field->add_error("That email is already registered");
-    }
-}
-
-sub validate_nickname {
-    my ( $self, $field ) = @_;
-    my $count = $self->form->schema->resultset('User')
-        ->search( { nickname => $field->value, } )->count;
-    if ($count) {
-        $field->add_error("That nickname is already taken");
-    }
-}
 
 __PACKAGE__->meta->make_immutable;
 

@@ -2017,6 +2017,20 @@ DISTRIBUTIONS
       Test::MockTime 0
       Test::More 0
       boolean 0
+  DateTime-Format-Pg-0.16009
+    pathname: D/DM/DMAKI/DateTime-Format-Pg-0.16009.tar.gz
+    provides:
+      DateTime::Format::Pg 0.16009
+    requirements:
+      CPAN::Meta 0
+      CPAN::Meta::Prereqs 0
+      DateTime 0.10
+      DateTime::Format::Builder 0.72
+      DateTime::TimeZone 0.05
+      ExtUtils::CBuilder 0
+      ExtUtils::MakeMaker 6.36
+      Module::Build 0.38
+      Test::More 0
   DateTime-Format-SQLite-0.11
     pathname: C/CF/CFAERBER/DateTime-Format-SQLite-0.11.tar.gz
     provides:
