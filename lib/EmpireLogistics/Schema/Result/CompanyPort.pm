@@ -3,6 +3,8 @@ package EmpireLogistics::Schema::Result::CompanyPort;
 
 
 use Moose;
+use MooseX::MarkAsMethods autoclean => 1;
+
 extends 'EmpireLogistics::Schema::Result';
 
 __PACKAGE__->table("company_port");

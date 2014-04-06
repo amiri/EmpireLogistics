@@ -3,6 +3,8 @@ package EmpireLogistics::Schema::Result::RawRailLine;
 
 
 use Moose;
+use MooseX::MarkAsMethods autoclean => 1;
+
 extends 'EmpireLogistics::Schema::Result';
 
 __PACKAGE__->table("raw_rail_line");

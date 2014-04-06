@@ -3,6 +3,8 @@ package EmpireLogistics::Schema::Result::PortHarborSize;
 
 
 use Moose;
+use MooseX::MarkAsMethods autoclean => 1;
+
 extends 'EmpireLogistics::Schema::Result';
 
 __PACKAGE__->table("port_harbor_size");

@@ -1,8 +1,9 @@
 package EmpireLogistics::Schema::Result::User;
 
-
-
 use Moose;
+use MooseX::MarkAsMethods autoclean => 1;
+
+use MooseX::MarkAsMethods autoclean => 1;
 extends 'EmpireLogistics::Schema::Result';
 
 __PACKAGE__->table("user");
@@ -86,8 +87,6 @@ sub id_from_login_cookie {
 
 __PACKAGE__->set_primary_key("id");
 
-
-
-
 __PACKAGE__->meta->make_immutable;
+
 1;

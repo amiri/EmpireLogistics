@@ -3,6 +3,8 @@ package EmpireLogistics::Schema::Result::RailLineWorkStoppage;
 
 
 use Moose;
+use MooseX::MarkAsMethods autoclean => 1;
+
 extends 'EmpireLogistics::Schema::Result';
 
 __PACKAGE__->table("rail_line_work_stoppage");

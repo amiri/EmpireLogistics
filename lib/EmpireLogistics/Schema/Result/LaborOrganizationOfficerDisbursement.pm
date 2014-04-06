@@ -3,6 +3,8 @@ package EmpireLogistics::Schema::Result::LaborOrganizationOfficerDisbursement;
 
 
 use Moose;
+use MooseX::MarkAsMethods autoclean => 1;
+
 extends 'EmpireLogistics::Schema::Result';
 
 __PACKAGE__->table("labor_organization_officer_disbursement");
