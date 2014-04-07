@@ -805,6 +805,32 @@ DISTRIBUTIONS
       MooseX::Types::Moose 0
       Test::More 0.89
       namespace::autoclean 0
+  Catalyst-View-CSV-1.4
+    pathname: M/MC/MCB/Catalyst-View-CSV-1.4.tar.gz
+    provides:
+      Catalyst::Helper::View::CSV undef
+      Catalyst::View::CSV 1.4
+    requirements:
+      Catalyst 0
+      Catalyst::Action::RenderView 0
+      Catalyst::Controller 0
+      Catalyst::Model::DBIC::Schema 0
+      Catalyst::Plugin::ConfigLoader 0
+      Catalyst::Test 0
+      Catalyst::View 0
+      CatalystX::Component::Traits 0
+      Config::General 0
+      DBD::SQLite 0
+      DBIx::Class 0
+      DBIx::Class::Schema 0
+      ExtUtils::MakeMaker 6.59
+      FindBin 0
+      Moose 0
+      Test::Exception 0
+      Test::More 0
+      Text::CSV 0
+      URI 0
+      perl 5.009005
   Catalyst-View-JSON-0.33
     pathname: M/MI/MIYAGAWA/Catalyst-View-JSON-0.33.tar.gz
     provides:
@@ -5112,6 +5138,25 @@ DISTRIBUTIONS
       aliased 0
       namespace::autoclean 0.12
       namespace::clean 0
+  MooseX-StrictConstructor-0.19
+    pathname: D/DR/DROLSKY/MooseX-StrictConstructor-0.19.tar.gz
+    provides:
+      MooseX::StrictConstructor 0.19
+      MooseX::StrictConstructor::Trait::Class 0.19
+      MooseX::StrictConstructor::Trait::Method::Constructor 0.19
+    requirements:
+      B 0
+      ExtUtils::MakeMaker 6.30
+      Moose 0.94
+      Moose::Exporter 0
+      Moose::Role 0
+      Moose::Util::MetaRole 0
+      Test::Fatal 0
+      Test::Moose 0
+      Test::More 0.88
+      namespace::autoclean 0
+      strict 0
+      warnings 0
   MooseX-Traits-Pluggable-0.12
     pathname: R/RK/RKITOVER/MooseX-Traits-Pluggable-0.12.tar.gz
     provides:

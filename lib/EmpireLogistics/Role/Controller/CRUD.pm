@@ -25,12 +25,6 @@ has 'item_name' => (
     required => 1,
 );
 
-has 'namespace' => (
-    is => 'ro',
-    isa => 'Str',
-    default => 'Admin::',
-);
-
 sub base : Chained('') PathPart('') CaptureArgs(0) {
     my ( $self, $c ) = @_;
     $self->model( $c->model( $self->model_name ) );

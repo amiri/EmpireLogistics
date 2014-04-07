@@ -14,10 +14,21 @@ has_field 'object_type' => (
     empty_select => '-- Choose One --',
 );
 
+has_field 'sample_data' => (
+    type => 'Display',
+    label => 'Sample Data',
+);
+
+sub html_sample_data {
+    my $self = shift;
+    return qq|<a class="sample-data">Download Sample CSV data</a>|;
+}
+
 has_field 'csv' => (
     type     => 'Upload',
     max_size => 2048000,
     required => 1,
+    label => "CSV File"
 );
 
 has_field 'submit' => (

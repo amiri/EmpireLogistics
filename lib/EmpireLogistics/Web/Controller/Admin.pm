@@ -9,6 +9,12 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller' }
 
+has 'namespace' => (
+    is => 'ro',
+    isa => 'Str',
+    default => 'Admin::',
+);
+
 sub auto : Private {
     my ( $self, $c ) = @_;
     if (!$c->user) {
