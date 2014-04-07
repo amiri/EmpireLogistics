@@ -1,5 +1,6 @@
 [% IF use_wrapper %]
-    [% WRAPPER 'wrapper.tt'%]
+    [% wrapper = c.stash.wrapper || 'wrapper.tt' %]
+    [% WRAPPER $wrapper %]
     [% content; END %]
 [%  ELSE %]
     [% content ; END %]

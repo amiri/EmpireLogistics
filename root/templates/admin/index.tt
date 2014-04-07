@@ -1,9 +1,1 @@
-<h1>Administration</h1>
-
-<div>
-<ul>
-[% FOR page IN admin_pages %]
-    <li><a href="[% page.url %]">[% page.name %]</a></li>
-[% END %]
-</ul>
-</div>
+<p>Choose an option at the right.</p>

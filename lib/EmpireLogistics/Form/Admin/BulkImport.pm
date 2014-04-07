@@ -21,7 +21,7 @@ has_field 'sample_data' => (
 
 sub html_sample_data {
     my $self = shift;
-    return qq|<a class="sample-data">Download Sample CSV data</a>|;
+    return qq|<a class="sample-data">Download Sample CSV data for the object type selected</a>|;
 }
 
 has_field 'csv' => (

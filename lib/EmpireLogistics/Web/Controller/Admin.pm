@@ -28,6 +28,11 @@ sub auto : Private {
         or $c->detach(qw/Controller::Root access_denied/);
 }
 
+sub begin :Private {
+    my ( $self, $c ) = @_;
+    $c->stash->{wrapper} = 'admin/wrapper.tt';
+}
+
 sub admin_base : Chained('/') PathPart('admin') CaptureArgs(0) {
     my ( $self, $c ) = @_;
     my $namespace   = "Admin::";
