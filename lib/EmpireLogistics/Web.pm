@@ -60,7 +60,7 @@ sub expire_cookie {
 
 sub build_backref {
     my $c = shift;
-    return $c->req->uri_for(URI->new('/'.$c->req->path)); 
+    return $c->uri_for(URI->new('/'.$c->req->path));
 }
 
 __PACKAGE__->meta->make_immutable;
