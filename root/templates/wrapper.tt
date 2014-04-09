@@ -21,11 +21,13 @@
     <title>Empire Logistics</title>
 </head>
 
-<body>
+<body[% IF c.req.path == '' %] style="overflow: hidden;"[% END %]>
 <div id="control-bar">
 [% INCLUDE 'topnav.tt' %]
 [% FOREACH alert IN c.stash.alert %]
-  <div class="alert alert-[% alert.class %]">[% alert.message %]</div>
+  <div class="alert alert-[% alert.class %]">
+    [% alert.message %]
+  </div>
 [% END %]
 </div>
 [% IF c.req.path == '' %]

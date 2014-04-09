@@ -29,13 +29,28 @@ sub bulk_import_base : Chained('') PathPart('') CaptureArgs(0) {
     my $schema = $c->model('DB')->schema;
     $c->stash(
         schema  => $schema,
-        form    => $self->form->new(schema => $schema),
+        form => $self->form->new(
+            action => $c->req->base . $c->req->path,
+            schema => $schema,
+        ),
+        template => 'admin/bulk-import/index.tt',
     );
 }
 
 sub get_index :Chained('bulk_import_base') PathPart('') Args(0) GET {
     my ($self,$c) = @_;
-    $c->stash->{template} = 'admin/bulk-import/index.tt';
+}
+
+sub post_index :Chained('bulk_import_base') PathPart('') Args(0) POST {
+    my ($self,$c) = @_;
+    my $form = $c->stash->{form};
+    $c->req->body_params->{'file'} = $c->req->upload('file');
+    $c->log->warn(p $c->req->body_params);
+    return unless $form->process($c->req->body_params);
+    if ($form->validated) {
+        $c->log->warn("Form validated");
+        
+    }
 }
 
 sub get_sample_csv_type :Chained('bulk_import_base') PathPart('sample-csv') Args(1) {
