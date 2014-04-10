@@ -23,13 +23,13 @@ __PACKAGE__->add_columns(
   "create_time",
   {
     data_type     => "timestamp with time zone",
-    default_value => "2014-02-27 14:49:06.446501+00",
+    default_value => \'now()',
     is_nullable   => 0,
   },
   "update_time",
   {
     data_type     => "timestamp with time zone",
-    default_value => "2014-02-27 14:49:06.446501+00",
+    default_value => \'now()',
     is_nullable   => 0,
   },
   "delete_time",
