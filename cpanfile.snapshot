@@ -4087,6 +4087,12 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
+  Lingua-Conjunction-2.00
+    pathname: R/RR/RRWO/Lingua-Conjunction-2.00.tar.gz
+    provides:
+      Lingua::Conjunction 2.00
+    requirements:
+      ExtUtils::MakeMaker 0
   Lingua-EN-FindNumber-1.2
     pathname: T/TM/TMTM/Lingua-EN-FindNumber-1.2.tar.gz
     provides:

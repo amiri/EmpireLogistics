@@ -13,6 +13,12 @@ has 'schema'   => (
     isa      => 'DBIx::Class::Schema',
     required => 1,
 );
+has 'validator' => (
+    is => 'ro',
+    isa => 'EmpireLogistics::Web::Model::BulkImport',
+    lazy => 1,
+    builder => '_build_validator',
+);
 has_field 'object_type' => (
     type         => 'Select',
     label        => 'Object Type',
@@ -45,6 +51,15 @@ has_field 'submit' => (
     element_class => [ 'btn', 'btn-primary' ],
 );
 
+sub _build_validator {
+    my $self = shift;
+    return EmpireLogistics::Web::Model::BulkImport->new(
+        file        => $self->field('file')->value,
+        object_type => $self->field('object_type')->value,
+        schema      => $self->schema,
+    );
+}
+
 sub options_object_type {
     my $self = shift;
     return [
@@ -60,14 +75,9 @@ sub validate {
     my $object_type_field = $self->field('object_type');
     my $type              = $file_field->value->type;
     $file_field->add_error('That is not a valid csv') unless $type =~ /csv/;
-    my $validator = EmpireLogistics::Web::Model::BulkImport->new(
-        file        => $file_field->value,
-        object_type => $object_type_field->value,
-        schema      => $self->schema
-    );
     $file_field->add_error('That is not a valid csv')
-        unless $validator->validate_file;
-    $file_field->add_error($_) for @{$validator->errors};
+        unless $self->validator->validate_file;
+    $file_field->add_error($_) for @{$self->validator->errors};
 }
 
 __PACKAGE__->meta->make_immutable;

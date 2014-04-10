@@ -29,6 +29,11 @@
     [% alert.message %]
   </div>
 [% END %]
+[% FOREACH error IN errors %]
+  <div class="alert alert-danger">
+    [% error %]
+  </div>
+[% END %]
 </div>
 [% IF c.req.path == '' %]
     [% content %]

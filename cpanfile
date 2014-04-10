@@ -54,6 +54,7 @@ requires "HTML::Selector::XPath";
 requires "IO::All";
 requires "Image::Magick", "6.77, < 6.82";
 requires "JSON::XS";
+requires "Lingua::Conjunction";
 requires "Log::Log4perl";
 requires "Log::Log4perl::Catalyst";
 requires "LWP::Protocol::https";
