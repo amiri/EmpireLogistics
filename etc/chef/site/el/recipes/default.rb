@@ -227,6 +227,19 @@ include_recipe "npm"
 include_recipe "sudo"
 include_recipe "perl"
 
+bash "sqitch" do
+  user "el"
+  group "el"
+  cwd "/var/local/EmpireLogistics/current"
+  environment ({ 'HOME' => ::Dir.home(node['env']['user']), 'USER' => node['env']['user'], 'PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/local/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin:/var/local/EmpireLogistics/shared/python/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games', 'PERLBREW_PERL' => 'perl-5.18.2', 'PERLBREW_ROOT' => '/var/local/EmpireLogistics/shared/perl', 'PERLBREW_HOME' => '/home/el/.perlbrew', 'PERLBREW_PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin' })
+  code <<-EOH
+    cd /var/local/EmpireLogistics/current
+    /var/local/EmpireLogistics/current/local/bin/sqitch --top-dir etc/schema deploy
+    /var/local/EmpireLogistics/current/local/bin/sqitch --top-dir etc/schema verify
+  EOH
+  action :run
+end
+
 cookbook_file "uwsgi.conf" do
   source "/etc/init/uwsgi.conf"
   path "/etc/init/uwsgi.conf"
@@ -327,7 +340,7 @@ bash "compile_uwsgi" do
     perlbrew switch perl-5.18.2
     UWSGI_BIN_NAME=/var/local/EmpireLogistics/shared/local/bin/uwsgi UWSGI_FORCE_REBUILD=1 /var/local/EmpireLogistics/shared/python/bin/python uwsgiconfig.py --build el
   EOH
-  #creates "/var/local/EmpireLogistics/shared/local/bin/uwsgi"
+  creates "/var/local/EmpireLogistics/shared/local/bin/uwsgi"
   notifies :run, "bash[compile_psgi_plugin]", :immediately
   notifies :run, "bash[compile_python_plugin]", :immediately
   action :run
@@ -345,7 +358,7 @@ bash "compile_psgi_plugin" do
     perlbrew switch perl-5.18.2
     /var/local/EmpireLogistics/shared/python/bin/python uwsgiconfig.py --plugin plugins/psgi el
   EOH
-  #creates "/var/local/EmpireLogistics/shared/local/uwsgi_plugins/psgi_plugin.so"
+  creates "/var/local/EmpireLogistics/shared/local/uwsgi_plugins/psgi_plugin.so"
   action :run
 end
 
@@ -361,7 +374,7 @@ bash "compile_python_plugin" do
     perlbrew switch perl-5.18.2
     /var/local/EmpireLogistics/shared/python/bin/python uwsgiconfig.py --plugin plugins/python el
   EOH
-  #creates "/var/local/EmpireLogistics/shared/local/uwsgi_plugins/python_plugin.so"
+  creates "/var/local/EmpireLogistics/shared/local/uwsgi_plugins/python_plugin.so"
   action :run
 end
 

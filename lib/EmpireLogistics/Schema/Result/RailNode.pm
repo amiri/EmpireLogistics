@@ -44,6 +44,7 @@ __PACKAGE__->add_columns(
   { data_type => "geometry", is_nullable => 1, size => "12544,3519" },
 );
 __PACKAGE__->set_primary_key("id");
+__PACKAGE__->add_unique_constraint("rail_node_name_lat_lon", ["name", "latitude", "longitude"]);
 __PACKAGE__->has_many(
   "company_rail_nodes",
   "EmpireLogistics::Schema::Result::CompanyRailNode",

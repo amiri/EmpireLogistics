@@ -1,0 +1,7 @@
+%syntax-version=1.0.0-b2
+%project=el
+%uri=https://github.com/amiri/EmpireLogistics
+
+port_name_lat_lon 2014-04-11T14:45:01Z Amiri Barksdale,,, <amiri@akbuntu> # Add unique constraints for port: name, lat, lon
+rail_node_name_lat_lon 2014-04-11T14:45:16Z Amiri Barksdale,,, <amiri@akbuntu> # Add unique constraints for rail_node: name, lat, lon
+warehouse_name_lat_lon 2014-04-11T14:45:30Z Amiri Barksdale,,, <amiri@akbuntu> # Add unique constraints for warehouse: name, lat, lon

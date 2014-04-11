@@ -70,6 +70,7 @@ __PACKAGE__->add_columns(
   { data_type => "geometry", is_nullable => 1, size => "12544,3519" },
 );
 __PACKAGE__->set_primary_key("id");
+__PACKAGE__->add_unique_constraint("warehouse_name_lat_lon", ["name", "latitude", "longitude"]);
 __PACKAGE__->has_many(
   "company_warehouses",
   "EmpireLogistics::Schema::Result::CompanyWarehouse",

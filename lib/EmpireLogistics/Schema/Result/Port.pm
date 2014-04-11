@@ -170,6 +170,7 @@ __PACKAGE__->add_columns(
   { data_type => "geometry", is_nullable => 1, size => "12544,3519" },
 );
 __PACKAGE__->set_primary_key("id");
+__PACKAGE__->add_unique_constraint("port_name_lat_lon", ["port_name", "latitude", "longitude"]);
 __PACKAGE__->has_many(
   "company_ports",
   "EmpireLogistics::Schema::Result::CompanyPort",
