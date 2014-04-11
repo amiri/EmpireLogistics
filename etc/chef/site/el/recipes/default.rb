@@ -112,7 +112,7 @@ deploy_revision "empirelogistics" do
   symlink_before_migrate       nil
   create_dirs_before_symlink   []
   purge_before_symlink         []
-  symlinks                     ({"logs" => "logs","local" => "local","perl" => "perl", "python" => "python", "tiles" => "tiles"})
+  symlinks                     ({"backups" => "backups", "logs" => "logs","local" => "local","perl" => "perl", "python" => "python", "tiles" => "tiles"})
   scm_provider Chef::Provider::Git
 end
 
@@ -405,4 +405,27 @@ cron "compress_tiles" do
   mailto "amiribarksdale@gmail.com"
   home "/home/el"
   command %Q{find /var/local/EmpireLogistics/shared/tiles -type f -name "*.json" -print0 | xargs -0r gzip -q -k}
+end
+
+cron "backup_database" do
+  minute "0"
+  hour "0"
+  user "el"
+  mailto "amiribarksdale@gmail.com"
+  command %Q{
+    vacuumdb -fz -U postgres empirelogistics >/dev/null 2>&1
+    [ -d /var/local/EmpireLogistics/shared/backups/`date +%Y%W` ] || mkdir -p /var/local/EmpireLogistics/shared/backups/`date +%Y%W`
+    pg_dump -U postgres -i -b empirelogistics | gzip > /var/local/EmpireLogistics/shared/backups/`date +%Y%W`/empirelogistics_`date +%Y%m%d`.gz
+  }
+end
+
+cron "delete_old_backups" do
+  minute "0"
+  hour "0"
+  weekday "1"
+  user "el"
+  mailto "amiribarksdale@gmail.com"
+  command %Q{
+    ls -t1 /var/local/EmpireLogistics/shared/backups/`date --date="- 1 week" +%Y%W` | tail -n +1 | xargs rm
+  }
 end
