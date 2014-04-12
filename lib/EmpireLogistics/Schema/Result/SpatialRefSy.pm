@@ -23,7 +23,5 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("srid");
 
 
-
-
 __PACKAGE__->meta->make_immutable;
 1;
