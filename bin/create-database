@@ -10,7 +10,7 @@ psql -U postgres -q -d $DB -c "create or replace language plpgsql"
 echo "Granting privileges to el"
 psql -U postgres -q -c "grant all privileges on database $DB to el"
 psql -U postgres -q -c "alter database $DB owner to el"
-for tbl in `psql -U postgres -qAt -c "select tablename from pg_tables where schemaname = 'public';" $DB` ; do  psql -U postgres -q -c "alter table \"$tbl\" owner to el" $DB ; done
+for tbl in `psql -U postgres -qAt -c "select tablename from pg_tables where schemaname = 'public';" $DB` ; do psql -U postgres -q -c "alter table \"$tbl\" owner to el" $DB ; done
 echo "Importing schema"
 psql -U el -q -d $DB < etc/schema/schema.sql
 
@@ -19,4 +19,4 @@ psql -U postgres -q -d $DB2 -c "create or replace language plpgsql"
 psql -U postgres -q -c "grant all privileges on database $DB2 to el"
 psql -U postgres -q -c "alter database $DB2 owner to el"
 zcat etc/data/original_sql/original_data_pg.sql.gz | psql -U postgres -q -d $DB2
-for tbl in `psql -U postgres -qAt -c "select tablename from pg_tables where schemaname = 'public';" $DB2` ; do  psql -U postgres -q -c "alter table \"$tbl\" owner to el" $DB2 ; done
+for tbl in `psql -U postgres -qAt -c "select tablename from pg_tables where schemaname = 'public';" $DB2` ; do psql -U postgres -q -c "alter table \"$tbl\" owner to el" $DB2 ; done

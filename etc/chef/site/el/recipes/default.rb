@@ -237,8 +237,8 @@ bash "sqitch" do
     source /home/el/.profile
     source /home/el/.bashrc
     perlbrew switch perl-5.18.2
-    perl -Mlocal::lib=local local/bin/sqitch --top-dir etc/schema deploy
-    perl -Mlocal::lib=local local/bin/sqitch --top-dir etc/schema verify
+    perl -w -CAS -Mlocal::lib=local local/bin/sqitch --top-dir etc/schema deploy
+    perl -w -CAS -Mlocal::lib=local local/bin/sqitch --top-dir etc/schema verify
   EOH
   action :run
 end
@@ -415,11 +415,7 @@ cron "backup_database" do
   hour "0"
   user "el"
   mailto "amiribarksdale@gmail.com"
-  command %Q{
-    vacuumdb -fz -U postgres empirelogistics >/dev/null 2>&1
-    [ -d /var/local/EmpireLogistics/shared/backups/`date +%Y%W` ] || mkdir -p /var/local/EmpireLogistics/shared/backups/`date +%Y%W`
-    pg_dump -U postgres -i -b empirelogistics | gzip > /var/local/EmpireLogistics/shared/backups/`date +%Y%W`/empirelogistics_`date +%Y%m%d`.gz
-  }
+  command %Q{vacuumdb -fz -U postgres empirelogistics >/dev/null 2>&1 && [ -d /var/local/EmpireLogistics/shared/backups/`date +%Y%W` ] || mkdir -p /var/local/EmpireLogistics/shared/backups/`date +%Y%W` && pg_dump -U postgres -i -b empirelogistics | gzip > /var/local/EmpireLogistics/shared/backups/`date +%Y%W`/empirelogistics_`date +%Y%m%d`.gz}
 end
 
 cron "delete_old_backups" do
@@ -428,7 +424,5 @@ cron "delete_old_backups" do
   weekday "1"
   user "el"
   mailto "amiribarksdale@gmail.com"
-  command %Q{
-    ls -t1 /var/local/EmpireLogistics/shared/backups/`date --date="- 1 week" +%Y%W` | tail -n +1 | xargs rm
-  }
+  command %Q{ls -t1 /var/local/EmpireLogistics/shared/backups/`date --date="- 1 week" +%Y%W` | tail -n +1 | xargs rm}
 end
