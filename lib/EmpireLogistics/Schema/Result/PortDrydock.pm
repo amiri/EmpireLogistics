@@ -41,14 +41,14 @@ __PACKAGE__->set_primary_key("id");
 
 
 __PACKAGE__->has_many(
-	edits => "EmpireLogistics::Schema::EditHistory",
-	sub {
-		my $args = shift;
-		return +{
-			"$args->{foreign_alias}.object" => { -ident => "$args->{self_alias}.id" },
-			"$args->{foreign_alias}.object_type" => $args->{self_alias},
-		}
-	},
+    edits => "EmpireLogistics::Schema::EditHistory",
+    sub {
+        my $args = shift;
+        return +{
+            "$args->{foreign_alias}.object" => { -ident => "$args->{self_alias}.id" },
+            "$args->{foreign_alias}.object_type" => $args->{self_alias},
+        }
+    },
 );
 
 __PACKAGE__->meta->make_immutable;
