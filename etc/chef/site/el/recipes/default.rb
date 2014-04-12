@@ -234,8 +234,11 @@ bash "sqitch" do
   environment ({ 'HOME' => ::Dir.home(node['env']['user']), 'USER' => node['env']['user'], 'PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/local/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin:/var/local/EmpireLogistics/shared/python/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games', 'PERLBREW_PERL' => 'perl-5.18.2', 'PERLBREW_ROOT' => '/var/local/EmpireLogistics/shared/perl', 'PERLBREW_HOME' => '/home/el/.perlbrew', 'PERLBREW_PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin' })
   code <<-EOH
     cd /var/local/EmpireLogistics/current
-    /var/local/EmpireLogistics/current/local/bin/sqitch --top-dir etc/schema deploy
-    /var/local/EmpireLogistics/current/local/bin/sqitch --top-dir etc/schema verify
+    source /home/el/.profile
+    source /home/el/.bashrc
+    perlbrew switch perl-5.18.2
+    perl -Mlocal::lib=local local/bin/sqitch --top-dir etc/schema deploy
+    perl -Mlocal::lib=local local/bin/sqitch --top-dir etc/schema verify
   EOH
   action :run
 end
