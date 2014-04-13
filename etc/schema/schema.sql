@@ -1,8 +1,8 @@
 drop table if exists rail_line cascade;
 create table rail_line (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     link_id text,
     route_id text,
@@ -30,8 +30,8 @@ create table rail_line (
 drop table if exists rail_interline cascade;
 create table rail_interline (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     interline_id_number integer,
     forwarding_node text,
@@ -46,8 +46,8 @@ create table rail_interline (
 drop table if exists rail_node cascade;
 create table rail_node (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     junction_id integer,
     name text,
@@ -60,8 +60,8 @@ drop sequence if exists rail_ownership_id_seq cascade;
 drop table if exists rail_ownership cascade;
 create table rail_ownership (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     aar_code integer,
     name text,
@@ -77,8 +77,8 @@ create index on rail_ownership (aar_code);
 drop table if exists rail_subdivision cascade;
 create table rail_subdivision (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     name text,
     full_name text,
@@ -93,8 +93,8 @@ drop sequence if exists state_id_seq cascade;
 drop table if exists state cascade;
 create table state (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     abbreviation text,
     name text
@@ -106,8 +106,8 @@ drop table if exists rail_subdivision_state cascade;
 create table rail_subdivision_state (
     subdivision integer not null,
     state integer not null,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     primary key (subdivision, state)
 );
@@ -119,8 +119,8 @@ alter table rail_subdivision_state add foreign key (subdivision) references rail
 drop table if exists rail_track_type cascade;
 create table rail_track_type (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     name text not null,
     detail text not null
@@ -141,8 +141,8 @@ insert into rail_track_type (name,detail) values
 drop table if exists rail_track_grade cascade;
 create table rail_track_grade (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     name text not null,
     detail text not null
@@ -163,8 +163,8 @@ insert into rail_track_grade (name,detail) values
 drop table if exists rail_track_gauge cascade;
 create table rail_track_gauge (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     name text not null,
     detail text not null
@@ -181,8 +181,8 @@ insert into rail_track_gauge (name,detail) values
 drop table if exists rail_status cascade;
 create table rail_status (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     name text not null,
     detail text not null
@@ -198,8 +198,8 @@ insert into rail_status (name,detail) values
 drop table if exists rail_density cascade;
 create table rail_density (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     name integer not null,
     detail text not null
@@ -219,8 +219,8 @@ insert into rail_density (name,detail) values
 drop table if exists rail_signal cascade;
 create table rail_signal (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     name text not null,
     detail text not null
@@ -240,8 +240,8 @@ insert into rail_signal (name,detail) values
 drop table if exists rail_passenger cascade;
 create table rail_passenger (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     name text not null,
     detail text not null
@@ -262,8 +262,8 @@ insert into rail_passenger (name,detail) values
 drop table if exists rail_military cascade;
 create table rail_military (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     name text not null,
     detail text not null
@@ -277,8 +277,8 @@ insert into rail_military (name,detail) values
 drop table if exists rail_line_class cascade;
 create table rail_line_class (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     name text not null,
     detail text not null
@@ -296,8 +296,8 @@ insert into rail_line_class (name,detail) values
 drop table if exists port cascade;
 create table port (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     port_name text,
     country text,
@@ -377,8 +377,8 @@ create index on port (harbor_type);
 drop table if exists port_depth_feet cascade;
 create table port_depth_feet (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     name text not null,
     detail text not null
@@ -406,8 +406,8 @@ insert into port_depth_feet (name,detail) values
 drop table if exists port_depth_meters cascade;
 create table port_depth_meters (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     name text not null,
     detail text not null
@@ -435,8 +435,8 @@ insert into port_depth_meters (name,detail) values
 drop table if exists port_drydock cascade;
 create table port_drydock (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     name text not null,
     detail text not null
@@ -451,8 +451,8 @@ insert into port_drydock (name,detail) values
 drop table if exists port_harbor_size cascade;
 create table port_harbor_size (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     name text not null,
     detail text not null
@@ -468,8 +468,8 @@ insert into port_harbor_size (name,detail) values
 drop table if exists port_harbor_type cascade;
 create table port_harbor_type (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     name text not null,
     detail text not null
@@ -490,8 +490,8 @@ insert into port_harbor_type (name,detail) values
 drop table if exists port_repair cascade;
 create table port_repair (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     name text not null,
     detail text not null
@@ -508,8 +508,8 @@ insert into port_repair (name,detail) values
 drop table if exists port_shelter cascade;
 create table port_shelter (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     name text not null,
     detail text not null
@@ -526,8 +526,8 @@ insert into port_shelter (name,detail) values
 drop table if exists port_tonnage cascade;
 create table port_tonnage (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     port integer not null references port(id) on delete cascade,
     year integer not null,
@@ -543,8 +543,8 @@ create index on port_tonnage (port);
 drop table if exists port_vessel_size cascade;
 create table port_vessel_size (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     name text not null,
     detail text not null
@@ -564,8 +564,8 @@ create type warehouse_status as enum ('open', 'closed');
 drop table if exists warehouse_type cascade;
 create table warehouse_type (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     name text
 );
@@ -574,8 +574,8 @@ create index on warehouse_type (name);
 drop table if exists warehouse cascade;
 create table warehouse (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     name text,
     description text,
@@ -594,8 +594,8 @@ create index on warehouse (owner);
 drop table if exists walmart cascade;
 create table walmart (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     walmart_id text
 );
@@ -604,8 +604,8 @@ drop table if exists warehouse_walmart cascade;
 create table warehouse_walmart (
     warehouse integer not null,
     walmart integer not null,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     primary key (warehouse, walmart)
 );
@@ -617,8 +617,8 @@ alter table warehouse_walmart add foreign key (walmart) references walmart(id) o
 drop table if exists address cascade;
 create table address (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     street_address text,
     city text,
@@ -638,8 +638,8 @@ create type company_type as enum ('3PL', 'commercial', 'financial', 'industrial'
 drop table if exists company cascade;
 create table company (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     name text,
     company_type company_type,
@@ -693,8 +693,8 @@ create type disbursement_type as enum (
 drop table if exists labor_organization cascade;
 create table labor_organization (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     name text,
     usdol_filing_number integer,
@@ -717,8 +717,8 @@ create index on labor_organization (organization_type);
 drop table if exists labor_organization_affiliation cascade;
 create table labor_organization_affiliation (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     child integer not null,
     parent integer not null,
@@ -734,8 +734,8 @@ alter table labor_organization_affiliation add foreign key (parent) references l
 drop table if exists labor_organization_membership cascade;
 create table labor_organization_membership (
 	id serial not null primary key,
-	create_time timestamptz not null default 'now',
-	update_time timestamptz not null default 'now',
+	create_time timestamptz not null default now(),
+	update_time timestamptz not null default now(),
 	delete_time timestamptz default null,
 	labor_organization integer not null references labor_organization(id) on delete cascade,
 	year integer not null,
@@ -747,8 +747,8 @@ create index on labor_organization_membership (labor_organization);
 drop table if exists labor_organization_address cascade;
 create table labor_organization_address (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     labor_organization integer not null,
     address integer not null,
@@ -763,8 +763,8 @@ alter table labor_organization_address add foreign key (address) references addr
 drop table if exists labor_organization_total_disbursement cascade;
 create table labor_organization_total_disbursement (
 	id serial not null primary key,
-	create_time timestamptz not null default 'now',
-	update_time timestamptz not null default 'now',
+	create_time timestamptz not null default now(),
+	update_time timestamptz not null default now(),
 	delete_time timestamptz default null,
 	labor_organization integer not null references labor_organization(id) on delete cascade,
 	year integer not null,
@@ -807,8 +807,8 @@ create index on labor_organization_total_disbursement (labor_organization);
 drop table if exists labor_organization_total_liability cascade;
 create table labor_organization_total_liability (
 	id serial not null primary key,
-	create_time timestamptz not null default 'now',
-	update_time timestamptz not null default 'now',
+	create_time timestamptz not null default now(),
+	update_time timestamptz not null default now(),
 	delete_time timestamptz default null,
 	labor_organization integer not null references labor_organization(id) on delete cascade,
 	year integer not null,
@@ -828,8 +828,8 @@ create index on labor_organization_total_liability (labor_organization);
 drop table if exists labor_organization_total_receipt cascade;
 create table labor_organization_total_receipt (
 	id serial not null primary key,
-	create_time timestamptz not null default 'now',
-	update_time timestamptz not null default 'now',
+	create_time timestamptz not null default now(),
+	update_time timestamptz not null default now(),
 	delete_time timestamptz default null,
 	labor_organization integer not null references labor_organization(id) on delete cascade,
 	year integer not null,
@@ -854,8 +854,8 @@ create index on labor_organization_total_receipt (labor_organization);
 drop table if exists labor_organization_payee cascade;
 create table labor_organization_payee (
 	id serial not null primary key,
-	create_time timestamptz not null default 'now',
-	update_time timestamptz not null default 'now',
+	create_time timestamptz not null default now(),
+	update_time timestamptz not null default now(),
 	delete_time timestamptz default null,
 	labor_organization integer not null references labor_organization(id) on delete cascade,
 	year integer not null,
@@ -873,8 +873,8 @@ create index on labor_organization_payee (payee_type);
 drop table if exists labor_organization_payee_address cascade;
 create table labor_organization_payee_address (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     labor_organization_payee integer not null,
     address integer not null,
@@ -889,8 +889,8 @@ alter table labor_organization_payee_address add foreign key (address) reference
 drop table if exists labor_organization_other_asset cascade;
 create table labor_organization_other_asset (
 	id serial not null primary key,
-	create_time timestamptz not null default 'now',
-	update_time timestamptz not null default 'now',
+	create_time timestamptz not null default now(),
+	update_time timestamptz not null default now(),
 	delete_time timestamptz default null,
 	labor_organization integer not null references labor_organization(id) on delete cascade,
 	year integer not null,
@@ -904,8 +904,8 @@ create index on labor_organization_other_asset (labor_organization);
 drop table if exists labor_organization_fixed_asset cascade;
 create table labor_organization_fixed_asset (
 	id serial not null primary key,
-	create_time timestamptz not null default 'now',
-	update_time timestamptz not null default 'now',
+	create_time timestamptz not null default now(),
+	update_time timestamptz not null default now(),
 	delete_time timestamptz default null,
 	labor_organization integer not null references labor_organization(id) on delete cascade,
 	year integer not null,
@@ -922,8 +922,8 @@ create index on labor_organization_fixed_asset (labor_organization);
 drop table if exists labor_organization_investment_asset cascade;
 create table labor_organization_investment_asset (
 	id serial not null primary key,
-	create_time timestamptz not null default 'now',
-	update_time timestamptz not null default 'now',
+	create_time timestamptz not null default now(),
+	update_time timestamptz not null default now(),
 	delete_time timestamptz default null,
 	labor_organization integer not null references labor_organization(id) on delete cascade,
 	year integer not null,
@@ -937,8 +937,8 @@ create index on labor_organization_investment_asset (labor_organization);
 drop table if exists labor_organization_total_asset cascade;
 create table labor_organization_total_asset (
 	id serial not null primary key,
-	create_time timestamptz not null default 'now',
-	update_time timestamptz not null default 'now',
+	create_time timestamptz not null default now(),
+	update_time timestamptz not null default now(),
 	delete_time timestamptz default null,
 	labor_organization integer not null references labor_organization(id) on delete cascade,
 	year integer not null,
@@ -968,8 +968,8 @@ create index on labor_organization_total_asset (labor_organization);
 drop table if exists labor_organization_account_payable cascade;
 create table labor_organization_account_payable (
 	id serial not null primary key,
-	create_time timestamptz not null default 'now',
-	update_time timestamptz not null default 'now',
+	create_time timestamptz not null default now(),
+	update_time timestamptz not null default now(),
 	delete_time timestamptz default null,
 	labor_organization integer not null references labor_organization(id) on delete cascade,
 	year integer not null,
@@ -986,8 +986,8 @@ create index on labor_organization_account_payable (labor_organization);
 drop table if exists labor_organization_account_receivable cascade;
 create table labor_organization_account_receivable (
 	id serial not null primary key,
-	create_time timestamptz not null default 'now',
-	update_time timestamptz not null default 'now',
+	create_time timestamptz not null default now(),
+	update_time timestamptz not null default now(),
 	delete_time timestamptz default null,
 	labor_organization integer not null references labor_organization(id) on delete cascade,
 	year integer not null,
@@ -1004,8 +1004,8 @@ create index on labor_organization_account_receivable (labor_organization);
 drop table if exists labor_organization_loan_payable cascade;
 create table labor_organization_loan_payable (
 	id serial not null primary key,
-	create_time timestamptz not null default 'now',
-	update_time timestamptz not null default 'now',
+	create_time timestamptz not null default now(),
+	update_time timestamptz not null default now(),
 	delete_time timestamptz default null,
 	labor_organization integer not null references labor_organization(id) on delete cascade,
 	year integer not null,
@@ -1022,8 +1022,8 @@ create index on labor_organization_loan_payable (labor_organization);
 drop table if exists labor_organization_loan_receivable cascade;
 create table labor_organization_loan_receivable (
 	id serial not null primary key,
-	create_time timestamptz not null default 'now',
-	update_time timestamptz not null default 'now',
+	create_time timestamptz not null default now(),
+	update_time timestamptz not null default now(),
 	delete_time timestamptz default null,
 	labor_organization integer not null references labor_organization(id) on delete cascade,
 	year integer not null,
@@ -1044,8 +1044,8 @@ create index on labor_organization_loan_receivable (labor_organization);
 drop table if exists labor_organization_other_liability cascade;
 create table labor_organization_other_liability (
 	id serial not null primary key,
-	create_time timestamptz not null default 'now',
-	update_time timestamptz not null default 'now',
+	create_time timestamptz not null default now(),
+	update_time timestamptz not null default now(),
 	delete_time timestamptz default null,
 	labor_organization integer not null references labor_organization(id) on delete cascade,
 	year integer not null,
@@ -1058,8 +1058,8 @@ create index on labor_organization_other_liability (labor_organization);
 drop table if exists labor_organization_sale_receipt cascade;
 create table labor_organization_sale_receipt (
 	id serial not null primary key,
-	create_time timestamptz not null default 'now',
-	update_time timestamptz not null default 'now',
+	create_time timestamptz not null default now(),
+	update_time timestamptz not null default now(),
 	delete_time timestamptz default null,
 	labor_organization integer not null references labor_organization(id) on delete cascade,
 	year integer not null,
@@ -1075,8 +1075,8 @@ create index on labor_organization_sale_receipt (labor_organization);
 drop table if exists labor_organization_other_receipt cascade;
 create table labor_organization_other_receipt (
 	id serial not null primary key,
-	create_time timestamptz not null default 'now',
-	update_time timestamptz not null default 'now',
+	create_time timestamptz not null default now(),
+	update_time timestamptz not null default now(),
 	delete_time timestamptz default null,
 	labor_organization integer not null references labor_organization(id) on delete cascade,
 	year integer not null,
@@ -1092,8 +1092,8 @@ create index on labor_organization_other_receipt (payee);
 drop table if exists labor_organization_total_receipt cascade;
 create table labor_organization_total_receipt (
 	id serial not null primary key,
-	create_time timestamptz not null default 'now',
-	update_time timestamptz not null default 'now',
+	create_time timestamptz not null default now(),
+	update_time timestamptz not null default now(),
 	delete_time timestamptz default null,
 	labor_organization integer not null references labor_organization(id) on delete cascade,
 	year integer not null,
@@ -1118,8 +1118,8 @@ create index on labor_organization_total_receipt (labor_organization);
 drop table if exists labor_organization_general_disbursement cascade;
 create table labor_organization_general_disbursement (
 	id serial not null primary key,
-	create_time timestamptz not null default 'now',
-	update_time timestamptz not null default 'now',
+	create_time timestamptz not null default now(),
+	update_time timestamptz not null default now(),
 	delete_time timestamptz default null,
 	labor_organization integer not null references labor_organization(id) on delete cascade,
 	year integer not null,
@@ -1136,8 +1136,8 @@ create index on labor_organization_general_disbursement (payee);
 drop table if exists labor_organization_investment_purchase cascade;
 create table labor_organization_investment_purchase (
 	id serial not null primary key,
-	create_time timestamptz not null default 'now',
-	update_time timestamptz not null default 'now',
+	create_time timestamptz not null default now(),
+	update_time timestamptz not null default now(),
 	delete_time timestamptz default null,
 	labor_organization integer not null references labor_organization(id) on delete cascade,
 	year integer not null,
@@ -1153,8 +1153,8 @@ create index on labor_organization_investment_purchase (labor_organization);
 drop table if exists labor_organization_officer_disbursement cascade;
 create table labor_organization_officer_disbursement (
 	id serial not null primary key,
-	create_time timestamptz not null default 'now',
-	update_time timestamptz not null default 'now',
+	create_time timestamptz not null default now(),
+	update_time timestamptz not null default now(),
 	delete_time timestamptz default null,
 	labor_organization integer not null references labor_organization(id) on delete cascade,
 	year integer not null,
@@ -1176,8 +1176,8 @@ create index on labor_organization_officer_disbursement (labor_organization);
 drop table if exists labor_organization_benefit_disbursement cascade;
 create table labor_organization_benefit_disbursement (
 	id serial not null primary key,
-	create_time timestamptz not null default 'now',
-	update_time timestamptz not null default 'now',
+	create_time timestamptz not null default now(),
+	update_time timestamptz not null default now(),
 	delete_time timestamptz default null,
 	labor_organization integer not null references labor_organization(id) on delete cascade,
 	year integer not null,
@@ -1197,8 +1197,8 @@ create index on labor_organization_benefit_disbursement (labor_organization);
 drop table if exists media cascade;
 create table media (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     url text not null,
     mime_type text not null,
@@ -1212,8 +1212,8 @@ create table media (
 drop table if exists work_stoppage cascade;
 create table work_stoppage (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     start_date date not null,
     end_date date,
@@ -1224,8 +1224,8 @@ create table work_stoppage (
 drop table if exists labor_organization_work_stoppage cascade;
 create table labor_organization_work_stoppage (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     labor_organization integer not null,
     work_stoppage integer not null,
@@ -1240,8 +1240,8 @@ alter table labor_organization_work_stoppage add foreign key (work_stoppage) ref
 drop table if exists port_work_stoppage cascade;
 create table port_work_stoppage (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     port integer not null,
     work_stoppage integer not null,
@@ -1256,8 +1256,8 @@ alter table port_work_stoppage add foreign key (work_stoppage) references work_s
 drop table if exists warehouse_work_stoppage cascade;
 create table warehouse_work_stoppage (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     warehouse integer not null,
     work_stoppage integer not null,
@@ -1272,8 +1272,8 @@ alter table warehouse_work_stoppage add foreign key (work_stoppage) references w
 drop table if exists rail_node_work_stoppage cascade;
 create table rail_node_work_stoppage (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     rail_node integer not null,
     work_stoppage integer not null,
@@ -1288,8 +1288,8 @@ alter table rail_node_work_stoppage add foreign key (work_stoppage) references w
 drop table if exists rail_line_work_stoppage cascade;
 create table rail_line_work_stoppage (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     rail_line integer not null,
     work_stoppage integer not null,
@@ -1304,8 +1304,8 @@ alter table rail_line_work_stoppage add foreign key (work_stoppage) references w
 drop table if exists osha_citation cascade;
 create table osha_citation (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     inspection_number text not null,
     issuance_date date not null,
@@ -1317,8 +1317,8 @@ create index on osha_citation (inspection_number);
 drop table if exists nlrb_decision cascade;
 create table nlrb_decision (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     citation_number text not null,
     case_number text not null,
@@ -1331,8 +1331,8 @@ create index on nlrb_decision (citation_number);
 drop table if exists company_address cascade;
 create table company_address (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     company integer not null,
     address integer not null,
@@ -1347,8 +1347,8 @@ alter table company_address add foreign key (address) references address(id) on 
 drop table if exists warehouse_address cascade;
 create table warehouse_address (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     warehouse integer not null,
     address integer not null,
@@ -1363,8 +1363,8 @@ alter table warehouse_address add foreign key (address) references address(id) o
 drop table if exists port_address cascade;
 create table port_address (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     port integer not null,
     address integer not null,
@@ -1379,8 +1379,8 @@ alter table port_address add foreign key (address) references address(id) on del
 drop table if exists company_osha_citation cascade;
 create table company_osha_citation (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     company integer not null,
     osha_citation integer not null,
@@ -1395,8 +1395,8 @@ alter table company_osha_citation add foreign key (osha_citation) references osh
 drop table if exists labor_organization_osha_citation cascade;
 create table labor_organization_osha_citation (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     labor_organization integer not null,
     osha_citation integer not null,
@@ -1411,8 +1411,8 @@ alter table labor_organization_osha_citation add foreign key (osha_citation) ref
 drop table if exists company_nlrb_decision cascade;
 create table company_nlrb_decision (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     company integer not null,
     nlrb_decision integer not null,
@@ -1427,8 +1427,8 @@ alter table company_nlrb_decision add foreign key (nlrb_decision) references nlr
 drop table if exists labor_organization_nlrb_decision cascade;
 create table labor_organization_nlrb_decision (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     labor_organization integer not null,
     nlrb_decision integer not null,
@@ -1444,8 +1444,8 @@ alter table labor_organization_nlrb_decision add foreign key (nlrb_decision) ref
 drop table if exists labor_organization_port cascade;
 create table labor_organization_port (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     labor_organization integer not null,
     port integer not null,
@@ -1460,8 +1460,8 @@ alter table labor_organization_port add foreign key (port) references port(id) o
 drop table if exists labor_organization_warehouse cascade;
 create table labor_organization_warehouse (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     labor_organization integer not null,
     warehouse integer not null,
@@ -1476,8 +1476,8 @@ alter table labor_organization_warehouse add foreign key (warehouse) references 
 drop table if exists labor_organization_rail_node cascade;
 create table labor_organization_rail_node (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     labor_organization integer not null,
     rail_node integer not null,
@@ -1492,8 +1492,8 @@ alter table labor_organization_rail_node add foreign key (rail_node) references 
 drop table if exists company_port cascade;
 create table company_port (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     company integer not null,
     port integer not null,
@@ -1508,8 +1508,8 @@ alter table company_port add foreign key (port) references port(id) on delete ca
 drop table if exists company_warehouse cascade;
 create table company_warehouse (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     company integer not null,
     warehouse integer not null,
@@ -1524,8 +1524,8 @@ alter table company_warehouse add foreign key (warehouse) references warehouse(i
 drop table if exists company_rail_node cascade;
 create table company_rail_node (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     company integer not null,
     rail_node integer not null,
@@ -1540,8 +1540,8 @@ alter table company_rail_node add foreign key (rail_node) references rail_node(i
 drop table if exists "user" cascade;
 create table "user" (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     email text not null,
     nickname text not null,
@@ -1555,8 +1555,8 @@ create table "user" (
 drop table if exists role cascade;
 create table role (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     name text not null
 );
@@ -1565,8 +1565,8 @@ drop table if exists user_role cascade;
 create table user_role (
     "user" integer not null references "user"(id) on delete cascade,
     role integer not null references role(id) on delete cascade,
-    create_time timestamptz not null default 'now',
-    update_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
+    update_time timestamptz not null default now(),
     delete_time timestamptz default null,
     primary key ("user", role)
 );
@@ -1677,7 +1677,7 @@ create type object_type as enum (
 drop table if exists edit_history cascade;
 create table edit_history (
     id serial not null primary key,
-    create_time timestamptz not null default 'now',
+    create_time timestamptz not null default now(),
     object_type object_type not null,
     object integer not null,
     "user" integer not null,
