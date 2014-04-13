@@ -57,6 +57,7 @@ $PARAMETERS{default} = {
                 get_current_srcroot() . "/root/templates",
             ],
             WRAPPER            => 'smart_wrapper.tt',
+            expose_methods => [qw/jsfiles stylesheets/],
         },
         "Plugin::Static::Simple" => {
             ignore_extensions => [qw/tt/],

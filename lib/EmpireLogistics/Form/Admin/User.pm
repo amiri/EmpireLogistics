@@ -11,7 +11,7 @@ has '+name'       => ( default => 'user-form' );
 has '+item_class' => ( default => 'User' );
 
 has_field 'id' => (
-    type  => 'Display',
+    type  => 'Hidden',
     label => 'User ID',
 );
 has_field 'create_time' => (
@@ -20,6 +20,7 @@ has_field 'create_time' => (
     format          => "%Y-%m-%d %r %z",
     readonly        => 1,
     html5_type_attr => 'datetime',
+    disabled        => 1,
 );
 has_field 'update_time' => (
     type            => 'Timestamp',
@@ -27,6 +28,7 @@ has_field 'update_time' => (
     format          => "%Y-%m-%d %r %z",
     readonly        => 1,
     html5_type_attr => 'datetime',
+    disabled        => 1,
 );
 has_field 'delete_time' => (
     type           => 'Checkbox',
@@ -46,6 +48,7 @@ has_field 'password' => (
     widget => 'Text',
     apply     => [ NoSpaces, Printable, NotAllDigits, StrongPassword ],
     minlength => 8,
+    noupdate => 1,
 );
 has_field 'nickname' => (
     type     => 'Text',

@@ -1,0 +1,38 @@
+[% IF table_data %]
+
+<div>
+<h3>Edit History [% object_type -%]</h3>
+<table class="table table-striped table-bordered table-condensed" id="edithistory">
+    <thead>
+      <tr>
+        [% FOREACH col IN table_cols %]
+            <th>[% col %]</th>
+        [% END %]
+        </tr>
+    </thead>
+    <tbody>
+        [% FOREACH row IN table_data; %]
+            <tr>
+                <td>[% row.create_time %]</td>
+                <td>[% row.user_id %]</td>
+                <td>[% row.field_name %]</td>
+                <td>[% row.new_value | html %]</td>
+                <td>[% row.original_value | html %]</td>
+
+            </tr>
+        [% END %]
+    </tbody>
+</table>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#edithistory').dataTable( {
+        "sPaginationType": "bootstrap",
+        "aaSorting": [[ 0, "desc" ]]
+    } );
+} );
+</script>
+</div>
+
+[% END %]

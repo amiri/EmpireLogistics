@@ -179,3 +179,6 @@ div#control-bar
 	padding-left:15px;
 	padding-right:15px;
 }
+body.admin {
+	background-color:#fff;
+}

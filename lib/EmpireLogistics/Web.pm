@@ -20,6 +20,26 @@ __PACKAGE__->apply_request_class_roles(
 
 __PACKAGE__->setup( @{$EmpireLogistics::Config::app_plugins} );
 
+has 'stylesheets' => (
+    is => 'rw',
+    isa => 'ArrayRef',
+    traits  => ['Array'],
+    default => sub { [] },
+    handles => {
+        add_stylesheet => 'push',
+    },
+);
+
+has 'jsfiles' => (
+    is => 'rw',
+    isa => 'ArrayRef',
+    traits  => ['Array'],
+    default => sub { [] },
+    handles => {
+        add_jsfile => 'push',
+    },
+);
+
 around authenticate => sub {
     my ( $orig, $c ) = ( shift, shift );
     my ($args) = @_;

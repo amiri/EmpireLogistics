@@ -9,12 +9,18 @@ has '+widget_name_space' => ( default => 'EmpireLogistic::Form::Widget');
 has '+widget_wrapper' => ( default => 'Bootstrap3' );
 has '+is_html5' => (default => 1);
 has '+http_method' => (default => 'post');
-
 has 'schema' => (
     is => 'rw',
     isa => 'DBIx::Class::Schema',
     required => 1,
 );
+has 'user_id' => (
+    is => 'ro',
+    isa => 'Int',
+    required => 1,
+);
+
+with 'EmpireLogistics::Role::Form::EditHistory';
 
 sub build_form_element_attr { { 'accept-charset' => 'utf-8' } }
 sub build_form_element_class { ['form-vertical'] }
@@ -30,6 +36,8 @@ around 'update_model', sub {
     } else {
         delete $self->values->{delete_time}; # don't touch
     }
+
+    $self->save_edit_history;
 
     my $return = $self->$orig(@args);
 

@@ -26,7 +26,6 @@ around delete => sub {
 
 around insert => sub {
     my ( $orig, $self ) = ( shift, shift );
-    warn "I am around insert";
 
     if (    $self->can('geometry')
         and $self->can('latitude')
@@ -44,11 +43,29 @@ around insert => sub {
             },
             ( $self->longitude, $self->latitude )
         );
-        warn "My geometry is $geometry";
         $self->geometry($geometry);
     }
     $self->$orig(@_);
 };
+
+sub edit_history_save {
+    my $self = shift;
+    my ( $user_id, $edit_history_fields, $notes ) = @_;
+
+    return 0 unless ( defined $user_id );
+
+    $self->create_related(
+        edits => {
+            object              => $self->id,
+            object_type         => $self->result_source->name,
+            user                => $user_id,
+            notes               => $notes,
+            edit_history_fields => $edit_history_fields,
+        }
+    );
+
+    return 1;
+}
 
 __PACKAGE__->meta->make_immutable;
 

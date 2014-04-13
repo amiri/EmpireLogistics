@@ -32,7 +32,7 @@ sub base : Chained('') PathPart('') CaptureArgs(0) {
     $c->stash(
         item_rs => $self->model,
         schema  => $schema,
-        form    => $self->form->new(schema => $schema),
+        form    => $self->form->new(schema => $schema, user_id => $c->user->id, ),
     );
 }
 
@@ -104,15 +104,15 @@ sub edit : Chained('object') PathPart('edit') Args(0) {
             params => $c->req->params,
             action => $action,
             );
-        $c->flash( status_msg => $self->class . ' edited' );
+        $c->flash->{alert} = [ { class => 'success', message => $self->class . ' updated' } ];
 
         # Redirect the user back to the list page
         #$c->res->redirect( $c->uri_for( $self->action_for('list') ) );
         return $c->res->redirect(
             $c->uri_for(
                 $c->controller( $self->namespace . $self->class )
-                    ->action_for('display'),
-                $c->stash->{object}->id
+                    ->action_for('edit'),
+                $c->req->captures
             )
         );
     }
@@ -125,6 +125,9 @@ sub edit : Chained('object') PathPart('edit') Args(0) {
             item_name => $self->item_name,
             creation  => undef,
             action    => $action,
+            table_data => $form->get_edit_history,
+            table_cols => $c->model('DB::EditHistory')->header_labels,
+            object_type => $self->class,
         );
     }
 }
@@ -132,7 +135,15 @@ sub edit : Chained('object') PathPart('edit') Args(0) {
 sub delete : Chained('object') PathPart('delete') Args(0) {
     my ( $self, $c ) = @_;
     $c->stash->{object}->delete;
-    $c->flash( status_msg => $self->class . ' deleted' );
+    $c->flash->{alert} = [ { class => 'success', message => $self->class . ' deleted' } ];
+    $c->res->redirect( $c->uri_for( $self->action_for('list') ) );
+}
+
+sub restore : Chained('object') PathPart('restore') Args(0) {
+    my ( $self, $c ) = @_;
+    $c->stash->{object}->delete_time(undef);
+    $c->stash->{object}->update;
+    $c->flash->{alert} = [ { class => 'success', message => $self->class . ' restored' } ];
     $c->res->redirect( $c->uri_for( $self->action_for('list') ) );
 }
 
@@ -166,7 +177,7 @@ sub form_create {
         );
         $c->stash( fillinform => $form->fif );
         return unless $form->validated;
-        $c->flash( status_msg => $self->class . ' created' );
+        $c->flash->{alert} = [ { class => 'success', message => $self->class . ' created' } ];
     }
     else {
         $c->log->debug("I do not have for and am not making a new form");
@@ -197,7 +208,7 @@ sub form_create {
         my ( $success_msg, $error_msg )
             = $self->process_multi_creates( $c, $stashed_object );
 
-        $c->flash( status_msg => $self->class . ' created' );
+        $c->flash->{alert} = [ { class => 'success', message => $self->class . ' created' } ];
     }
 
     $c->res->redirect( $c->uri_for( $self->action_for('list') ) );

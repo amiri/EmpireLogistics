@@ -7,3 +7,4 @@
 <div>
     [% form.render %]
 </div>
+[% INCLUDE 'admin/edit_history.tt' %]
