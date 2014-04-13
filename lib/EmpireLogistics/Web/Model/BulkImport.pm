@@ -244,10 +244,16 @@ sub file_has_valid_data_for_object_type {
             my $constraints
                 = $self->column_info_for_object_type->{ $self->object_type }
                 {$field};
-            if (    exists $constraints->{is_nullable}
-                and !$constraints->{is_nullable}
-                and
-                ( not defined $row->{$field} or not exists $row->{$field} ) )
+            if (exists $constraints->{is_nullable}
+                and (
+                    not $constraints->{is_nullable}
+                     or $field eq 'latitude'
+                     or $field eq 'longitude'
+                )
+                and (
+                    not defined $row->{$field}
+                 or not exists $row->{$field})
+                )
             {
                 $self->add_error(
                     "You are missing a value for $field at line $i");

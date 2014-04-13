@@ -28,15 +28,16 @@
               [% UNLESS col == 'id' || col == 'password' || col == 'notes' || col == 'description' %]
                 <td>
                     <a href="[% c.uri_for(c.controller("item"), item.id, 'edit' ) %]">
-                        [% IF item.$col.can('ymd') && col == 'delete_time' %]
+                        [% IF item.$col && item.$col.can('ymd') && col == 'delete_time' %]
                             [% IF item.$col.defined %]
                             <p>Yes</p>
                             [% ELSE %]
                             [% END %]
-                        [% ELSIF item.$col.can('ymd') && !(col == 'delete_time')%]
+                        [% ELSIF item.$col && item.$col.can('ymd') && !(col == 'delete_time')%]
                             [% item.$col.ymd %]
-                        [% ELSE %]
+                        [% ELSIF item.$col %]
                             [% item.$col %]
+                        [% ELSE %]
                         [% END %]
                     </a>
                 </td>
