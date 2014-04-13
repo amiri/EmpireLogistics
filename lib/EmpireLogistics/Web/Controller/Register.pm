@@ -32,7 +32,7 @@ sub post_register : Chained('base') PathPart('') Args(0) POST {
                 {   email      => $email,
                     password   => $password,
                     nickname   => $nickname,
-                    user_roles => [ { role => 'user' } ]
+                    user_roles => [ { role => $c->model('DB::Role')->find({name => 'user'}) } ],
                 }
             );
         }
