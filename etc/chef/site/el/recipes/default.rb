@@ -237,8 +237,7 @@ bash "sqitch" do
     source /home/el/.profile
     source /home/el/.bashrc
     perlbrew switch perl-5.18.2
-    perl -w -CAS -Mlocal::lib=local local/bin/sqitch --top-dir etc/schema deploy
-    perl -w -CAS -Mlocal::lib=local local/bin/sqitch --top-dir etc/schema verify
+    perl -w -CAS -Mlocal::lib=local local/bin/sqitch --top-dir etc/schema deploy && perl -w -CAS -Mlocal::lib=local local/bin/sqitch --top-dir etc/schema verify
   EOH
   action :run
 end
