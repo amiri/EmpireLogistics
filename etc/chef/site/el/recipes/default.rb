@@ -240,6 +240,7 @@ bash "sqitch" do
     perl -w -CAS -Mlocal::lib=local local/bin/sqitch --top-dir etc/schema deploy && perl -w -CAS -Mlocal::lib=local local/bin/sqitch --top-dir etc/schema verify
   EOH
   action :run
+  returns [0,1]
 end
 
 cookbook_file "uwsgi.conf" do
