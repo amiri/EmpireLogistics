@@ -26,25 +26,30 @@ sub post_register : Chained('base') PathPart('') Args(0) POST {
         my $email    = $form->field('email')->value;
         my $password = $form->field('password')->value;
         my $nickname = $form->field('nickname')->value;
+        my $remember = $form->field('remember')->value;
         my $new_user;
         try {
-            $new_user = $c->model('DB::User')->create(
-                {   email      => $email,
-                    password   => $password,
-                    nickname   => $nickname,
-                    user_roles => [ { role => $c->model('DB::Role')->find({name => 'user'}) } ],
-                }
-            );
+            # Oh God this is so stupid. DBIx::Class::FilterColumn
+            # breaks DBIx::Class::InflateColumn::DateTime, so I can't use it,
+            # but the accessor method is not used on rs->create, so I have
+            # to explicitly set the password and then do the insert.
+            $new_user = $c->model('DB::User')->new_result({
+                email      => $email,
+                nickname   => $nickname,
+                user_roles => [ { role => $c->model('DB::Role')->find({name => 'user'}) } ],
+            });
+            $new_user->password($password);
+            $new_user->insert;
         }
         catch {
             $c->error("Could not create a new user: $_");
         };
-        if ($new_user) {
-            $c->authenticate(
-                {   email    => $email,
-                    password => $password,
-                }
-            );
+        if ($new_user && $new_user->in_storage) {
+            $c->authenticate({
+                email    => $email,
+                password => $password,
+                remember => $remember,
+            });
             $c->res->redirect('/');
         }
     }

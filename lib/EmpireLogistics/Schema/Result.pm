@@ -7,9 +7,11 @@ use MooseX::NonMoose;
 extends 'DBIx::Class::Core';
 
 __PACKAGE__->load_components(
-    "InflateColumn::DateTime", "InflateColumn::DateTime::Duration",
-    "TimeStamp",               "FilterColumn",
-    "Helper::Row::ToJSON",     "Core",
+    "InflateColumn::DateTime",
+    "InflateColumn::DateTime::Duration",
+    "TimeStamp",
+    "Helper::Row::ToJSON",
+    "Core",
 );
 
 around delete => sub {

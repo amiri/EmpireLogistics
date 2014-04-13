@@ -2,8 +2,6 @@ package EmpireLogistics::Schema::Result::User;
 
 use Moose;
 use MooseX::MarkAsMethods autoclean => 1;
-
-use MooseX::MarkAsMethods autoclean => 1;
 extends 'EmpireLogistics::Schema::Result';
 
 __PACKAGE__->table("user");
@@ -36,17 +34,12 @@ __PACKAGE__->add_columns(
   "password",
   {   data_type     => "text",
       is_nullable   => 0,
+      accessor => '_password',
   },
   "description",
   { data_type => "text", is_nullable => 1 },
   "notes",
   { data_type => "text", is_nullable => 1 },
-);
-
-__PACKAGE__->filter_column(
-    password => {
-        filter_to_storage => 'encrypt_password',
-    },
 );
 
 __PACKAGE__->has_many(
@@ -59,6 +52,12 @@ __PACKAGE__->many_to_many(
     "roles" => "user_roles",
     "role"
 );
+
+sub password {
+    my $self = shift;
+    return $self->_password($self->encrypt_password($_[0])) if (scalar @_);
+    return $self->_password;
+}
 
 sub encrypt_password {
     my ($self,$raw_pass) = @_;
