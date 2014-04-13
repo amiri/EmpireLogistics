@@ -32,7 +32,7 @@ has_field 'submit' => (
 sub validate_email {
     my ( $self, $field ) = @_;
     my $count = $self->form->schema->resultset('User')
-        ->search( { email => $field->value, } )->count;
+        ->search( { email => $field->value, delete_time => undef } )->count;
     if (!$count) {
         $field->add_error("That is an unknown email address");
     }
