@@ -10,7 +10,7 @@ BEGIN;
     CREATE TEMPORARY TABLE tmp_company_warehouse WITH(OIDS) ON COMMIT DROP AS SELECT * FROM company_warehouse;
 
     ALTER TABLE tmp_warehouse ALTER COLUMN owner SET DATA TYPE TEXT;
-    DROP TYPE warehouse_owner cascade;
+    DROP TYPE IF EXISTS warehouse_owner cascade;
 
     CREATE TABLE warehouse_owner (
         id serial not null primary key,
