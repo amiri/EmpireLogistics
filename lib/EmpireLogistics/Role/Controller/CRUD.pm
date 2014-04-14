@@ -8,6 +8,16 @@ has 'form' => (
     required => 1,
 );
 
+has 'delete_form' => (
+    is => 'ro',
+    required => 1,
+);
+
+has 'restore_form' => (
+    is => 'ro',
+    required => 1,
+);
+
 has 'class' => (
     is       => 'ro',
     required => 1,
@@ -26,13 +36,23 @@ has 'item_name' => (
 );
 
 sub base : Chained('') PathPart('') CaptureArgs(0) {
-    my ( $self, $c ) = @_;
-    $self->model( $c->model( $self->model_name ) );
+    my ($self, $c) = @_;
+    $self->model($c->model($self->model_name));
     my $schema = $c->model('DB')->schema;
     $c->stash(
         item_rs => $self->model,
         schema  => $schema,
-        form    => $self->form->new(schema => $schema, user_id => $c->user->id, ),
+        form => $self->form->new(schema => $schema, user_id => $c->user->id,),
+        delete_form => $self->delete_form->new(
+            item_class => $self->class,
+            schema     => $schema,
+            user_id    => $c->user->id,
+        ),
+        restore_form => $self->restore_form->new(
+            item_class => $self->class,
+            schema     => $schema,
+            user_id    => $c->user->id,
+        ),
     );
 }
 
@@ -134,17 +154,38 @@ sub edit : Chained('object') PathPart('edit') Args(0) {
 
 sub delete : Chained('object') PathPart('delete') Args(0) {
     my ( $self, $c ) = @_;
-    $c->stash->{object}->delete;
-    $c->flash->{alert} = [ { class => 'success', message => $self->class . ' deleted' } ];
+    my $delete_form = $c->stash->{delete_form};
+    $delete_form->process(
+        item   => $c->stash->{object},
+        schema => $c->stash->{schema},
+        params => { %{$c->req->params},  delete_time => 1 },
+    );
+    $c->stash->{delete_form} = $delete_form;
+    if ($delete_form->validated) {
+        $c->flash->{alert} = [ { class => 'success', message => $self->class . ' deleted' } ];
+    } else {
+        $c->flash->{alert} = [ {class => 'warning', message => $self->class . ' not deleted' } ];
+    }
     $c->res->redirect( $c->uri_for( $self->action_for('list') ) );
+    return 1;
 }
 
 sub restore : Chained('object') PathPart('restore') Args(0) {
     my ( $self, $c ) = @_;
-    $c->stash->{object}->delete_time(undef);
-    $c->stash->{object}->update;
-    $c->flash->{alert} = [ { class => 'success', message => $self->class . ' restored' } ];
+    my $restore_form = $c->stash->{restore_form};
+    $restore_form->process(
+        item   => $c->stash->{object},
+        schema => $c->stash->{schema},
+        params => { %{$c->req->params},  restore_time => 1 },
+    );
+    $c->stash->{restore_form} = $restore_form;
+    if ($restore_form->validated) {
+        $c->flash->{alert} = [ { class => 'success', message => $self->class . ' restored' } ];
+    } else {
+        $c->flash->{alert} = [ {class => 'warning', message => $self->class . ' not restored' } ];
+    }
     $c->res->redirect( $c->uri_for( $self->action_for('list') ) );
+    return 1;
 }
 
 sub form_create {

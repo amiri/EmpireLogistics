@@ -69,6 +69,7 @@ requires "Moose::Exporter";
 requires "MooseX::MarkAsMethods", ">= 0.13";
 requires "MooseX::MethodAttributes";
 requires "MooseX::NonMoose", ">= 0.16";
+requires "MooseX::Role::Parameterized";
 requires "MooseX::Role::WithOverloading";
 requires "MooseX::StrictConstructor";
 requires "MooseX::Types::Common::String";
