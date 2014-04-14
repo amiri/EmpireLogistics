@@ -5240,6 +5240,17 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
+  MooseX-Types-Path-Class-0.06
+    pathname: T/TH/THEPLER/MooseX-Types-Path-Class-0.06.tar.gz
+    provides:
+      MooseX::Types::Path::Class 0.06
+    requirements:
+      Class::MOP 0
+      ExtUtils::MakeMaker 6.30
+      Moose 0.39
+      MooseX::Types 0.04
+      Path::Class 0.16
+      Test::More 0.88
   Mouse-2.1.1
     pathname: G/GF/GFUJI/Mouse-2.1.1.tar.gz
     provides:
@@ -5804,6 +5815,33 @@ DISTRIBUTIONS
       Try::Tiny 0
       URI 1.59
       parent 0
+  Plack-Middleware-Debug-0.16
+    pathname: M/MI/MIYAGAWA/Plack-Middleware-Debug-0.16.tar.gz
+    provides:
+      Plack::Middleware::Debug 0.16
+      Plack::Middleware::Debug::Base 0.16
+      Plack::Middleware::Debug::CatalystLog 0.16
+      Plack::Middleware::Debug::DBITrace 0.16
+      Plack::Middleware::Debug::Environment 0.16
+      Plack::Middleware::Debug::Memory 0.16
+      Plack::Middleware::Debug::ModuleVersions 0.16
+      Plack::Middleware::Debug::Panel undef
+      Plack::Middleware::Debug::Parameters undef
+      Plack::Middleware::Debug::PerlConfig 0.16
+      Plack::Middleware::Debug::Response 0.16
+      Plack::Middleware::Debug::Session undef
+      Plack::Middleware::Debug::Timer 0.16
+      Plack::Middleware::Debug::TrackObjects undef
+    requirements:
+      Class::Method::Modifiers 1.05
+      Data::Dump 0
+      Encode 2.23
+      File::ShareDir 1.00
+      Module::Build::Tiny 0.026
+      Plack 0
+      Text::MicroTemplate 0.15
+      parent 0
+      perl 5.008001
   Plack-Middleware-FixMissingBodyInRedirect-0.09
     pathname: S/SW/SWEETKID/Plack-Middleware-FixMissingBodyInRedirect-0.09.tar.gz
     provides:
@@ -6870,6 +6908,17 @@ DISTRIBUTIONS
       Text::Glob 0.09
     requirements:
       Test::More 0
+  Text-MicroTemplate-0.20
+    pathname: K/KA/KAZUHO/Text-MicroTemplate-0.20.tar.gz
+    provides:
+      Text::MicroTemplate 0.20
+      Text::MicroTemplate::EncodedString 0.20
+      Text::MicroTemplate::File undef
+    requirements:
+      ExtUtils::MakeMaker 6.42
+      File::Temp 0
+      Test::More 0
+      perl 5.00800
   Text-SimpleTable-2.03
     pathname: M/MR/MRAMBERG/Text-SimpleTable-2.03.tar.gz
     provides:
