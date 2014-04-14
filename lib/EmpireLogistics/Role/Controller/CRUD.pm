@@ -53,6 +53,8 @@ sub base : Chained('') PathPart('') CaptureArgs(0) {
             schema     => $schema,
             user_id    => $c->user->id,
         ),
+        controller_name => $self->namespace . $self->class,
+        class_name => $self->class,
     );
 }
 

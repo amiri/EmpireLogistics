@@ -106,6 +106,7 @@ __PACKAGE__->add_columns(
         "walmart",
         "warehouse",
         "warehouse_address",
+        "warehouse_owner",
         "warehouse_type",
         "warehouse_walmart",
         "warehouse_work_stoppage",

@@ -44,20 +44,7 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "owner",
   {
-    data_type => "enum",
-    extra => {
-      custom_type_name => "warehouse_owner",
-      list => [
-        "walmart",
-        "target",
-        "costco",
-        "krogers",
-        "walgreens",
-        "home depot",
-        "amazon",
-        "ikea",
-      ],
-    },
+    data_type => "integer",
     is_nullable => 1,
   },
   "date_opened",
@@ -102,6 +89,11 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+__PACKAGE__->might_have(
+    "owner",
+    "EmpireLogistics::Schema::Result::WarehouseOwner",
+    {"foreign.id" => "self.owner" },
+);
 
 
 

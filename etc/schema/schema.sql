@@ -555,8 +555,23 @@ insert into port_vessel_size (name,detail) values
     ('L', '500+ feet'),
     ('M', '≥ 500 feet');
 
-drop type if exists warehouse_owner cascade;
-create type warehouse_owner as enum ('walmart', 'target', 'costco', 'krogers', 'walgreens', 'home depot', 'amazon', 'ikea');
+drop table if exists warehouse_owner cascade;
+CREATE TABLE warehouse_owner (
+    id integer NOT NULL,
+    create_time timestamp with time zone DEFAULT now() NOT NULL,
+    update_time timestamp with time zone DEFAULT now() NOT NULL,
+    delete_time timestamp with time zone,
+    name text NOT NULL
+);
+insert into warehouse_owner (name) values
+    ('walmart'),
+    ('target'),
+    ('costco'),
+    ('krogers'),
+    ('walgreens'),
+    ('home depot'),
+    ('amazon'),
+    ('ikea');
 
 drop type if exists warehouse_status cascade;
 create type warehouse_status as enum ('open', 'closed');
@@ -581,15 +596,16 @@ create table warehouse (
     description text,
     status warehouse_status,
     area integer,
-    owner warehouse_owner,
     date_opened date,
     latitude double precision,
     longitude double precision,
     geometry geometry(Point,900913)
+    owner integer references warehouse_owner(id),
 );
 create index on warehouse (name);
 create index on warehouse (status);
 create index on warehouse (owner);
+CREATE INDEX warehouse_warehouse_owner ON warehouse USING btree (owner);
 
 drop table if exists walmart cascade;
 create table walmart (
@@ -1667,6 +1683,7 @@ create type object_type as enum (
     'walmart',
     'warehouse',
     'warehouse_address',
+    'warehouse_owner',
     'warehouse_type',
     'warehouse_walmart',
     'warehouse_work_stoppage',

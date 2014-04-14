@@ -27,7 +27,8 @@
             [% FOREACH col IN item_rs.result_source.columns %]
               [% UNLESS col == 'id' || col == 'password' || col == 'notes' || col == 'description' %]
                 <td>
-                    <a href="[% c.uri_for(c.controller("item"), item.id, 'edit' ) %]">
+                [% edit_href = c.uri_for(c.controller.action_for('edit'), [item.id] ) %]
+                    <a href="[% edit_href %]">
                         [% IF item.$col && item.$col.can('ymd') && col == 'delete_time' %]
                             [% IF item.$col.defined %]
                             <p>Yes</p>
