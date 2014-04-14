@@ -106,7 +106,7 @@ BEGIN;
     ALTER TABLE edit_history ADD COLUMN object_type object_type;
     CREATE INDEX edit_history_object_type ON edit_history (object_type);
 
-    INSERT INTO edit_history SELECT te.id,te.create_time,te.update_time,te.object,te."user",te.notes,te.object_type FROM tmp_edit_history te;
+    INSERT INTO edit_history SELECT te.id,te.create_time,te.object,te."user",te.notes,te.object_type FROM tmp_edit_history te;
     INSERT INTO edit_history_field SELECT * FROM tmp_edit_history_field;
 
 COMMIT;
