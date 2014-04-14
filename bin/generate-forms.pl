@@ -76,13 +76,16 @@ sub run {
         system(
             "form_generator.pl --rs_name=$rsname --schema_name=$schema --db_dsn=$dsn --db_user=$dbuser > $destination/$modulename"
         );
-        my $content = io("$destination/$modulename")->slurp;
-        if ( $content =~ /package/ ) {
-            s/package ($formname)/package EmpireLogistics::Form::Admin::$1/g;
+        my @lines = io("$destination/$modulename")->slurp;
+        for my $line (@lines) {
+            if ( $line =~ /package/ ) {
+                $line =~ s/package ($formname)Form;/package EmpireLogistics::Form::Admin::$1;/g;
+                $line =~ s/package ($formname)/package EmpireLogistics::Form::Admin::$1/g;
+            }
         }
+        my $content = join( "\n", @lines );
+        $content > io("$destination/$modulename");
     }
-    $content > io("$destination/$modulename");
-}
 }
 
 __PACKAGE__->meta->make_immutable;
