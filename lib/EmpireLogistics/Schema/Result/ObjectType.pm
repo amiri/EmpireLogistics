@@ -1,18 +1,18 @@
-package EmpireLogistics::Schema::Result::WarehouseOwner;
+package EmpireLogistics::Schema::Result::ObjectType;
 
 use Moose;
 use MooseX::MarkAsMethods autoclean => 1;
 
 extends 'EmpireLogistics::Schema::Result';
 
-__PACKAGE__->table("warehouse_owner");
+__PACKAGE__->table("object_type");
 __PACKAGE__->add_columns(
   "id",
   {
     data_type         => "integer",
     is_auto_increment => 1,
     is_nullable       => 0,
-    sequence          => "warehouse_owner_id_seq",
+    sequence          => "object_type_id_seq",
   },
   "create_time",
   {
@@ -55,4 +55,5 @@ __PACKAGE__->has_many(
 );
 
 __PACKAGE__->meta->make_immutable;
+
 1;

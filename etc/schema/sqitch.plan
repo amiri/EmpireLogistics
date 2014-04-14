@@ -8,3 +8,4 @@ warehouse_name_lat_lon 2014-04-11T14:45:30Z Amiri Barksdale,,, <amiri@akbuntu> #
 alter_create_time 2014-04-12T21:06:43Z Amiri Barksdale,,, <amiri@akbuntu> # Alter create_times to be now() instead of 'now'
 alter_update_time 2014-04-13T16:19:12Z Amiri Barksdale,,, <amiri@akbuntu> # Alter update_times to be now()
 migrate_warehouse_owner_from_enum_to_table 2014-04-14T01:59:03Z Amiri Barksdale,,, <amiri@akbuntu> # Can't easily edit warehouse-owners if they are in an enum type
+migrate_object_type_from_enum_to_table 2014-04-14T13:48:38Z Amiri Barksdale,,, <amiri@akbuntu> # Postgres ENUMS are really impossible to work with
