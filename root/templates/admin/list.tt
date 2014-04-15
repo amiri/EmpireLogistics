@@ -29,14 +29,14 @@
                 <td>
                 [% edit_href = c.uri_for(c.controller.action_for('edit'), [item.id] ) %]
                     <a href="[% edit_href %]">
-                        [% IF item.$col && item.$col.can('ymd') && col == 'delete_time' %]
+                        [% IF item.$col.defined && item.$col.can('ymd') && col == 'delete_time' %]
                             [% IF item.$col.defined %]
                             <p>Yes</p>
                             [% ELSE %]
                             [% END %]
-                        [% ELSIF item.$col && item.$col.can('ymd') && !(col == 'delete_time')%]
+                        [% ELSIF item.$col.defined && item.$col.can('ymd') && !(col == 'delete_time')%]
                             [% item.$col.strftime('%Y-%m-%d %r %z') %]
-                        [% ELSIF item.$col %]
+                        [% ELSIF item.$col.defined %]
                             [% item.$col %]
                         [% ELSE %]
                         [% END %]
