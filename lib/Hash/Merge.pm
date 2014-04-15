@@ -322,15 +322,15 @@ Hash::Merge - Merges arbitrarily deep hashes into a single hash
 
     use Hash::Merge qw( merge );
     my %a = ( 
-		'foo'    => 1,
-	    'bar'    => [ qw( a b e ) ],
-	    'querty' => { 'bob' => 'alice' },
-	);
+        'foo'    => 1,
+        'bar'    => [ qw( a b e ) ],
+        'querty' => { 'bob' => 'alice' },
+    );
     my %b = ( 
-		'foo'     => 2, 
-		'bar'    => [ qw(c d) ],
-		'querty' => { 'ted' => 'margeret' }, 
-	);
+        'foo'     => 2, 
+        'bar'    => [ qw(c d) ],
+        'querty' => { 'ted' => 'margeret' }, 
+    );
 
     my %c = %{ merge( \%a, \%b ) };
 
@@ -338,34 +338,34 @@ Hash::Merge - Merges arbitrarily deep hashes into a single hash
 
     # This is the same as above
 
-	Hash::Merge::specify_behavior(
-	    {
-			'SCALAR' => {
-				'SCALAR' => sub { $_[1] },
-				'ARRAY'  => sub { [ $_[0], @{$_[1]} ] },
-				'HASH'   => sub { $_[1] },
-			},
-			'ARRAY => {
-				'SCALAR' => sub { $_[1] },
-				'ARRAY'  => sub { [ @{$_[0]}, @{$_[1]} ] },
-				'HASH'   => sub { $_[1] }, 
-			},
-			'HASH' => {
-				'SCALAR' => sub { $_[1] },
-				'ARRAY'  => sub { [ values %{$_[0]}, @{$_[1]} ] },
-				'HASH'   => sub { Hash::Merge::_merge_hashes( $_[0], $_[1] ) }, 
-			},
-		}, 
-		'My Behavior', 
-	);
-	
-	# Also there is OO interface.
-	
-	my $merge = Hash::Merge->new( 'LEFT_PRECEDENT' );
-	my %c = %{ $merge->merge( \%a, \%b ) };
-	
-	# All behavioral changes (e.g. $merge->set_behavior(...)), called on an object remain specific to that object
-	# The legacy "Global Setting" behavior is respected only when new called as a non-OO function.
+    Hash::Merge::specify_behavior(
+        {
+            'SCALAR' => {
+                'SCALAR' => sub { $_[1] },
+                'ARRAY'  => sub { [ $_[0], @{$_[1]} ] },
+                'HASH'   => sub { $_[1] },
+            },
+            'ARRAY => {
+                'SCALAR' => sub { $_[1] },
+                'ARRAY'  => sub { [ @{$_[0]}, @{$_[1]} ] },
+                'HASH'   => sub { $_[1] }, 
+            },
+            'HASH' => {
+                'SCALAR' => sub { $_[1] },
+                'ARRAY'  => sub { [ values %{$_[0]}, @{$_[1]} ] },
+                'HASH'   => sub { Hash::Merge::_merge_hashes( $_[0], $_[1] ) }, 
+            },
+        }, 
+        'My Behavior', 
+    );
+    
+    # Also there is OO interface.
+    
+    my $merge = Hash::Merge->new( 'LEFT_PRECEDENT' );
+    my %c = %{ $merge->merge( \%a, \%b ) };
+    
+    # All behavioral changes (e.g. $merge->set_behavior(...)), called on an object remain specific to that object
+    # The legacy "Global Setting" behavior is respected only when new called as a non-OO function.
 
 =head1 DESCRIPTION
 
@@ -501,27 +501,27 @@ Here is the specifics on how the current internal behaviors are called,
 and what each does.  Assume that the left value is given as $a, and
 the right as $b (these are either scalars or appropriate references)
 
-	LEFT TYPE   RIGHT TYPE      LEFT_PRECEDENT       RIGHT_PRECEDENT
-	 SCALAR      SCALAR            $a                   $b
-	 SCALAR      ARRAY             $a                   ( $a, @$b )
-	 SCALAR      HASH              $a                   %$b
-	 ARRAY       SCALAR            ( @$a, $b )          $b
-	 ARRAY       ARRAY             ( @$a, @$b )         ( @$a, @$b )
-	 ARRAY       HASH              ( @$a, values %$b )  %$b 
-	 HASH        SCALAR            %$a                  $b
-	 HASH        ARRAY             %$a                  ( values %$a, @$b )
-	 HASH        HASH              merge( %$a, %$b )    merge( %$a, %$b )
+    LEFT TYPE   RIGHT TYPE      LEFT_PRECEDENT       RIGHT_PRECEDENT
+     SCALAR      SCALAR            $a                   $b
+     SCALAR      ARRAY             $a                   ( $a, @$b )
+     SCALAR      HASH              $a                   %$b
+     ARRAY       SCALAR            ( @$a, $b )          $b
+     ARRAY       ARRAY             ( @$a, @$b )         ( @$a, @$b )
+     ARRAY       HASH              ( @$a, values %$b )  %$b 
+     HASH        SCALAR            %$a                  $b
+     HASH        ARRAY             %$a                  ( values %$a, @$b )
+     HASH        HASH              merge( %$a, %$b )    merge( %$a, %$b )
 
-	LEFT TYPE   RIGHT TYPE  STORAGE_PRECEDENT   RETAINMENT_PRECEDENT
-	 SCALAR      SCALAR     $a                  ( $a ,$b )
-	 SCALAR      ARRAY      ( $a, @$b )         ( $a, @$b )
-	 SCALAR      HASH       %$b                 merge( hashify( $a ), %$b )
-	 ARRAY       SCALAR     ( @$a, $b )         ( @$a, $b )
-	 ARRAY       ARRAY      ( @$a, @$b )        ( @$a, @$b )
-	 ARRAY       HASH       %$b                 merge( hashify( @$a ), %$b )
-	 HASH        SCALAR     %$a                 merge( %$a, hashify( $b ) )
-	 HASH        ARRAY      %$a                 merge( %$a, hashify( @$b ) )
-	 HASH        HASH       merge( %$a, %$b )   merge( %$a, %$b )
+    LEFT TYPE   RIGHT TYPE  STORAGE_PRECEDENT   RETAINMENT_PRECEDENT
+     SCALAR      SCALAR     $a                  ( $a ,$b )
+     SCALAR      ARRAY      ( $a, @$b )         ( $a, @$b )
+     SCALAR      HASH       %$b                 merge( hashify( $a ), %$b )
+     ARRAY       SCALAR     ( @$a, $b )         ( @$a, $b )
+     ARRAY       ARRAY      ( @$a, @$b )        ( @$a, @$b )
+     ARRAY       HASH       %$b                 merge( hashify( @$a ), %$b )
+     HASH        SCALAR     %$a                 merge( %$a, hashify( $b ) )
+     HASH        ARRAY      %$a                 merge( %$a, hashify( @$b ) )
+     HASH        HASH       merge( %$a, %$b )   merge( %$a, %$b )
 
 
 (*) note that merge calls _merge_hashes, hashify calls _hashify.
