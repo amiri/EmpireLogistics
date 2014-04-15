@@ -76,6 +76,22 @@ __PACKAGE__->has_many(
 
 
 
+__PACKAGE__->belongs_to(
+    "object_type" =>
+    "EmpireLogistics::Schema::Result::ObjectType",
+    sub {
+        my $args = shift;
+        return (
+            {
+                "$args->{foreign_alias}.name " => { -ident => "$args->{self_resultsource}.name" },
+            },
+            $args->{self_rowobj} && {
+                "$args->{foreign_alias}.name" => $args->{self_resultsource}->name,
+            },
+        );
+    },
+);
+
 __PACKAGE__->has_many(
     edits => "EmpireLogistics::Schema::Result::EditHistory",
     sub {
@@ -83,11 +99,11 @@ __PACKAGE__->has_many(
         return (
             {
                 "$args->{foreign_alias}.object" => { -ident => "$args->{self_alias}.id" },
-                "$args->{foreign_alias}.object_type" => $args->{self_resultsource}->name,
+                "$args->{foreign_alias}.object_type" => $args->{self_rowobj}->object_type->id,
             },
             $args->{self_rowobj} && {
                 "$args->{foreign_alias}.object" => $args->{self_rowobj}->id,
-                "$args->{foreign_alias}.object_type" => $args->{self_resultsource}->name,
+                "$args->{foreign_alias}.object_type" => $args->{self_rowobj}->object_type->id,
             },
         );
     },

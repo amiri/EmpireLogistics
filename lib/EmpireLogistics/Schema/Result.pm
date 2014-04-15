@@ -59,7 +59,7 @@ sub edit_history_save {
     $self->create_related(
         edits => {
             object              => $self->id,
-            object_type         => $self->result_source->name,
+            object_type         => $self->object_type->id,
             user                => $user_id,
             notes               => $notes,
             edit_history_fields => $edit_history_fields,
