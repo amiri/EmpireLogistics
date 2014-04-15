@@ -27,7 +27,7 @@ BEGIN;
 
     ALTER TABLE warehouse DROP COLUMN owner;
     ALTER TABLE warehouse DROP COLUMN status;
-    ALTER TABLE warehouse ADD COLUMN owner warehouse_owner;
+    ALTER TABLE warehouse ADD COLUMN owner warehouse_owner not null;
     ALTER TABLE warehouse ADD COLUMN status warehouse_status;
     CREATE INDEX warehouse_warehouse_owner ON warehouse (owner);
     CREATE INDEX warehouse_warehouse_status ON warehouse (status);

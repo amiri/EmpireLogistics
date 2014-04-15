@@ -51,7 +51,7 @@ BEGIN;
 
     TRUNCATE warehouse CASCADE;
 
-    ALTER TABLE warehouse ADD COLUMN owner integer references warehouse_owner (id);
+    ALTER TABLE warehouse ADD COLUMN owner integer not null references warehouse_owner (id);
     ALTER TABLE warehouse ADD COLUMN status integer references warehouse_status (id);
     CREATE INDEX warehouse_warehouse_owner ON warehouse (owner);
     CREATE INDEX warehouse_warehouse_status ON warehouse (status);
