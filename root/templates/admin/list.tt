@@ -46,12 +46,12 @@
             [% END %]
             <td>
             [% IF item.delete_time.defined %]
-                <a class="btn btn-info" href="[% c.uri_for(c.controller("item"), item.id, 'restore' )%]">
+                <a class="btn btn-info" href="[% c.uri_for(c.controller.action_for('restore'), [item.id] ) %]">
                   <i class="glyphicon-undo glyphicon-white"></i>
                     [% c.loc('Restore') %]
                 </a>
             [% ELSE %]
-                <a class="btn btn-danger" href="[% c.uri_for(c.controller("item"), item.id, 'delete' )%]">
+                <a class="btn btn-danger" href="[% c.uri_for(c.controller.action_for('delete'), [item.id] ) %]">
                   <i class="glyphicon-trash glyphicon-white"></i>
                     [% c.loc('Delete') %]
                 </a>
