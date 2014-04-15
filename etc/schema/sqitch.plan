@@ -11,3 +11,4 @@ migrate_warehouse_owner_from_enum_to_table 2014-04-14T01:59:03Z Amiri Barksdale,
 migrate_object_type_from_enum_to_table 2014-04-14T13:48:38Z Amiri Barksdale,,, <amiri@akbuntu> # Postgres ENUMS are really impossible to work with
 migrate_company_type_from_enum 2014-04-14T14:48:02Z Amiri Barksdale,,, <amiri@akbuntu> # Another enum migration
 migrate_labor_types_from_enum 2014-04-14T15:32:25Z Amiri Barksdale,,, <amiri@akbuntu> # Finally migrate our labor org types
+@create-times-and-enum-migrations 2014-04-15T03:38:28Z Amiri Barksdale,,, <amiri@akbuntu># create_time and update_times are now()\nwarehouse_owner, object_type, company_type, and labor_organization_type are no longer TYPE ENUM but rather simple tables, which are much easier to edit
