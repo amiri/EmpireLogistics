@@ -9,12 +9,12 @@
     <div class="col-md-2" id="admin-nav">
         <ul class="nav nav-stacked" id="sidebar">
           [% FOR page IN admin_pages %]
-              <li><a href="[% page.url %]"><h3>[% page.name %]</h3></a></li>
+              <li><a href="[% page.url %]"><h4>[% page.name %]</h4></a></li>
           [% END %]
         </ul>
-    </div>  
+    </div>
     <div class="col-md-10">
     [% content %]
-    </div> 
+    </div>
 </div>
 [% END %]
