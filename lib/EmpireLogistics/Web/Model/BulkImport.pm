@@ -13,6 +13,7 @@ use List::AllUtils qw/none/;
 use Lingua::Conjunction;
 use EmpireLogistics::Schema;
 use EmpireLogistics::Config;
+use Scalar::Util ();
 use Data::Printer;
 extends 'Catalyst::Model';
 with 'Catalyst::Component::InstancePerContext';
@@ -172,7 +173,12 @@ sub sample_data {
     my @rows             = map {
         my $item   = $_;
         my $return = {};
-        $return->{$_} = $item->$_ for @$relevant_columns;
+        $return->{$_} = (
+            (           Scalar::Util::blessed($item->$_)
+                    and Scalar::Util::reftype($item->$_) ne 'DateTime'
+                    and $item->$_->can('id')
+            ) ? $item->$_->id : $item->$_
+        ) for @$relevant_columns;
         $return;
         } $self->schema->resultset($rs_name)->search(
         {},

@@ -13,7 +13,7 @@
     <thead>
         <tr>
         [% FOREACH col IN item_rs.result_source.columns %]
-             [% UNLESS col == 'id' || col == 'password' || col == 'notes' || col == 'description' %]
+             [% UNLESS col == 'password' || col == 'notes' || col == 'description' %]
                 <th class="header">[% item_rs.labels.$col %]</th>
              [% END %]
         [% END %]
@@ -25,7 +25,7 @@
     [% FOREACH item IN items -%]
         <tr>
             [% FOREACH col IN item_rs.result_source.columns %]
-              [% UNLESS col == 'id' || col == 'password' || col == 'notes' || col == 'description' %]
+              [% UNLESS col == 'password' || col == 'notes' || col == 'description' %]
                 <td>
                 [% edit_href = c.uri_for(c.controller.action_for('edit'), [item.id] ) %]
                     <a href="[% edit_href %]">
@@ -35,7 +35,7 @@
                             [% ELSE %]
                             [% END %]
                         [% ELSIF item.$col && item.$col.can('ymd') && !(col == 'delete_time')%]
-                            [% item.$col.ymd %]
+                            [% item.$col.strftime('%Y-%m-%d %r %z') %]
                         [% ELSIF item.$col %]
                             [% item.$col %]
                         [% ELSE %]

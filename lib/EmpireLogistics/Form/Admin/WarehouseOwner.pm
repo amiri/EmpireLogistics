@@ -10,8 +10,10 @@ has '+name'       => ( default => 'warehouse-owner-form' );
 has '+item_class' => ( default => 'WarehouseOwner' );
 
 has_field 'id' => (
-    type  => 'Hidden',
-    label => 'Warehouse Type ID',
+    type  => 'Integer',
+    disabled => 1,
+    readonly => 1,
+    label => 'Warehouse Owner ID',
 );
 has_field 'create_time' => (
     type            => 'Timestamp',
