@@ -81,3 +81,11 @@
 </div>
 [%  END %]
 [% END %]
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#list').dataTable( {
+        "sPaginationType": "bootstrap",
+        "aaSorting": [[ 0, "desc" ]]
+    } );
+} );
+</script>
