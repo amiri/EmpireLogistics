@@ -5,13 +5,12 @@ BARE METAL
 If you are running a Debian-derived distribution, preferably Ubuntu 13.10,
 Saucy Salamander, you can run the following on the command line:
 
-    make prereqs
-    make all
+    make sandbox
 
-The "all" target in the Makefile does all the hard work. It configures
+The "sandbox" target in the Makefile does all the hard work. It configures
 the server, imports and populates all the data, and it will overwrite
 existing data if you run it again. This is dangerous in production, of
-course, but it's OK for the moment.
+course, but it's OK for a sandbox.
 
 If you want to break it down, you can build the parts individually:
 

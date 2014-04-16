@@ -9,7 +9,9 @@ labor_dir := data/labor_organizations
 
 ########## Meta commands
 
-all: chef data database sqitch
+sandbox: prereqs chef database sqitch
+
+prod: chef sqitch
 
 data: download-data rail warehouses ports labor
 
