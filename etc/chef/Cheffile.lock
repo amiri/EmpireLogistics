@@ -53,7 +53,6 @@ SITE
       build-essential (>= 0.0.0)
       yum (~> 3.0)
       yum-epel (>= 0.0.0)
-    ssh-keys (1.0.0)
     sudo (2.3.0)
     uwsgi (0.1.0)
       conffile (>= 0.0.0)
@@ -92,6 +91,13 @@ GIT
   specs:
     perlbrew (0.1.0)
       build-essential (>= 0.0.0)
+
+GIT
+  remote: https://github.com/nickola/chef-ssh-keys
+  ref: master
+  sha: ccd948d42e57d1cc19c7092b981518691723ffc5
+  specs:
+    ssh-keys (1.0.0)
 
 GIT
   remote: https://github.com/phlipper/chef-postgresql
