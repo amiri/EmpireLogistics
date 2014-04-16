@@ -1,6 +1,8 @@
 {
   "id": "amiri",
-  "ssh_keys": "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAvpLZ8uu0jdRcEQem3YUuWhgezq+3Uw1j1L9Gt1jGPOyNaHY7/5gYgG2rfVnCj9jqE4lZO3tSuMaSo+XqZTyemjMugf4xv3Moi5NLSlamgzBPwzrhHMEuq2RiwPj7w1mshrgt8yXNGV58LLJp7ye0/9q3C6zlXyEEWnTiK3ixiNsf4U/8fmZHg7Yz0jNHvQQtGspg3yuYSeNSk15ojzE0bvrbO8UIsgEjMxj1CbqBHxycSCtlEA6lHECGXmrse50kIb1fhcFi4CG7x8QXsHqJfETu/Pz34pJHeLdavZDqIRMQD1eRrA9AdfH/541UBtIAWgGK8FEsliAxY1R6L7qwqw==",
+  "ssh_keys": [
+    "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAvpLZ8uu0jdRcEQem3YUuWhgezq+3Uw1j1L9Gt1jGPOyNaHY7/5gYgG2rfVnCj9jqE4lZO3tSuMaSo+XqZTyemjMugf4xv3Moi5NLSlamgzBPwzrhHMEuq2RiwPj7w1mshrgt8yXNGV58LLJp7ye0/9q3C6zlXyEEWnTiK3ixiNsf4U/8fmZHg7Yz0jNHvQQtGspg3yuYSeNSk15ojzE0bvrbO8UIsgEjMxj1CbqBHxycSCtlEA6lHECGXmrse50kIb1fhcFi4CG7x8QXsHqJfETu/Pz34pJHeLdavZDqIRMQD1eRrA9AdfH/541UBtIAWgGK8FEsliAxY1R6L7qwqw=="
+  ],
   "groups": [ "admin", "sysadmin" ],
   "uid": 1918,
   "shell": "/bin/bash",
