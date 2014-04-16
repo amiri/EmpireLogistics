@@ -15,10 +15,6 @@ sub db_user {
     my $self = shift;
     return $EmpireLogistics::Config::database->{db_user};
 }
-sub db_pass {
-    my $self = shift;
-    return $EmpireLogistics::Config::database->{db_pass};
-}
 sub dsn {
     my $self = shift;
     return EmpireLogistics::Config->dsn;
@@ -31,20 +27,19 @@ sub db_opts {
 sub schema {
     my $self = shift;
     return EmpireLogistics::Schema->connect(
-       $self->dsn,$self->db_user,$self->db_pass,$self->db_opts,
+       $self->dsn,$self->db_user,$self->db_opts,
     );
 }
 
 sub dbh {
     my $self = shift;
     my $db_user = $self->db_user;
-    my $db_pass = $self->db_pass;
     my $db_opts = $self->db_opts;
     my $dsn = $self->dsn;
 
     my $dbh;
     try {
-        $dbh = DBI->connect($dsn, $db_user, $db_pass, { %$db_opts, AutoCommit => 0, });
+        $dbh = DBI->connect($dsn, $db_user, undef, { %$db_opts, AutoCommit => 0, });
     } catch {
         warn "Could not connect to database: $_";
     };

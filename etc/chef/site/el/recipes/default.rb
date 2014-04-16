@@ -72,6 +72,8 @@ group "el" do
   action :create
 end
 
+include_recipe "ssh-keys"
+
 execute "remove_uwsgi" do
   command "apt-get -y --purge autoremove uwsgi-*"
   returns [0,100]

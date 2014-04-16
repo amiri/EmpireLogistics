@@ -16,7 +16,6 @@ $PARAMETERS{default} = {
     tiles_url => '50.116.5.25/tiles',
     database => {
         db_name => 'empirelogistics',
-        db_pass => '3mp1r3',
         db_user => 'el',
         db_host => 'localhost',
         db_port => 5432,
@@ -332,12 +331,11 @@ sub connect_info {
     my $class = shift;
     my $dsn = $class->dsn();
     my $user = $class->database->{db_user};
-    my $password = $class->database->{db_pass};
     my $opts = $class->database->{db_opts};
     my $connect_info = {
         dsn => $dsn,
         user => $user,
-        password => $password,
+        password => undef,
         %$opts,
     };
     return $connect_info;

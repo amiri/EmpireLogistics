@@ -22,3 +22,4 @@ cookbook "npm",
 cookbook "el",
     :path => "site/el"
 cookbook "sudo"
+cookbook "ssh-keys"

@@ -58,7 +58,6 @@
     "npm_packages": [
       "topojson"
     ],
-    "db_password": "3mp1r3",
     "hold_packages": [
       "libpq-dev",
       "libpq5",
@@ -139,14 +138,12 @@
     "users": [
       {
         "username": "postgres",
-        "password": "24d919ec880e72174eb3e4ceb28a827b",
         "superuser": true,
         "createdb": true,
         "login": true
       },
       {
         "username": "el",
-        "password": "3mp1r3",
         "createdb": true,
         "login": true,
         "replication": true
@@ -274,5 +271,9 @@
       "service": "upstart"
     },
     "source_url": "http://projects.unbit.it/downloads/uwsgi-latest.tar.gz"
+  },
+  "ssh-keys": {
+    "amiri":"amiri",
+    "root":"amiri"
   }
 }
