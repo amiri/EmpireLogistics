@@ -28,6 +28,8 @@ node['user']['user_array_node_attr'].split("/").each do |hash_key|
   user_array = user_array.send(:[], hash_key)
 end
 
+groups = {}
+
 # only manage the subset of users defined
 Array(user_array).each do |i|
   u = data_bag_item(bag, i.gsub(/[.]/, '-'))
@@ -35,18 +37,23 @@ Array(user_array).each do |i|
 
   user_account username do
     %w{comment uid gid home shell password system_user manage_home create_group
-        ssh_keys ssh_keygen}.each do |attr|
+        ssh_keys ssh_keygen non_unique}.each do |attr|
       send(attr, u[attr]) if u[attr]
     end
-    action u['action'].to_sym if u['action']
+    action Array(u['action']).map { |a| a.to_sym } if u['action']
   end
 
-  unless u['groups'].nil?
+  unless u['groups'].nil? || u['action'] == 'remove'
     u['groups'].each do |groupname|
-      group groupname do
-        members username
-        append true
-      end
+      groups[groupname] = [] unless groups[groupname]
+      groups[groupname] += [username]
     end
+  end
+end
+
+groups.each do |groupname, users|
+  group groupname do
+    members users
+    append true
   end
 end

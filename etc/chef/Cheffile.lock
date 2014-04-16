@@ -54,7 +54,6 @@ SITE
       yum (~> 3.0)
       yum-epel (>= 0.0.0)
     sudo (2.3.0)
-    user (0.3.0)
     uwsgi (0.1.0)
       conffile (>= 0.0.0)
       python (>= 0.0.0)
@@ -92,6 +91,13 @@ GIT
   specs:
     perlbrew (0.1.0)
       build-essential (>= 0.0.0)
+
+GIT
+  remote: https://github.com/fnichol/chef-user
+  ref: master
+  sha: d703d0ab4463afabea92e2f1a4d697fbe04931eb
+  specs:
+    user (0.3.1)
 
 GIT
   remote: https://github.com/nickola/chef-ssh-keys

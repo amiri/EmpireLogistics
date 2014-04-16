@@ -1,17 +1,28 @@
-# <a name="title"></a> chef-user [![Build Status](https://secure.travis-ci.org/fnichol/chef-user.png?branch=master)](http://travis-ci.org/fnichol/chef-user)
+# <a name="title"></a> User Chef Cookbook
+
+[![Build Status](https://secure.travis-ci.org/fnichol/chef-user.png?branch=master)](http://travis-ci.org/fnichol/chef-user)
 
 ## <a name="description"></a> Description
 
 A convenient Chef LWRP to manage user accounts and SSH keys. This is **not**
 the Opscode *users* cookbook.
 
-* Github: https://github.com/fnichol/chef-user
+* Website: http://fnichol.github.io/chef-user/
 * Opscode Community Site: http://community.opscode.com/cookbooks/user
+* Source Code: https://github.com/fnichol/chef-user
 
 ## <a name="usage"></a> Usage
 
-Simply include `recipe[user]` in your run\_list and the `user_account`
-resource will be available.
+Simply include this cookbook as a dependency in `metadata.rb` and the `user_account`
+resource will be available. Example:
+
+    # In your_cookbook/metadata.rb
+    depends 'user'
+    
+    # In your_cookbook/recipes/default.rb
+    user_account 'hsolo' do
+        ssh_keygen true
+    end
 
 To use `recipe[user::data_bag]`, include it in your run\_list and have a
 data bag called `"users"` with an item like the following:
@@ -20,6 +31,7 @@ data bag called `"users"` with an item like the following:
       "id"        : "hsolo",
       "comment"   : "Han Solo",
       "home"      : "/opt/hoth/hsolo",
+      "groups"    : ["admin", "www-data"],
       "ssh_keys"  : ["123...", "456..."]
     }
 
@@ -30,11 +42,20 @@ or a user to be removed:
       "action"  : "remove"
     }
 
+If you have a username containing a period, use a dash in the data bag item
+and set a `username` attribute:
+
+    {
+      "id"        : "luke-skywalker",
+      "username"  : "luke.skywalker",
+      "action"    : ["create", "lock"]
+    }
+
 The data bag recipe will iterate through a list of usernames defined in
 `node['users']` (by default) and attempt to pull in the user's information
 from the data bag item. In other words, having:
 
-    node['users'] = ['hsolo']
+    node['users'] = ['hsolo', 'lando', 'luke.skywalker']
 
 will set up the `hsolo` user information and not use the `lando` user
 information.
@@ -66,20 +87,47 @@ this cookbook. All the methods listed below assume a tagged version release
 is the target, but omit the tags to get the head of development. A valid
 Chef repository structure like the [Opscode repo][chef_repo] is also assumed.
 
-### <a name="installation-platform"></a> From the Opscode Community Platform
+### <a name="installation-platform"></a> From the Community Site
 
-To install this cookbook from the Opscode platform, use the *knife* command:
+To install this cookbook from the Community Site, use the *knife* command:
 
     knife cookbook site install user
+
+### <a name="installation-berkshelf"></a> Using Berkshelf
+
+[Berkshelf][berkshelf] is a cookbook dependency manager and development
+workflow assistant. To install Berkshelf:
+
+    cd chef-repo
+    gem install berkshelf
+    berks init
+
+To use the Community Site version:
+
+    echo "cookbook 'user'" >> Berksfile
+    berks install
+
+Or to reference the Git version:
+
+    repo="fnichol/chef-user"
+    latest_release=$(curl -s https://api.github.com/repos/$repo/git/refs/tags \
+    | ruby -rjson -e '
+      j = JSON.parse(STDIN.read);
+      puts j.map { |t| t["ref"].split("/").last }.sort.last
+    ')
+    cat >> Berksfile <<END_OF_BERKSFILE
+    cookbook 'user',
+      :git => 'git://github.com/$repo.git', :branch => '$latest_release'
+    END_OF_BERKSFILE
+    berks install
 
 ### <a name="installation-librarian"></a> Using Librarian-Chef
 
 [Librarian-Chef][librarian] is a bundler for your Chef cookbooks.
-Include a reference to the cookbook in a [Cheffile][cheffile] and run
-`librarian-chef install`. To install Librarian-Chef:
+To install Librarian-Chef:
 
-    gem install librarian
     cd chef-repo
+    gem install librarian
     librarian-chef init
 
 To use the Opscode platform version:
@@ -89,41 +137,17 @@ To use the Opscode platform version:
 
 Or to reference the Git version:
 
+    repo="fnichol/chef-user"
+    latest_release=$(curl -s https://api.github.com/repos/$repo/git/refs/tags \
+    | ruby -rjson -e '
+      j = JSON.parse(STDIN.read);
+      puts j.map { |t| t["ref"].split("/").last }.sort.last
+    ')
     cat >> Cheffile <<END_OF_CHEFFILE
     cookbook 'user',
-      :git => 'git://github.com/fnichol/chef-user.git', :ref => 'v0.3.0'
+      :git => 'git://github.com/$repo.git', :ref => '$latest_release'
     END_OF_CHEFFILE
     librarian-chef install
-
-### <a name="installation-kgc"></a> Using knife-github-cookbooks
-
-The [knife-github-cookbooks][kgc] gem is a plugin for *knife* that supports
-installing cookbooks directly from a GitHub repository. To install with the
-plugin:
-
-    gem install knife-github-cookbooks
-    cd chef-repo
-    knife cookbook github install fnichol/chef-user/v0.3.0
-
-### <a name="installation-gitsubmodule"></a> As a Git Submodule
-
-A common practice (which is getting dated) is to add cookbooks as Git
-submodules. This is accomplishes like so:
-
-    cd chef-repo
-    git submodule add git://github.com/fnichol/chef-user.git cookbooks/user
-    git submodule init && git submodule update
-
-**Note:** the head of development will be linked here, not a tagged release.
-
-### <a name="installation-tarball"></a> As a Tarball
-
-If the cookbook needs to downloaded temporarily just to be uploaded to a Chef
-Server or Opscode Hosted Chef, then a tarball installation might fit the bill:
-
-    cd chef-repo/cookbooks
-    curl -Ls https://github.com/fnichol/chef-user/tarball/v0.3.0 | tar xfz - && \
-      mv fnichol-chef-user-* user
 
 ## <a name="recipes"></a> Recipes
 
@@ -131,7 +155,7 @@ Server or Opscode Hosted Chef, then a tarball installation might fit the bill:
 
 This recipe is a no-op and does nothing.
 
-### <a name="recipes-data-bag"></a> default
+### <a name="recipes-data-bag"></a> data_bag
 
 Processes a list of users with data drawn from a data bag. The default data bag
 is `users` and the list of user account to create on this node is set on
@@ -151,6 +175,12 @@ The default user shell given to a user. Each resource can override this value
 which varies by platform. Generally speaking, the default value is
 `"/bin/bash"`.
 
+### <a name="attributes-home-dir-mode"></a> home_dir_mode
+
+The default Unix permissions applied to a user's home directory.
+
+The default is `"2755"`.
+
 ### <a name="attributes-manage-home"></a> manage_home
 
 Whether of not to manage the home directory of a user by default. Each resource
@@ -161,7 +191,17 @@ can override this value. The are 2 valid states:
 
 The default is `true`.
 
-### <a name="attributes-create-user-group"></a> create_user_group
+### <a name="attributes-non-unique"></a> non_unique
+
+Whether of not to allow the creation of a user account with a duplicate UID.
+Each resource can override this value. The are 2 valid states:
+
+* `"true"`, `true`, or `"yes"`: will allow duplicate UIDs.
+* `"false"`, `false`, or `"no"`: will not allow duplicate UIDs.
+
+The default is `false`.
+
+### <a name="attributes-create-user-group"></a> create_group
 
 Whether or not to to create a group with the same name as the user by default.
 Each resource can override this value. The are 2 valid states:
@@ -311,6 +351,11 @@ this by installing the "libshadow-ruby1.8" package.
       <td><code>true</code></td>
     </tr>
     <tr>
+      <td>non_unique</td>
+      <td>Whether or not to allow the creation of a user account with a duplicate UID.</td>
+      <td><code>false</code></td>
+    </tr>
+    <tr>
       <td>create_group</td>
       <td>
         Whether or not to to create a group with the same name as the user.
@@ -343,10 +388,10 @@ this by installing the "libshadow-ruby1.8" package.
       home      '/opt/hoth/hsolo'
     end
 
-##### Locking a User Account
+##### Creating and Locking a User Account
 
     user_account 'lando' do
-      action  :lock
+      action  [:create, :lock]
     end
 
 ##### Removing a User account
@@ -381,6 +426,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
+[berkshelf]:      http://berkshelf.com/
 [chef_repo]:    https://github.com/opscode/chef-repo
 [cheffile]:     https://github.com/applicationsonline/librarian/blob/master/lib/librarian/chef/templates/Cheffile
 [kgc]:          https://github.com/websterclay/knife-github-cookbooks#readme

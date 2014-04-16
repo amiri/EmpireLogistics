@@ -29,14 +29,22 @@ when 'openbsd'
 when 'mac_os_x', 'mac_os_x_server'
   default['user']['home_root']      = "/Users"
   default['user']['default_shell']  = "/bin/bash"
+when 'omnios'
+  default['user']['home_root']      = "/export/home"
+  default['user']['default_shell']  = "/bin/bash"
 else
   default['user']['home_root']      = "/home"
   default['user']['default_shell']  = nil
 end
 
+default['user']['home_dir_mode'] = '2755'
+
 default['user']['manage_home']        = "true"
 default['user']['create_user_group']  = "true"
 default['user']['ssh_keygen']         = "true"
+default['user']['non_unique']         = "false"
 
 default['user']['data_bag_name']        = "users"
 default['user']['user_array_node_attr'] = "users"
+
+default[default['user']['user_array_node_attr']] = []

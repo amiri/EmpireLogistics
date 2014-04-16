@@ -272,8 +272,7 @@
     },
     "source_url": "http://projects.unbit.it/downloads/uwsgi-latest.tar.gz"
   },
-  "ssh-keys": {
-    "amiri":"amiri",
-    "root":"amiri"
+  "user": {
+    "data_bag_name":"users"
   }
 }
