@@ -18,10 +18,11 @@ If you want to break it down, you can build the parts individually:
     make prereqs
     make chef
     make database
+    make sqitch
 
 Now you should have a populated PostgreSQL database with
 a lot of data in place. You also have nginx, PostgreSQL, and uwsgi
-installed, but unconfigured.
+installed and everything running.
 
 VAGRANT/VIRTUALBOX
 

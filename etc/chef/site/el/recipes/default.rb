@@ -229,22 +229,6 @@ include_recipe "npm"
 include_recipe "sudo"
 include_recipe "perl"
 
-bash "sqitch" do
-  user "el"
-  group "el"
-  cwd "/var/local/EmpireLogistics/current"
-  environment ({ 'HOME' => ::Dir.home(node['env']['user']), 'USER' => node['env']['user'], 'PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/local/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin:/var/local/EmpireLogistics/shared/python/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games', 'PERLBREW_PERL' => 'perl-5.18.2', 'PERLBREW_ROOT' => '/var/local/EmpireLogistics/shared/perl', 'PERLBREW_HOME' => '/home/el/.perlbrew', 'PERLBREW_PATH' => '/var/local/EmpireLogistics/shared/perl/bin:/var/local/EmpireLogistics/shared/perl/perls/perl-5.18.2/bin' })
-  code <<-EOH
-    cd /var/local/EmpireLogistics/current
-    source /home/el/.profile
-    source /home/el/.bashrc
-    perlbrew switch perl-5.18.2
-    perl -w -CAS -Mlocal::lib=local local/bin/sqitch --top-dir etc/schema deploy && perl -w -CAS -Mlocal::lib=local local/bin/sqitch --top-dir etc/schema verify
-  EOH
-  action :run
-  returns [0,1]
-end
-
 cookbook_file "uwsgi.conf" do
   source "/etc/init/uwsgi.conf"
   path "/etc/init/uwsgi.conf"

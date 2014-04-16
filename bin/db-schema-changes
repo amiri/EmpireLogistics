@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cd /var/local/EmpireLogistics/current
+source /home/el/.profile
+source /home/el/.bashrc
+perlbrew switch perl-5.18.2
+perl -w -CAS -Mlocal::lib=local local/bin/sqitch --top-dir etc/schema deploy && perl -w -CAS -Mlocal::lib=local local/bin/sqitch --top-dir etc/schema verify

@@ -9,7 +9,7 @@ labor_dir := data/labor_organizations
 
 ########## Meta commands
 
-all: chef data database
+all: chef data database sqitch
 
 data: download-data rail warehouses ports labor
 
@@ -40,6 +40,11 @@ chef:
 
 tilestache-cache:
 	sudo -u el /var/local/EmpireLogistics/current/python/bin/tilestache-seed.py -c /var/local/EmpireLogistics/current/etc/empirelogistics_tiles.cfg -l lines -b 71.130988 -169.359741 13.068777 -53.695679 -e json 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 &
+
+.PHONY: sqitch
+
+sqitch:
+	sudo -u el bin/db-schema-changes
 
 ########## Download data
 
