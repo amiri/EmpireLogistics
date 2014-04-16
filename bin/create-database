@@ -5,24 +5,24 @@ DB2=pgloader
 
 # Drop db
 echo "Dropping $DB"
-dropdb $DB
+psql -U postgres -q -c "drop database $DB"
 echo "Dropping $DB2"
-dropdb $DB2
+psql -U postgres -q -c "drop database $DB2"
 
 # Drop user
 echo "Dropping user"
-psql -c "DROP OWNED BY el CASCADE"
-dropuser el
+psql -U postgres -q -c "DROP OWNED BY el CASCADE"
+psql -U postgres -q -c "DROP ROLE el"
 
 # Create role el
 echo "Creating user"
-psql -c "create role el WITH NOSUPERUSER CREATEDB LOGIN REPLICATION"
+psql -U postgres -q -c "create role el WITH NOSUPERUSER CREATEDB LOGIN REPLICATION"
 
 echo "Creating $DB"
-createdb $DB
+psql -U postgres -q -c "create database $DB"
 
 echo "Creating $DB2"
-createdb $DB2
+psql -U postgres -q -c "create database $DB2"
 
 echo "Enabling PostGIS"
 psql -U postgres -q -d $DB -c "create extension if not exists postgis"
