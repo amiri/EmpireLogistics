@@ -54,6 +54,7 @@ SITE
       yum (~> 3.0)
       yum-epel (>= 0.0.0)
     sudo (2.3.0)
+    user (0.3.0)
     uwsgi (0.1.0)
       conffile (>= 0.0.0)
       python (>= 0.0.0)
@@ -130,5 +131,6 @@ DEPENDENCIES
   python (>= 0)
   ssh-keys (>= 0)
   sudo (>= 0)
+  user (>= 0)
   uwsgi (>= 0)
 

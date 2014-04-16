@@ -24,4 +24,5 @@ cookbook "el",
 cookbook "sudo"
 cookbook "ssh-keys",
     :git => "https://github.com/nickola/chef-ssh-keys"
-cookbook "user"
+cookbook "user",
+    :git => "https://github.com/fnichol/chef-user"
