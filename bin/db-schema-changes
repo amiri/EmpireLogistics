@@ -1,6 +1,5 @@
 #!/bin/bash
 
-echo `whoami`
 cd /var/local/EmpireLogistics/current
 source /home/el/.profile
 source /home/el/.bashrc
