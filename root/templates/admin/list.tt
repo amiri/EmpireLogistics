@@ -2,7 +2,7 @@
     <h2><a href="/admin">Back to Main Admin Page</a></h2>
 
     <div>
-        <p><a href="[% c.uri_for('create') %]">[% c.loc('New [_1]', item_rs.result_source.source_name) %]</a></p>
+        <p><a href="[% c.uri_for(c.controller.action_for('create')) %]">[% c.loc('New [_1]', item_rs.result_source.source_name) %]</a></p>
 
 [% INCLUDE pages %]
 
@@ -85,7 +85,9 @@
 $(document).ready(function() {
     $('#list').dataTable( {
         "sPaginationType": "bootstrap",
-        "aaSorting": [[ 0, "desc" ]]
+        "aoColumnDefs": [
+            { "sType": "num-html", "aTargets": [ 0 ] }
+        ]
     } );
 } );
 </script>

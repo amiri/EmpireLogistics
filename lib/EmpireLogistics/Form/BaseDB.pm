@@ -29,9 +29,9 @@ around 'update_model', sub {
     my ($orig, $self, @args) = @_;
 
     # Transform delete_time into datetime, if needed
-    if ($self->values->{delete_time} && !$self->item->delete_time) {
+    if ($self->values->{delete_time} and $self->item and not $self->item->delete_time) {
         $self->values->{delete_time} = DateTime->now; # set
-    } elsif (!$self->values->{delete_time} && $self->item->delete_time) {
+    } elsif (!$self->values->{delete_time} and $self->item and $self->item->delete_time) {
         $self->values->{delete_time} = undef; # unset
     } else {
         delete $self->values->{delete_time}; # don't touch

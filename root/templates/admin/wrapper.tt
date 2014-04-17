@@ -4,6 +4,7 @@
 [% style_added = c.add_stylesheet('/css/lib/dataTables.bootstrap.css') %]
 [% js_added = c.add_jsfile('/js/lib/jquery.dataTables.min.js') %]
 [% js_added = c.add_jsfile('/js/lib/dataTables.bootstrap.js') %]
+[% js_added = c.add_jsfile('/js/lib/dataTables.num-html-sort.js') %]
 <h1>Administration</h1>
 <div class="row">
     <div class="col-md-2" id="admin-nav">

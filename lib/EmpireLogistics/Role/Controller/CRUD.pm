@@ -82,25 +82,32 @@ sub get_index : Chained('base') PathPart('') Args(0) GET {
 sub create_for : Chained('base') PathPart('create_for') Args(1) {
     my ( $self, $c, $id ) = @_;
     $c->log->debug( 'I got an arg for create_for: ', $id );
-    my $new_object = $self->model->new_result( {} );
+    #my $new_object = $self->model->new_result( {} );
     $c->stash(
         template => "admin/create_update.tt",
         creation => 1,
         for      => $id,
     );
-    return $self->form_create( $c, $new_object );
+    return $self->form_create(
+        $c,
+        #$new_object,
+    );
 }
 
 sub create : Chained('base') PathPart('create') Args(0) {
     my ( $self, $c ) = @_;
-    my $new_object = $self->model->new_result( {} );
+    #my $new_object = $self->model->new_result( {} );
     my $template = "create_update.tt";
     if ( $c->req->is_xhr && lc $c->req->method eq 'get' ) {
         $template = 'multi_create.tt';
     }
 
     $c->stash( creation => 1, template => "admin/$template", );
-    return $self->form_create( $c, $new_object, $template );
+    return $self->form_create(
+        $c,
+        #$new_object,
+        $template,
+    );
 }
 
 sub edit : Chained('object') PathPart('edit') Args(0) {
@@ -168,7 +175,7 @@ sub delete : Chained('object') PathPart('delete') Args(0) {
     } else {
         $c->flash->{alert} = [ {class => 'warning', message => $self->class . ' not deleted' } ];
     }
-    $c->res->redirect( $c->uri_for( $self->action_for('list') ) );
+    $c->res->redirect( $c->uri_for( $c->controller($self->namespace . $self->class)->action_for('get_index')  ) );
     return 1;
 }
 
@@ -186,12 +193,12 @@ sub restore : Chained('object') PathPart('restore') Args(0) {
     } else {
         $c->flash->{alert} = [ {class => 'warning', message => $self->class . ' not restored' } ];
     }
-    $c->res->redirect( $c->uri_for( $self->action_for('list') ) );
+    $c->res->redirect( $c->uri_for( $self->action_for('get_index') ) );
     return 1;
 }
 
 sub form_create {
-    my ( $self, $c, $stashed_object, $template, $form_number ) = @_;
+    my ( $self, $c, $template, $form_number ) = @_;
     my $creation = $c->stash->{creation};
     my $form;
     if ( $c->stash->{for} ) {
@@ -241,20 +248,16 @@ sub form_create {
         }
 
         $form->process(
-            item   => $stashed_object,
             schema => $c->stash->{schema},
             params => $c->req->params,
         );
         $c->stash( fillinform => $form->fif );
         return unless $form->validated;
 
-        my ( $success_msg, $error_msg )
-            = $self->process_multi_creates( $c, $stashed_object );
-
         $c->flash->{alert} = [ { class => 'success', message => $self->class . ' created' } ];
     }
 
-    $c->res->redirect( $c->uri_for( $self->action_for('list') ) );
+    $c->res->redirect( $c->uri_for( $c->controller($self->namespace . $self->class)->action_for('get_index')  ) );
 }
 
 sub view : Chained('object') PathPart('') : Args(0) {
