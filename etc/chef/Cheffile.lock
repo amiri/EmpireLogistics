@@ -100,13 +100,6 @@ GIT
     user (0.3.1)
 
 GIT
-  remote: https://github.com/nickola/chef-ssh-keys
-  ref: master
-  sha: ccd948d42e57d1cc19c7092b981518691723ffc5
-  specs:
-    ssh-keys (1.0.0)
-
-GIT
   remote: https://github.com/phlipper/chef-postgresql
   ref: master
   sha: 2c412e2f1aebce50d84fe13a3d9c6c544004fad6
@@ -135,7 +128,6 @@ DEPENDENCIES
   perlbrew (>= 0)
   postgresql (>= 0)
   python (>= 0)
-  ssh-keys (>= 0)
   sudo (>= 0)
   user (>= 0)
   uwsgi (>= 0)
