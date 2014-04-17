@@ -5,3 +5,4 @@ cookbook_path [
     "#{current_dir}/chef/site-cookbooks/"
 ]
 data_bag_path "#{current_dir}/chef/data_bags"
+ssl_verify_mode :verify_peer

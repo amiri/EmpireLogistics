@@ -22,7 +22,5 @@ cookbook "npm",
 cookbook "el",
     :path => "site/el"
 cookbook "sudo"
-cookbook "ssh-keys",
-    :git => "https://github.com/nickola/chef-ssh-keys"
 cookbook "user",
     :git => "https://github.com/fnichol/chef-user"
