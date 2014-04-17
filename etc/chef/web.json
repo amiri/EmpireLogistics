@@ -273,7 +273,6 @@
     "source_url": "http://projects.unbit.it/downloads/uwsgi-latest.tar.gz"
   },
   "users": [
-    "amiri",
-    "el"
+    "amiri"
   ]
 }
