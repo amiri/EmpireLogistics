@@ -280,5 +280,12 @@
       "PermitRootLogin": "no",
       "PasswordAuthentication": "no"
     }
+  },
+  "postfix": {
+    "mail_type": "master",
+    "main": {
+      "mydestination": null,
+      "relay_domains": null
+    }
   }
 }
