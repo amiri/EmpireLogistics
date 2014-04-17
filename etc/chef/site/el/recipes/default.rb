@@ -74,6 +74,7 @@ end
 
 include_recipe "user"
 include_recipe "user::data_bag"
+include_recipe "openssh"
 
 execute "remove_uwsgi" do
   command "apt-get -y --purge autoremove uwsgi-*"

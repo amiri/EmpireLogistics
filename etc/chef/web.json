@@ -274,5 +274,11 @@
   },
   "users": [
     "amiri"
-  ]
+  ],
+  "openssh": {
+    "server": {
+      "PermitRootLogin": "no",
+      "PasswordAuthentication": "no"
+    }
+  }
 }

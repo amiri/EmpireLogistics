@@ -24,3 +24,4 @@ cookbook "el",
 cookbook "sudo"
 cookbook "user",
     :git => "https://github.com/fnichol/chef-user"
+cookbook "openssh"
