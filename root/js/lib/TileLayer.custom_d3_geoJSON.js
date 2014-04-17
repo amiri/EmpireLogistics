@@ -45,6 +45,7 @@ L.TileLayer.custom_d3_geoJSON = L.TileLayer.extend({
                         .attr("data-content", self.options.content)
                         .on('mouseover', self.options.mouseover)
                         .on('mouseout', self.options.mouseout)
+                        .on('click', self.options.click)
                         ;
                         $("path").popover({
                             "html":true,
@@ -109,6 +110,7 @@ L.TileLayer.custom_d3_geoJSON = L.TileLayer.extend({
                         .attr("data-content", self.options.content)
                         .on('mouseover', self.options.mouseover)
                         .on('mouseout', self.options.mouseout)
+                        .on('click', self.options.click)
                         ;
                         $("circle").popover({
                             "html":true,

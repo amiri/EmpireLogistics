@@ -187,6 +187,10 @@
         html += "</dl>";
         return html;
     }
+    function railLineClick(d) {
+        console.log("Clicked railLine");
+        console.log(d);
+    }
 
     // Rail interline
     function railInterlineTitle(d) {
@@ -213,6 +217,10 @@
         html += "</dl>";
         return html;
     }
+    function railInterlineClick(d) {
+        console.log("Clicked railInterline");
+        console.log(d);
+    }
 
     // Rail node
     function railNodeTitle(d) {
@@ -226,6 +234,10 @@
         }
         html += "</dl>";
         return html;
+    }
+    function railNodeClick(d) {
+        console.log("Clicked railNode");
+        console.log(d);
     }
 
     // Warehouse
@@ -261,6 +273,10 @@
         }
         html += "</dl>";
         return html;
+    }
+    function warehouseClick(d) {
+        console.log("Clicked warehouse");
+        console.log(d);
     }
 
     // Port
@@ -303,6 +319,13 @@
         html += "</dl>";
         return html;
     }
+    function portClick(d) {
+        console.log("Clicked port");
+        console.log(d);
+        $('#port-modal').modal({
+            remote: '/admin/port/'+ d.properties.id + '/edit/'
+        });
+    }
 
     // Rail lines layer
     new L.geoJson({
@@ -318,7 +341,8 @@
         title: railLineTitle,
         content: railLinePopoverContent,
         mouseover: railLineMouseover,
-        mouseout: railLineMouseout
+        mouseout: railLineMouseout,
+        click: railLineClick
     });
     // Put this one on the bottom with "true"
     map.addLayer(lineLayer, true);
@@ -337,7 +361,8 @@
         title: railInterlineTitle,
         content: railInterlinePopoverContent,
         mouseover: railInterlineMouseover,
-        mouseout: railInterlineMouseout
+        mouseout: railInterlineMouseout,
+        click: railInterlineClick
     });
     map.addLayer(interlinesLayer);
     overlays["Rail Interlines"] = interlinesLayer;
@@ -357,7 +382,8 @@
         title: portTitle,
         content: portPopoverContent,
         mouseover: portMouseover,
-        mouseout: portMouseout
+        mouseout: portMouseout,
+        click: portClick,
     });
     map.addLayer(portLayer);
     overlays["Ports"] = portLayer;
@@ -376,7 +402,8 @@
         title: warehouseTitle,
         content: warehousePopoverContent,
         mouseover: warehouseMouseover,
-        mouseout: warehouseMouseout
+        mouseout: warehouseMouseout,
+        click: warehouseClick
     });
     map.addLayer(warehouseLayer);
     overlays["Warehouses"] = warehouseLayer;
@@ -395,7 +422,8 @@
         title: railNodeTitle,
         content: railNodePopoverContent,
         mouseover: railNodeMouseover,
-        mouseout: railNodeMouseout
+        mouseout: railNodeMouseout,
+        click: railNodeClick
     });
     map.addLayer(nodesLayer);
     overlays["Rail Nodes"] = nodesLayer;

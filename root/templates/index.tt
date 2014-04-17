@@ -1,2 +1,3 @@
 <div id="map"></div>
 [% INCLUDE 'js/el.tt' %]
+[% INCLUDE 'edit-modals.tt' %]
