@@ -1,0 +1,15 @@
+{
+  "id": "michael",
+  "ssh_keys": [
+    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCn6AvSyAj1IudEZcHvYRgtBWQwh0q2NIDsULO0pxRG6OPo+rlOJ4r+NCG6goyNQvS2vDrTROs+52oU48wrLuyMdsxPNnEkrho//HLgsYGeRhNJPNPEuHWsWt/3JqsZJ8LR+NM48d/Bea6HxrTTgW2iDe3LGI9kQf0oARfQedTPIBcqTIeZ0FOi/55gvHS5V05tj4lq0b7KJo2KGhruEXKrcpFtzG8ABaiQWAOLqaxBQMgifan5OxZMHiIpjI0YFeMnwd3X+6YnBtRLSNEjo3e2mmKAoqjLyj//LkmMhv+2F797/scnF9/wt8V3S81OenZ8z5pOS89lcP0X80tgLzL/"
+  ],
+  "groups": [ "admin", "sysadmin" ],
+  "uid": 1919,
+  "shell": "/bin/bash",
+  "home": "/home/michael",
+  "comment": "Michael Wilson",
+  "nagios": {
+    "email": "mykulw@gmail.com"
+  },
+  "action": "create"
+}

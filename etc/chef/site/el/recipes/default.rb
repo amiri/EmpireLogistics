@@ -94,6 +94,27 @@ remote_directory "/var/local/EmpireLogistics" do
   action :create_if_missing
 end
 
+# Install el's ssh keys
+template "/tmp/ssh_deploy_wrapper.sh" do
+  source "ssh_deploy_wrapper.sh.erb"
+  owner "el"
+  mode 0770
+end
+
+cookbook_file "id_rsa.pub" do
+  source "/ssh/id_rsa.pub"
+  path "/home/el/.ssh/id_rsa.pub"
+  owner "el"
+  mode 0600
+end
+
+cookbook_file "id_rsa" do
+  source "/ssh/id_rsa"
+  path "/home/el/.ssh/id_rsa"
+  owner "el"
+  mode 0600
+end
+
 # This is stupid, because chef won't change perms of parent directories
 # in recipe above
 execute "chown" do
@@ -102,7 +123,8 @@ execute "chown" do
 end
 
 deploy_revision "empirelogistics" do
-  repo "http://github.com/amiri/EmpireLogistics.git"
+  ssh_wrapper "/tmp/ssh_deploy_wrapper.sh"
+  repo "git@github.com:amiri/EmpireLogistics.git"
   deploy_to "/var/local/EmpireLogistics"
   revision "HEAD"
   user "el"
