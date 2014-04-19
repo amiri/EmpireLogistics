@@ -9,12 +9,12 @@ has 'form' => (
 );
 
 has 'delete_form' => (
-    is => 'ro',
+    is       => 'ro',
     required => 1,
 );
 
 has 'restore_form' => (
-    is => 'ro',
+    is       => 'ro',
     required => 1,
 );
 
@@ -36,13 +36,14 @@ has 'item_name' => (
 );
 
 sub base : Chained('') PathPart('') CaptureArgs(0) {
-    my ($self, $c) = @_;
-    $self->model($c->model($self->model_name));
+    my ( $self, $c ) = @_;
+    $self->model( $c->model( $self->model_name ) );
     my $schema = $c->model('DB')->schema;
     $c->stash(
         item_rs => $self->model,
         schema  => $schema,
-        form => $self->form->new(schema => $schema, user_id => $c->user->id,),
+        form =>
+            $self->form->new( schema => $schema, user_id => $c->user->id, ),
         delete_form => $self->delete_form->new(
             item_class => $self->class,
             schema     => $schema,
@@ -54,7 +55,7 @@ sub base : Chained('') PathPart('') CaptureArgs(0) {
             user_id    => $c->user->id,
         ),
         controller_name => $self->namespace . $self->class,
-        class_name => $self->class,
+        class_name      => $self->class,
     );
 }
 
@@ -66,9 +67,28 @@ sub object : Chained('base') PathPart('') CaptureArgs(1) {
 sub get_index : Chained('base') PathPart('') Args(0) GET {
     my ( $self, $c ) = @_;
     my $page = $c->req->param('page') // 1;
+    my $rows = $c->req->param('rows') // 10;
     $page = 1 if ( $page !~ /^\d+$/ );
     my $rs = $self->model;
-    my $items = [ $rs->all ];
+    my $items = [ $rs->search( {}, { page => $page, rows => $rows, } ) ];
+
+    my $columns = [ $self->model->result_source->columns ];
+    $c->stash(
+        items     => $items,
+        columns   => $columns,
+        template  => 'admin/list.tt',
+        item_name => $self->item_name,
+    );
+}
+
+sub post_index : Chained('base') PathPart('') Args(0) POST {
+    my ( $self, $c ) = @_;
+    return unless $c->req->is_xhr;
+    my $page = $c->req->param('page') // 1;
+    my $rows = $c->req->param('rows') // 10;
+    $page = 1 if ( $page !~ /^\d+$/ );
+    my $rs = $self->model;
+    my $items = [ $rs->search( {}, { page => $page, rows => $rows, } ) ];
 
     my $columns = [ $self->model->result_source->columns ];
     $c->stash(
@@ -82,7 +102,6 @@ sub get_index : Chained('base') PathPart('') Args(0) GET {
 sub create_for : Chained('base') PathPart('create_for') Args(1) {
     my ( $self, $c, $id ) = @_;
     $c->log->debug( 'I got an arg for create_for: ', $id );
-    #my $new_object = $self->model->new_result( {} );
     $c->stash(
         template => "admin/create_update.tt",
         creation => 1,
@@ -90,32 +109,27 @@ sub create_for : Chained('base') PathPart('create_for') Args(1) {
     );
     return $self->form_create(
         $c,
+
         #$new_object,
     );
 }
 
 sub create : Chained('base') PathPart('create') Args(0) {
     my ( $self, $c ) = @_;
-    #my $new_object = $self->model->new_result( {} );
     my $template = "create_update.tt";
     if ( $c->req->is_xhr && lc $c->req->method eq 'get' ) {
         $template = 'multi_create.tt';
     }
 
     $c->stash( creation => 1, template => "admin/$template", );
-    return $self->form_create(
-        $c,
-        #$new_object,
-        $template,
-    );
+    return $self->form_create( $c, $template, );
 }
 
 sub edit : Chained('object') PathPart('edit') Args(0) {
     my ( $self, $c ) = @_;
     my $form   = $c->stash->{form};
     my $action = $c->uri_for(
-        $c->controller( $self->namespace . $self->class )
-            ->action_for('edit'),
+        $c->controller( $self->namespace . $self->class )->action_for('edit'),
         [ $c->stash->{object}->id ]
     );
 
@@ -133,7 +147,8 @@ sub edit : Chained('object') PathPart('edit') Args(0) {
             params => $c->req->params,
             action => $action,
             );
-        $c->flash->{alert} = [ { class => 'success', message => $self->class . ' updated' } ];
+        $c->flash->{alert} = [
+            { class => 'success', message => $self->class . ' updated' } ];
 
         # Redirect the user back to the list page
         #$c->res->redirect( $c->uri_for( $self->action_for('list') ) );
@@ -144,18 +159,17 @@ sub edit : Chained('object') PathPart('edit') Args(0) {
                 $c->req->captures
             )
         );
-    }
-    else {
+    } else {
         $form->process( item => $c->stash->{object}, );
         $c->stash(
-            form      => $form,
-            template  => "admin/create_update.tt",
-            item      => $c->stash->{object},
-            item_name => $self->item_name,
-            creation  => undef,
-            action    => $action,
-            table_data => $form->get_edit_history,
-            table_cols => $c->model('DB::EditHistory')->header_labels,
+            form        => $form,
+            template    => "admin/create_update.tt",
+            item        => $c->stash->{object},
+            item_name   => $self->item_name,
+            creation    => undef,
+            action      => $action,
+            table_data  => $form->get_edit_history,
+            table_cols  => $c->model('DB::EditHistory')->header_labels,
             object_type => $self->class,
         );
     }
@@ -167,15 +181,24 @@ sub delete : Chained('object') PathPart('delete') Args(0) {
     $delete_form->process(
         item   => $c->stash->{object},
         schema => $c->stash->{schema},
-        params => { %{$c->req->params},  delete_time => 1 },
+        params => { %{ $c->req->params }, delete_time => 1 },
     );
     $c->stash->{delete_form} = $delete_form;
-    if ($delete_form->validated) {
-        $c->flash->{alert} = [ { class => 'success', message => $self->class . ' deleted' } ];
+    if ( $delete_form->validated ) {
+        $c->flash->{alert} = [
+            { class => 'success', message => $self->class . ' deleted' } ];
     } else {
-        $c->flash->{alert} = [ {class => 'warning', message => $self->class . ' not deleted' } ];
+        $c->flash->{alert}
+            = [
+            { class => 'warning', message => $self->class . ' not deleted' }
+            ];
     }
-    $c->res->redirect( $c->uri_for( $c->controller($self->namespace . $self->class)->action_for('get_index')  ) );
+    $c->res->redirect(
+        $c->uri_for(
+            $c->controller( $self->namespace . $self->class )
+                ->action_for('get_index')
+        )
+    );
     return 1;
 }
 
@@ -185,13 +208,17 @@ sub restore : Chained('object') PathPart('restore') Args(0) {
     $restore_form->process(
         item   => $c->stash->{object},
         schema => $c->stash->{schema},
-        params => { %{$c->req->params},  restore_time => 1 },
+        params => { %{ $c->req->params }, restore_time => 1 },
     );
     $c->stash->{restore_form} = $restore_form;
-    if ($restore_form->validated) {
-        $c->flash->{alert} = [ { class => 'success', message => $self->class . ' restored' } ];
+    if ( $restore_form->validated ) {
+        $c->flash->{alert} = [
+            { class => 'success', message => $self->class . ' restored' } ];
     } else {
-        $c->flash->{alert} = [ {class => 'warning', message => $self->class . ' not restored' } ];
+        $c->flash->{alert}
+            = [
+            { class => 'warning', message => $self->class . ' not restored' }
+            ];
     }
     $c->res->redirect( $c->uri_for( $self->action_for('get_index') ) );
     return 1;
@@ -227,9 +254,9 @@ sub form_create {
         );
         $c->stash( fillinform => $form->fif );
         return unless $form->validated;
-        $c->flash->{alert} = [ { class => 'success', message => $self->class . ' created' } ];
-    }
-    else {
+        $c->flash->{alert} = [
+            { class => 'success', message => $self->class . ' created' } ];
+    } else {
         $c->log->debug("I do not have for and am not making a new form");
         $form = $c->stash->{form};
         my $action
@@ -254,10 +281,16 @@ sub form_create {
         $c->stash( fillinform => $form->fif );
         return unless $form->validated;
 
-        $c->flash->{alert} = [ { class => 'success', message => $self->class . ' created' } ];
+        $c->flash->{alert} = [
+            { class => 'success', message => $self->class . ' created' } ];
     }
 
-    $c->res->redirect( $c->uri_for( $c->controller($self->namespace . $self->class)->action_for('get_index')  ) );
+    $c->res->redirect(
+        $c->uri_for(
+            $c->controller( $self->namespace . $self->class )
+                ->action_for('get_index')
+        )
+    );
 }
 
 sub view : Chained('object') PathPart('') : Args(0) {

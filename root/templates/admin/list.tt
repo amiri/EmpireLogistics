@@ -1,15 +1,14 @@
+[% c.add_jsfile('/js/admin/list-tables.js') %]
 [% meta.title = item_rs.result_source.source_name _ " List" %]
     <h2><a href="/admin">Back to Main Admin Page</a></h2>
 
     <div>
         <p><a href="[% c.uri_for(c.controller.action_for('create')) %]">[% c.loc('New [_1]', item_rs.result_source.source_name) %]</a></p>
 
-[% INCLUDE pages %]
-
     </div>
 
 <div>
-<table class="table table-hover" id="list">
+<table class="table table-hover" id="list" data-table-source="[% c.uri_for(c.controller.action_for('get_index')) %]">
     <thead>
         <tr>
         [% FOREACH col IN item_rs.result_source.columns %]
@@ -63,31 +62,3 @@
 </table>
 </div>
 
-[% INCLUDE pages %]
-
-[% BLOCK pages %]
-[%  IF pager.previous_page OR pager.next_page %]
-<div class="row">
-    <div class="col-md-5">
-        [% IF pager.previous_page %]
-            <a href="[% c.request.uri_with( page => pager.previous_page ) %]">[% c.loc('Previous Page') %]</a>
-        [% END %]
-    </div>
-    <div class="col-md-5">
-        [% IF pager.next_page %]
-            <a href="[% c.request.uri_with( page => pager.next_page ) %]">[% c.loc('Next Page') %]</a>
-        [% END %]
-    </div>
-</div>
-[%  END %]
-[% END %]
-<script type="text/javascript">
-$(document).ready(function() {
-    $('#list').dataTable( {
-        "sPaginationType": "bootstrap",
-        "aoColumnDefs": [
-            { "sType": "num-html", "aTargets": [ 0 ] }
-        ]
-    } );
-} );
-</script>

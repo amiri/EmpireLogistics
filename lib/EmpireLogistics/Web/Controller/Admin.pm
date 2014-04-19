@@ -30,7 +30,8 @@ sub auto : Private {
 
 sub begin :Private {
     my ( $self, $c ) = @_;
-    $c->stash->{wrapper} = 'admin/wrapper.tt';
+    my $wrapper = $c->req->is_xhr ? 'admin/modal-wrapper.tt' : 'admin/wrapper.tt';
+    $c->stash->{wrapper} = $wrapper;
 }
 
 sub admin_base : Chained('/') PathPart('admin') CaptureArgs(0) {

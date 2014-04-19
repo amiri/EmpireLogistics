@@ -2,7 +2,7 @@
 
 <div>
 <h3>Edit History [% object_type -%]</h3>
-<table class="table table-striped table-bordered table-condensed" id="edithistory">
+<table class="table table-striped table-bordered table-condensed edithistory">
     <thead>
       <tr>
         [% FOREACH col IN table_cols %]
@@ -23,16 +23,7 @@
         [% END %]
     </tbody>
 </table>
-
-
-<script type="text/javascript">
-$(document).ready(function() {
-    $('#edithistory').dataTable( {
-        "sPaginationType": "bootstrap",
-        "aaSorting": [[ 0, "desc" ]]
-    } );
-} );
-</script>
 </div>
 
+[% js_added = c.add_jsfile('/js/admin/edit-history.js') %]
 [% END %]

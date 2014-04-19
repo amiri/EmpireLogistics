@@ -1,6 +1,6 @@
 jQuery(function($) {
     $("a.sample-data").hide();
-    $("#object_type").on('change', function(){
+    $("#object_type").on('change', function() {
         var val = $(this).val();
         var sampleDataAnchor = $("a.sample-data");
         sampleDataAnchor.attr('href', '/admin/bulk-import/sample-csv/' + val);
@@ -10,3 +10,4 @@ jQuery(function($) {
         sampleDataAnchor.show();
     });
 });
+
