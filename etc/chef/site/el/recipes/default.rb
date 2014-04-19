@@ -203,7 +203,7 @@ geolib_filename = ::File.basename(node['nginx']['geoip']['lib_url'])
 geolib_filepath = "#{Chef::Config['file_cache_path']}#{geolib_filename}"
 
 remote_file geolib_filepath do
-  source   "#{node['nginx']['geoip']['lib_url']}.tar.gz"
+  source   "#{node['nginx']['geoip']['lib_url']}"
   checksum node['nginx']['geoip']['lib_checksum']
   owner    'root'
   group    'root'
