@@ -35,13 +35,13 @@ has_field 'delete_time' => (
     deflate_method => \&deflate_delete_time,
 );
 
-has_field 'port_name' => ( type => 'Text', );
-has_field 'longitude' => ( type => 'Text', );
-has_field 'latitude' => ( type => 'Text', );
-has_field 'geometry' => ( type => 'Text', );
-has_field 'country' => ( type => 'Text', );
-has_field 'harbor_size' => ( type => 'Text', );
-has_field 'harbor_type' => ( type => 'Text', );
+has_field 'port_name' => ( type => 'Text', required => 1, );
+has_field 'longitude' => ( type => 'Text', required => 1, );
+has_field 'latitude' => ( type => 'Text', required => 1, );
+has_field 'geometry' => ( type => 'Text', disabled => 1, readonly => 1, );
+has_field 'country' => ( type => 'Text', required => 1, );
+has_field 'harbor_size' => ( type => 'Text', required => 1, );
+has_field 'harbor_type' => ( type => 'Text', required => 1, );
 has_field 'shelter' => ( type => 'Text', );
 has_field 'entry_tide_restriction' => ( type => 'Boolean', );
 has_field 'entry_swell_restriction' => ( type => 'Boolean', );
@@ -50,10 +50,10 @@ has_field 'entry_other_restriction' => ( type => 'Boolean', );
 has_field 'overhead_limits' => ( type => 'Boolean', );
 has_field 'channel_depth' => ( type => 'Text', );
 has_field 'anchor_depth' => ( type => 'Text', );
-has_field 'cargo_pier_depth' => ( type => 'Text', );
+has_field 'cargo_pier_depth' => ( type => 'Text', required => 1, );
 has_field 'oil_terminal_depth' => ( type => 'Text', );
 has_field 'tide_range' => ( type => 'Integer', );
-has_field 'max_vessel_size' => ( type => 'Text', );
+has_field 'max_vessel_size' => ( type => 'Text', required => 1, );
 has_field 'good_holding_ground' => ( type => 'Boolean', );
 has_field 'turning_basin' => ( type => 'Boolean', );
 has_field 'first_port_of_entry' => ( type => 'Boolean', );

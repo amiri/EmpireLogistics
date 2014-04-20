@@ -1,8 +1,10 @@
 [% title = (creation == 1 ? 'Create' : 'Edit') %]
 [% meta.title = title _ " " _ class_name %]
+[% UNLESS c.req.is_xhr %]
 <h2><a href="/admin">Back to Admin Page</a></h2>
 <h2><a href="/admin/[% c.controller.actions.base.PathPart.0 %]">Back to [% class_name %] Page</a></h2>
-[% page_title = (creation == 1 ? 'Create ' _ class_name : 'Edit ' _ class_name ) %]
+[% END %]
+[% page_title = (creation == 1 ? 'Create ' _ class_name : 'Edit ' _ item.name) %]
 <h3>[% page_title %]</h3>
 <div>
     [% form.render %]

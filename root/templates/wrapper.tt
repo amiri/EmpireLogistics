@@ -45,5 +45,6 @@
     [% content %]
     </div>
 [% END %]
+[% c.add_jsfile('/js/refresh-modals.js') %]
 </body>
 </html>

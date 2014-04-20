@@ -189,6 +189,7 @@ sub edit : Chained('object') PathPart('edit') Args(0) {
         $c->controller( $self->namespace . $self->class )->action_for('edit'),
         [ $c->stash->{object}->id ]
     );
+    $form->action($action);
 
     $c->stash(
         template => "admin/create_update.tt",
@@ -202,7 +203,6 @@ sub edit : Chained('object') PathPart('edit') Args(0) {
             item   => $c->stash->{object},
             schema => $c->stash->{schema},
             params => $c->req->params,
-            action => $action,
             );
         $c->flash->{alert}
             = [
@@ -225,7 +225,6 @@ sub edit : Chained('object') PathPart('edit') Args(0) {
             item        => $c->stash->{object},
             item_name   => $self->item_name,
             creation    => undef,
-            action      => $action,
             table_data  => $form->get_edit_history,
             table_cols  => $c->model('DB::EditHistory')->header_labels,
             object_type => $self->class,
@@ -295,12 +294,12 @@ sub form_create {
     my $action
         = $c->uri_for( $c->controller( $self->namespace . $self->class )
             ->action_for('create') );
+    $form->action($action);
     $c->stash(
         template  => "admin/$template",
         form      => $form,
         item_name => $self->item_name,
         creation  => $creation,
-        action    => $action,
     );
     if ( lc $c->req->method eq 'post' ) {
         $c->req->params->{'file'} = $c->req->upload('file');

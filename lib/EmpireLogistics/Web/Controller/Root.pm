@@ -10,7 +10,8 @@ __PACKAGE__->config( namespace => '' );
 
 sub auto : Private {
     my ( $self, $c ) = @_;
-    $c->stash( use_wrapper => 1 ) unless $c->req->is_xhr;
+    $c->stash(use_wrapper => 1)
+        unless $c->req->is_xhr and not $c->req->param('wrapper');
     my $locale = $c->req->param('locale');
     $c->response->headers->push_header( 'Vary' => 'Accept-Language' );
     $c->language( $locale ? [$locale] : undef );

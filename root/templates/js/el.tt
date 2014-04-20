@@ -190,6 +190,9 @@
     function railLineClick(d) {
         console.log("Clicked railLine");
         console.log(d);
+        $('#rail-line-modal').modal({
+            remote: '/admin/rail-line/'+ d.properties.id + '/edit/?wrapper=1'
+        });
     }
 
     // Rail interline
@@ -220,6 +223,9 @@
     function railInterlineClick(d) {
         console.log("Clicked railInterline");
         console.log(d);
+        $('#rail-interline-modal').modal({
+            remote: '/admin/rail-interline/'+ d.properties.id + '/edit/?wrapper=1'
+        });
     }
 
     // Rail node
@@ -238,6 +244,9 @@
     function railNodeClick(d) {
         console.log("Clicked railNode");
         console.log(d);
+        $('#rail-node-modal').modal({
+            remote: '/admin/rail-node/'+ d.properties.id + '/edit/?wrapper=1'
+        });
     }
 
     // Warehouse
@@ -277,6 +286,9 @@
     function warehouseClick(d) {
         console.log("Clicked warehouse");
         console.log(d);
+        $('#rail-warehouse-modal').modal({
+            remote: '/admin/warehouse/'+ d.properties.id + '/edit/?wrapper=1'
+        });
     }
 
     // Port
@@ -323,7 +335,7 @@
         console.log("Clicked port");
         console.log(d);
         $('#port-modal').modal({
-            remote: '/admin/port/'+ d.properties.id + '/edit/'
+            remote: '/admin/port/'+ d.properties.id + '/edit/?wrapper=1'
         });
     }
 

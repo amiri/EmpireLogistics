@@ -3,33 +3,34 @@
 [% c.add_jsfile('/js/lib/dataTables.bootstrap.js') %]
 [% c.add_jsfile('/js/lib/dataTables.num-html-sort.js') %]
 [% c.add_jsfile('/js/admin/edit-history.js') %]
-<div class="modal fade" id="rail-line-modal" tabindex="-1" role="dialog" aria-labelledby="Edit Rail Line" aria-hidden="true">
+<div class="modal fade" id="rail-line-modal" data-object-type="Rail Line" tabindex="-1" role="dialog" aria-labelledby="Edit Rail Line" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
     </div>
   </div>
 </div>
-<div class="modal fade" id="rail-interline-modal" tabindex="-1" role="dialog" aria-labelledby="Edit Rail Interline" aria-hidden="true">
+<div class="modal fade" id="rail-interline-modal" data-object-type="Rail Interline" tabindex="-1" role="dialog" aria-labelledby="Edit Rail Interline" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
     </div>
   </div>
 </div>
-<div class="modal fade" id="rail-node-modal" tabindex="-1" role="dialog" aria-labelledby="Edit Rail Node" aria-hidden="true">
+<div class="modal fade" id="rail-node-modal" data-object-type="Rail Node" tabindex="-1" role="dialog" aria-labelledby="Edit Rail Node" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
     </div>
   </div>
 </div>
-<div class="modal fade" id="warehouse-modal" tabindex="-1" role="dialog" aria-labelledby="Edit Warehouse" aria-hidden="true">
+<div class="modal fade" id="warehouse-modal" data-object-type="Warehouse" tabindex="-1" role="dialog" aria-labelledby="Edit Warehouse" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
     </div>
   </div>
 </div>
-<div class="modal fade" id="port-modal" tabindex="-1" role="dialog" aria-labelledby="Edit Port" aria-hidden="true">
+<div class="modal fade" id="port-modal" data-object-type="Port" tabindex="-1" role="dialog" aria-labelledby="Edit Port" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
     </div>
   </div>
 </div>
+[% c.add_jsfile('/js/refresh-modals.js') %]
