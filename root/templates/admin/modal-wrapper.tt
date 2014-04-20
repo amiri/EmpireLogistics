@@ -9,4 +9,4 @@
     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 </div>
 
-[% js_added = c.add_jsfile('/js/admin/edit-history.js') %]
+[% c.add_jsfile('/js/admin/edit-history.js') %]

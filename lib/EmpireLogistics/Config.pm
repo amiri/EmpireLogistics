@@ -58,6 +58,10 @@ $PARAMETERS{default} = {
             WRAPPER            => 'smart_wrapper.tt',
             expose_methods => [qw/jsfiles stylesheets/],
         },
+        "View::JSON" => {
+            allow_callback => 1,
+            expose_stash => 'json_data',
+        },
         "Plugin::Static::Simple" => {
             ignore_extensions => [qw/tt/],
         },

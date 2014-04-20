@@ -1,4 +1,9 @@
-[% c.add_jsfile('/js/admin/list-tables.js') %]
+[% IF large_dataset %]
+[%     c.add_jsfile('/js/admin/list-large-tables.js') %]
+[% ELSE %]
+[%     c.add_jsfile('/js/admin/list-tables.js') %]
+[% END %]
+
 [% meta.title = item_rs.result_source.source_name _ " List" %]
     <h2><a href="/admin">Back to Main Admin Page</a></h2>
 
@@ -12,11 +17,12 @@
     <thead>
         <tr>
         [% FOREACH col IN item_rs.result_source.columns %]
-             [% UNLESS col == 'password' || col == 'notes' || col == 'description' %]
+             [% UNLESS col == 'password' || col == 'notes' || col == 'description' || (item_rs.result_source.column_info(col).data_type == 'boolean' AND col != 'delete_time') %]
                 <th class="header">[% item_rs.labels.$col %]</th>
              [% END %]
         [% END %]
             <th class="header">Actions</th>
+            <th class="header hidden">Edit URL</th>
         </tr>
     </thead>
 [% # Display each item in a table row %]
@@ -24,7 +30,7 @@
     [% FOREACH item IN items -%]
         <tr>
             [% FOREACH col IN item_rs.result_source.columns %]
-              [% UNLESS col == 'password' || col == 'notes' || col == 'description' %]
+               [% UNLESS col == 'password' || col == 'notes' || col == 'description' || (item_rs.result_source.column_info(col).data_type == 'boolean' AND col != 'delete_time') %]
                 <td>
                 [% edit_href = c.uri_for(c.controller.action_for('edit'), [item.id] ) %]
                     <a href="[% edit_href %]">
@@ -56,9 +62,9 @@
                 </a>
             [% END %]
             </td>
+            <td class="hidden"></td> <!-- edit url -->
         </tr>
     [% END -%]
     </tbody>
 </table>
 </div>
-

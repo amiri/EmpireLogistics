@@ -75,6 +75,7 @@ requires "MooseX::Role::WithOverloading";
 requires "MooseX::StrictConstructor";
 requires "MooseX::Types::Common::String";
 requires "MooseX::Types::Path::Class";
+requires "MooseX::Types::URI";
 requires "Net::Domain::TLD";
 requires "Net::DNS";
 requires "Parallel::ForkManager";

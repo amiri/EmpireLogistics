@@ -60,6 +60,17 @@ around authenticate => sub {
     return $user;
 };
 
+around add_stylesheet => sub {
+    my ($orig, $c) = (shift, shift);
+    my $value = $c->$orig(@_);
+    return undef;
+};
+around add_jsfile => sub {
+    my ($orig, $c) = (shift, shift);
+    my $value = $c->$orig(@_);
+    return undef;
+};
+
 around logout => sub {
     my ( $orig, $c ) = ( shift, shift );
 

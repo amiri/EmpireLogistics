@@ -25,5 +25,5 @@
 </table>
 </div>
 
-[% js_added = c.add_jsfile('/js/admin/edit-history.js') %]
+[% c.add_jsfile('/js/admin/edit-history.js') %]
 [% END %]

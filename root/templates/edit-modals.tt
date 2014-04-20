@@ -1,8 +1,8 @@
-[% style_added = c.add_stylesheet('/css/lib/dataTables.bootstrap.css') %]
-[% js_added = c.add_jsfile('/js/lib/jquery.dataTables.min.js') %]
-[% js_added = c.add_jsfile('/js/lib/dataTables.bootstrap.js') %]
-[% js_added = c.add_jsfile('/js/lib/dataTables.num-html-sort.js') %]
-[% js_added = c.add_jsfile('/js/admin/edit-history.js') %]
+[% c.add_stylesheet('/css/lib/dataTables.bootstrap.css') %]
+[% c.add_jsfile('/js/lib/jquery.dataTables.min.js') %]
+[% c.add_jsfile('/js/lib/dataTables.bootstrap.js') %]
+[% c.add_jsfile('/js/lib/dataTables.num-html-sort.js') %]
+[% c.add_jsfile('/js/admin/edit-history.js') %]
 <div class="modal fade" id="rail-line-modal" tabindex="-1" role="dialog" aria-labelledby="Edit Rail Line" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">

@@ -78,40 +78,97 @@ sub get_index : Chained('base') PathPart('') Args(0) GET {
         columns   => $columns,
         template  => 'admin/list.tt',
         item_name => $self->item_name,
+        (($rs->count) > 100 ? (large_dataset => 1) : ()),
     );
 }
 
 sub post_index : Chained('base') PathPart('') Args(0) POST {
-    my ( $self, $c ) = @_;
+    my ($self, $c) = @_;
     return unless $c->req->is_xhr;
-    my $page = $c->req->param('page') // 1;
-    my $rows = $c->req->param('rows') // 10;
-    $page = 1 if ( $page !~ /^\d+$/ );
+    $c->stash->{current_view} = 'JSON';
+    my $rows        = $c->req->param('iDisplayLength') // 10;
+    my $start_index = $c->req->param('iDisplayStart')  // 0;
+    my $page             = $start_index == 0 ? 1 : $start_index / $rows + 1;
+    my $sort_column      = $c->req->param('iSortCol_0');
+    my $sort_column_name = $c->req->param('mDataProp_' . $sort_column);
+    my $sort_order       = $c->req->param('sSortDir_0');
+    my %order_by     = (order_by => {"-$sort_order" => [$sort_column_name]});
+    my $search_attr  = {};
+    my $search_text = $c->req->param('sSearch');
+    my ($search_param) =
+        map { $c->req->param('mDataProp_' . $_) }
+        map {/\w+(\d+)/; $1}
+        grep {$c->req->param($_) eq 'true'}
+        grep {/bSearchable/} keys %{$c->req->params};
+    $search_attr->{$search_param} = {-ilike => qq|%$search_text%|}
+        if $search_param && $search_text;
     my $rs = $self->model;
-    my $items = [ $rs->search( {}, { page => $page, rows => $rows, } ) ];
+    my $items = $rs->search( $search_attr, {
+        page => $page,
+        rows => $rows,
+        %order_by
+    });
 
-    my $columns = [ $self->model->result_source->columns ];
+    my $columns = [$self->model->result_source->columns];
     $c->stash(
-        items     => $items,
-        columns   => $columns,
-        template  => 'admin/list.tt',
-        item_name => $self->item_name,
+        json_data => {
+            aaData => [
+                map {
+                    $_->edit_url(
+                        $c->uri_for(
+                            $c->controller($self->namespace . $self->class)
+                            ->action_for('edit'), [$_->id])
+                    );
+                    $_
+                } $items->all
+            ],
+            iTotalRecords        => $rs->count + 0,
+            iTotalDisplayRecords => $rs->count + 0,
+        }
     );
 }
 
-sub create_for : Chained('base') PathPart('create_for') Args(1) {
-    my ( $self, $c, $id ) = @_;
-    $c->log->debug( 'I got an arg for create_for: ', $id );
-    $c->stash(
-        template => "admin/create_update.tt",
-        creation => 1,
-        for      => $id,
-    );
-    return $self->form_create(
-        $c,
-
-        #$new_object,
-    );
+sub column_definitions : Chained('base') PathPart('column-definitions')
+    Args(0) POST {
+    my ($self, $c) = @_;
+    return unless $c->req->is_xhr;
+    $c->stash->{current_view} = 'JSON';
+    my $rs      = $self->model;
+    my $columns = [
+        map {{
+            mData => $_,
+            sTitle => $rs->labels->{$_},
+            bSearchable => (($_ =~ /name/) ? 'true' : 'false'),
+        }}
+        grep {!/^(password|notes|description)$/}
+        grep {!/^id$/}
+        grep {
+            $rs->result_source->column_info($_)->{data_type} ne 'boolean'
+         or $_ eq 'delete_time'
+        } $rs->result_source->columns
+    ];
+    unshift @$columns, {
+        sType => 'num-html',
+        mData => 'id',
+        bSearchable => 'false',
+    };
+    push @$columns, {
+        mData           => 'restore_delete',
+        sDefaultContent => '',
+        bSearchable => 'false',
+        sTitle => 'Actions',
+    };
+    push @$columns, {
+        mData           => 'edit_url',
+        bSearchable => 'false',
+        bVisible => 'false',
+        sTitle => 'Edit URL',
+    };
+    my $i = 0;
+    for my $col (@$columns) {
+        $col->{aTargets} = [$i++];
+    }
+    $c->stash->{json_data} = $columns;
 }
 
 sub create : Chained('base') PathPart('create') Args(0) {
@@ -147,11 +204,12 @@ sub edit : Chained('object') PathPart('edit') Args(0) {
             params => $c->req->params,
             action => $action,
             );
-        $c->flash->{alert} = [
-            { class => 'success', message => $self->class . ' updated' } ];
+        $c->flash->{alert}
+            = [
+            { class => 'success', message => $self->class . ' updated' }
+            ];
 
         # Redirect the user back to the list page
-        #$c->res->redirect( $c->uri_for( $self->action_for('list') ) );
         return $c->res->redirect(
             $c->uri_for(
                 $c->controller( $self->namespace . $self->class )
@@ -185,8 +243,10 @@ sub delete : Chained('object') PathPart('delete') Args(0) {
     );
     $c->stash->{delete_form} = $delete_form;
     if ( $delete_form->validated ) {
-        $c->flash->{alert} = [
-            { class => 'success', message => $self->class . ' deleted' } ];
+        $c->flash->{alert}
+            = [
+            { class => 'success', message => $self->class . ' deleted' }
+            ];
     } else {
         $c->flash->{alert}
             = [
@@ -212,8 +272,10 @@ sub restore : Chained('object') PathPart('restore') Args(0) {
     );
     $c->stash->{restore_form} = $restore_form;
     if ( $restore_form->validated ) {
-        $c->flash->{alert} = [
-            { class => 'success', message => $self->class . ' restored' } ];
+        $c->flash->{alert}
+            = [
+            { class => 'success', message => $self->class . ' restored' }
+            ];
     } else {
         $c->flash->{alert}
             = [
@@ -228,62 +290,31 @@ sub form_create {
     my ( $self, $c, $template, $form_number ) = @_;
     my $creation = $c->stash->{creation};
     my $form;
-    if ( $c->stash->{for} ) {
-        $c->log->debug("I have for and am making a new form");
-        $form = $self->form->new(
-            init_object => { green => $c->stash->{for} } );
-        my $action
-            = $c->uri_for(
-            $c->controller( $self->namespace . $self->class )
-                ->action_for('create') );
-        $c->stash(
-            template  => "admin/create_update.tt",
-            form      => $form,
-            item_name => $self->item_name,
-            creation  => $creation,
-            action    => $action,
-        );
-
-        if ( lc $c->req->method eq 'post' ) {
-            $c->req->params->{'file'} = $c->req->upload('file');
-        }
-
-        $form->process(
-            schema => $c->stash->{schema},
-            params => $c->req->params,
-        );
-        $c->stash( fillinform => $form->fif );
-        return unless $form->validated;
-        $c->flash->{alert} = [
-            { class => 'success', message => $self->class . ' created' } ];
-    } else {
-        $c->log->debug("I do not have for and am not making a new form");
-        $form = $c->stash->{form};
-        my $action
-            = $c->uri_for(
-            $c->controller( $self->namespace . $self->class )
-                ->action_for('create') );
-        $c->stash(
-            template  => "admin/$template",
-            form      => $form,
-            item_name => $self->item_name,
-            creation  => $creation,
-            action    => $action,
-        );
-        if ( lc $c->req->method eq 'post' ) {
-            $c->req->params->{'file'} = $c->req->upload('file');
-        }
-
-        $form->process(
-            schema => $c->stash->{schema},
-            params => $c->req->params,
-        );
-        $c->stash( fillinform => $form->fif );
-        return unless $form->validated;
-
-        $c->flash->{alert} = [
-            { class => 'success', message => $self->class . ' created' } ];
+    $c->log->debug("I do not have for and am not making a new form");
+    $form = $c->stash->{form};
+    my $action
+        = $c->uri_for( $c->controller( $self->namespace . $self->class )
+            ->action_for('create') );
+    $c->stash(
+        template  => "admin/$template",
+        form      => $form,
+        item_name => $self->item_name,
+        creation  => $creation,
+        action    => $action,
+    );
+    if ( lc $c->req->method eq 'post' ) {
+        $c->req->params->{'file'} = $c->req->upload('file');
     }
+
+    $form->process(
+        schema => $c->stash->{schema},
+        params => $c->req->params,
+    );
+    $c->stash( fillinform => $form->fif );
+    return unless $form->validated;
+
+    $c->flash->{alert}
+        = [ { class => 'success', message => $self->class . ' created' } ];
 
     $c->res->redirect(
         $c->uri_for(

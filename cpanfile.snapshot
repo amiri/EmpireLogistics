@@ -5252,6 +5252,26 @@ DISTRIBUTIONS
       MooseX::Types 0.04
       Path::Class 0.16
       Test::More 0.88
+  MooseX-Types-URI-0.05
+    pathname: E/ET/ETHER/MooseX-Types-URI-0.05.tar.gz
+    provides:
+      MooseX::Types::URI 0.05
+    requirements:
+      ExtUtils::MakeMaker 6.30
+      Module::Build::Tiny 0.030
+      Moose::Util::TypeConstraints 0
+      MooseX::Types 0
+      MooseX::Types::Moose 0
+      MooseX::Types::Path::Class 0
+      Scalar::Util 0
+      URI 0
+      URI::FromHash 0
+      URI::WithBase 0
+      URI::data 0
+      URI::file 0
+      perl 5.006
+      strict 0
+      warnings 0
   Mouse-2.2.0
     pathname: G/GF/GFUJI/Mouse-2.2.0.tar.gz
     provides:
@@ -7178,6 +7198,19 @@ DISTRIBUTIONS
       URI 1.00
       URI::URL 5.00
       perl v5.6.0
+  URI-FromHash-0.04
+    pathname: D/DR/DROLSKY/URI-FromHash-0.04.tar.gz
+    provides:
+      URI::FromHash 0.04
+    requirements:
+      Carp 0
+      Exporter 0
+      ExtUtils::MakeMaker 6.30
+      Params::Validate 0
+      URI 0
+      URI::QueryParam 0
+      strict 0
+      warnings 0
   URI-Nested-0.10
     pathname: D/DW/DWHEELER/URI-Nested-0.10.tar.gz
     provides:
