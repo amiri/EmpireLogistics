@@ -11,6 +11,8 @@ labor_dir := data/labor_organizations
 
 sandbox: prereqs chef database sqitch
 
+update-sandbox: chef sqitch
+
 prod: chef sqitch
 
 data: download-data rail warehouses ports labor
@@ -47,6 +49,12 @@ tilestache-cache:
 
 sqitch:
 	sudo -u el bin/db-schema-changes
+
+.PHONY: copy-root
+
+copy-root:
+	sudo rsync -uav root/ /var/local/EmpireLogistics/current/root
+	sudo chown -Rf el:el /var/local/EmpireLogistics/current/root
 
 ########## Download data
 
