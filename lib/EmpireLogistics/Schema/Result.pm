@@ -54,6 +54,25 @@ around insert => sub {
     $self->$orig(@_);
 };
 
+around update => sub {
+    my ( $orig, $self ) = ( shift, shift );
+
+    my %dirty_columns = $self->get_dirty_columns;
+    if (defined $dirty_columns{latitude} or defined $dirty_columns{longitude}) {
+        my ($geometry) = $self->result_source->schema->storage->dbh_do(
+            sub {
+                my ( $storage, $dbh, $lon, $lat ) = @_;
+                $dbh->selectrow_array(
+                    "select ST_Transform(ST_SetSRID(ST_MakePoint($lon, $lat), 4326), 900913)"
+                );
+            },
+            ( ($dirty_columns{longitude}||$self->longitude),($dirty_columns{latitude} || $self->latitude) )
+        );
+        $self->geometry($geometry);
+    }
+    $self->$orig(@_);
+};
+
 sub edit_history_save {
     my $self = shift;
     my ( $user_id, $edit_history_fields, $notes ) = @_;
@@ -95,10 +114,22 @@ sub TO_JSON {
             update_time => $self->update_time->strftime('%Y-%m-%d %r %z'),
         };
     }
+    if ( $self->can('date_opened') and $self->date_opened) {
+        $ret = {
+            %{$ret},
+            date_opened => $self->update_time->strftime('%Y-%m'),
+        };
+    }
     if ( $self->can('edit_url') and $self->edit_url) {
         $ret = {
             %{$ret},
             edit_url => $self->edit_url->as_string,
+        };
+    }
+    if ( $self->can('owner') and $self->owner) {
+        $ret = {
+            %{$ret},
+            owner => $self->owner->name,
         };
     }
 
