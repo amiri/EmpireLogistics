@@ -102,6 +102,9 @@ __PACKAGE__->has_many(
   { "foreign.labor_organization" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
+__PACKAGE__->many_to_many(
+    'addresses' => 'labor_organization_addresses', 'address'
+);
 __PACKAGE__->has_many(
   "labor_organization_affiliation_children",
   "EmpireLogistics::Schema::Result::LaborOrganizationAffiliation",
@@ -210,11 +213,17 @@ __PACKAGE__->has_many(
   { "foreign.labor_organization" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
+__PACKAGE__->many_to_many(
+    'ports' => 'labor_organization_ports', 'port'
+);
 __PACKAGE__->has_many(
   "labor_organization_rail_nodes",
   "EmpireLogistics::Schema::Result::LaborOrganizationRailNode",
   { "foreign.labor_organization" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->many_to_many(
+    'rail_nodes' => 'labor_organization_rail_nodes', 'rail_node'
 );
 __PACKAGE__->has_many(
   "labor_organization_sale_receipts",
@@ -252,15 +261,18 @@ __PACKAGE__->has_many(
   { "foreign.labor_organization" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
+__PACKAGE__->many_to_many(
+    'warehouses' => 'labor_organization_warehouses', 'warehouse'
+);
 __PACKAGE__->has_many(
   "labor_organization_work_stoppages",
   "EmpireLogistics::Schema::Result::LaborOrganizationWorkStoppage",
   { "foreign.labor_organization" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
-
-
-
+__PACKAGE__->many_to_many(
+    'work_stoppages' => 'labor_organization_work_stoppages', 'work_stoppage'
+);
 
 __PACKAGE__->belongs_to(
     "object_type" =>

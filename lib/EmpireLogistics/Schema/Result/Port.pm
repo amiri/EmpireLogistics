@@ -177,6 +177,17 @@ __PACKAGE__->has_many(
   { "foreign.port" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
+
+__PACKAGE__->many_to_many(
+    'companies' => 'company_ports', 'company'
+);
+__PACKAGE__->many_to_many(
+    'labor_organizations' => 'labor_organization_ports', 'labor_organization'
+);
+__PACKAGE__->many_to_many(
+    'work_stoppages' => 'port_work_stoppages', 'work_stoppage'
+);
+
 __PACKAGE__->has_many(
   "labor_organization_ports",
   "EmpireLogistics::Schema::Result::LaborOrganizationPort",
@@ -201,8 +212,6 @@ __PACKAGE__->has_many(
   { "foreign.port" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
-
-
 
 
 __PACKAGE__->belongs_to(

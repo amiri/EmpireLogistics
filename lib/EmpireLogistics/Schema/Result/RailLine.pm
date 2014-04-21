@@ -83,6 +83,10 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+__PACKAGE__->many_to_many(
+    'work_stoppages' => 'rail_line_work_stoppages', 'work_stoppage'
+);
+
 
 
 

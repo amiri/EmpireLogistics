@@ -82,7 +82,18 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-
+__PACKAGE__->many_to_many(
+    'addresses' => 'company_addresses', 'address'
+);
+__PACKAGE__->many_to_many(
+    'ports' => 'company_ports', 'port'
+);
+__PACKAGE__->many_to_many(
+    'rail_nodes' => 'company_rail_nodes', 'rail_node'
+);
+__PACKAGE__->many_to_many(
+    'warehouses' => 'company_warehouses', 'warehouse'
+);
 
 
 __PACKAGE__->belongs_to(

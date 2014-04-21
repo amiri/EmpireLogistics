@@ -73,8 +73,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-
-
+__PACKAGE__->many_to_many(
+    'companies' => 'company_addresses' => 'company',
+);
+__PACKAGE__->many_to_many(
+    'labor_organizations' => 'labor_organization_addresses' => 'labor_organization',
+);
+__PACKAGE__->many_to_many(
+    'labor_organization_payees' => 'labor_organization_payee_addresses' => 'labor_organization_payee',
+);
+__PACKAGE__->many_to_many(
+    'ports' => 'port_addresses' => 'port',
+);
+__PACKAGE__->many_to_many(
+    'warehouses' => 'warehouse_addresses' => 'warehouse',
+);
 
 __PACKAGE__->belongs_to(
     "object_type" =>

@@ -89,6 +89,15 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+__PACKAGE__->many_to_many(
+    'companies' => 'company_warehouses', 'company'
+);
+__PACKAGE__->many_to_many(
+    'labor_organizations' => 'labor_organization_warehouses', 'labor_organization'
+);
+__PACKAGE__->many_to_many(
+    'work_stoppages' => 'warehouse_work_stoppages', 'work_stoppage'
+);
 __PACKAGE__->belongs_to(
     "owner",
     "EmpireLogistics::Schema::Result::WarehouseOwner",
