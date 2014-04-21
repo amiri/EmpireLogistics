@@ -1,299 +1,108 @@
-# Generated automatically with HTML::FormHandler::Generator::DBIC
+package EmpireLogistics::Form::Admin::Warehouse;
 
-# Using following commandline:
+use HTML::FormHandler::Moose;
+use HTML::FormHandler::Types ( 'NoSpaces', 'Printable' );
+use namespace::autoclean;
+extends 'EmpireLogistics::Form::BaseDB';
+with 'EmpireLogistics::Role::Form::Util';
 
-# form_generator.pl --rs_name=Warehouse --schema_name=EmpireLogistics::Schema --db_dsn=dbi:Pg:dbname=empireLogistics
+has '+name'       => ( default => 'warehouse-form' );
+has '+item_class' => ( default => 'Warehouse' );
 
-{
-
-    package EmpireLogistics::Form::Admin::Warehouse;
-
-    use HTML::FormHandler::Moose;
-
-    extends 'HTML::FormHandler::Model::DBIC';
-
-    use namespace::autoclean;
-
-
-
-    use DateTime;
-
-
-
-
-
-    has '+item_class' => ( default => 'Warehouse' );
-
-
-
-    has_field 'geometry' => ( type => 'TextArea', );
-
-    has_field 'longitude' => ( type => 'Text', );
-
-    has_field 'latitude' => ( type => 'Text', );
-
-    has_field 'date_opened' => ( 
-
-            type => 'Compound',
-
-            apply => [
-
-                {
-
-                    transform => sub{ DateTime->new( $_[0] ) },
-
-                    message => "Not a valid DateTime",
-
-                }
-
-            ],
-
-        );
-
-        has_field 'date_opened.year';        has_field 'date_opened.month';        has_field 'date_opened.day';
-
-    has_field 'owner' => ( type => 'Text', );
-
-    has_field 'area' => ( type => 'Integer', );
-
-    has_field 'status' => ( type => 'Text', );
-
-    has_field 'description' => ( type => 'TextArea', );
-
-    has_field 'name' => ( type => 'TextArea', );
-
-    has_field 'delete_time' => ( type => 'Text', );
-
-    has_field 'update_time' => ( type => 'Text', required => 1, );
-
-    has_field 'create_time' => ( type => 'Text', required => 1, );
-
-    has_field 'warehouse_work_stoppages' => ( type => '+WarehouseWorkStoppageField', );
-
-    has_field 'warehouse_walmarts' => ( type => '+WarehouseWalmartField', );
-
-    has_field 'edits' => ( type => '+EditHistoryField', );
-
-    has_field 'warehouse_addresses' => ( type => '+WarehouseAddressField', );
-
-    has_field 'company_warehouses' => ( type => '+CompanyWarehouseField', );
-
-    has_field 'labor_organization_warehouses' => ( type => '+LaborOrganizationWarehouseField', );
-
-    has_field 'submit' => ( widget => 'Submit', );
-
-
-
-    __PACKAGE__->meta->make_immutable;
-
-    no HTML::FormHandler::Moose;
-
+sub build_render_list {
+    return [
+        'metadata_block',
+        'basic_block',
+        'location_block',
+        'submit',
+    ];
 }
+has_block 'metadata_block' => (
+    tag         => 'fieldset',
+    label       => 'Metadata',
+    render_list => [
+        'id',
+        'create_time',
+        'update_time',
+        'delete_time',
+    ],
+);
 
+has_block 'basic_block' => (
+    tag         => 'fieldset',
+    label       => 'Basic Information',
+    render_list => [
+        'name',
+        'owner',
+        'status',
+        'date_opened',
+        'area',
+        'description',
+    ],
+);
 
+has_block 'location_block' => (
+    tag         => 'fieldset',
+    label       => 'Location',
+    render_list => [
+        'latitude',
+        'longitude',
+        'geometry',
+    ],
+);
 
+has_field 'id' => (
+    type  => 'Hidden',
+    label => 'Warehouse ID',
+);
+has_field 'create_time' => (
+    type            => 'Timestamp',
+    label           => 'Create time',
+    format          => "%Y-%m-%d %r %z",
+    readonly        => 1,
+    html5_type_attr => 'datetime',
+    disabled        => 1,
+);
+has_field 'update_time' => (
+    type            => 'Timestamp',
+    label           => 'Update time',
+    format          => "%Y-%m-%d %r %z",
+    readonly        => 1,
+    html5_type_attr => 'datetime',
+    disabled        => 1,
+);
+has_field 'delete_time' => (
+    type           => 'Checkbox',
+    label          => 'Deleted',
+    deflate_method => \&deflate_delete_time,
+);
+has_field 'date_opened' => (
+    type           => 'YMTimestamp',
+    label          => 'Date Opened',
+    format          => "%Y-%m",
+    html5_type_attr => 'datetime',
+);
 
+has_field 'longitude' => ( type => 'Text', required => 1, );
+has_field 'latitude' => ( type => 'Text', required => 1, );
+has_field 'geometry' => ( type => 'Text', disabled => 1, readonly => 1, );
 
-{
-
-    package LaborOrganizationWarehouseField;
-
-    use HTML::FormHandler::Moose;
-
-    extends 'HTML::FormHandler::Field::Compound';
-
-    use namespace::autoclean;
-
-
-
-    has_field 'delete_time' => ( type => 'Text', );
-
-    has_field 'update_time' => ( type => 'Text', required => 1, );
-
-    has_field 'create_time' => ( type => 'Text', required => 1, );
-
-    has_field 'labor_organization' => ( type => 'Select', );
-
-    has_field 'warehouse' => ( type => 'Select', );
-
-    
-
-    __PACKAGE__->meta->make_immutable;
-
-    no HTML::FormHandler::Moose;
-
+has_field 'name' => ( type => 'Text', required => 1, );
+has_field 'status' => ( type => 'Text', );
+has_field 'owner' => ( type => 'Select', );
+sub options_owner {
+    my $self = shift;
+    return $self->schema->resultset('WarehouseOwner')->form_options;
 }
-
-
-
-
-
-{
-
-    package EmpireLogistics::Form::Admin::WarehouseWorkStoppageField;
-
-    use HTML::FormHandler::Moose;
-
-    extends 'HTML::FormHandler::Field::Compound';
-
-    use namespace::autoclean;
-
-
-
-    has_field 'delete_time' => ( type => 'Text', );
-
-    has_field 'update_time' => ( type => 'Text', required => 1, );
-
-    has_field 'create_time' => ( type => 'Text', required => 1, );
-
-    has_field 'work_stoppage' => ( type => 'Select', );
-
-    has_field 'warehouse' => ( type => 'Select', );
-
-    
-
-    __PACKAGE__->meta->make_immutable;
-
-    no HTML::FormHandler::Moose;
-
-}
-
-
-
-
-
-{
-
-    package EditHistoryField;
-
-    use HTML::FormHandler::Moose;
-
-    extends 'HTML::FormHandler::Field::Compound';
-
-    use namespace::autoclean;
-
-
-
-    has_field 'notes' => ( type => 'TextArea', );
-
-    has_field 'object' => ( type => 'Integer', required => 1, );
-
-    has_field 'object_type' => ( type => 'Text', required => 1, );
-
-    has_field 'create_time' => ( type => 'Text', required => 1, );
-
-    has_field 'admin' => ( type => 'Select', );
-
-    
-
-    __PACKAGE__->meta->make_immutable;
-
-    no HTML::FormHandler::Moose;
-
-}
-
-
-
-
-
-{
-
-    package EmpireLogistics::Form::Admin::WarehouseAddressField;
-
-    use HTML::FormHandler::Moose;
-
-    extends 'HTML::FormHandler::Field::Compound';
-
-    use namespace::autoclean;
-
-
-
-    has_field 'delete_time' => ( type => 'Text', );
-
-    has_field 'update_time' => ( type => 'Text', required => 1, );
-
-    has_field 'create_time' => ( type => 'Text', required => 1, );
-
-    has_field 'address' => ( type => 'Select', );
-
-    has_field 'warehouse' => ( type => 'Select', );
-
-    
-
-    __PACKAGE__->meta->make_immutable;
-
-    no HTML::FormHandler::Moose;
-
-}
-
-
-
-
-
-{
-
-    package EmpireLogistics::Form::Admin::WarehouseWalmartField;
-
-    use HTML::FormHandler::Moose;
-
-    extends 'HTML::FormHandler::Field::Compound';
-
-    use namespace::autoclean;
-
-
-
-    has_field 'delete_time' => ( type => 'Text', );
-
-    has_field 'update_time' => ( type => 'Text', required => 1, );
-
-    has_field 'create_time' => ( type => 'Text', required => 1, );
-
-    has_field 'warehouse' => ( type => 'Select', );
-
-    has_field 'walmart' => ( type => 'Select', );
-
-    
-
-    __PACKAGE__->meta->make_immutable;
-
-    no HTML::FormHandler::Moose;
-
-}
-
-
-
-
-
-{
-
-    package CompanyWarehouseField;
-
-    use HTML::FormHandler::Moose;
-
-    extends 'HTML::FormHandler::Field::Compound';
-
-    use namespace::autoclean;
-
-
-
-    has_field 'delete_time' => ( type => 'Text', );
-
-    has_field 'update_time' => ( type => 'Text', required => 1, );
-
-    has_field 'create_time' => ( type => 'Text', required => 1, );
-
-    has_field 'company' => ( type => 'Select', );
-
-    has_field 'warehouse' => ( type => 'Select', );
-
-    
-
-    __PACKAGE__->meta->make_immutable;
-
-    no HTML::FormHandler::Moose;
-
-}
-
-
-
-
+has_field 'description' => ( type => 'TextArea', );
+has_field 'area' => ( type => 'Integer', label => 'Area (square feet)' );
+has_field 'submit' => (
+    type          => 'Submit',
+    widget        => 'ButtonTag',
+    value         => 'Save',
+    element_class => [ 'btn', 'btn-primary' ],
+);
+
+__PACKAGE__->meta->make_immutable;
+
+1;

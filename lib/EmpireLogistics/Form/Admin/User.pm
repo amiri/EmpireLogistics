@@ -10,6 +10,57 @@ with 'EmpireLogistics::Role::Form::Util';
 has '+name'       => ( default => 'user-form' );
 has '+item_class' => ( default => 'User' );
 
+sub build_render_list {
+    return [
+        'metadata_block',
+        'basic_block',
+        'text_block',
+        'submit',
+    ];
+}
+has_block 'metadata_block' => (
+    tag         => 'fieldset',
+    label       => 'Metadata',
+    render_list => [
+        'id',
+        'create_time',
+        'update_time',
+        'delete_time',
+    ],
+);
+
+has_block 'basic_block' => (
+    tag         => 'fieldset',
+    label       => 'Basic Information',
+    render_list => [
+        'email',
+        'nickname',
+        'password',
+        'roles'
+    ],
+);
+has_block 'text_block' => (
+    tag         => 'fieldset',
+    label       => 'Miscellaneous',
+    render_list => [
+        'notes_block',
+        'description_block',
+    ],
+);
+
+has_block 'notes_block' => (
+    tag => 'div',
+    class => ['col-md-6'],
+    label       => 'Notes',
+    render_list => ['notes'],
+);
+has_block 'description_block' => (
+    tag => 'div',
+    class => ['col-md-6'],
+    label       => 'Description',
+    render_list => ['description'],
+);
+
 has_field 'id' => (
     type  => 'Hidden',
     label => 'User ID',
