@@ -5,7 +5,7 @@
 [% END %]
 
 [% meta.title = item_rs.result_source.source_name _ " List" %]
-    <h2><a href="/admin">Back to Main Admin Page</a></h2>
+    <h4><a href="/admin">Back to Main Admin Page</a></h4>
 
     <div>
         <p><a href="[% c.uri_for(c.controller.action_for('create')) %]">[% c.loc('New [_1]', item_rs.result_source.source_name) %]</a></p>

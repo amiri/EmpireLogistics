@@ -1,8 +1,8 @@
-package EmpireLogistics::Web::Controller::Admin::WarehouseOwner;
+package EmpireLogistics::Web::Controller::Admin::Warehouse;
 
 use Moose;
 use namespace::autoclean;
-use EmpireLogistics::Form::Admin::WarehouseOwner;
+use EmpireLogistics::Form::Admin::Warehouse;
 use EmpireLogistics::Form::Admin::Restore;
 use EmpireLogistics::Form::Admin::Delete;
 
@@ -11,15 +11,15 @@ BEGIN { extends qw/EmpireLogistics::Web::Controller::Admin/; }
 with 'EmpireLogistics::Role::Controller::CRUD';
 
 __PACKAGE__->config(
-    model_name => 'DB::WarehouseOwner',
-    class      => 'WarehouseOwner',
-    item_name  => 'warehouse-owner',
-    form       => 'EmpireLogistics::Form::Admin::WarehouseOwner',
+    model_name => 'DB::Warehouse',
+    class      => 'Warehouse',
+    item_name  => 'warehouse',
+    form       => 'EmpireLogistics::Form::Admin::Warehouse',
     delete_form => 'EmpireLogistics::Form::Admin::Delete',
     restore_form => 'EmpireLogistics::Form::Admin::Restore',
     actions    => {
         base => {
-            PathPart    => ['warehouse-owner'],
+            PathPart    => ['warehouse'],
             Chained     => ['admin_base'],
             CaptureArgs => 0
         },

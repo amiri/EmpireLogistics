@@ -2,7 +2,6 @@ package EmpireLogistics::Web::Controller::Admin::Port;
 
 use Moose;
 use namespace::autoclean;
-use DBIx::Class::ResultClass::HashRefInflator;
 use EmpireLogistics::Form::Admin::Port;
 use EmpireLogistics::Form::Admin::Restore;
 use EmpireLogistics::Form::Admin::Delete;

@@ -99,7 +99,7 @@ sub post_index : Chained('base') PathPart('') Args(0) POST {
         map { $c->req->param('mDataProp_' . $_) }
         map {/\w+(\d+)/; $1}
         grep {$c->req->param($_) eq 'true'}
-        grep {/bSearchable/} keys %{$c->req->params};
+        grep {/bSearchable/} keys %{$c->req->body_params};
     $search_attr->{$search_param} = {-ilike => qq|%$search_text%|}
         if $search_param && $search_text;
     my $rs = $self->model;
@@ -196,27 +196,33 @@ sub edit : Chained('object') PathPart('edit') Args(0) {
         creation => 0,
     );
     if ( lc $c->req->method eq 'post' ) {
-        $c->req->params->{'file'} = $c->req->upload('file');
+        $c->req->body_params->{'file'} = $c->req->upload('file');
 
-        return
-            unless $form->process(
+        $form->process(
             item   => $c->stash->{object},
             schema => $c->stash->{schema},
-            params => $c->req->params,
-            );
-        $c->flash->{alert}
-            = [
-            { class => 'success', message => $self->class . ' updated' }
-            ];
-
-        # Redirect the user back to the list page
-        return $c->res->redirect(
-            $c->uri_for(
-                $c->controller( $self->namespace . $self->class )
-                    ->action_for('edit'),
-                $c->req->captures
-            )
+            params => $c->req->body_params,
+            action => $action,
         );
+        if ($form->validated) {
+            $c->flash->{alert}
+                = [
+                { class => 'success', message => $self->class . ' updated' }
+                ];
+
+            # Redirect the user back to the list page
+            $c->res->redirect(
+                $c->uri_for(
+                    $c->controller( $self->namespace . $self->class )
+                        ->action_for('edit'),
+                    $c->req->captures
+                )
+            );
+            return 1;
+        } else {
+            $c->stash->{alert} = [ map {{ class => 'danger', message => $_  }} $form->errors ];
+            $c->stash->{form} = $form;
+        }
     } else {
         $form->process( item => $c->stash->{object}, );
         $c->stash(
@@ -228,6 +234,7 @@ sub edit : Chained('object') PathPart('edit') Args(0) {
             table_data  => $form->get_edit_history,
             table_cols  => $c->model('DB::EditHistory')->header_labels,
             object_type => $self->class,
+            action => $action,
         );
     }
 }
@@ -300,14 +307,15 @@ sub form_create {
         form      => $form,
         item_name => $self->item_name,
         creation  => $creation,
+        action => $action,
     );
     if ( lc $c->req->method eq 'post' ) {
-        $c->req->params->{'file'} = $c->req->upload('file');
+        $c->req->body_params->{'file'} = $c->req->upload('file');
     }
 
     $form->process(
         schema => $c->stash->{schema},
-        params => $c->req->params,
+        params => $c->req->body_params,
     );
     $c->stash( fillinform => $form->fif );
     return unless $form->validated;
