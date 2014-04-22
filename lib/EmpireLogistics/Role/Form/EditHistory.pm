@@ -22,27 +22,93 @@ sub save_edit_history {
 
         # Skip nonexistent submission fields
         next if not exists $self->values->{ $field->name };
-        if ( $field->value_changed ) {
-            my $value      = $field->value;
-            my $init_value = $field->init_value;
+
+        # Save Repeatable edit history
+        if ( $field->isa('HTML::FormHandler::Field::Repeatable') ) {
+            my $i = 0;
+            for my $rfield ( $field->fields ) {
+                my @repeatable_edit_history_fields = ();
+
+                # Need specific item here
+                my $item
+                    = ref( $field->item ) eq 'ARRAY'
+                    ? $field->item->[$i]
+                    : $field->item;
+
+                for my $subfield ( $rfield->sorted_fields ) {
+                    my $edit_history_field
+                        = $self->get_edit_history_field_from_object( $item,
+                        $subfield );
+                    push @repeatable_edit_history_fields, $edit_history_field
+                        if $edit_history_field;
+                }
+
+                $item->edit_history_save( $self->user_id,
+                    \@repeatable_edit_history_fields );
+                $i++;
+            }
+        } else {
+            my $edit_history_field = $self->get_edit_history_field($field);
+            push @edit_history_fields, $edit_history_field
+                if $edit_history_field;
+        }
+    }
+    $self->item->edit_history_save( $self->user_id, \@edit_history_fields, );
+}
+
+sub get_edit_history_field_from_object {
+    my ( $self, $item, $field ) = @_;
+    my $edit_history_field;
+    if ( $field->value_changed ) {
+        my $field_name = $field->accessor;
+        my $init_value = $item->$field_name;
+        if ( $field->value ne $init_value ) {
+            my $value = $field->value;
             if ( $field->html_element eq 'select' ) {
                 $value      = $field->as_label;
                 $init_value = $field->as_label($init_value);
             }
+
             # Don't store any password text anywhere
-            if ($field->name eq 'password') {
+            if ( $field->name eq 'password' ) {
                 $value =~ s/^(.*)/'*' x length($value)/e;
                 $init_value =~ s/^(.*)/'*' x length($value)/e;
             }
-            push @edit_history_fields,
-                {
+            $edit_history_field = {
                 field          => $field->accessor,
                 original_value => $init_value,
                 new_value      => $value,
-                };
+            };
         }
     }
-    $self->item->edit_history_save( $self->user_id, \@edit_history_fields, );
+    return $edit_history_field;
+}
+
+sub get_edit_history_field {
+    my ( $self, $field ) = @_;
+    my $edit_history_field;
+    if ( $field->value_changed ) {
+        my $value      = $field->value;
+        my $field_name = $field->name;
+        my $init_value
+            = $field->init_value || $field->parent->item->$field_name;
+        if ( $field->html_element eq 'select' ) {
+            $value      = $field->as_label;
+            $init_value = $field->as_label($init_value);
+        }
+
+        # Don't store any password text anywhere
+        if ( $field->name eq 'password' ) {
+            $value =~ s/^(.*)/'*' x length($value)/e;
+            $init_value =~ s/^(.*)/'*' x length($value)/e;
+        }
+        $edit_history_field = {
+            field          => $field->accessor,
+            original_value => $init_value,
+            new_value      => $value,
+        };
+    }
+    return $edit_history_field;
 }
 
 sub get_edit_history {

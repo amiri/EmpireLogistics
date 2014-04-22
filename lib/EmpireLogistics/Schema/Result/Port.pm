@@ -187,6 +187,9 @@ __PACKAGE__->many_to_many(
 __PACKAGE__->many_to_many(
     'work_stoppages' => 'port_work_stoppages', 'work_stoppage'
 );
+__PACKAGE__->many_to_many(
+    'addresses' => 'port_addresses', 'address'
+);
 
 __PACKAGE__->has_many(
   "labor_organization_ports",

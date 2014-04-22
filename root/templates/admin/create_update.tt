@@ -1,5 +1,6 @@
 [% title = (creation == 1 ? 'Create' : 'Edit') %]
 [% meta.title = title _ " " _ class_name %]
+[% form.render_repeatable_js %]
 [% UNLESS c.req.is_xhr %]
 <h4><a href="/admin">Back to Admin Page</a></h4>
 <h5><a href="/admin/[% c.controller.actions.base.PathPart.0 %]">Back to [% class_name %] Page</a></h5>
