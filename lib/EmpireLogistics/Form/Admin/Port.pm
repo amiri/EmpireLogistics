@@ -6,7 +6,6 @@ use JSON::Any;
 use namespace::autoclean;
 extends 'EmpireLogistics::Form::BaseDB';
 with 'EmpireLogistics::Role::Form::Util';
-#with 'HTML::FormHandler::Render::RepeatableJs';
 
 has '+name'       => ( default => 'port-form' );
 has '+item_class' => ( default => 'Port' );

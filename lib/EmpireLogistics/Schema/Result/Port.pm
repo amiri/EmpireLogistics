@@ -188,7 +188,9 @@ __PACKAGE__->many_to_many(
     'work_stoppages' => 'port_work_stoppages', 'work_stoppage'
 );
 __PACKAGE__->many_to_many(
-    'addresses' => 'port_addresses', 'address'
+    'addresses' => 'port_addresses',
+    'address',
+    {where => {'me.delete_time' => undef}},
 );
 
 __PACKAGE__->has_many(
@@ -198,10 +200,12 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 __PACKAGE__->has_many(
-  "port_addresses",
-  "EmpireLogistics::Schema::Result::PortAddress",
-  { "foreign.port" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+    "port_addresses",
+    "EmpireLogistics::Schema::Result::PortAddress",
+    {"foreign.port" => "self.id"},
+    {   cascade_copy   => 0,
+        cascade_delete => 0,
+    },
 );
 __PACKAGE__->has_many(
   "port_tonnages",
