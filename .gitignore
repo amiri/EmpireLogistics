@@ -18,5 +18,5 @@ na-rail-*.json
 /.vagrant
 *.swp
 *.db
-/scratch
+/scratch/*
 Vagrantfile
