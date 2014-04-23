@@ -2,14 +2,19 @@ package EmpireLogistics::Form::Admin::Port;
 
 use HTML::FormHandler::Moose;
 use HTML::FormHandler::Types ( 'NoSpaces', 'Printable' );
-use Carp::Always;
+use JSON::Any;
 use namespace::autoclean;
 extends 'EmpireLogistics::Form::BaseDB';
 with 'EmpireLogistics::Role::Form::Util';
-with 'HTML::FormHandler::Render::RepeatableJs';
+#with 'HTML::FormHandler::Render::RepeatableJs';
 
 has '+name'       => ( default => 'port-form' );
 has '+item_class' => ( default => 'Port' );
+has 'address_relation' => (
+    is => 'ro',
+    isa => 'Str',
+    default => 'port_addresses',
+);
 
 sub build_render_list {
     return [
@@ -57,11 +62,12 @@ has_block 'location_block' => (
 
 has_block 'address_block' => (
     tag         => 'fieldset',
-    render_list => [ 'addresses', 'add_address' ],
+    render_list => [ 'addresses', 'add_element' ],
     label       => 'Addresses',
+    wrapper_class => 'addresses',
 );
 
-has_field 'add_address' => (
+has_field 'add_element' => (
     type          => 'AddElement',
     repeatable    => 'addresses',
     value         => 'Add another address',
@@ -72,10 +78,17 @@ has_field 'addresses' => (
     type           => 'Repeatable',
     setup_for_js   => 1,
     do_wrapper     => 1,
-    init_contains  => { widget_wrapper => 'Bootstrap3', },
     do_label       => 0,
     num_when_empty => 1,
     num_extra      => 0,
+    init_contains  => {
+        widget_wrapper => 'Simple',
+        tags           => {wrapper_tag => 'fieldset', controls_div => 1},
+        wrapper_class  => ['well-lg'],
+    },
+    widget_wrapper => 'Simple',
+    tags => { controls_div => 1 },
+    wrapper_class  => ['well-lg'],
 );
 has_field 'addresses.contains' => ( type => '+Address', );
 
@@ -85,7 +98,7 @@ sub options_addresses {
         map {{
             label => $_->addresses->street_address,
             value => $_->id,
-        }} $self->item->addresses->all
+        }} $self->item->addresses->active->all
     ];
     return $options;
 }
@@ -342,5 +355,91 @@ has_field 'submit' => (
     value         => 'Save',
     element_class => [ 'btn', 'btn-primary' ],
 );
+
+sub render_repeatable_js {
+    my $self = shift;
+    return '' unless $self->has_for_js;
+
+    my $for_js = $self->for_js;
+    my %index;
+    my %html;
+    my %level;
+    foreach my $key ( keys %$for_js ) {
+        $index{$key} = $for_js->{$key}->{index};
+        $html{$key}  = $for_js->{$key}->{html};
+        $level{$key} = $for_js->{$key}->{level};
+    }
+    my $encoder = JSON::Any->new;
+    my $index_str = $encoder->encode( \%index );
+    my $html_str  = $encoder->encode( \%html );
+    my $level_str = $encoder->encode( \%level );
+    my $js        = <<EOS;
+<script>
+\$(document).ready(function() {
+  var rep_index = $index_str;
+  var rep_html = $html_str;
+  var rep_level = $level_str;
+  \$('.add_element').click(function() {
+    // get the repeatable id
+    var data_rep_id = \$(this).attr('data-rep-id');
+    // create a regex out of index placeholder
+    var level = rep_level[data_rep_id]
+    var re = new RegExp('\{index-' + level + '\}',"g");
+    // replace the placeholder in the html with the index
+    var index = rep_index[data_rep_id];
+    var html = rep_html[data_rep_id];
+    html = html.replace(re, index);
+    // escape dots in element id
+    var esc_rep_id = data_rep_id.replace(/[.]/g, '\\\\.');
+    // append new element in the 'controls' div of the repeatable
+    var rep_controls = \$('#' + esc_rep_id + ' > .controls');
+    rep_controls.append(html);
+    // increment index of repeatable fields
+    index++;
+    rep_index[data_rep_id] = index;
+  });
+
+  \$(document).on('click', '.rm_element', function() {
+    cont = confirm('Remove?');
+    if (cont) {
+      var id = \$(this).attr('data-rep-elem-id');
+      var rel = \$(this).attr('data-rel');
+      var bridged = \$(this).attr('data-rel-self');
+      var esc_id = id.replace(/[.]/g, '\\\\.');
+      var rm_elem = \$('#' + esc_id);
+      if (rm_elem[0]) {
+        rm_elem = rm_elem[0];
+      }
+      console.log(esc_id);
+
+      var elem_id = esc_id + "\\\\.id";
+      elem_id = elem_id.replace(/[\\\\]/g, '');
+      // Could not get this to work with an ID selector, thus the name.
+      var elem_id_elem = \$("input[name*='" + elem_id + "']");
+
+      var elem_id_val = elem_id_elem.val();
+      var formAction = \$("form#port-form").attr('action');
+
+      console.log(formAction);
+      formAction = formAction + '/delete/' + rel + '/' + elem_id_val + '/' + bridged + '/';
+      formAction = formAction.replace(/edit\\//g, '');
+      console.log(formAction);
+
+      \$.ajax({
+          url: formAction,
+          dataType: "json",
+      }).done(function( data ) {
+          if (data.success == 1) {
+              \$(rm_elem).remove();
+          }
+      });
+    }
+    event.preventDefault();
+  });
+});
+</script>
+EOS
+    return $js;
+}
 
 1;

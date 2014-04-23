@@ -268,6 +268,26 @@ sub delete : Chained('object') PathPart('delete') Args(0) {
     return 1;
 }
 
+sub capture_relation :Chained('object') PathPart('delete') CaptureArgs(1) {
+    my ($self,$c,$relation) = @_;
+    return unless $c->req->is_xhr;
+    $c->stash->{current_view} = 'JSON';
+    $c->stash->{relation} = $relation;
+}
+
+sub delete_relation :Chained('capture_relation') PathPart('') Args(2) {
+    my ($self,$c,$id,$bridged) = @_;
+    $c->log->warn("I am going to delete relation");
+    $c->log->warn("My id is $id");
+    $c->log->warn("My bridged is $bridged");
+    if ($id && $bridged) {
+        my $relation = $c->stash->{relation};
+        my $object = $c->stash->{object};
+        $object->$relation->find({ $bridged => $id })->delete;
+    }
+    $c->stash->{json_data} = { success => 1 };
+}
+
 sub restore : Chained('object') PathPart('restore') Args(0) {
     my ( $self, $c ) = @_;
     my $restore_form = $c->stash->{restore_form};

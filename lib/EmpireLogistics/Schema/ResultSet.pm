@@ -8,6 +8,11 @@ extends 'DBIx::Class::ResultSet';
 
 sub BUILDARGS { $_[2] }
 
+sub active {
+    my $self = shift;
+    return $self->search({delete_time => undef});
+}
+
 __PACKAGE__->meta->make_immutable;
 
 1;
