@@ -2,7 +2,7 @@
 
 BEGIN;
 
-    ALTER TABLE company_type ADD UNIQUE CONSTRAINT company_type_unique_name (name);
-    ALTER TABLE labor_organization_type ADD UNIQUE CONSTRAINT labor_organization_type_unique_name (name);
+    ALTER TABLE company_type ADD CONSTRAINT company_type_unique_name UNIQUE (name);
+    ALTER TABLE labor_organization_type ADD CONSTRAINT labor_organization_type_unique_name UNIQUE (name);
 
 COMMIT;
