@@ -17,6 +17,7 @@ BEGIN;
         ('slowdown')
     ;
 
+    ALTER TABLE work_stoppage_type ADD CONSTRAINT work_stoppage_type_unique_name UNIQUE (name);
     alter table work_stoppage add column work_stoppage_type integer not null references work_stoppage_type(id);
     CREATE INDEX work_stoppage_work_stoppage_type ON work_stoppage (work_stoppage_type);
     insert into object_type (name) values ('work_stoppage_type');
