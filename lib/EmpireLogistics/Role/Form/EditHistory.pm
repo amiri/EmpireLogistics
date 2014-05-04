@@ -23,8 +23,14 @@ sub save_edit_history {
         # Skip nonexistent submission fields
         next if not exists $self->values->{ $field->name };
 
-        # Save Repeatable edit history
-        if ( $field->isa('HTML::FormHandler::Field::Repeatable') ) {
+        # Save Repeatable edit history, unless, of course, no values
+        if (      $field->isa('HTML::FormHandler::Field::Repeatable')
+              and (
+                  ref($field->result->value) eq 'ARRAY'
+                ? scalar(@{$field->result->value}) > 0
+                : defined $field->result->value
+              )
+        ) {
             my $i = 0;
             for my $rfield ( $field->fields ) {
                 my @repeatable_edit_history_fields = ();
@@ -34,6 +40,7 @@ sub save_edit_history {
                     = ref( $field->item ) eq 'ARRAY'
                     ? $field->item->[$i]
                     : $field->item;
+                next unless defined $item;
 
                 for my $subfield ( $rfield->sorted_fields ) {
                     my $edit_history_field
@@ -59,6 +66,19 @@ sub save_edit_history {
 sub get_edit_history_field_from_object {
     my ( $self, $item, $field ) = @_;
     my $edit_history_field;
+    $item = $field->item if $field->can('item');
+    # This should not be here. This should be refactored into cleaner subs.
+    if ($field->can('sorted_fields') and $field->can('item')) {
+        my $sub_item = $field->item;
+        return unless $sub_item;
+        my @edit_history_fields = ();
+        for my $sub_field ($field->sorted_fields) {
+            my $hist_field = $self->get_edit_history_field_from_object($sub_item, $sub_field);
+            push @edit_history_fields, $hist_field if $hist_field;
+        }
+        $sub_item->edit_history_save($self->user_id,\@edit_history_fields);
+        return;
+    }
     if ( $field->value_changed ) {
         my $field_name = $field->accessor;
         my $init_value = $item->$field_name;

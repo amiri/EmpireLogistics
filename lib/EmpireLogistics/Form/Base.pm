@@ -12,7 +12,14 @@ has '+http_method' => (default => 'post');
 has '+enctype' => (default => 'application/x-www-form-urlencoded');
 
 sub build_form_element_attr { { 'accept-charset' => 'utf-8' } }
-sub build_form_element_class { ['form-vertical'] }
+sub build_form_element_class { ['form-horizontal'] }
+sub build_form_tags {{
+    'layout_classes' => {
+        label_class => ['col-lg-2'],
+        element_wrapper_class => ['col-lg-10'],
+        no_label_element_wrapper_class => ['col-lg-offset-1'],
+    },
+}}
 
 __PACKAGE__->meta->make_immutable;
 

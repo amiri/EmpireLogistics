@@ -1,6 +1,7 @@
-package EmpireLogistics::Form::Field::Address;
+package EmpireLogistics::Form::Field::LaborOrganizationInvestmentAsset;
 
 use HTML::FormHandler::Moose;
+use List::AllUtils qw/any/;
 extends 'HTML::FormHandler::Field::Compound';
 with 'EmpireLogistics::Role::Form::Util';
 
@@ -21,9 +22,12 @@ has 'item' => (
 sub _build_item {
     my $self = shift;
     return unless $self->field('id')->fif;
-    my $address =
-        $self->form->item->addresses->find({id => $self->field('id')->fif});
-    return $address;
+    my $asset = $self->form->item->labor_organization_investment_assets->find(
+        {
+            id => $self->field('id')->fif,
+        }
+    );
+    return $asset;
 }
 
 has_field 'id' => (
@@ -52,12 +56,27 @@ has_field 'delete_time' => (
     deflate_method => \&deflate_delete_time,
     inflate_method => \&inflate_delete_time,
 );
-has_field 'street_address' => (label => 'Street Address', type => 'Text',);
-has_field 'postal_code'    => (type  => 'Text',);
-has_field 'city'           => (type  => 'Text',);
-has_field 'state'          => (type  => 'Text',);
-has_field 'country'        => (type  => 'Text',);
-has_field 'rm_element'     => (
+has_field 'name'   => (type => 'Text',);
+has_field 'year'   => (type => 'Year', empty_select => '-- Select One --',);
+has_field 'amount' => (type => 'Integer',);
+has_field 'investment_type' => (
+    type           => 'Select',
+    empty_select   => '-- Select One --',
+    options_method => \&options_investment_type,
+);
+
+sub options_investment_type {
+    my $self = shift;
+    return [
+        map { {label => $_, value => $_,} } @{
+            $self->form->schema->resultset(
+                "LaborOrganizationInvestmentAsset")
+                ->result_source->column_info('investment_type')->{extra}{list}
+        }
+    ];
+}
+
+has_field 'rm_element' => (
     type          => 'Display',
     label         => "Remove and Delete",
     render_method => \&render_rm_element,
@@ -66,9 +85,17 @@ has_field 'rm_element'     => (
 sub render_rm_element {
     my $self = shift;
     my $id   = $self->parent->id;
-    my $rel  = $self->parent->form->address_relation;
+    my $rel  = $self->parent->form->investment_asset_relation;
     return
-        qq{<div><span class="btn btn-danger rm_element" data-rel="$rel" data-rel-self="address" data-rep-elem-id="$id">Remove</span></div>};
+        qq{<div><span class="btn btn-danger rm_element" data-rel="$rel" data-rep-elem-id="$id">Remove</span></div>};
+}
+
+sub validate {
+    my $self          = shift;
+    my $year_required = 0;
+    $year_required = 1 if any { defined $_->value } @{$self->sorted_fields};
+    $self->field('year')->add_error("Investment asset year required")
+        if $year_required;
 }
 
 no HTML::FormHandler::Moose;
@@ -76,3 +103,4 @@ no HTML::FormHandler::Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
+

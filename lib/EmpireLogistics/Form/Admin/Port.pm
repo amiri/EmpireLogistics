@@ -1,23 +1,33 @@
 package EmpireLogistics::Form::Admin::Port;
 
 use HTML::FormHandler::Moose;
-use HTML::FormHandler::Types ( 'NoSpaces', 'Printable' );
+use HTML::FormHandler::Types ('NoSpaces', 'Printable');
 use JSON::Any;
 use namespace::autoclean;
 extends 'EmpireLogistics::Form::BaseDB';
 with 'EmpireLogistics::Role::Form::Util';
 
-has '+name'       => ( default => 'port-form' );
-has '+item_class' => ( default => 'Port' );
+has '+name'       => (default => 'port-form');
+has '+item_class' => (default => 'Port');
 has 'address_relation' => (
-    is => 'ro',
-    isa => 'Str',
+    is      => 'ro',
+    isa     => 'Str',
     default => 'port_addresses',
+);
+has 'js_files' => (
+    is      => 'ro',
+    isa     => 'ArrayRef',
+    default => sub {
+        [
+            '/js/admin/port.js',
+        ];
+    },
 );
 
 sub build_render_list {
     return [
-        'metadata_block',     'basic_block',         'location_block',
+        'metadata_block', 'basic_block', 'location_block',
+        'relations_block',
         'restrictions_block', 'pilotage_block',      'tugs_block',
         'quarantine_block',   'communication_block', 'facilities_block',
         'cranes_block',       'services_block',      'supplies_block',
@@ -27,52 +37,50 @@ sub build_render_list {
 
 has_block 'relations_block' => (
     tag         => 'fieldset',
-    label       => 'Connections',
-    render_list => [ 'companies', 'labor_organizations', ],
-);
-
-has_field 'companies' => (
-    type         => 'Multiple',
-    label_column => 'name',
-);
-
-has_field 'labor_organizations' => (
-    type         => 'Multiple',
-    label_column => 'name',
+    label       => 'Relationships',
+    render_list => ['companies', 'labor_organizations', 'work_stoppages'],
 );
 
 has_block 'metadata_block' => (
     tag         => 'fieldset',
     label       => 'Metadata',
-    render_list => [ 'id', 'create_time', 'update_time', 'delete_time', ],
+    render_list => ['id', 'create_time', 'update_time', 'delete_time',],
 );
 
 has_block 'basic_block' => (
     tag         => 'fieldset',
     label       => 'Basic Information',
-    render_list => [ 'overview_block', 'characteristics_block', ],
+    render_list => ['overview_block', 'characteristics_block',],
 );
 
 has_block 'location_block' => (
     tag         => 'fieldset',
     label       => 'Location',
-    render_list => [ 'latitude', 'longitude', 'geometry', 'address_block', ],
+    render_list => ['latitude', 'longitude', 'geometry', 'address_block',],
 );
 
+# Companies
+has_field 'companies' => (
+    type => '+Company',
+);
+
+# Labor Organizations
+has_field 'labor_organizations' => (
+    type => '+LaborOrganization',
+);
+
+# Work Stoppages
+has_field 'work_stoppages' => (
+    type => '+WorkStoppage',
+);
+
+# Addresses
 has_block 'address_block' => (
-    tag         => 'fieldset',
-    render_list => [ 'addresses', 'add_element' ],
-    label       => 'Addresses',
+    tag           => 'fieldset',
+    render_list   => ['addresses', 'add_address'],
+    label         => 'Addresses',
     wrapper_class => 'addresses',
 );
-
-has_field 'add_element' => (
-    type          => 'AddElement',
-    repeatable    => 'addresses',
-    value         => 'Add another address',
-    element_class => ['btn btn-info']
-);
-
 has_field 'addresses' => (
     type           => 'Repeatable',
     setup_for_js   => 1,
@@ -86,19 +94,23 @@ has_field 'addresses' => (
         wrapper_class  => ['well-lg'],
     },
     widget_wrapper => 'Simple',
-    tags => { controls_div => 1 },
+    tags           => {controls_div => 1},
     wrapper_class  => ['well-lg'],
 );
-has_field 'addresses.contains' => ( type => '+Address', );
+has_field 'addresses.contains' => (type => '+Address',);
+
+has_field 'add_address' => (
+    type          => 'AddElement',
+    repeatable    => 'addresses',
+    value         => 'Add another address',
+    element_class => ['btn btn-info']
+);
 
 sub options_addresses {
     my $self = shift;
-    my $options = [
-        map {{
-            label => $_->addresses->street_address,
-            value => $_->id,
-        }} $self->item->addresses->active->all
-    ];
+    my $options =
+        [map { {label => $_->addresses->street_address, value => $_->id,} }
+            $self->item->addresses->active->all];
     return $options;
 }
 
@@ -150,7 +162,7 @@ has_block 'pilotage_block' => (
 has_block 'tugs_block' => (
     tag         => 'fieldset',
     label       => 'Tugs',
-    render_list => [ 'tugs_can_salvage', 'tugs_can_assist', ],
+    render_list => ['tugs_can_salvage', 'tugs_can_assist',],
 );
 
 has_block 'quarantine_block' => (
@@ -223,7 +235,7 @@ has_block 'supplies_block' => (
 has_block 'misc_block' => (
     tag         => 'fieldset',
     label       => 'Miscellaneous',
-    render_list => [ 'repairs', 'drydock', 'railway', ],
+    render_list => ['repairs', 'drydock', 'railway',],
 );
 has_field 'id' => (
     type  => 'Hidden',
@@ -252,193 +264,107 @@ has_field 'delete_time' => (
 );
 
 # Basic
-has_field 'port_name'   => ( type => 'Text', required => 1, );
-has_field 'harbor_size' => ( type => 'Text', required => 1, );
-has_field 'harbor_type' => ( type => 'Text', required => 1, );
-has_field 'channel_depth'      => ( type => 'Text', );
-has_field 'cargo_pier_depth'   => ( type => 'Text', );
-has_field 'anchor_depth'       => ( type => 'Text', );
-has_field 'oil_terminal_depth' => ( type => 'Text', );
+has_field 'port_name'   => (type => 'Text', required => 1,);
+has_field 'harbor_size' => (type => 'Text', required => 1,);
+has_field 'harbor_type' => (type => 'Text', required => 1,);
+has_field 'channel_depth'      => (type => 'Text',);
+has_field 'cargo_pier_depth'   => (type => 'Text',);
+has_field 'anchor_depth'       => (type => 'Text',);
+has_field 'oil_terminal_depth' => (type => 'Text',);
 
 # Characteristics
-has_field 'tide_range'          => ( type => 'Integer', );
-has_field 'max_vessel_size'     => ( type => 'Text', required => 1, );
-has_field 'shelter'             => ( type => 'Text', );
-has_field 'good_holding_ground' => ( type => 'Boolean', );
-has_field 'turning_basin'       => ( type => 'Boolean', );
-has_field 'first_port_of_entry' => ( type => 'Boolean', );
-has_field 'us_representative'   => ( type => 'Boolean', );
-has_field 'eta_message'         => ( type => 'Boolean', );
+has_field 'tide_range'          => (type => 'Integer',);
+has_field 'max_vessel_size'     => (type => 'Text', required => 1,);
+has_field 'shelter'             => (type => 'Text',);
+has_field 'good_holding_ground' => (type => 'Boolean',);
+has_field 'turning_basin'       => (type => 'Boolean',);
+has_field 'first_port_of_entry' => (type => 'Boolean',);
+has_field 'us_representative'   => (type => 'Boolean',);
+has_field 'eta_message'         => (type => 'Boolean',);
 
 # Location
-has_field 'longitude' => ( type => 'Text', required => 1, );
-has_field 'latitude'  => ( type => 'Text', required => 1, );
-has_field 'geometry'  => ( type => 'Text', disabled => 1, readonly => 1, );
-has_field 'country' => ( type => 'Text', );
+has_field 'longitude' => (type => 'Text', required => 1,);
+has_field 'latitude'  => (type => 'Text', required => 1,);
+has_field 'geometry'  => (type => 'Text', disabled => 1, readonly => 1,);
+has_field 'country' => (type => 'Text',);
 
 # Restrictions
-has_field 'entry_tide_restriction'  => ( type => 'Boolean', );
-has_field 'entry_swell_restriction' => ( type => 'Boolean', );
-has_field 'entry_ice_restriction'   => ( type => 'Boolean', );
-has_field 'entry_other_restriction' => ( type => 'Boolean', );
-has_field 'overhead_limits'         => ( type => 'Boolean', );
+has_field 'entry_tide_restriction'  => (type => 'Boolean',);
+has_field 'entry_swell_restriction' => (type => 'Boolean',);
+has_field 'entry_ice_restriction'   => (type => 'Boolean',);
+has_field 'entry_other_restriction' => (type => 'Boolean',);
+has_field 'overhead_limits'         => (type => 'Boolean',);
 
 # Pilotage
-has_field 'pilotage_required'         => ( type => 'Boolean', );
-has_field 'pilotage_available'        => ( type => 'Boolean', );
-has_field 'pilotage_local_assistance' => ( type => 'Boolean', );
-has_field 'pilotage_advisable'        => ( type => 'Boolean', );
+has_field 'pilotage_required'         => (type => 'Boolean',);
+has_field 'pilotage_available'        => (type => 'Boolean',);
+has_field 'pilotage_local_assistance' => (type => 'Boolean',);
+has_field 'pilotage_advisable'        => (type => 'Boolean',);
 
 # Tugs
-has_field 'tugs_can_salvage' => ( type => 'Boolean', );
-has_field 'tugs_can_assist'  => ( type => 'Boolean', );
+has_field 'tugs_can_salvage' => (type => 'Boolean',);
+has_field 'tugs_can_assist'  => (type => 'Boolean',);
 
 # Quarantine
-has_field 'quarantine_pratique_required'           => ( type => 'Boolean', );
-has_field 'quarantine_sscc_certification_required' => ( type => 'Boolean', );
-has_field 'quarantine_other_required'              => ( type => 'Boolean', );
+has_field 'quarantine_pratique_required'           => (type => 'Boolean',);
+has_field 'quarantine_sscc_certification_required' => (type => 'Boolean',);
+has_field 'quarantine_other_required'              => (type => 'Boolean',);
 
 # Communications
-has_field 'comm_phone' => ( type => 'Boolean', );
-has_field 'comm_fax'   => ( type => 'Boolean', );
-has_field 'comm_radio' => ( type => 'Boolean', );
-has_field 'comm_vhf'   => ( type => 'Boolean', );
-has_field 'comm_air'   => ( type => 'Boolean', );
-has_field 'comm_rail'  => ( type => 'Boolean', );
+has_field 'comm_phone' => (type => 'Boolean',);
+has_field 'comm_fax'   => (type => 'Boolean',);
+has_field 'comm_radio' => (type => 'Boolean',);
+has_field 'comm_vhf'   => (type => 'Boolean',);
+has_field 'comm_air'   => (type => 'Boolean',);
+has_field 'comm_rail'  => (type => 'Boolean',);
 
 # Offloading
-has_field 'load_offload_wharf'       => ( type => 'Boolean', );
-has_field 'load_offload_anchor'      => ( type => 'Boolean', );
-has_field 'load_offload_medium_moor' => ( type => 'Boolean', );
-has_field 'load_offload_beach_moor'  => ( type => 'Boolean', );
-has_field 'load_offload_ice_moor'    => ( type => 'Boolean', );
+has_field 'load_offload_wharf'       => (type => 'Boolean',);
+has_field 'load_offload_anchor'      => (type => 'Boolean',);
+has_field 'load_offload_medium_moor' => (type => 'Boolean',);
+has_field 'load_offload_beach_moor'  => (type => 'Boolean',);
+has_field 'load_offload_ice_moor'    => (type => 'Boolean',);
 
 # Facilities
-has_field 'medical_facilities'   => ( type => 'Boolean', );
-has_field 'garbage_disposal'     => ( type => 'Boolean', );
-has_field 'degaussing_available' => ( type => 'Boolean', );
-has_field 'dirty_ballast'        => ( type => 'Boolean', );
+has_field 'medical_facilities'   => (type => 'Boolean',);
+has_field 'garbage_disposal'     => (type => 'Boolean',);
+has_field 'degaussing_available' => (type => 'Boolean',);
+has_field 'dirty_ballast'        => (type => 'Boolean',);
 
 # Cranes
-has_field 'fixed_cranes'            => ( type => 'Boolean', );
-has_field 'mobile_cranes'           => ( type => 'Boolean', );
-has_field 'floating_cranes'         => ( type => 'Boolean', );
-has_field 'cranes_lift_100_tons'    => ( type => 'Boolean', );
-has_field 'cranes_lift_50_100_tons' => ( type => 'Boolean', );
-has_field 'cranes_lift_25_49_tons'  => ( type => 'Boolean', );
-has_field 'cranes_lift_0_24_tons'   => ( type => 'Boolean', );
+has_field 'fixed_cranes'            => (type => 'Boolean',);
+has_field 'mobile_cranes'           => (type => 'Boolean',);
+has_field 'floating_cranes'         => (type => 'Boolean',);
+has_field 'cranes_lift_100_tons'    => (type => 'Boolean',);
+has_field 'cranes_lift_50_100_tons' => (type => 'Boolean',);
+has_field 'cranes_lift_25_49_tons'  => (type => 'Boolean',);
+has_field 'cranes_lift_0_24_tons'   => (type => 'Boolean',);
 
 # Services
-has_field 'longshore_services'            => ( type => 'Boolean', );
-has_field 'electrical_services'           => ( type => 'Boolean', );
-has_field 'steam_services'                => ( type => 'Boolean', );
-has_field 'navigation_equipment_services' => ( type => 'Boolean', );
-has_field 'electrical_repair_services'    => ( type => 'Boolean', );
+has_field 'longshore_services'            => (type => 'Boolean',);
+has_field 'electrical_services'           => (type => 'Boolean',);
+has_field 'steam_services'                => (type => 'Boolean',);
+has_field 'navigation_equipment_services' => (type => 'Boolean',);
+has_field 'electrical_repair_services'    => (type => 'Boolean',);
 
 # Supplies
-has_field 'supplies_provisions' => ( type => 'Boolean', );
-has_field 'supplies_water'      => ( type => 'Boolean', );
-has_field 'supplies_fuel_oil'   => ( type => 'Boolean', );
-has_field 'supplies_diesel_oil' => ( type => 'Boolean', );
-has_field 'supplies_deck'       => ( type => 'Boolean', );
-has_field 'supplies_engine'     => ( type => 'Boolean', );
+has_field 'supplies_provisions' => (type => 'Boolean',);
+has_field 'supplies_water'      => (type => 'Boolean',);
+has_field 'supplies_fuel_oil'   => (type => 'Boolean',);
+has_field 'supplies_diesel_oil' => (type => 'Boolean',);
+has_field 'supplies_deck'       => (type => 'Boolean',);
+has_field 'supplies_engine'     => (type => 'Boolean',);
 
 # Miscellaneous
-has_field 'repairs' => ( type => 'Text', );
-has_field 'drydock' => ( type => 'Text', );
-has_field 'railway' => ( type => 'Text', );
+has_field 'repairs' => (type => 'Text',);
+has_field 'drydock' => (type => 'Text',);
+has_field 'railway' => (type => 'Text',);
 
 has_field 'submit' => (
     type          => 'Submit',
     widget        => 'ButtonTag',
     value         => 'Save',
-    element_class => [ 'btn', 'btn-primary' ],
+    element_class => ['btn', 'btn-primary'],
 );
-
-sub render_repeatable_js {
-    my $self = shift;
-    return '' unless $self->has_for_js;
-
-    my $for_js = $self->for_js;
-    my %index;
-    my %html;
-    my %level;
-    foreach my $key ( keys %$for_js ) {
-        $index{$key} = $for_js->{$key}->{index};
-        $html{$key}  = $for_js->{$key}->{html};
-        $level{$key} = $for_js->{$key}->{level};
-    }
-    my $encoder = JSON::Any->new;
-    my $index_str = $encoder->encode( \%index );
-    my $html_str  = $encoder->encode( \%html );
-    my $level_str = $encoder->encode( \%level );
-    my $js        = <<EOS;
-<script>
-\$(document).ready(function() {
-  var rep_index = $index_str;
-  var rep_html = $html_str;
-  var rep_level = $level_str;
-  \$('.add_element').click(function() {
-    // get the repeatable id
-    var data_rep_id = \$(this).attr('data-rep-id');
-    // create a regex out of index placeholder
-    var level = rep_level[data_rep_id]
-    var re = new RegExp('\{index-' + level + '\}',"g");
-    // replace the placeholder in the html with the index
-    var index = rep_index[data_rep_id];
-    var html = rep_html[data_rep_id];
-    html = html.replace(re, index);
-    // escape dots in element id
-    var esc_rep_id = data_rep_id.replace(/[.]/g, '\\\\.');
-    // append new element in the 'controls' div of the repeatable
-    var rep_controls = \$('#' + esc_rep_id + ' > .controls');
-    rep_controls.append(html);
-    // increment index of repeatable fields
-    index++;
-    rep_index[data_rep_id] = index;
-  });
-
-  \$(document).on('click', '.rm_element', function() {
-    cont = confirm('Remove?');
-    if (cont) {
-      var id = \$(this).attr('data-rep-elem-id');
-      var rel = \$(this).attr('data-rel');
-      var bridged = \$(this).attr('data-rel-self');
-      var esc_id = id.replace(/[.]/g, '\\\\.');
-      var rm_elem = \$('#' + esc_id);
-      if (rm_elem[0]) {
-        rm_elem = rm_elem[0];
-      }
-      console.log(esc_id);
-
-      var elem_id = esc_id + "\\\\.id";
-      elem_id = elem_id.replace(/[\\\\]/g, '');
-      // Could not get this to work with an ID selector, thus the name.
-      var elem_id_elem = \$("input[name*='" + elem_id + "']");
-
-      var elem_id_val = elem_id_elem.val();
-      var formAction = \$("form#port-form").attr('action');
-
-      console.log(formAction);
-      formAction = formAction + '/delete/' + rel + '/' + elem_id_val + '/' + bridged + '/';
-      formAction = formAction.replace(/edit\\//g, '');
-      console.log(formAction);
-
-      \$.ajax({
-          url: formAction,
-          dataType: "json",
-      }).done(function( data ) {
-          if (data.success == 1) {
-              \$(rm_elem).remove();
-          }
-      });
-    }
-    event.preventDefault();
-  });
-});
-</script>
-EOS
-    return $js;
-}
 
 1;

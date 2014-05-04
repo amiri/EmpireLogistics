@@ -1,6 +1,7 @@
-package EmpireLogistics::Form::Field::Address;
+package EmpireLogistics::Form::Field::LaborOrganizationOtherAsset;
 
 use HTML::FormHandler::Moose;
+use List::AllUtils qw/any/;
 extends 'HTML::FormHandler::Field::Compound';
 with 'EmpireLogistics::Role::Form::Util';
 
@@ -21,9 +22,12 @@ has 'item' => (
 sub _build_item {
     my $self = shift;
     return unless $self->field('id')->fif;
-    my $address =
-        $self->form->item->addresses->find({id => $self->field('id')->fif});
-    return $address;
+    my $asset = $self->form->item->labor_organization_other_assets->find(
+        {
+            id => $self->field('id')->fif,
+        }
+    );
+    return $asset;
 }
 
 has_field 'id' => (
@@ -52,12 +56,12 @@ has_field 'delete_time' => (
     deflate_method => \&deflate_delete_time,
     inflate_method => \&inflate_delete_time,
 );
-has_field 'street_address' => (label => 'Street Address', type => 'Text',);
-has_field 'postal_code'    => (type  => 'Text',);
-has_field 'city'           => (type  => 'Text',);
-has_field 'state'          => (type  => 'Text',);
-has_field 'country'        => (type  => 'Text',);
-has_field 'rm_element'     => (
+has_field 'year' => (type => 'Year', empty_select => '-- Select One --',);
+has_field 'book_value'  => (type => 'Integer',);
+has_field 'value'       => (type => 'Integer',);
+has_field 'description' => (type => 'Text',);
+
+has_field 'rm_element' => (
     type          => 'Display',
     label         => "Remove and Delete",
     render_method => \&render_rm_element,
@@ -66,9 +70,17 @@ has_field 'rm_element'     => (
 sub render_rm_element {
     my $self = shift;
     my $id   = $self->parent->id;
-    my $rel  = $self->parent->form->address_relation;
+    my $rel  = $self->parent->form->other_asset_relation;
     return
-        qq{<div><span class="btn btn-danger rm_element" data-rel="$rel" data-rel-self="address" data-rep-elem-id="$id">Remove</span></div>};
+        qq{<div><span class="btn btn-danger rm_element" data-rel="$rel" data-rep-elem-id="$id">Remove</span></div>};
+}
+
+sub validate {
+    my $self          = shift;
+    my $year_required = 0;
+    $year_required = 1 if any { defined $_->value } @{$self->sorted_fields};
+    $self->field('year')->add_error("Other asset year required")
+        if $year_required;
 }
 
 no HTML::FormHandler::Moose;
