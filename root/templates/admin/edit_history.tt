@@ -1,7 +1,7 @@
 [% IF table_data %]
 
 <div>
-<h3>Edit History [% object_type -%]</h3>
+<h3>[% object_type -%][% IF item.can('name') %] [% item.name %][% END %] Edit History</h3>
 <table class="table table-striped table-bordered table-condensed edithistory">
     <thead>
       <tr>
