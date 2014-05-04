@@ -126,10 +126,22 @@ sub TO_JSON {
             edit_url => $self->edit_url->as_string,
         };
     }
+    if ( $self->can('date_established') and $self->date_established) {
+        $ret = {
+            %{$ret},
+            date_established => $self->date_established->strftime('%Y'),
+        };
+    }
     if ( $self->can('owner') and $self->owner) {
         $ret = {
             %{$ret},
             owner => $self->owner->name,
+        };
+    }
+    if ( $self->can('organization_type') and $self->organization_type) {
+        $ret = {
+            %{$ret},
+            organization_type => $self->organization_type->name,
         };
     }
 

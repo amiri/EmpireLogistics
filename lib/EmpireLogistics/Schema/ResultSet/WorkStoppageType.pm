@@ -1,4 +1,4 @@
-package EmpireLogistics::Schema::ResultSet::WarehouseOwner;
+package EmpireLogistics::Schema::ResultSet::WorkStoppageType;
 
 use Moose;
 use MooseX::MarkAsMethods autoclean => 1;
@@ -22,11 +22,10 @@ sub _build_labels {
         create_time => 'Create Time',
         update_time => 'Update Time',
         delete_time => 'Deleted',
-        name        => 'Name',
+        name        => "Labor Action Type",
     };
 }
 
 __PACKAGE__->meta->make_immutable;
 
 1;
-

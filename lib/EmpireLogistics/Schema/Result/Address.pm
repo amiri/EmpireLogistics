@@ -46,31 +46,46 @@ __PACKAGE__->has_many(
   "company_addresses",
   "EmpireLogistics::Schema::Result::CompanyAddress",
   { "foreign.address" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 __PACKAGE__->has_many(
   "labor_organization_addresses",
   "EmpireLogistics::Schema::Result::LaborOrganizationAddress",
   { "foreign.address" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 __PACKAGE__->has_many(
   "labor_organization_payee_addresses",
   "EmpireLogistics::Schema::Result::LaborOrganizationPayeeAddress",
   { "foreign.address" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 __PACKAGE__->has_many(
   "port_addresses",
   "EmpireLogistics::Schema::Result::PortAddress",
   { "foreign.address" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 __PACKAGE__->has_many(
   "warehouse_addresses",
   "EmpireLogistics::Schema::Result::WarehouseAddress",
   { "foreign.address" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 
 __PACKAGE__->many_to_many(

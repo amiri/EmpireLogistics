@@ -1,4 +1,4 @@
-package EmpireLogistics::Schema::ResultSet::WarehouseOwner;
+package EmpireLogistics::Schema::ResultSet::WorkStoppage;
 
 use Moose;
 use MooseX::MarkAsMethods autoclean => 1;
@@ -18,15 +18,16 @@ has 'labels' => (
 sub _build_labels {
     my $self = shift;
     return {
-        id          => 'ID',
-        create_time => 'Create Time',
-        update_time => 'Update Time',
-        delete_time => 'Deleted',
-        name        => 'Name',
+        id                 => 'ID',
+        create_time        => 'Create Time',
+        update_time        => 'Update Time',
+        delete_time        => 'Deleted',
+        name               => "Labor Action Name",
+        work_stoppage_type => "Action Type",
+        description        => "Description",
     };
 }
 
 __PACKAGE__->meta->make_immutable;
 
 1;
-

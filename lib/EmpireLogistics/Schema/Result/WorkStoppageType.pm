@@ -1,18 +1,18 @@
-package EmpireLogistics::Schema::Result::Role;
+package EmpireLogistics::Schema::Result::WorkStoppageType;
 
 use Moose;
 use MooseX::MarkAsMethods autoclean => 1;
 
 extends 'EmpireLogistics::Schema::Result';
 
-__PACKAGE__->table("role");
+__PACKAGE__->table("work_stoppage_type");
 __PACKAGE__->add_columns(
   "id",
   {
     data_type         => "integer",
     is_auto_increment => 1,
     is_nullable       => 0,
-    sequence          => "role_id_seq",
+    sequence          => "work_stoppage_type_id_seq",
   },
   "create_time",
   {
@@ -32,22 +32,17 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 0 },
 );
 __PACKAGE__->set_primary_key("id");
+__PACKAGE__->add_unique_constraint("work_stoppage_type_unique_name", ["name"]);
+
 __PACKAGE__->has_many(
-  "user_roles",
-  "EmpireLogistics::Schema::Result::UserRole",
-  { "foreign.role" => "self.id" },
-  {
+    "work_stoppages" => "EmpireLogistics::Schema::Result::WorkStoppage",
+    {"foreign.work_stoppage_type" => "self.id"},
+    {
 	where => { "me.delete_time" => undef },
 	cascade_copy => 0, cascade_delete => 0
   },
 );
 
-
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-03-30 15:53:38
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8XO24LFtEcJbIgypfxMgMw
-
-
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->belongs_to(
     "object_type" =>
     "EmpireLogistics::Schema::Result::ObjectType",
@@ -83,4 +78,5 @@ __PACKAGE__->has_many(
 );
 
 __PACKAGE__->meta->make_immutable;
+
 1;

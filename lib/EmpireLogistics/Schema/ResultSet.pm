@@ -6,12 +6,26 @@ use MooseX::NonMoose;
 
 extends 'DBIx::Class::ResultSet';
 
+has 'form_options' => (
+    is      => 'ro',
+    isa     => 'ArrayRef',
+    lazy    => 1,
+    builder => '_build_form_options',
+);
+
 sub BUILDARGS { $_[2] }
 
 sub active {
     my $self = shift;
-    return $self->search({delete_time => undef});
+    return $self->search({"me.delete_time" => undef});
 }
+
+sub _build_form_options {
+    my $self = shift;
+    return [ map { { value => $_->id, label => $_->name } }
+            $self->active->all ];
+}
+
 
 __PACKAGE__->meta->make_immutable;
 

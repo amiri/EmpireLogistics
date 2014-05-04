@@ -49,19 +49,28 @@ __PACKAGE__->has_many(
   "company_rail_nodes",
   "EmpireLogistics::Schema::Result::CompanyRailNode",
   { "foreign.rail_node" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 __PACKAGE__->has_many(
   "labor_organization_rail_nodes",
   "EmpireLogistics::Schema::Result::LaborOrganizationRailNode",
   { "foreign.rail_node" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 __PACKAGE__->has_many(
   "rail_node_work_stoppages",
   "EmpireLogistics::Schema::Result::RailNodeWorkStoppage",
   { "foreign.rail_node" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 
 

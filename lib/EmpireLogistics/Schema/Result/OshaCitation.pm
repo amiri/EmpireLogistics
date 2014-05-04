@@ -32,23 +32,39 @@ __PACKAGE__->add_columns(
   { data_type => "timestamp with time zone", is_nullable => 1 },
   "inspection_number",
   { data_type => "text", is_nullable => 0 },
+  "citation_number",
+  { data_type => "text", is_nullable => 0 },
   "issuance_date",
   { data_type => "date", is_nullable => 0 },
   "url",
   { data_type => "text", is_nullable => 0 },
 );
 __PACKAGE__->set_primary_key("id");
+__PACKAGE__->add_unique_constraint("osha_citation_inspection_and_citation_unique", ["inspection_number","citation_number"]);
 __PACKAGE__->has_many(
   "company_osha_citations",
   "EmpireLogistics::Schema::Result::CompanyOshaCitation",
   { "foreign.osha_citation" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 __PACKAGE__->has_many(
   "labor_organization_osha_citations",
   "EmpireLogistics::Schema::Result::LaborOrganizationOshaCitation",
   { "foreign.osha_citation" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
+);
+
+__PACKAGE__->many_to_many(
+"companies", "company_osha_citations", "company" 
+);
+__PACKAGE__->many_to_many(
+"labor_organizations", "labor_organization_osha_citations", "labor_organization" 
 );
 
 

@@ -1,7 +1,5 @@
 package EmpireLogistics::Schema::Result::Company;
 
-
-
 use Moose;
 use MooseX::MarkAsMethods autoclean => 1;
 
@@ -34,52 +32,77 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "company_type",
   {
-    data_type => "enum",
-    extra => {
-      custom_type_name => "company_type",
-      list => ["3PL", "commercial", "financial", "industrial"],
-    },
-    is_nullable => 1,
+    data_type => "integer",
+    is_nullable => 0,
   },
   "description",
   { data_type => "text", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("id");
+__PACKAGE__->add_unique_constraint("company_name_unique", ["name"]);
+
+__PACKAGE__->belongs_to(
+    "company_type" => "EmpireLogistics::Schema::Result::CompanyType",
+    {"foreign.id" => "self.company_type"},
+    {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
+);
+
 __PACKAGE__->has_many(
   "company_addresses",
   "EmpireLogistics::Schema::Result::CompanyAddress",
   { "foreign.company" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 __PACKAGE__->has_many(
   "company_nlrb_decisions",
   "EmpireLogistics::Schema::Result::CompanyNlrbDecision",
   { "foreign.company" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 __PACKAGE__->has_many(
   "company_osha_citations",
   "EmpireLogistics::Schema::Result::CompanyOshaCitation",
   { "foreign.company" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 __PACKAGE__->has_many(
   "company_ports",
   "EmpireLogistics::Schema::Result::CompanyPort",
   { "foreign.company" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 __PACKAGE__->has_many(
   "company_rail_nodes",
   "EmpireLogistics::Schema::Result::CompanyRailNode",
   { "foreign.company" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 __PACKAGE__->has_many(
   "company_warehouses",
   "EmpireLogistics::Schema::Result::CompanyWarehouse",
   { "foreign.company" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 
 __PACKAGE__->many_to_many(
@@ -93,6 +116,12 @@ __PACKAGE__->many_to_many(
 );
 __PACKAGE__->many_to_many(
     'warehouses' => 'company_warehouses', 'warehouse'
+);
+__PACKAGE__->many_to_many(
+    'osha_citations' => 'company_osha_citations', 'osha_citation'
+);
+__PACKAGE__->many_to_many(
+    'nlrb_decisions' => 'company_nlrb_decisions', 'nlrb_decision'
 );
 
 

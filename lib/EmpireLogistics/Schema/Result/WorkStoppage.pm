@@ -36,40 +36,87 @@ __PACKAGE__->add_columns(
   { data_type => "date", is_nullable => 1 },
   "description",
   { data_type => "text", is_nullable => 1 },
+  "work_stoppage_type",
+  {
+    data_type => "integer",
+    is_nullable => 0,
+  },
+  "name",
+  { data_type => "text", is_nullable => 0 },
 );
 __PACKAGE__->set_primary_key("id");
+__PACKAGE__->add_unique_constraint("work_stoppage_unique_name", ["name"]);
+
+__PACKAGE__->belongs_to(
+    "work_stoppage_type" => "EmpireLogistics::Schema::Result::WorkStoppageType",
+    {"foreign.id" => "self.work_stoppage_type"},
+    {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
+);
+
 __PACKAGE__->has_many(
   "labor_organization_work_stoppages",
   "EmpireLogistics::Schema::Result::LaborOrganizationWorkStoppage",
   { "foreign.work_stoppage" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 __PACKAGE__->has_many(
   "port_work_stoppages",
   "EmpireLogistics::Schema::Result::PortWorkStoppage",
   { "foreign.work_stoppage" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 __PACKAGE__->has_many(
   "rail_line_work_stoppages",
   "EmpireLogistics::Schema::Result::RailLineWorkStoppage",
   { "foreign.work_stoppage" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 __PACKAGE__->has_many(
   "rail_node_work_stoppages",
   "EmpireLogistics::Schema::Result::RailNodeWorkStoppage",
   { "foreign.work_stoppage" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 __PACKAGE__->has_many(
   "warehouse_work_stoppages",
   "EmpireLogistics::Schema::Result::WarehouseWorkStoppage",
   { "foreign.work_stoppage" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 
-
+__PACKAGE__->many_to_many(
+    labor_organizations => "labor_organization_work_stoppages", "labor_organization"
+);
+__PACKAGE__->many_to_many(
+    ports => "port_work_stoppages", "port"
+);
+__PACKAGE__->many_to_many(
+    rail_lines => "rail_line_work_stoppages", "rail_line"
+);
+__PACKAGE__->many_to_many(
+    rail_nodes => "rail_node_work_stoppages", "rail_node"
+);
+__PACKAGE__->many_to_many(
+    warehouses => "warehouse_work_stoppages", "warehouse"
+);
 
 
 __PACKAGE__->belongs_to(

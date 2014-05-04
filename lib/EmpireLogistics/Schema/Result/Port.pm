@@ -171,21 +171,18 @@ __PACKAGE__->add_columns(
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("port_name_lat_lon", ["port_name", "latitude", "longitude"]);
-__PACKAGE__->has_many(
-  "company_ports",
-  "EmpireLogistics::Schema::Result::CompanyPort",
-  { "foreign.port" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
 
 __PACKAGE__->many_to_many(
-    'companies' => 'company_ports', 'company'
+    'companies' => 'company_ports', 'company',
+    {where => {'me.delete_time' => undef}},
 );
 __PACKAGE__->many_to_many(
-    'labor_organizations' => 'labor_organization_ports', 'labor_organization'
+    'labor_organizations' => 'labor_organization_ports', 'labor_organization',
+    {where => {'me.delete_time' => undef}},
 );
 __PACKAGE__->many_to_many(
-    'work_stoppages' => 'port_work_stoppages', 'work_stoppage'
+    'work_stoppages' => 'port_work_stoppages', 'work_stoppage',
+    {where => {'me.delete_time' => undef}},
 );
 __PACKAGE__->many_to_many(
     'addresses' => 'port_addresses',
@@ -194,10 +191,23 @@ __PACKAGE__->many_to_many(
 );
 
 __PACKAGE__->has_many(
+  "company_ports",
+  "EmpireLogistics::Schema::Result::CompanyPort",
+  { "foreign.port" => "self.id" },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
+);
+
+__PACKAGE__->has_many(
   "labor_organization_ports",
   "EmpireLogistics::Schema::Result::LaborOrganizationPort",
   { "foreign.port" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 __PACKAGE__->has_many(
     "port_addresses",
@@ -211,13 +221,19 @@ __PACKAGE__->has_many(
   "port_tonnages",
   "EmpireLogistics::Schema::Result::PortTonnage",
   { "foreign.port" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 __PACKAGE__->has_many(
   "port_work_stoppages",
   "EmpireLogistics::Schema::Result::PortWorkStoppage",
   { "foreign.port" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 
 

@@ -80,7 +80,10 @@ __PACKAGE__->has_many(
   "rail_line_work_stoppages",
   "EmpireLogistics::Schema::Result::RailLineWorkStoppage",
   { "foreign.rail_line" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 
 __PACKAGE__->many_to_many(

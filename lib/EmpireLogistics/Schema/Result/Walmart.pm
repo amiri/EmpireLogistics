@@ -38,7 +38,10 @@ __PACKAGE__->has_many(
   "warehouse_walmarts",
   "EmpireLogistics::Schema::Result::WarehouseWalmart",
   { "foreign.walmart" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 
 

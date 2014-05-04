@@ -44,15 +44,27 @@ __PACKAGE__->has_many(
   "company_nlrb_decisions",
   "EmpireLogistics::Schema::Result::CompanyNlrbDecision",
   { "foreign.nlrb_decision" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 __PACKAGE__->has_many(
   "labor_organization_nlrb_decisions",
   "EmpireLogistics::Schema::Result::LaborOrganizationNlrbDecision",
   { "foreign.nlrb_decision" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 
+__PACKAGE__->many_to_many(
+"companies", "company_nlrb_decisions", "company"
+);
+__PACKAGE__->many_to_many(
+"labor_organizations", "labor_organization_nlrb_decisions", "labor_organization"
+);
 
 
 

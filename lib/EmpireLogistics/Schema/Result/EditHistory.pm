@@ -39,7 +39,9 @@ __PACKAGE__->has_many(
   "edit_history_fields",
   "EmpireLogistics::Schema::Result::EditHistoryField",
   { "foreign.edit_history" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 
 __PACKAGE__->belongs_to(

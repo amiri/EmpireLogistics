@@ -1,4 +1,4 @@
-package EmpireLogistics::Schema::ResultSet::WarehouseOwner;
+package EmpireLogistics::Schema::ResultSet::OshaCitation;
 
 use Moose;
 use MooseX::MarkAsMethods autoclean => 1;
@@ -18,11 +18,13 @@ has 'labels' => (
 sub _build_labels {
     my $self = shift;
     return {
-        id          => 'ID',
-        create_time => 'Create Time',
-        update_time => 'Update Time',
-        delete_time => 'Deleted',
-        name        => 'Name',
+        id                => 'ID',
+        create_time       => 'Create Time',
+        update_time       => 'Update Time',
+        delete_time       => 'Deleted',
+        inspection_number => "Inspection Number",
+        issuance_date     => "Issuance Date",
+        url               => "URL",
     };
 }
 

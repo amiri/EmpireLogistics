@@ -62,33 +62,51 @@ __PACKAGE__->has_many(
   "company_warehouses",
   "EmpireLogistics::Schema::Result::CompanyWarehouse",
   { "foreign.warehouse" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 __PACKAGE__->has_many(
   "labor_organization_warehouses",
   "EmpireLogistics::Schema::Result::LaborOrganizationWarehouse",
   { "foreign.warehouse" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 __PACKAGE__->has_many(
   "warehouse_addresses",
   "EmpireLogistics::Schema::Result::WarehouseAddress",
   { "foreign.warehouse" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 __PACKAGE__->has_many(
   "warehouse_walmarts",
   "EmpireLogistics::Schema::Result::WarehouseWalmart",
   { "foreign.warehouse" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 __PACKAGE__->has_many(
   "warehouse_work_stoppages",
   "EmpireLogistics::Schema::Result::WarehouseWorkStoppage",
   { "foreign.warehouse" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 
+__PACKAGE__->many_to_many(
+    'addresses' => 'warehouse_addresses', 'address'
+);
 __PACKAGE__->many_to_many(
     'companies' => 'company_warehouses', 'company'
 );
@@ -103,8 +121,6 @@ __PACKAGE__->belongs_to(
     "EmpireLogistics::Schema::Result::WarehouseOwner",
     {"foreign.id" => "self.owner" },
 );
-
-
 
 __PACKAGE__->belongs_to(
     "object_type" =>

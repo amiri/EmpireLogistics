@@ -40,7 +40,10 @@ __PACKAGE__->has_many(
   "rail_subdivision_states",
   "EmpireLogistics::Schema::Result::RailSubdivisionState",
   { "foreign.state" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 
 

@@ -1,4 +1,4 @@
-package EmpireLogistics::Schema::ResultSet::WarehouseOwner;
+package EmpireLogistics::Schema::ResultSet::CompanyType;
 
 use Moose;
 use MooseX::MarkAsMethods autoclean => 1;
@@ -22,7 +22,7 @@ sub _build_labels {
         create_time => 'Create Time',
         update_time => 'Update Time',
         delete_time => 'Deleted',
-        name        => 'Name',
+        name        => "Type",
     };
 }
 

@@ -64,19 +64,28 @@ __PACKAGE__->has_many(
   "labor_organization_general_disbursements",
   "EmpireLogistics::Schema::Result::LaborOrganizationGeneralDisbursement",
   { "foreign.payee" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 __PACKAGE__->has_many(
   "labor_organization_other_receipts",
   "EmpireLogistics::Schema::Result::LaborOrganizationOtherReceipt",
   { "foreign.payee" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 __PACKAGE__->has_many(
   "labor_organization_payee_addresses",
   "EmpireLogistics::Schema::Result::LaborOrganizationPayeeAddress",
   { "foreign.labor_organization_payee" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 
 
