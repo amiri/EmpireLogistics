@@ -198,6 +198,7 @@ sub edit : Chained('object') PathPart('edit') Args(0) {
         [$c->stash->{object}->id]
     );
     $form->action($action);
+    $form->item($c->stash->{object});
 
     $c->stash(
         template => "admin/create_update.tt",

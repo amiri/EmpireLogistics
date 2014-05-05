@@ -164,9 +164,16 @@ __PACKAGE__->has_many(
   },
 );
 
-
-
-
+# Disbursements
+__PACKAGE__->has_many(
+  "labor_organization_investment_purchases",
+  "EmpireLogistics::Schema::Result::LaborOrganizationInvestmentPurchase",
+  { "foreign.labor_organization" => "self.id" },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
+);
 __PACKAGE__->has_many(
   "labor_organization_benefit_disbursements",
   "EmpireLogistics::Schema::Result::LaborOrganizationBenefitDisbursement",
@@ -186,14 +193,26 @@ __PACKAGE__->has_many(
   },
 );
 __PACKAGE__->has_many(
-  "labor_organization_investment_purchases",
-  "EmpireLogistics::Schema::Result::LaborOrganizationInvestmentPurchase",
+  "labor_organization_officer_disbursements",
+  "EmpireLogistics::Schema::Result::LaborOrganizationOfficerDisbursement",
   { "foreign.labor_organization" => "self.id" },
   {
 	where => { "me.delete_time" => undef },
 	cascade_copy => 0, cascade_delete => 0
   },
 );
+__PACKAGE__->has_many(
+  "labor_organization_total_disbursements",
+  "EmpireLogistics::Schema::Result::LaborOrganizationTotalDisbursement",
+  { "foreign.labor_organization" => "self.id" },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
+);
+
+
+# Loans
 __PACKAGE__->has_many(
   "labor_organization_loan_payables",
   "EmpireLogistics::Schema::Result::LaborOrganizationLoanPayable",
@@ -212,6 +231,29 @@ __PACKAGE__->has_many(
 	cascade_copy => 0, cascade_delete => 0
   },
 );
+
+
+# Liabilities
+__PACKAGE__->has_many(
+  "labor_organization_other_liabilities",
+  "EmpireLogistics::Schema::Result::LaborOrganizationOtherLiability",
+  { "foreign.labor_organization" => "self.id" },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
+);
+__PACKAGE__->has_many(
+  "labor_organization_total_liabilities",
+  "EmpireLogistics::Schema::Result::LaborOrganizationTotalLiability",
+  { "foreign.labor_organization" => "self.id" },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
+);
+
+# Memberships
 __PACKAGE__->has_many(
   "labor_organization_memberships",
   "EmpireLogistics::Schema::Result::LaborOrganizationMembership",
@@ -221,9 +263,11 @@ __PACKAGE__->has_many(
 	cascade_copy => 0, cascade_delete => 0
   },
 );
+
+# Receipts
 __PACKAGE__->has_many(
-  "labor_organization_nlrb_decisions",
-  "EmpireLogistics::Schema::Result::LaborOrganizationNlrbDecision",
+  "labor_organization_sale_receipts",
+  "EmpireLogistics::Schema::Result::LaborOrganizationSaleReceipt",
   { "foreign.labor_organization" => "self.id" },
   {
 	where => { "me.delete_time" => undef },
@@ -231,26 +275,8 @@ __PACKAGE__->has_many(
   },
 );
 __PACKAGE__->has_many(
-  "labor_organization_officer_disbursements",
-  "EmpireLogistics::Schema::Result::LaborOrganizationOfficerDisbursement",
-  { "foreign.labor_organization" => "self.id" },
-  {
-	where => { "me.delete_time" => undef },
-	cascade_copy => 0, cascade_delete => 0
-  },
-);
-__PACKAGE__->has_many(
-  "labor_organization_osha_citations",
-  "EmpireLogistics::Schema::Result::LaborOrganizationOshaCitation",
-  { "foreign.labor_organization" => "self.id" },
-  {
-	where => { "me.delete_time" => undef },
-	cascade_copy => 0, cascade_delete => 0
-  },
-);
-__PACKAGE__->has_many(
-  "labor_organization_other_liabilities",
-  "EmpireLogistics::Schema::Result::LaborOrganizationOtherLiability",
+  "labor_organization_total_receipts",
+  "EmpireLogistics::Schema::Result::LaborOrganizationTotalReceipt",
   { "foreign.labor_organization" => "self.id" },
   {
 	where => { "me.delete_time" => undef },
@@ -266,6 +292,35 @@ __PACKAGE__->has_many(
 	cascade_copy => 0, cascade_delete => 0
   },
 );
+
+
+
+
+# Decisions
+__PACKAGE__->has_many(
+  "labor_organization_osha_citations",
+  "EmpireLogistics::Schema::Result::LaborOrganizationOshaCitation",
+  { "foreign.labor_organization" => "self.id" },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
+);
+__PACKAGE__->has_many(
+  "labor_organization_nlrb_decisions",
+  "EmpireLogistics::Schema::Result::LaborOrganizationNlrbDecision",
+  { "foreign.labor_organization" => "self.id" },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
+);
+
+
+
+
+
+# Relationships
 __PACKAGE__->has_many(
   "labor_organization_payees",
   "EmpireLogistics::Schema::Result::LaborOrganizationPayee",
@@ -294,42 +349,6 @@ __PACKAGE__->has_many(
   },
 );
 __PACKAGE__->has_many(
-  "labor_organization_sale_receipts",
-  "EmpireLogistics::Schema::Result::LaborOrganizationSaleReceipt",
-  { "foreign.labor_organization" => "self.id" },
-  {
-	where => { "me.delete_time" => undef },
-	cascade_copy => 0, cascade_delete => 0
-  },
-);
-__PACKAGE__->has_many(
-  "labor_organization_total_disbursements",
-  "EmpireLogistics::Schema::Result::LaborOrganizationTotalDisbursement",
-  { "foreign.labor_organization" => "self.id" },
-  {
-	where => { "me.delete_time" => undef },
-	cascade_copy => 0, cascade_delete => 0
-  },
-);
-__PACKAGE__->has_many(
-  "labor_organization_total_liabilities",
-  "EmpireLogistics::Schema::Result::LaborOrganizationTotalLiability",
-  { "foreign.labor_organization" => "self.id" },
-  {
-	where => { "me.delete_time" => undef },
-	cascade_copy => 0, cascade_delete => 0
-  },
-);
-__PACKAGE__->has_many(
-  "labor_organization_total_receipts",
-  "EmpireLogistics::Schema::Result::LaborOrganizationTotalReceipt",
-  { "foreign.labor_organization" => "self.id" },
-  {
-	where => { "me.delete_time" => undef },
-	cascade_copy => 0, cascade_delete => 0
-  },
-);
-__PACKAGE__->has_many(
   "labor_organization_warehouses",
   "EmpireLogistics::Schema::Result::LaborOrganizationWarehouse",
   { "foreign.labor_organization" => "self.id" },
@@ -347,6 +366,9 @@ __PACKAGE__->has_many(
 	cascade_copy => 0, cascade_delete => 0
   },
 );
+
+
+
 __PACKAGE__->many_to_many(
     'affiliates' => 'labor_organization_affiliation_children', 'child',
     {where => {'me.delete_time' => undef}},
@@ -383,7 +405,6 @@ __PACKAGE__->many_to_many(
     'nlrb_decisions' => 'labor_organization_nlrb_decisions', 'nlrb_decision',
     {where => {'me.delete_time' => undef}},
 );
-
 
 __PACKAGE__->belongs_to(
     "object_type" =>

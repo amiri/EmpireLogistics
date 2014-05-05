@@ -443,6 +443,57 @@ sub post_rail_lines_ids : Chained('base') PathPart('rail-lines-ids') Args(0) POS
     $c->stash->{json_data} = \@options;
 }
 
+sub post_labor_organization_payees : Chained('base')
+    PathPart('labor-organization-payees') Args(0) POST {
+    my ( $self, $c ) = @_;
+    return unless $c->req->is_xhr;
+    my $prefix = lc $c->req->param('q');
+    my $payee_rs
+        = $c->model('DB::LaborOrganizationPayee')->active->search(
+        {   -or => [
+                { name         => { -ilike => '%' . $prefix . '%' } },
+                \[q/usdol_payee_id::text ilike ?/, '%'.$prefix.'%'],
+            ]
+        },
+        {
+            order_by => ['name'],
+        }
+        );
+    my @payee_options;
+    while ( my $payee = $payee_rs->next ) {
+        push @payee_options,
+            {
+            text => $payee->name.", USDOL #".$payee->usdol_payee_id,
+            id   => $payee->id,
+            };
+    }
+    my $results = {
+        results => \@payee_options,
+        more    => 0,
+        context => { id => '123' },
+    };
+    $c->stash->{json_data} = $results;
+}
+
+sub post_labor_organization_payees_ids : Chained('base')
+    PathPart('labor-organization-payees-ids') Args(0) POST {
+    my ( $self, $c ) = @_;
+    return unless $c->req->is_xhr;
+    my $query = $c->req->param('q');
+    my @ids = split( ',', $query );
+    my @options;
+    foreach my $id (@ids) {
+        my $payee = $c->model('DB::LaborOrganizationPayee')
+            ->active->find( { id => $id } );
+        next unless $payee;
+        push @options, {
+            id => $id,
+            text => $payee->name.", USDOL #".$payee->usdol_payee_id,
+        };
+    }
+    $c->stash->{json_data} = \@options;
+}
+
 
 __PACKAGE__->meta->make_immutable;
 

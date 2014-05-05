@@ -20,8 +20,8 @@ sub auto : Private {
     if (!$c->user) {
         my $backref = $c->build_backref;
         $c->user_session->{backref} = $backref;
-        $c->flash->{alert} =  [{ class => 'danger', message => 'Access denied.'}];
-        $c->res->redirect("/login");
+        $c->flash->{alert} =  [{ class => 'danger', message => 'Access denied. Log in first.'}];
+        $c->redirect_and_detach("/login");
         return 1;
     }
     $c->check_user_roles(qw/admin/)

@@ -238,6 +238,46 @@ $(document).ready(function() {
             }
         }
     });
+    $("#labor-organization-payees").select2({
+        "multiple": true,
+        "minimumInputLength": 3,
+        "placeholder": 'Enter Payees Associated With Organization',
+        "ajax": {
+            "url": '/autocomplete/labor-organization-payees/',
+            "dataType": 'json',
+            "type": 'POST',
+            "width": 'element',
+            "quietMillis": 100,
+            "data": function(term, page) {
+                return {
+                    "q": term,
+                    //search term
+                    "page_limit": 25,
+                    // page size
+                    "page": page // page number
+                };
+            },
+            "results": function(data, page) {
+                return {
+                    "results": data.results
+                };
+            }
+        },
+        "initSelection": function(element, callback) {
+            // the input tag has a value attribute preloaded with values
+            // this function resolves those id attributes to an object that select2 can render
+            // using its formatResult renderer
+            var val = $(element).val();
+            if (val !== "") {
+                $.ajax("/autocomplete/labor-organization-payees-ids/?q=" + val, {
+                    dataType: "json",
+                    method: 'POST'
+                }).done(function(data) {
+                    callback(data);
+                });
+            }
+        }
+    });
 });
 
 

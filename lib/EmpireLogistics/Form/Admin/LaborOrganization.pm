@@ -51,6 +51,53 @@ has 'total_asset_relation' => (
     isa     => 'Str',
     default => 'labor_organization_other_assets',
 );
+has 'benefit_disbursement_relation' => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => 'labor_organization_benefit_disbursements',
+);
+has 'investment_purchase_relation' => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => 'labor_organization_investment_purchases',
+);
+has 'total_disbursement_relation' => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => 'labor_organization_total_disbursements',
+);
+has 'general_disbursement_relation' => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => 'labor_organization_general_disbursements',
+);
+has 'officer_disbursement_relation' => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => 'labor_organization_officer_disbursements',
+);
+has 'loan_payable_relation' => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => 'labor_organization_loans_payable',
+);
+has 'loan_receivable_relation' => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => 'labor_organization_loans_receivable',
+);
+has 'other_liability_relation' => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => 'labor_organization_other_liability',
+);
+
+has 'total_liability_relation' => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => 'labor_organization_total_liability',
+);
+
 
 sub build_render_list {
     return [
@@ -66,7 +113,7 @@ sub build_render_list {
 }
 
 has_block 'metadata_block' => (
-    tag         => 'div',
+    tag         => 'fieldset',
     label       => 'Metadata',
     render_list => [
         'id',
@@ -104,7 +151,7 @@ has_field 'delete_time' => (
 );
 
 has_block 'basic_block' => (
-    tag         => 'div',
+    tag         => 'fieldset',
     label       => 'Basic Information',
     render_list => [
         'name',
@@ -135,7 +182,7 @@ has_field 'usdol_filing_number' => (type => 'Text',);
 has_field 'organization_type'   => (type => '+LaborOrganizationType',);
 
 has_block 'local_block' => (
-    tag         => 'div',
+    tag         => 'fieldset',
     label       => 'Local Information',
     render_list => [
         'local_type',
@@ -151,7 +198,7 @@ has_field 'local_number' => (type => 'Text',);
 has_field 'local_suffix' => (type => 'Text',);
 
 has_block 'address_block' => (
-    tag           => 'div',
+    tag           => 'fieldset',
     render_list   => ['labor_organization_addresses', 'add_address'],
     label         => 'Yearly Addresses',
     wrapper_class => 'addresses',
@@ -165,7 +212,7 @@ has_field 'labor_organization_addresses' => (
     num_extra      => 0,
     init_contains  => {
         widget_wrapper => 'Simple',
-        tags           => {wrapper_tag => 'div', controls_div => 1},
+        tags           => {wrapper_tag => 'fieldset', controls_div => 1},
         wrapper_class  => ['well-lg'],
     },
     widget_wrapper => 'Simple',
@@ -183,7 +230,7 @@ has_field 'add_address' => (
 );
 
 has_block 'affiliations_block' => (
-    tag         => 'div',
+    tag         => 'fieldset',
     label       => 'Affiliates and Affiliations',
     render_list => [
         'affiliates',
@@ -211,7 +258,7 @@ has_field 'affiliations' => (
 );
 
 has_block 'relations_block' => (
-    tag         => 'div',
+    tag         => 'fieldset',
     label       => 'Relationships',
     render_list => [
         'ports',
@@ -222,14 +269,13 @@ has_block 'relations_block' => (
 );
 
 has_block 'financials_block' => (
-    tag         => 'div',
+    tag         => 'fieldset',
     label       => 'Financial Information',
     render_list => [
         'accounts_block',
         'assets_block',
-        'investment_block',
-        'loans_block',
         'disbursements_block',
+        'loans_block',
         'liabilities_block',
         'receipts_block',
         'payees_block',
@@ -237,7 +283,7 @@ has_block 'financials_block' => (
 );
 
 has_block 'accounts_block' => (
-    tag         => 'div',
+    tag         => 'fieldset',
     label       => 'Accounts',
     render_list => [
         'labor_organization_account_payables',
@@ -256,7 +302,7 @@ has_field 'labor_organization_account_payables' => (
     num_extra      => 0,
     init_contains  => {
         widget_wrapper => 'Bootstrap3',
-        tags           => {wrapper_tag => 'div', controls_div => 1},
+        tags           => {wrapper_tag => 'fieldset', controls_div => 1},
         wrapper_class  => ['well-lg'],
     },
     widget_wrapper => 'Bootstrap3',
@@ -283,7 +329,7 @@ has_field 'labor_organization_account_receivables' => (
     num_extra      => 0,
     init_contains  => {
         widget_wrapper => 'Bootstrap3',
-        tags           => {wrapper_tag => 'div', controls_div => 1},
+        tags           => {wrapper_tag => 'fieldset', controls_div => 1},
         wrapper_class  => ['well-lg'],
     },
     widget_wrapper => 'Bootstrap3',
@@ -301,7 +347,7 @@ has_field 'add_labor_organization_account_receivables' => (
 );
 
 has_block 'assets_block' => (
-    tag         => 'div',
+    tag         => 'fieldset',
     label       => 'Assets',
     render_list => [
         'labor_organization_fixed_assets',
@@ -325,7 +371,7 @@ has_field 'labor_organization_fixed_assets' => (
     num_extra      => 0,
     init_contains  => {
         widget_wrapper => 'Bootstrap3',
-        tags           => {wrapper_tag => 'div', controls_div => 1},
+        tags           => {wrapper_tag => 'fieldset', controls_div => 1},
         wrapper_class  => ['well-lg'],
     },
     widget_wrapper => 'Bootstrap3',
@@ -352,7 +398,7 @@ has_field 'labor_organization_investment_assets' => (
     num_extra      => 0,
     init_contains  => {
         widget_wrapper => 'Bootstrap3',
-        tags           => {wrapper_tag => 'div', controls_div => 1},
+        tags           => {wrapper_tag => 'fieldset', controls_div => 1},
         wrapper_class  => ['well-lg'],
     },
     widget_wrapper => 'Bootstrap3',
@@ -374,12 +420,12 @@ has_field 'labor_organization_other_assets' => (
     setup_for_js   => 1,
     do_wrapper     => 1,
     do_label       => 1,
-    label          => 'Other Assets',
+    label          => 'Miscellaneous Assets',
     num_when_empty => 1,
     num_extra      => 0,
     init_contains  => {
         widget_wrapper => 'Bootstrap3',
-        tags           => {wrapper_tag => 'div', controls_div => 1},
+        tags           => {wrapper_tag => 'fieldset', controls_div => 1},
         wrapper_class  => ['well-lg'],
     },
     widget_wrapper => 'Bootstrap3',
@@ -392,7 +438,7 @@ has_field 'labor_organization_other_assets.contains' =>
 has_field 'add_labor_organization_other_assets' => (
     type          => 'AddElement',
     repeatable    => 'labor_organization_other_assets',
-    value         => 'Add another other asset',
+    value         => 'Add another miscellaneous asset',
     element_class => ['btn btn-info'],
 );
 
@@ -406,7 +452,7 @@ has_field 'labor_organization_total_assets' => (
     num_extra      => 0,
     init_contains  => {
         widget_wrapper => 'Bootstrap3',
-        tags           => {wrapper_tag => 'div', controls_div => 1},
+        tags           => {wrapper_tag => 'fieldset', controls_div => 1},
         wrapper_class  => ['well-lg'],
     },
     widget_wrapper => 'Bootstrap3',
@@ -419,7 +465,170 @@ has_field 'labor_organization_total_assets.contains' =>
 has_field 'add_labor_organization_total_assets' => (
     type          => 'AddElement',
     repeatable    => 'labor_organization_total_assets',
-    value         => 'Add antotal total asset',
+    value         => 'Add another total asset',
+    element_class => ['btn btn-info'],
+);
+
+
+
+has_block 'disbursements_block' => (
+    tag         => 'fieldset',
+    label       => 'Disbursements',
+    render_list => [
+        'labor_organization_benefit_disbursements',
+        'add_labor_organization_benefit_disbursements',
+        'labor_organization_officer_disbursements',
+        'add_labor_organization_officer_disbursements',
+        'labor_organization_general_disbursements',
+        'add_labor_organization_general_disbursements',
+        'labor_organization_investment_purchases',
+        'add_labor_organization_investment_purchases',
+        'labor_organization_total_disbursements',
+        'add_labor_organization_total_disbursements',
+    ],
+);
+
+
+has_field 'labor_organization_benefit_disbursements' => (
+    type           => 'Repeatable',
+    setup_for_js   => 1,
+    do_wrapper     => 1,
+    do_label       => 1,
+    label          => 'Benefit Disbursements',
+    num_when_empty => 1,
+    num_extra      => 0,
+    init_contains  => {
+        widget_wrapper => 'Bootstrap3',
+        tags           => {wrapper_tag => 'fieldset', controls_div => 1},
+        wrapper_class  => ['well-lg'],
+    },
+    widget_wrapper => 'Bootstrap3',
+    tags           => {controls_div => 1},
+    wrapper_class  => ['well-lg'],
+);
+has_field 'labor_organization_benefit_disbursements.contains' =>
+    (type => '+LaborOrganizationBenefitDisbursement',);
+
+has_field 'add_labor_organization_benefit_disbursements' => (
+    type          => 'AddElement',
+    repeatable    => 'labor_organization_benefit_disbursements',
+    value         => 'Add another benefit disbursement',
+    element_class => ['btn btn-info'],
+);
+
+
+has_field 'labor_organization_investment_purchases' => (
+    type           => 'Repeatable',
+    setup_for_js   => 1,
+    do_wrapper     => 1,
+    do_label       => 1,
+    label          => 'Investment Purchases',
+    num_when_empty => 1,
+    num_extra      => 0,
+    init_contains  => {
+        widget_wrapper => 'Bootstrap3',
+        tags           => {wrapper_tag => 'fieldset', controls_div => 1},
+        wrapper_class  => ['well-lg'],
+    },
+    widget_wrapper => 'Bootstrap3',
+    tags           => {controls_div => 1},
+    wrapper_class  => ['well-lg'],
+);
+has_field 'labor_organization_investment_purchases.contains' =>
+    (type => '+LaborOrganizationInvestmentPurchase',);
+
+has_field 'add_labor_organization_investment_purchases' => (
+    type          => 'AddElement',
+    repeatable    => 'labor_organization_investment_purchases',
+    value         => 'Add another investment purchase',
+    element_class => ['btn btn-info'],
+);
+
+
+has_field 'labor_organization_general_disbursements' => (
+    type           => 'Repeatable',
+    setup_for_js   => 1,
+    do_wrapper     => 1,
+    do_label       => 1,
+    label          => 'General Disbursements',
+    num_when_empty => 1,
+    num_extra      => 0,
+    init_contains  => {
+        widget_wrapper => 'Bootstrap3',
+        tags           => {wrapper_tag => 'fieldset', controls_div => 1},
+        wrapper_class  => ['well-lg'],
+    },
+    widget_wrapper => 'Bootstrap3',
+    tags           => {controls_div => 1},
+    wrapper_class  => ['well-lg'],
+);
+has_field 'labor_organization_general_disbursements.contains' =>
+    (type => '+LaborOrganizationGeneralDisbursement',);
+
+has_field 'add_labor_organization_general_disbursements' => (
+    type          => 'AddElement',
+    repeatable    => 'labor_organization_general_disbursements',
+    value         => 'Add another general disbursement',
+    element_class => ['btn btn-info'],
+);
+
+
+
+
+has_field 'labor_organization_officer_disbursements' => (
+    type           => 'Repeatable',
+    setup_for_js   => 1,
+    do_wrapper     => 1,
+    do_label       => 1,
+    label          => 'Officer Disbursements',
+    num_when_empty => 1,
+    num_extra      => 0,
+    init_contains  => {
+        widget_wrapper => 'Bootstrap3',
+        tags           => {wrapper_tag => 'fieldset', controls_div => 1},
+        wrapper_class  => ['well-lg'],
+    },
+    widget_wrapper => 'Bootstrap3',
+    tags           => {controls_div => 1},
+    wrapper_class  => ['well-lg'],
+);
+has_field 'labor_organization_officer_disbursements.contains' =>
+    (type => '+LaborOrganizationOfficerDisbursement',);
+
+has_field 'add_labor_organization_officer_disbursements' => (
+    type          => 'AddElement',
+    repeatable    => 'labor_organization_officer_disbursements',
+    value         => 'Add another officer disbursement',
+    element_class => ['btn btn-info'],
+);
+
+
+
+
+has_field 'labor_organization_total_disbursements' => (
+    type           => 'Repeatable',
+    setup_for_js   => 1,
+    do_wrapper     => 1,
+    do_label       => 1,
+    label          => 'Total Disbursements',
+    num_when_empty => 1,
+    num_extra      => 0,
+    init_contains  => {
+        widget_wrapper => 'Bootstrap3',
+        tags           => {wrapper_tag => 'fieldset', controls_div => 1},
+        wrapper_class  => ['well-lg'],
+    },
+    widget_wrapper => 'Bootstrap3',
+    tags           => {controls_div => 1},
+    wrapper_class  => ['well-lg'],
+);
+has_field 'labor_organization_total_disbursements.contains' =>
+    (type => '+LaborOrganizationTotalDisbursement',);
+
+has_field 'add_labor_organization_total_disbursements' => (
+    type          => 'AddElement',
+    repeatable    => 'labor_organization_total_disbursements',
+    value         => 'Add another total disbursement',
     element_class => ['btn btn-info'],
 );
 
@@ -433,86 +642,222 @@ has_field 'add_labor_organization_total_assets' => (
 
 
 
-has_block 'investment_block' => (
-    tag         => 'div',
-    label       => 'Investments',
-    render_list => [
-        'investment_purchases',
-    ],
-);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 has_block 'loans_block' => (
-    tag         => 'div',
+    tag         => 'fieldset',
     label       => 'Loans',
     render_list => [
-        'loans_payable',
-        'loans_receivable',
+        'labor_organization_loans_payable',
+        'add_labor_organization_loans_payable',
+        'labor_organization_loans_receivable',
+        'add_labor_organization_loans_receivable',
     ],
+);
+has_field 'labor_organization_loans_payable' => (
+    type           => 'Repeatable',
+    setup_for_js   => 1,
+    do_wrapper     => 1,
+    do_label       => 1,
+    label          => 'Loans Payable',
+    num_when_empty => 1,
+    num_extra      => 0,
+    init_contains  => {
+        widget_wrapper => 'Bootstrap3',
+        tags           => {wrapper_tag => 'fieldset', controls_div => 1},
+        wrapper_class  => ['well-lg'],
+    },
+    widget_wrapper => 'Bootstrap3',
+    tags           => {controls_div => 1},
+    wrapper_class  => ['well-lg'],
+);
+has_field 'labor_organization_loans_payable.contains' =>
+    (type => '+LaborOrganizationLoanPayable',);
+
+has_field 'add_labor_organization_loans_payable' => (
+    type          => 'AddElement',
+    repeatable    => 'labor_organization_loans_payable',
+    value         => 'Add another loan payable',
+    element_class => ['btn btn-info'],
+);
+has_field 'labor_organization_loans_receivable' => (
+    type           => 'Repeatable',
+    setup_for_js   => 1,
+    do_wrapper     => 1,
+    do_label       => 1,
+    label          => 'Loans Receivable',
+    num_when_empty => 1,
+    num_extra      => 0,
+    init_contains  => {
+        widget_wrapper => 'Bootstrap3',
+        tags           => {wrapper_tag => 'fieldset', controls_div => 1},
+        wrapper_class  => ['well-lg'],
+    },
+    widget_wrapper => 'Bootstrap3',
+    tags           => {controls_div => 1},
+    wrapper_class  => ['well-lg'],
+);
+has_field 'labor_organization_loans_receivable.contains' =>
+    (type => '+LaborOrganizationLoanReceivable',);
+
+has_field 'add_labor_organization_loans_receivable' => (
+    type          => 'AddElement',
+    repeatable    => 'labor_organization_loans_receivable',
+    value         => 'Add another loan receivable',
+    element_class => ['btn btn-info'],
 );
 
-has_block 'disbursements_block' => (
-    tag         => 'div',
-    label       => 'Disbursements',
-    render_list => [
-        'benefits_disbursements',
-        'general_disbursements',
-        'officer_disbursements',
-        'total_disbursements',
-    ],
-);
+
+
+
+
+
+
+
+
+
+
+
+
 
 has_block 'liabilities_block' => (
-    tag         => 'div',
+    tag         => 'fieldset',
     label       => 'Liabilities',
     render_list => [
-        'other_liabilities',
-        'total_liabilities',
+        'labor_organization_other_liabilities',
+        'add_labor_organization_other_liabilities',
+        'labor_organization_total_liabilities',
+        'add_labor_organization_total_liabilities',
     ],
 );
+has_field 'labor_organization_other_liabilities' => (
+    type           => 'Repeatable',
+    setup_for_js   => 1,
+    do_wrapper     => 1,
+    do_label       => 1,
+    label          => 'Miscellaneous Liabilities',
+    num_when_empty => 1,
+    num_extra      => 0,
+    init_contains  => {
+        widget_wrapper => 'Bootstrap3',
+        tags           => {wrapper_tag => 'fieldset', controls_div => 1},
+        wrapper_class  => ['well-lg'],
+    },
+    widget_wrapper => 'Bootstrap3',
+    tags           => {controls_div => 1},
+    wrapper_class  => ['well-lg'],
+);
+has_field 'labor_organization_other_liabilities.contains' =>
+    (type => '+LaborOrganizationOtherLiability',);
+
+has_field 'add_labor_organization_other_liabilities' => (
+    type          => 'AddElement',
+    repeatable    => 'labor_organization_other_liabilities',
+    value         => 'Add another miscellaneous liability',
+    element_class => ['btn btn-info'],
+);
+has_field 'labor_organization_total_liabilities' => (
+    type           => 'Repeatable',
+    setup_for_js   => 1,
+    do_wrapper     => 1,
+    do_label       => 1,
+    label          => 'Total Liabilities',
+    num_when_empty => 1,
+    num_extra      => 0,
+    init_contains  => {
+        widget_wrapper => 'Bootstrap3',
+        tags           => {wrapper_tag => 'fieldset', controls_div => 1},
+        wrapper_class  => ['well-lg'],
+    },
+    widget_wrapper => 'Bootstrap3',
+    tags           => {controls_div => 1},
+    wrapper_class  => ['well-lg'],
+);
+has_field 'labor_organization_total_liabilities.contains' =>
+    (type => '+LaborOrganizationTotalLiability',);
+
+has_field 'add_labor_organization_total_liabilities' => (
+    type          => 'AddElement',
+    repeatable    => 'labor_organization_total_liabilities',
+    value         => 'Add another total liability',
+    element_class => ['btn btn-info'],
+);
+
+
+
+
+
+
 
 has_block 'receipts_block' => (
-    tag         => 'div',
+    tag         => 'fieldset',
     label       => 'Receipts',
     render_list => [
-        'other_receipts',
-        'sales_receipts',
-        'total_receipts',
+        'labor_organization_other_receipts',
+        'labor_organization_sales_receipts',
+        'labor_organization_total_receipts',
     ],
 );
+has_field 'labor_organization_other_receipts' => ();
+has_field 'labor_organization_sales_receipts' => ();
+has_field 'labor_organization_total_receipts' => ();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 has_block 'payees_block' => (
-    tag         => 'div',
+    tag         => 'fieldset',
     label       => 'Payees',
     render_list => [
-        'payees',
+        'labor_organization_payees',
     ],
 );
 
-has_field 'investment_purchases' => ();
+has_field 'labor_organization_payees' => (
+    type         => '+LaborOrganizationPayee',
+    id           => 'labor-organization-payees',
+    label        => 'Payees',
+    element_attr => { 'data-placeholder' => 'Enter Payees' },
+);
 
-has_field 'loans_payable' => ();
 
-has_field 'loans_receivable' => ();
 
-has_field 'benefits_disbursements' => ();
 
-has_field 'general_disbursements' => ();
-
-has_field 'officer_disbursements' => ();
-
-has_field 'total_disbursements' => ();
-
-has_field 'other_liabilities' => ();
-
-has_field 'total_liabilities' => ();
-
-has_field 'other_receipts' => ();
-
-has_field 'sales_receipts' => ();
-
-has_field 'total_receipts' => ();
-
-has_field 'payees' => ();
 
 has_field 'ports'          => (type => '+Port',);
 has_field 'rail_nodes'     => (type => '+RailNode',);
