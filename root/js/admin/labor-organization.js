@@ -279,7 +279,7 @@ $(document).ready(function() {
         }
     });
     $("#labor-organization-payee-single").select2({
-        "multiple": true,
+        "multiple": false,
         "minimumInputLength": 3,
         "placeholder": 'Enter Payee',
         "ajax": {
