@@ -3,12 +3,13 @@ package EmpireLogistics::Form::Admin::LaborOrganization;
 use HTML::FormHandler::Moose;
 use HTML::FormHandler::Types ('NoSpaces', 'Printable');
 use MooseX::Types::URI qw/Uri/;
+use Carp::Always;
 use namespace::autoclean;
 extends 'EmpireLogistics::Form::BaseDB';
 with 'EmpireLogistics::Role::Form::Util';
 
 has '+name'       => (default => 'labor-organization-form');
-has '+item_class' => (default => 'WorkStoppage');
+has '+item_class' => (default => 'LaborOrganization');
 has 'js_files'    => (
     is      => 'ro',
     isa     => 'ArrayRef',
@@ -96,6 +97,21 @@ has 'total_liability_relation' => (
     is      => 'ro',
     isa     => 'Str',
     default => 'labor_organization_total_liability',
+);
+has 'total_receipt_relation' => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => 'labor_organization_total_receipts',
+);
+has 'other_receipt_relation' => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => 'labor_organization_other_receipts',
+);
+has 'sale_receipt_relation' => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => 'labor_organization_sale_receipts',
 );
 
 
@@ -810,14 +826,94 @@ has_block 'receipts_block' => (
     label       => 'Receipts',
     render_list => [
         'labor_organization_other_receipts',
-        'labor_organization_sales_receipts',
+        'add_labor_organization_other_receipts',
+        'labor_organization_sale_receipts',
+        'add_labor_organization_sale_receipts',
         'labor_organization_total_receipts',
+        'add_labor_organization_total_receipts',
     ],
 );
-has_field 'labor_organization_other_receipts' => ();
-has_field 'labor_organization_sales_receipts' => ();
-has_field 'labor_organization_total_receipts' => ();
 
+has_field 'labor_organization_total_receipts' => (
+    type           => 'Repeatable',
+    setup_for_js   => 1,
+    do_wrapper     => 1,
+    do_label       => 1,
+    label          => 'Total Receipts',
+    num_when_empty => 1,
+    num_extra      => 0,
+    init_contains  => {
+        widget_wrapper => 'Bootstrap3',
+        tags           => {wrapper_tag => 'fieldset', controls_div => 1},
+        wrapper_class  => ['well-lg'],
+    },
+    widget_wrapper => 'Bootstrap3',
+    tags           => {controls_div => 1},
+    wrapper_class  => ['well-lg'],
+);
+has_field 'labor_organization_total_receipts.contains' =>
+    (type => '+LaborOrganizationTotalReceipt',);
+
+has_field 'add_labor_organization_total_receipts' => (
+    type          => 'AddElement',
+    repeatable    => 'labor_organization_total_receipts',
+    value         => 'Add another total receipt',
+    element_class => ['btn btn-info'],
+);
+
+has_field 'labor_organization_sale_receipts' => (
+    type           => 'Repeatable',
+    setup_for_js   => 1,
+    do_wrapper     => 1,
+    do_label       => 1,
+    label          => 'Sale Receipts',
+    num_when_empty => 1,
+    num_extra      => 0,
+    init_contains  => {
+        widget_wrapper => 'Bootstrap3',
+        tags           => {wrapper_tag => 'fieldset', controls_div => 1},
+        wrapper_class  => ['well-lg'],
+    },
+    widget_wrapper => 'Bootstrap3',
+    tags           => {controls_div => 1},
+    wrapper_class  => ['well-lg'],
+);
+has_field 'labor_organization_sale_receipts.contains' =>
+    (type => '+LaborOrganizationSaleReceipt',);
+
+has_field 'add_labor_organization_sale_receipts' => (
+    type          => 'AddElement',
+    repeatable    => 'labor_organization_sale_receipts',
+    value         => 'Add another sale receipt',
+    element_class => ['btn btn-info'],
+);
+
+has_field 'labor_organization_other_receipts' => (
+    type           => 'Repeatable',
+    setup_for_js   => 1,
+    do_wrapper     => 1,
+    do_label       => 1,
+    label          => 'Other Receipts',
+    num_when_empty => 1,
+    num_extra      => 0,
+    init_contains  => {
+        widget_wrapper => 'Bootstrap3',
+        tags           => {wrapper_tag => 'fieldset', controls_div => 1},
+        wrapper_class  => ['well-lg'],
+    },
+    widget_wrapper => 'Bootstrap3',
+    tags           => {controls_div => 1},
+    wrapper_class  => ['well-lg'],
+);
+has_field 'labor_organization_other_receipts.contains' =>
+    (type => '+LaborOrganizationOtherReceipt',);
+
+has_field 'add_labor_organization_other_receipts' => (
+    type          => 'AddElement',
+    repeatable    => 'labor_organization_other_receipts',
+    value         => 'Add another miscellaneous receipt',
+    element_class => ['btn btn-info'],
+);
 
 
 
