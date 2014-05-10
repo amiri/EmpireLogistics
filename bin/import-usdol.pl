@@ -520,7 +520,7 @@ sub process_accounts_payable {
                     TOTAL
                     /
                 };
-           $each; 
+           $each;
         } @$data
     ];
     return $return;
@@ -1127,7 +1127,7 @@ UNION: for my $key ((sort {$a <=> $b} keys %union_data)) {
     sort keys %$union_data_for_year;
     $first_basic = $process{basic}->($first_basic);
     #die p $first_basic if $first_basic->{usdol_filing_number} == 14910;
-    
+
     # We need the labor_organization already defined
     # before we enter the year loop.
     my $id = save_local_or_organization($first_basic,$first_basic_year);
@@ -1204,9 +1204,9 @@ UNION: for my $key ((sort {$a <=> $b} keys %union_data)) {
         create_membership($record{basic},$id,$year) if $record{basic}->{members};
         #   Create address record from basic
         create_labor_address($record{basic},$id,$year);
-        
+
         # Payees
-        #   Create all payees from payees 
+        #   Create all payees from payees
         create_payees($record{payees},$id,$year) if $record{payees} && scalar @{$record{payees}} > 0;
 
         # Assets
@@ -1225,7 +1225,7 @@ UNION: for my $key ((sort {$a <=> $b} keys %union_data)) {
         #   Receivable
         create_accounts_receivable($record{accounts_receivable},$id,$year);
 
-        # Loans 
+        # Loans
         #   Payable
         create_loans_payable($record{loans_payable},$id,$year);
         #   Receivable

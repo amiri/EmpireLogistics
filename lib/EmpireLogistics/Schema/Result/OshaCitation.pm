@@ -61,10 +61,10 @@ __PACKAGE__->has_many(
 );
 
 __PACKAGE__->many_to_many(
-"companies", "company_osha_citations", "company" 
+"companies", "company_osha_citations", "company"
 );
 __PACKAGE__->many_to_many(
-"labor_organizations", "labor_organization_osha_citations", "labor_organization" 
+"labor_organizations", "labor_organization_osha_citations", "labor_organization"
 );
 
 

@@ -1,6 +1,7 @@
 package EmpireLogistics::Role::Controller::CRUD;
 
 use MooseX::MethodAttributes::Role;
+use Data::Printer;
 use namespace::autoclean;
 
 has 'form' => (
@@ -92,18 +93,29 @@ sub post_index : Chained('base') PathPart('') Args(0) POST {
     my $sort_column_name = $c->req->param('mDataProp_' . $sort_column);
     my $sort_order       = $c->req->param('sSortDir_0');
     my %order_by    = (order_by => {"-$sort_order" => [$sort_column_name]});
-    my $search_attr = {};
+    my %search_attr = ();
     my $search_text = $c->req->param('sSearch');
-    my ($search_param) =
+    my @search_params =
         map  { $c->req->param('mDataProp_' . $_) }
-        map  { /\w+(\d+)/; $1 }
+        map  { /\w+_(\d+)/; $1 }
         grep { $c->req->param($_) eq 'true' }
         grep { /bSearchable/ } keys %{$c->req->body_params};
-    $search_attr->{$search_param} = {-ilike => qq|%$search_text%|}
-        if $search_param && $search_text;
+    if (scalar(@search_params > 1)) {
+        $search_attr{'-or'} = [
+            map {{
+                $_ => {-ilike => qq|%$search_text%|}
+            }} @search_params
+        ] if $search_text;
+    } else {
+        $search_attr{$search_params[0]} = {-ilike => qq|%$search_text%|}
+            if $search_params[0] && $search_text;
+    }
     my $rs    = $self->model;
-    my $items = $rs->search(
-        $search_attr, {
+    my $filtered_rs = $rs->search(
+        \%search_attr
+    );
+    my $items = $filtered_rs->search(
+        {}, {
             page => $page,
             rows => $rows,
             %order_by
@@ -125,7 +137,7 @@ sub post_index : Chained('base') PathPart('') Args(0) POST {
                 } $items->all
             ],
             iTotalRecords        => $rs->count + 0,
-            iTotalDisplayRecords => $rs->count + 0,
+            iTotalDisplayRecords => $filtered_rs->count + 0,
         }
     );
 }
@@ -137,41 +149,57 @@ sub column_definitions : Chained('base') PathPart('column-definitions')
     $c->stash->{current_view} = 'JSON';
     my $rs      = $self->model;
     my $columns = [
-        map {
-            {
+        map {{
                 mData       => $_,
                 sTitle      => $rs->labels->{$_},
-                bSearchable => (($_ =~ /name/) ? 'true' : 'false'),
-            }
-            }
-            grep {
-            !/^(password|notes|description)$/
-            }
-            grep {
+                bSearchable => (
+                    (
+                        $_ =~ /(
+                        name
+                        |junction
+                        |owner
+                        |trackage
+                        |subdivision
+                        |passenger
+                        |military
+                        |gauge
+                        |grade
+                        |status
+                        |track_type
+                        |line_class
+                        |density
+                    )/x
+                    ) ? 'true' : 'false'
+                ),
+        }}
+        grep {
+            !/^(password|notes|description|geometry)$/
+        }
+        grep {
             !/^id$/
-            }
-            grep {
+        }
+        grep {
             $rs->result_source->column_info($_)->{data_type} ne 'boolean'
                 or $_ eq 'delete_time'
-            } $rs->result_source->columns
+        } $rs->result_source->columns
     ];
     unshift @$columns, {
         sType       => 'num-html',
         mData       => 'id',
         bSearchable => 'false',
-        };
+    };
     push @$columns, {
         mData           => 'restore_delete',
         sDefaultContent => '',
         bSearchable     => 'false',
         sTitle          => 'Actions',
-        };
+    };
     push @$columns, {
         mData       => 'edit_url',
         bSearchable => 'false',
         bVisible    => 'false',
         sTitle      => 'Edit URL',
-        };
+    };
     my $i = 0;
     for my $col (@$columns) {
         $col->{aTargets} = [$i++];
@@ -322,10 +350,9 @@ sub form_create {
     my $form;
     $c->log->debug("I do not have for and am not making a new form");
     $form = $c->stash->{form};
-    my $action =
-        $c->uri_for(
+    my $action = $c->uri_for(
         $c->controller($self->namespace . $self->class)->action_for('create')
-        );
+    );
     $form->action($action);
     $c->stash(
         template  => "admin/$template",

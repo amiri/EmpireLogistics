@@ -17,7 +17,7 @@ has 'header_labels' => (
 
 sub _build_header_labels {
     my $self = shift;
-    return [ 
+    return [
         "Create Time",
         "Edited By",
         "Field",

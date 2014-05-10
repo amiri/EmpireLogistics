@@ -68,7 +68,7 @@ sub options_payee {
     return [
         map {{
             label => $_->name.' (USDOL Payee #'.$_->usdol_payee_id.')',
-            id => $_->id,    
+            id => $_->id,
         }} ($self->form->item ? $self->form->item->labor_organization_payees->all : $self->form->schema->resultset('LaborOrganizationPayee')->active->all)
     ];
 }

@@ -13,7 +13,7 @@ use Data::Printer;
 use JSON::XS;
 use feature qw/say/;
 
-=head2 qc28.iln 
+=head2 qc28.iln
 
 Fields:
   (Rec) Columns Format     Name      Attribute

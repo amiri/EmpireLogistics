@@ -12,21 +12,21 @@ use Data::Printer;
 use JSON::XS;
 use feature qw/say/;
 
-=head2 subdiv.txt 
+=head2 subdiv.txt
 
-   Since 4-character abbreviations are used for subdivision 
-   identifiers in the link file, this file provides the full name of 
+   Since 4-character abbreviations are used for subdivision
+   identifiers in the link file, this file provides the full name of
    the subdivision.  An attempt has been made to use unique abbre-
    viations for different subs even when the names are the same.
 
 Fixed fields in the beginning of the record, with optional explana-
-tory text:  
+tory text:
    Columns  Format  Name      Attribute
      1-4     A4     WMARK      Owning railroad (as ancestral as
                                  possible)
      8-11    A4     SB         Subdivision abbreviation
     14-14    A1     SBTYP      Subdivison type, subjective for now,
-                                 explained in comments at the file 
+                                 explained in comments at the file
                                  beginning.
     16-32    A17    SBNAME     Expanded name
     33+      A*     SBSTAT     List of states containing SB, delimited
@@ -35,7 +35,7 @@ tory text:
 Comments follow the closing brace.  Examples (shortened):
 MP    RivM s River        {MO}  Jefferson City W> Neff Yd
 MILW  Rivr s River        {MN} River Jct W 288.0 w> 407.4 St Paul Yd
-SLSF  ThaS s Thayer South {MO AR TN}  Thayer > Tennessee Yd  
+SLSF  ThaS s Thayer South {MO AR TN}  Thayer > Tennessee Yd
 
 =cut
 

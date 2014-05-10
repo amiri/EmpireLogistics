@@ -17,7 +17,7 @@
     <thead>
         <tr>
         [% FOREACH col IN item_rs.result_source.columns %]
-             [% UNLESS col == 'password' || col == 'notes' || col == 'description' || (item_rs.result_source.column_info(col).data_type == 'boolean' AND col != 'delete_time') %]
+             [% UNLESS col == 'password' || col == 'notes' || col == 'description' || col == 'geometry' || (item_rs.result_source.column_info(col).data_type == 'boolean' AND col != 'delete_time') %]
                 <th class="header">[% item_rs.labels.$col %]</th>
              [% END %]
         [% END %]
@@ -30,7 +30,7 @@
     [% FOREACH item IN items -%]
         <tr>
             [% FOREACH col IN item_rs.result_source.columns %]
-               [% UNLESS col == 'password' || col == 'notes' || col == 'description' || (item_rs.result_source.column_info(col).data_type == 'boolean' AND col != 'delete_time') %]
+               [% UNLESS col == 'password' || col == 'notes' || col == 'description' || col == 'geometry' || (item_rs.result_source.column_info(col).data_type == 'boolean' AND col != 'delete_time') %]
                 <td>
                 [% edit_href = c.uri_for(c.controller.action_for('edit'), [item.id] ) %]
                     <a href="[% edit_href %]">

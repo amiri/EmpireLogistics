@@ -18,11 +18,10 @@ has 'labels' => (
 sub _build_labels {
     my $self = shift;
     return {
-        id          => 'ID',
-        create_time => 'Create Time',
-        update_time => 'Update Time',
-        delete_time => 'Deleted',
-
+        id                 => 'ID',
+        create_time        => 'Create Time',
+        update_time        => 'Update Time',
+        delete_time        => 'Deleted',
         link_id            => 'Link ID',
         route_id           => 'Route ID',
         miles              => 'Miles',

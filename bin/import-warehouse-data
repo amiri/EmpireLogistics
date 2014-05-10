@@ -4,7 +4,7 @@ DB=empirelogistics
 SQL_FILE=data/warehouses/warehouse_data.sql.gz
 
 if test -f $SQL_FILE; then
-    zcat data/warehouses/warehouse_data.sql.gz | psql -U el -q -d $DB 
+    zcat data/warehouses/warehouse_data.sql.gz | psql -U el -q -d $DB
 else
     perl bin/import-walmart.pl
     perl bin/import-target.pl

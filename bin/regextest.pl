@@ -1,18 +1,18 @@
-#!/usr/bin/perl 
+#!/usr/bin/perl
 #===============================================================================
 #
 #         FILE: regextest.pl
 #
-#        USAGE: ./regextest.pl  
+#        USAGE: ./regextest.pl
 #
-#  DESCRIPTION: 
+#  DESCRIPTION:
 #
 #      OPTIONS: ---
 # REQUIREMENTS: ---
 #         BUGS: ---
 #        NOTES: ---
-#       AUTHOR: YOUR NAME (), 
-# ORGANIZATION: 
+#       AUTHOR: YOUR NAME (),
+# ORGANIZATION:
 #      VERSION: 1.0
 #      CREATED: 12/29/2013 02:44:44 PM
 #     REVISION: ---
@@ -49,7 +49,7 @@ warn $2;
     #}
     #return $date;
 #}
-#my $owner = "oper by CR 1976.3-1977.8, then MINT"; 
+#my $owner = "oper by CR 1976.3-1977.8, then MINT";
 
         #if ($owner =~ /(\d{4}(?:\.\d+)?)/) {
             #$owner =~ s/(\d{4}(?:\.\d+)?)/parsedate($1)/eg;

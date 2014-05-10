@@ -73,6 +73,18 @@ __PACKAGE__->has_many(
   },
 );
 
+__PACKAGE__->many_to_many(
+    'companies' => 'company_rail_nodes', 'company',
+    {where => {'me.delete_time' => undef}},
+);
+__PACKAGE__->many_to_many(
+    'labor_organizations' => 'labor_organization_rail_nodes', 'labor_organization',
+    {where => {'me.delete_time' => undef}},
+);
+__PACKAGE__->many_to_many(
+    'work_stoppages' => 'rail_node_work_stoppages', 'work_stoppage',
+    {where => {'me.delete_time' => undef}},
+);
 
 
 

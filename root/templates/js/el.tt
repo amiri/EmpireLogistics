@@ -7,7 +7,7 @@
     if (!window.location.hash) {
         var hash = $("span.hash").data("hash");
         if (hash) {
-            window.location.hash = hash; 
+            window.location.hash = hash;
         } else {
             map.setView([29.7628, - 95.3831], 16);
         }

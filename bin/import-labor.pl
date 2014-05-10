@@ -46,7 +46,7 @@ my @affiliation_commands;
 for my $labor_organization (@$labor_organizations) {
     my $insert_command = 'insert into labor_organization (name,date_established,url,organization_type,description,abbreviation) values (?,?,?,?,?,?)';
     $sth = $dbh->prepare($insert_command);
-    
+
     my $name = $labor_organization->{name} ? $labor_organization->{name} : undef;
     my $date_established = $labor_organization->{year_established} ? DateTimeX::Easy->new(year => $labor_organization->{year_established}) : undef;
     my $members = $labor_organization->{members} ? $labor_organization->{members} : undef;
