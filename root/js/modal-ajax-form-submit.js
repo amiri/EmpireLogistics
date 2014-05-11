@@ -1,15 +1,12 @@
 jQuery(function($) {
-    $('form').on('submit', function(event) {
-        var $form = $(this);
-        var $container = $('.modal.fade.in');
-        var $target = $container.find('.modal-body');
-        var objectType = $container.data('object-type');
+    function ajaxifyForm() {
+        $('div.modal-body form').on('submit', function(event) {
+            var $form = $(this);
+            var $container = $('.modal.fade.in');
+            var $target = $container.find('.modal-body');
+            var objectType = $container.data('object-type');
 
-        $.ajax({
-            type: $form.attr('method'),
-            url: $form.attr('action'),
-            data: $form.serialize(),
-            success: function(data, status) {
+            function successHandler(data, status) {
                 $target.html(data);
                 $('.modal.fade.in').animate({
                     scrollTop: 0
@@ -68,9 +65,18 @@ jQuery(function($) {
                 if ($('#work-stoppages') && typeof workStoppagesOptions !== 'undefined') {
                     $('#work-stoppages').select2(workStoppagesOptions);
                 }
-            }
+                ajaxifyForm();
+            };
+
+            $.ajax({
+                type: $form.attr('method'),
+                url: $form.attr('action'),
+                data: $form.serialize(),
+                success: successHandler
+            });
+            event.preventDefault();
         });
-        event.preventDefault();
-    });
+    };
+    ajaxifyForm();
 });
 

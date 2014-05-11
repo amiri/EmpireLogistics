@@ -49,14 +49,14 @@ has_block 'text_block' => (
 );
 
 has_block 'notes_block' => (
-    tag => 'div',
-    class => ['col-md-6'],
+    tag => 'fieldset',
+    #class => ['col-md-6'],
     label       => 'Notes',
     render_list => ['notes'],
 );
 has_block 'description_block' => (
-    tag => 'div',
-    class => ['col-md-6'],
+    tag => 'fieldset',
+    #class => ['col-md-6'],
     label       => 'Description',
     render_list => ['description'],
 );

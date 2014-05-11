@@ -185,13 +185,27 @@
             html += "<dt>Status</dt><dd>" + d.properties.status+ "</dd>";
         }
         html += "</dl>";
+        html += "<h6 class='pull-right'><small>Right-click for details</small></h6>"
         return html;
     }
+    function railLineRightClick(d) {
+        $("body").contextMenu({
+            edit: function(){
+                $('#rail-line-modal').modal({
+                    remote: '/admin/rail-line/'+ d.properties.id + '/edit/?wrapper=1'
+                })
+            },
+            details: function(){
+                $('#rail-line-modal').modal({
+                    remote: '/details/rail-line/'+ d.properties.id
+                })
+            },
+            menuSelector: "#contextMenu"
+        });
+    }
     function railLineClick(d) {
-        console.log("Clicked railLine");
-        console.log(d);
         $('#rail-line-modal').modal({
-            remote: '/admin/rail-line/'+ d.properties.id + '/edit/?wrapper=1'
+            remote: '/details/rail-line/'+ d.properties.id
         });
     }
 
@@ -220,11 +234,24 @@
         html += "</dl>";
         return html;
     }
+    function railInterlineRightClick(d) {
+        $("body").contextMenu({
+            edit: function(){
+                $('#rail-interline-modal').modal({
+                    remote: '/admin/rail-interline/'+ d.properties.id + '/edit/?wrapper=1'
+                })
+            },
+            details: function(){
+                $('#rail-interline-modal').modal({
+                    remote: '/details/rail-interline/'+ d.properties.id
+                })
+            },
+            menuSelector: "#contextMenu"
+        });
+    }
     function railInterlineClick(d) {
-        console.log("Clicked railInterline");
-        console.log(d);
         $('#rail-interline-modal').modal({
-            remote: '/admin/rail-interline/'+ d.properties.id + '/edit/?wrapper=1'
+            remote: '/details/rail-interline/'+ d.properties.id
         });
     }
 
@@ -241,11 +268,24 @@
         html += "</dl>";
         return html;
     }
+    function railNodeRightClick(d) {
+        $("body").contextMenu({
+            edit: function(){
+                $('#rail-node-modal').modal({
+                    remote: '/admin/rail-node/'+ d.properties.id + '/edit/?wrapper=1'
+                })
+            },
+            details: function(){
+                $('#rail-node-modal').modal({
+                    remote: '/details/rail-node/'+ d.properties.id
+                })
+            },
+            menuSelector: "#contextMenu"
+        });
+    }
     function railNodeClick(d) {
-        console.log("Clicked railNode");
-        console.log(d);
         $('#rail-node-modal').modal({
-            remote: '/admin/rail-node/'+ d.properties.id + '/edit/?wrapper=1'
+            remote: '/details/rail-node/'+ d.properties.id
         });
     }
 
@@ -283,11 +323,24 @@
         html += "</dl>";
         return html;
     }
+    function warehouseRightClick(d) {
+        $("body").contextMenu({
+            edit: function(){
+                $('#warehouse-modal').modal({
+                    remote: '/admin/warehouse/'+ d.properties.id + '/edit/?wrapper=1'
+                })
+            },
+            details: function(){
+                $('#warehouse-modal').modal({
+                    remote: '/details/warehouse/'+ d.properties.id
+                })
+            },
+            menuSelector: "#contextMenu"
+        });
+    }
     function warehouseClick(d) {
-        console.log("Clicked warehouse");
-        console.log(d);
-        $('#rail-warehouse-modal').modal({
-            remote: '/admin/warehouse/'+ d.properties.id + '/edit/?wrapper=1'
+        $('#warehouse-modal').modal({
+            remote: '/details/warehouse/'+ d.properties.id
         });
     }
 
@@ -331,11 +384,24 @@
         html += "</dl>";
         return html;
     }
+    function portRightClick(d) {
+        $("body").contextMenu({
+            edit: function(){
+                $('#port-modal').modal({
+                    remote: '/admin/port/'+ d.properties.id + '/edit/?wrapper=1'
+                })
+            },
+            details: function(){
+                $('#port-modal').modal({
+                    remote: '/details/port/'+ d.properties.id
+                })
+            },
+            menuSelector: "#contextMenu"
+        });
+    }
     function portClick(d) {
-        console.log("Clicked port");
-        console.log(d);
         $('#port-modal').modal({
-            remote: '/admin/port/'+ d.properties.id + '/edit/?wrapper=1'
+            remote: '/details/port/'+ d.properties.id
         });
     }
 
@@ -354,7 +420,8 @@
         content: railLinePopoverContent,
         mouseover: railLineMouseover,
         mouseout: railLineMouseout,
-        click: railLineClick
+        click: railLineClick,
+        rightClick: railLineRightClick
     });
     // Put this one on the bottom with "true"
     map.addLayer(lineLayer, true);
@@ -374,7 +441,8 @@
         content: railInterlinePopoverContent,
         mouseover: railInterlineMouseover,
         mouseout: railInterlineMouseout,
-        click: railInterlineClick
+        click: railInterlineClick,
+        rightClick: railInterlineRightClick
     });
     map.addLayer(interlinesLayer);
     overlays["Rail Interlines"] = interlinesLayer;
@@ -396,6 +464,7 @@
         mouseover: portMouseover,
         mouseout: portMouseout,
         click: portClick,
+        rightClick: portRightClick
     });
     map.addLayer(portLayer);
     overlays["Ports"] = portLayer;
@@ -415,7 +484,8 @@
         content: warehousePopoverContent,
         mouseover: warehouseMouseover,
         mouseout: warehouseMouseout,
-        click: warehouseClick
+        click: warehouseClick,
+        rightClick: warehouseRightClick
     });
     map.addLayer(warehouseLayer);
     overlays["Warehouses"] = warehouseLayer;
@@ -435,7 +505,8 @@
         content: railNodePopoverContent,
         mouseover: railNodeMouseover,
         mouseout: railNodeMouseout,
-        click: railNodeClick
+        click: railNodeClick,
+        rightClick: railNodeRightClick
     });
     map.addLayer(nodesLayer);
     overlays["Rail Nodes"] = nodesLayer;

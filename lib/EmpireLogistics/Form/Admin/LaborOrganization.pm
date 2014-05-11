@@ -324,6 +324,7 @@ has_field 'labor_organization_account_payables' => (
     widget_wrapper => 'Bootstrap3',
     tags           => {controls_div => 1},
     wrapper_class  => ['well-lg'],
+    element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_account_payables.contains' =>
     (type => '+LaborOrganizationAccountPayable',);
@@ -351,6 +352,7 @@ has_field 'labor_organization_account_receivables' => (
     widget_wrapper => 'Bootstrap3',
     tags           => {controls_div => 1},
     wrapper_class  => ['well-lg'],
+    element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_account_receivables.contains' =>
     (type => '+LaborOrganizationAccountReceivable',);
@@ -393,6 +395,7 @@ has_field 'labor_organization_fixed_assets' => (
     widget_wrapper => 'Bootstrap3',
     tags           => {controls_div => 1},
     wrapper_class  => ['well-lg'],
+    element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_fixed_assets.contains' =>
     (type => '+LaborOrganizationFixedAsset',);
@@ -420,6 +423,7 @@ has_field 'labor_organization_investment_assets' => (
     widget_wrapper => 'Bootstrap3',
     tags           => {controls_div => 1},
     wrapper_class  => ['well-lg'],
+    element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_investment_assets.contains' =>
     (type => '+LaborOrganizationInvestmentAsset',);
@@ -447,6 +451,7 @@ has_field 'labor_organization_other_assets' => (
     widget_wrapper => 'Bootstrap3',
     tags           => {controls_div => 1},
     wrapper_class  => ['well-lg'],
+    element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_other_assets.contains' =>
     (type => '+LaborOrganizationOtherAsset',);
@@ -474,6 +479,7 @@ has_field 'labor_organization_total_assets' => (
     widget_wrapper => 'Bootstrap3',
     tags           => {controls_div => 1},
     wrapper_class  => ['well-lg'],
+    element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_total_assets.contains' =>
     (type => '+LaborOrganizationTotalAsset',);
@@ -521,6 +527,7 @@ has_field 'labor_organization_benefit_disbursements' => (
     widget_wrapper => 'Bootstrap3',
     tags           => {controls_div => 1},
     wrapper_class  => ['well-lg'],
+    element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_benefit_disbursements.contains' =>
     (type => '+LaborOrganizationBenefitDisbursement',);
@@ -549,6 +556,7 @@ has_field 'labor_organization_investment_purchases' => (
     widget_wrapper => 'Bootstrap3',
     tags           => {controls_div => 1},
     wrapper_class  => ['well-lg'],
+    element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_investment_purchases.contains' =>
     (type => '+LaborOrganizationInvestmentPurchase',);
@@ -577,6 +585,7 @@ has_field 'labor_organization_general_disbursements' => (
     widget_wrapper => 'Bootstrap3',
     tags           => {controls_div => 1},
     wrapper_class  => ['well-lg'],
+    element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_general_disbursements.contains' =>
     (type => '+LaborOrganizationGeneralDisbursement',);
@@ -607,6 +616,7 @@ has_field 'labor_organization_officer_disbursements' => (
     widget_wrapper => 'Bootstrap3',
     tags           => {controls_div => 1},
     wrapper_class  => ['well-lg'],
+    element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_officer_disbursements.contains' =>
     (type => '+LaborOrganizationOfficerDisbursement',);
@@ -637,6 +647,7 @@ has_field 'labor_organization_total_disbursements' => (
     widget_wrapper => 'Bootstrap3',
     tags           => {controls_div => 1},
     wrapper_class  => ['well-lg'],
+    element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_total_disbursements.contains' =>
     (type => '+LaborOrganizationTotalDisbursement',);
@@ -702,6 +713,7 @@ has_field 'labor_organization_loans_payable' => (
     widget_wrapper => 'Bootstrap3',
     tags           => {controls_div => 1},
     wrapper_class  => ['well-lg'],
+    element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_loans_payable.contains' =>
     (type => '+LaborOrganizationLoanPayable',);
@@ -728,6 +740,7 @@ has_field 'labor_organization_loans_receivable' => (
     widget_wrapper => 'Bootstrap3',
     tags           => {controls_div => 1},
     wrapper_class  => ['well-lg'],
+    element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_loans_receivable.contains' =>
     (type => '+LaborOrganizationLoanReceivable',);
@@ -778,6 +791,7 @@ has_field 'labor_organization_other_liabilities' => (
     widget_wrapper => 'Bootstrap3',
     tags           => {controls_div => 1},
     wrapper_class  => ['well-lg'],
+    element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_other_liabilities.contains' =>
     (type => '+LaborOrganizationOtherLiability',);
@@ -804,6 +818,7 @@ has_field 'labor_organization_total_liabilities' => (
     widget_wrapper => 'Bootstrap3',
     tags           => {controls_div => 1},
     wrapper_class  => ['well-lg'],
+    element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_total_liabilities.contains' =>
     (type => '+LaborOrganizationTotalLiability',);
@@ -850,6 +865,7 @@ has_field 'labor_organization_total_receipts' => (
     widget_wrapper => 'Bootstrap3',
     tags           => {controls_div => 1},
     wrapper_class  => ['well-lg'],
+    element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_total_receipts.contains' =>
     (type => '+LaborOrganizationTotalReceipt',);
@@ -877,6 +893,7 @@ has_field 'labor_organization_sale_receipts' => (
     widget_wrapper => 'Bootstrap3',
     tags           => {controls_div => 1},
     wrapper_class  => ['well-lg'],
+    element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_sale_receipts.contains' =>
     (type => '+LaborOrganizationSaleReceipt',);
@@ -904,6 +921,7 @@ has_field 'labor_organization_other_receipts' => (
     widget_wrapper => 'Bootstrap3',
     tags           => {controls_div => 1},
     wrapper_class  => ['well-lg'],
+    element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_other_receipts.contains' =>
     (type => '+LaborOrganizationOtherReceipt',);

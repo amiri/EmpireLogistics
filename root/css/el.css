@@ -182,3 +182,17 @@ div#control-bar
 body.admin {
 	background-color:#fff;
 }
+.checkbox-inline label {
+    font-weight: 400;
+}
+div.form-control.btn.btn-info.add_element {
+    width: auto;
+}
+.compact-field .form-group {
+    margin-bottom: 5px;
+
+}
+.compact-field .form-group .form-control {
+    height: 30px;
+    line-height: 1;
+}

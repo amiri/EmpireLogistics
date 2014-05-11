@@ -5,10 +5,12 @@ use namespace::autoclean;
 extends 'HTML::FormHandler::Model::DBIC';
 
 has '+field_name_space'  => (default => 'EmpireLogistics::Form::Field');
-has '+widget_name_space' => (default => 'EmpireLogistic::Form::Widget');
+has '+widget_name_space' => (default => 'EmpireLogistics::Form::Widget');
 has '+widget_wrapper'    => (default => 'Bootstrap3');
 has '+is_html5'          => (default => 1);
 has '+http_method'       => (default => 'post');
+has '+enctype'           => (default => 'application/x-www-form-urlencoded');
+
 has 'schema'             => (
     is       => 'rw',
     isa      => 'DBIx::Class::Schema',
@@ -29,7 +31,7 @@ sub build_form_tags {
     {
         'layout_classes' => {
             label_class                    => ['col-lg-2'],
-            element_wrapper_class          => ['col-lg-10'],
+            element_wrapper_class          => ['col-lg-5'],
             no_label_element_wrapper_class => ['col-lg-offset-1'],
         },
     };

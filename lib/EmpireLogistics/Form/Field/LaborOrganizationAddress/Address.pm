@@ -9,6 +9,9 @@ has '+widget_wrapper' => ( default => 'Bootstrap3' );
 has '+do_wrapper'     => ( default => 1 );
 has '+do_label'       => ( default => 0 );
 has '+widget_tags'    => ( default => sub { { wrapper_tag => 'fieldset' } } );
+sub build_element_wrapper_class {
+    ['col-lg-10']
+}
 
 # This is to allow us to save edit_history for this field.
 has 'item' => (

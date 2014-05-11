@@ -1,14 +1,8 @@
 package EmpireLogistics::Form::Field::Address;
 
 use HTML::FormHandler::Moose;
-extends 'HTML::FormHandler::Field::Compound';
+extends 'EmpireLogistics::Form::Field::ELCompound';
 with 'EmpireLogistics::Role::Form::Util';
-
-sub build_wrapper_class { [''] }
-has '+widget_wrapper' => (default => 'Bootstrap3');
-has '+do_wrapper'     => (default => 1);
-has '+do_label'       => (default => 0);
-has '+widget_tags'    => (default => sub { {wrapper_tag => 'fieldset'} });
 
 # This is to allow us to save edit_history for this field.
 has 'item' => (

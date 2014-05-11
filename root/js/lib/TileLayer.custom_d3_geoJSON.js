@@ -1,3 +1,69 @@
+// Kudos: http://jsfiddle.net/KyleMit/X9tgY/,
+// http://stackoverflow.com/questions/18666601/use-bootstrap-3-dropdown-menu-as-context-menu
+
+(function ($, window) {
+
+    $.fn.contextMenu = function (settings) {
+
+        return this.each(function () {
+
+            // Open context menu
+            $(this).on("contextmenu", function (e) {
+                $(settings.menuSelector + " a.edit").on('click', settings.edit);
+                $(settings.menuSelector + " a.details").on('click', settings.details);
+
+                $(settings.menuSelector)
+                    .show()
+                    .css({
+                        position: "absolute",
+                        left: getLeftLocation(e),
+                        top: getTopLocation(e),
+                        "z-index": 9999
+                    });
+
+                return false;
+            });
+
+            // make sure menu closes on any click
+            // and unbind all handlers
+            $(document).click(function () {
+                $(settings.menuSelector).hide();
+                $(settings.menuSelector + " a.details").unbind();
+                $(settings.menuSelector + " a.edit").unbind();
+                $(settings.menuSelector).unbind();
+                $("body").unbind();
+            });
+        });
+
+        function getLeftLocation(e) {
+            var mouseWidth = e.pageX;
+            var pageWidth = $(window).width();
+            var menuWidth = $(settings.menuSelector).width();
+            
+            // opening menu would pass the side of the page
+            if (mouseWidth + menuWidth > pageWidth &&
+                menuWidth < mouseWidth) {
+                return mouseWidth - menuWidth;
+            } 
+            return mouseWidth;
+        }        
+        
+        function getTopLocation(e) {
+            var mouseHeight = e.pageY;
+            var pageHeight = $(window).height();
+            var menuHeight = $(settings.menuSelector).height();
+
+            // opening menu would pass the bottom of the page
+            if (mouseHeight + menuHeight > pageHeight &&
+                menuHeight < mouseHeight) {
+                return mouseHeight - menuHeight;
+            } 
+            return mouseHeight;
+        }
+
+    };
+})(jQuery, window);
+
 function isFunction(functionToCheck) {
     var getType = {};
     return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
@@ -46,6 +112,7 @@ L.TileLayer.custom_d3_geoJSON = L.TileLayer.extend({
                         .on('mouseover', self.options.mouseover)
                         .on('mouseout', self.options.mouseout)
                         .on('click', self.options.click)
+                        .on('contextmenu', self.options.rightClick)
                         ;
                         $("path").popover({
                             "html":true,
@@ -111,6 +178,7 @@ L.TileLayer.custom_d3_geoJSON = L.TileLayer.extend({
                         .on('mouseover', self.options.mouseover)
                         .on('mouseout', self.options.mouseout)
                         .on('click', self.options.click)
+                        .on('contextmenu', self.options.rightClick)
                         ;
                         $("circle").popover({
                             "html":true,

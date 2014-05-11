@@ -18,7 +18,7 @@ has 'js_files'    => (
 );
 
 sub build_render_list {
-    return ['metadata_block', 'basic_block', 'relations_block', 'submit',];
+    return ['metadata_block', 'basic_block', 'location_block','relations_block', 'submit',];
 }
 has_block 'metadata_block' => (
     tag         => 'fieldset',
