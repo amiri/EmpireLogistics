@@ -197,7 +197,7 @@
             },
             details: function(){
                 $('#rail-line-modal').modal({
-                    remote: '/details/rail-line/'+ d.properties.id
+                    remote: '/details/rail-line/'+ d.properties.id + '/?wrapper=1'
                 })
             },
             menuSelector: "#contextMenu"
@@ -205,7 +205,7 @@
     }
     function railLineClick(d) {
         $('#rail-line-modal').modal({
-            remote: '/details/rail-line/'+ d.properties.id
+            remote: '/details/rail-line/'+ d.properties.id + '/?wrapper=1'
         });
     }
 
@@ -243,7 +243,7 @@
             },
             details: function(){
                 $('#rail-interline-modal').modal({
-                    remote: '/details/rail-interline/'+ d.properties.id
+                    remote: '/details/rail-interline/'+ d.properties.id + '/?wrapper=1'
                 })
             },
             menuSelector: "#contextMenu"
@@ -251,7 +251,7 @@
     }
     function railInterlineClick(d) {
         $('#rail-interline-modal').modal({
-            remote: '/details/rail-interline/'+ d.properties.id
+            remote: '/details/rail-interline/'+ d.properties.id + '/?wrapper=1'
         });
     }
 
@@ -277,7 +277,7 @@
             },
             details: function(){
                 $('#rail-node-modal').modal({
-                    remote: '/details/rail-node/'+ d.properties.id
+                    remote: '/details/rail-node/'+ d.properties.id + '/?wrapper=1'
                 })
             },
             menuSelector: "#contextMenu"
@@ -285,7 +285,7 @@
     }
     function railNodeClick(d) {
         $('#rail-node-modal').modal({
-            remote: '/details/rail-node/'+ d.properties.id
+            remote: '/details/rail-node/'+ d.properties.id + '/?wrapper=1'
         });
     }
 
@@ -332,7 +332,7 @@
             },
             details: function(){
                 $('#warehouse-modal').modal({
-                    remote: '/details/warehouse/'+ d.properties.id
+                    remote: '/details/warehouse/'+ d.properties.id + '/?wrapper=1'
                 })
             },
             menuSelector: "#contextMenu"
@@ -340,7 +340,7 @@
     }
     function warehouseClick(d) {
         $('#warehouse-modal').modal({
-            remote: '/details/warehouse/'+ d.properties.id
+            remote: '/details/warehouse/'+ d.properties.id + '/?wrapper=1'
         });
     }
 
@@ -393,7 +393,7 @@
             },
             details: function(){
                 $('#port-modal').modal({
-                    remote: '/details/port/'+ d.properties.id
+                    remote: '/details/port/'+ d.properties.id + '/?wrapper=1'
                 })
             },
             menuSelector: "#contextMenu"
@@ -401,7 +401,7 @@
     }
     function portClick(d) {
         $('#port-modal').modal({
-            remote: '/details/port/'+ d.properties.id
+            remote: '/details/port/'+ d.properties.id + '/?wrapper=1'
         });
     }
 
