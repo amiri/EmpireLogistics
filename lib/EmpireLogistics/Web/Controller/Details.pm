@@ -28,13 +28,11 @@ sub begin : Private {
 sub base : Chained('/') PathPart('details') CaptureArgs(0) GET {
     my ($self, $c) = @_;
     $c->stash->{current_view} = 'TT';
-    $c->log->warn("I am in base");
     return 1;
 }
 
 sub capture_model : Chained('base') PathPart('') CaptureArgs(1) GET {
     my ($self, $c, $path) = @_;
-    $c->log->warn("I am in capture_model");
 
     $c->error("No path for model") unless $path;
     my $model = $self->model_for_path->{$path};
@@ -56,7 +54,6 @@ sub display_model : Chained('capture_model') PathPart('') Args(0) {
 
 sub capture_object : Chained('capture_model') PathPart('') CaptureArgs(1) GET {
     my ($self, $c, $id) = @_;
-    $c->log->warn("I am in capture_object");
     $c->error("No id for detail view") unless $id;
     my $object = $c->stash->{rs}->find($id);
     $c->error("No object for id $id") unless $object;
@@ -68,7 +65,6 @@ sub capture_object : Chained('capture_model') PathPart('') CaptureArgs(1) GET {
 
 sub display : Chained('capture_object') PathPart('') Args(0) GET {
     my ($self, $c) = @_;
-    $c->log->warn("I am in display");
     return 1;
 }
 

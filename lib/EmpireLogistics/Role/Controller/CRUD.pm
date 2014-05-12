@@ -309,9 +309,6 @@ sub capture_relation : Chained('object') PathPart('delete') CaptureArgs(1) {
 
 sub delete_relation : Chained('capture_relation') PathPart('') Args {
     my ($self, $c, $id, $bridged) = @_;
-    $c->log->warn("I am going to delete relation");
-    $c->log->warn("My id is $id");
-    $c->log->warn("My bridged is $bridged");
     if ($id and $bridged) {
         my $relation = $c->stash->{relation};
         my $object   = $c->stash->{object};
