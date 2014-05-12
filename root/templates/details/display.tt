@@ -1,0 +1,60 @@
+<div>
+<h1>[% model %] [% object.name %]</h1>
+    <div class="row">
+        <div class="col-lg-11 col-lg-offset-1">
+            [% FOREACH col IN object.result_source.columns %]
+               [% UNLESS (col == 'password' || col == 'geometry' || col == 'update_time' || col == 'create_time' || col == 'delete_time' || col == 'description') %]
+                    <div class="row">
+                        <div class="col-lg-4 details">
+                            <p>
+                                <strong>[% rs.labels.$col %]</strong>
+                            </p>
+                        </div>
+                        <div class="col-lg-7 details">
+                            <p>
+                            [% IF object.$col.defined && object.$col.can('ymd') %]
+                                [% object.$col.strftime('%Y-%m-%d %r %z') %]
+                            [% ELSIF object.result_source.column_info(col).data_type == 'boolean' %]
+                                [% IF object.$col %]
+                                    Yes
+                                [% ELSE %]
+                                    No
+                                [% END %]
+                            [% ELSIF object.$col.can('name') %]
+                                [% object.$col.name %]
+                            [% ELSIF object.$col.defined %]
+                                [% object.$col %]
+                            [% ELSE %]
+                            [% END %]
+                            </p>
+                        </div>
+                    </div>
+               [% END %]
+            [% END %]
+            [% IF object.result_source.columns.grep("^description\$").size %]
+                <div class="row">
+                    <div class="col-lg-12 details">
+                        <p>
+                            <strong>Description</strong>
+                        </p>
+                        <div>[% object.description %]</div>
+                    </div>
+                </div>
+
+            [% END %]
+            [% IF object.result_source.columns.grep("^notes\$").size %]
+                <div class="row">
+                    <div class="col-lg-12 details">
+                        <p>
+                            <strong>Notes</strong>
+                        </p>
+                        <div>[% object.notes %]</div>
+                    </div>
+                </div>
+
+            [% END %]
+            [% edit_href = c.uri_for(c.controller("Admin::" _ model).action_for('edit'), [object.id] ) %]
+            [% IF c.user_exists %]<a href="[% edit_href %]">Edit</a>[% END %]
+        </div>
+    </div>
+</div>

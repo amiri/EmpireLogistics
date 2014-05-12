@@ -196,3 +196,9 @@ div.form-control.btn.btn-info.add_element {
     height: 30px;
     line-height: 1;
 }
+.row .details {
+    font-size: 150%;
+}
+.modal-body .row .details {
+    font-size: 120%;
+}
