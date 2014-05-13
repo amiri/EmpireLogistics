@@ -50,13 +50,19 @@ has_block 'metadata_block' => (
 has_block 'basic_block' => (
     tag         => 'fieldset',
     label       => 'Basic Information',
-    render_list => ['overview_block', 'characteristics_block',],
+    render_list => ['overview_block', 'characteristics_block', 'description'],
 );
 
 has_block 'location_block' => (
     tag         => 'fieldset',
     label       => 'Location',
     render_list => ['latitude', 'longitude', 'geometry', 'address_block',],
+);
+
+has_field 'description' => (
+    type  => 'TextArea',
+    label => 'Description',
+    apply => [ Printable, NotAllDigits ],
 );
 
 # Companies

@@ -36,9 +36,15 @@ has_block 'basic_block' => (
         'a_junction',
         'b_junction',
         'subdivision',
+        'description',
     ],
 );
 
+has_field 'description' => (
+    type  => 'TextArea',
+    label => 'Description',
+    apply => [ Printable, NotAllDigits ],
+);
 has_block 'details_block' => (
     tag         => 'fieldset',
     label       => 'Details',

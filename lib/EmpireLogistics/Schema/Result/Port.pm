@@ -168,6 +168,8 @@ __PACKAGE__->add_columns(
   { data_type => "double precision", is_nullable => 1 },
   "geometry",
   { data_type => "geometry", is_nullable => 1, size => "12544,3519" },
+  "description",
+  { data_type => "text", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("port_name_lat_lon", ["port_name", "latitude", "longitude"]);

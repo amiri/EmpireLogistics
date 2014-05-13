@@ -29,7 +29,7 @@ has_block 'metadata_block' => (
 has_block 'basic_block' => (
     tag         => 'fieldset',
     label       => 'Basic Information',
-    render_list => ['name', 'junction_id', 'incident_links',],
+    render_list => ['name', 'junction_id', 'incident_links', 'description',],
 );
 
 has_block 'location_block' => (
@@ -84,6 +84,11 @@ has_field 'name' => (
 has_field 'incident_links' => (
     type  => 'Integer',
     label => 'Links',
+);
+has_field 'description' => (
+    type  => 'TextArea',
+    label => 'Description',
+    apply => [ Printable, NotAllDigits ],
 );
 
 # Location
