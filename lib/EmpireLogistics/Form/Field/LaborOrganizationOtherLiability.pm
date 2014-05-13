@@ -52,7 +52,7 @@ has_field 'delete_time' => (
 );
 has_field 'year' => (type => 'Year', empty_select => '-- Select One --',);
 has_field 'amount'  => (type => 'Integer',);
-has_field 'description' => (type => 'Text',);
+has_field 'description'         => (type => 'TextArea', element_wrapper_class => ['col-lg-10'], apply => [Printable, NotAllDigits],);
 
 has_field 'rm_element' => (
     type          => 'Display',

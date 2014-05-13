@@ -5,6 +5,7 @@
 [% c.add_jsfile('/js/lib/jquery.dataTables.min.js') %]
 [% c.add_jsfile('/js/lib/dataTables.bootstrap.js') %]
 [% c.add_jsfile('/js/lib/dataTables.num-html-sort.js') %]
+[% c.add_jsfile('/js/lib/ckeditor/ckeditor.js') %]
 <h1>Administration</h1>
 <div class="row">
     <div class="col-md-2" id="admin-nav">
@@ -19,3 +20,6 @@
     </div>
 </div>
 [% END %]
+<script type="text/javascript">
+    CKEDITOR.replace("description");
+</script>

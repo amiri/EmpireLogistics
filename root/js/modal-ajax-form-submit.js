@@ -65,6 +65,7 @@ jQuery(function($) {
                 if ($('#work-stoppages') && typeof workStoppagesOptions !== 'undefined') {
                     $('#work-stoppages').select2(workStoppagesOptions);
                 }
+                CKEDITOR.replace("description");
                 ajaxifyForm();
             };
 

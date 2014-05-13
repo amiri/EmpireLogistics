@@ -92,11 +92,7 @@ has_field 'name' => (
     required => 1,
     apply    => [ Printable, NotAllDigits ],
 );
-has_field 'description' => (
-    type  => 'TextArea',
-    label => 'Description',
-    apply => [ Printable, NotAllDigits ],
-);
+has_field 'description'         => (type => 'TextArea', element_wrapper_class => ['col-lg-10'], apply => [Printable, NotAllDigits],);
 has_field 'company_type' => ( type => '+CompanyType', );
 
 has_field 'addresses' => (

@@ -85,11 +85,7 @@ has_field 'incident_links' => (
     type  => 'Integer',
     label => 'Links',
 );
-has_field 'description' => (
-    type  => 'TextArea',
-    label => 'Description',
-    apply => [ Printable, NotAllDigits ],
-);
+has_field 'description'         => (type => 'TextArea', element_wrapper_class => ['col-lg-10'], apply => [Printable, NotAllDigits],);
 
 # Location
 has_field 'longitude' => (type => 'Text', required => 1,);

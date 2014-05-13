@@ -40,11 +40,7 @@ has_block 'basic_block' => (
     ],
 );
 
-has_field 'description' => (
-    type  => 'TextArea',
-    label => 'Description',
-    apply => [ Printable, NotAllDigits ],
-);
+has_field 'description'         => (type => 'TextArea', element_wrapper_class => ['col-lg-10'], apply => [Printable, NotAllDigits],);
 has_block 'details_block' => (
     tag         => 'fieldset',
     label       => 'Details',

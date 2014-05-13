@@ -1,7 +1,7 @@
 package EmpireLogistics::Form::Admin::LaborOrganization;
 
 use HTML::FormHandler::Moose;
-use HTML::FormHandler::Types ('NoSpaces', 'Printable');
+use HTML::FormHandler::Types ('NoSpaces', 'Printable', 'NotAllDigits',);
 use MooseX::Types::URI qw/Uri/;
 use Carp::Always;
 use namespace::autoclean;
@@ -193,7 +193,7 @@ has_field 'url' => (
     html5_type_attr => 'url',
     apply           => [Uri],
 );
-has_field 'description'         => (type => 'TextArea');
+has_field 'description'         => (type => 'TextArea', element_wrapper_class => ['col-lg-10'], apply => [Printable, NotAllDigits],);
 has_field 'usdol_filing_number' => (type => 'Text',);
 has_field 'organization_type'   => (type => '+LaborOrganizationType',);
 

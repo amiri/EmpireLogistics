@@ -59,11 +59,7 @@ has_block 'location_block' => (
     render_list => ['latitude', 'longitude', 'geometry', 'address_block',],
 );
 
-has_field 'description' => (
-    type  => 'TextArea',
-    label => 'Description',
-    apply => [ Printable, NotAllDigits ],
-);
+has_field 'description'         => (type => 'TextArea', element_wrapper_class => ['col-lg-10'], apply => [Printable, NotAllDigits],);
 
 # Companies
 has_field 'companies' => (

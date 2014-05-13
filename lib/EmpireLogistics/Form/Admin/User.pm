@@ -106,7 +106,7 @@ has_field 'nickname' => (
     required => 1,
     label    => "Display Name",
 );
-has_field 'description' => ( type => 'TextArea', );
+has_field 'description'         => (type => 'TextArea', element_wrapper_class => ['col-lg-10'], apply => [Printable, NotAllDigits],);
 has_field 'notes'       => ( type => 'TextArea', );
 has_field 'roles'       => (
     type   => 'Multiple',

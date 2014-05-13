@@ -1,7 +1,7 @@
 package EmpireLogistics::Form::Admin::LaborAction;
 
 use HTML::FormHandler::Moose;
-use HTML::FormHandler::Types ( 'NoSpaces', 'Printable' );
+use HTML::FormHandler::Types ( 'NoSpaces', 'Printable', 'NotAllDigits', );
 use namespace::autoclean;
 extends 'EmpireLogistics::Form::BaseDB';
 with 'EmpireLogistics::Role::Form::Util';
@@ -117,7 +117,7 @@ sub options_work_stoppage_type {
     return $self->schema->resultset('WorkStoppageType')->form_options;
 }
 
-has_field 'description' => ( type => 'TextArea', required => 1, );
+has_field 'description'         => (type => 'TextArea', element_wrapper_class => ['col-lg-10'], apply => [Printable, NotAllDigits],);
 has_field 'start_date' => (
     type            => 'Date',
     label           => 'Start Date',
