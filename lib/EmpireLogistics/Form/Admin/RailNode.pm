@@ -1,7 +1,7 @@
 package EmpireLogistics::Form::Admin::RailNode;
 
 use HTML::FormHandler::Moose;
-use HTML::FormHandler::Types ('NoSpaces', 'Printable');
+use HTML::FormHandler::Types ( 'NoSpaces', 'Printable', 'NotAllDigits' );
 use MooseX::Types::URI qw/Uri/;
 use namespace::autoclean;
 extends 'EmpireLogistics::Form::BaseDB';

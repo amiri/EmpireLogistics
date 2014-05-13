@@ -1,7 +1,7 @@
 package EmpireLogistics::Form::Admin::Port;
 
 use HTML::FormHandler::Moose;
-use HTML::FormHandler::Types ('NoSpaces', 'Printable');
+use HTML::FormHandler::Types ( 'NoSpaces', 'Printable', 'NotAllDigits' );
 use JSON::Any;
 use namespace::autoclean;
 extends 'EmpireLogistics::Form::BaseDB';
