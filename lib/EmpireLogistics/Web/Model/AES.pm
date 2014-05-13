@@ -40,7 +40,6 @@ sub encrypt {
 
 sub decrypt {
     my ( $self, $to_be_decrypted ) = @_;
-    warn $to_be_decrypted;
     return $self->cbc->decrypt_hex($to_be_decrypted);
 }
 
