@@ -101,6 +101,24 @@ __PACKAGE__->has_many(
 	cascade_copy => 0, cascade_delete => 0
   },
 );
+__PACKAGE__->has_many(
+  "work_stoppage_nlrb_decisions",
+  "EmpireLogistics::Schema::Result::WorkStoppageNlrbDecision",
+  { "foreign.work_stoppage" => "self.id" },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
+);
+__PACKAGE__->has_many(
+  "work_stoppage_osha_citations",
+  "EmpireLogistics::Schema::Result::WorkStoppageOshaCitation",
+  { "foreign.work_stoppage" => "self.id" },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
+);
 
 __PACKAGE__->many_to_many(
     labor_organizations => "labor_organization_work_stoppages", "labor_organization"
@@ -118,6 +136,12 @@ __PACKAGE__->many_to_many(
     warehouses => "warehouse_work_stoppages", "warehouse"
 );
 
+__PACKAGE__->many_to_many(
+    'osha_citations' => 'work_stoppage_osha_citations', 'osha_citation'
+);
+__PACKAGE__->many_to_many(
+    'nlrb_decisions' => 'work_stoppage_nlrb_decisions', 'nlrb_decision'
+);
 
 __PACKAGE__->belongs_to(
     "object_type" =>

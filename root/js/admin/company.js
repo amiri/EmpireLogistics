@@ -202,7 +202,7 @@ $(document).ready(function() {
     $("#ports").select2(portsOptions);
     $("#rail-nodes").select2(railNodesOptions);
     $("#warehouses").select2(warehousesOptions);
-    $("#nlrb-decisions").select2(nlrbDecisions);
+    $("#nlrb-decisions").select2(nlrbDecisionsOptions);
     $("#osha-citations").select2(oshaCitationsOptions);
 });
 

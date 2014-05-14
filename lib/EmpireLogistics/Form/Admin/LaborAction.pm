@@ -20,6 +20,7 @@ sub build_render_list {
     return [
         'metadata_block',
         'basic_block',
+        'decisions_block',
         'relations_block',
         'submit',
     ];
@@ -47,6 +48,15 @@ has_block 'basic_block' => (
         'description',
     ],
 );
+
+has_block 'decisions_block' => (
+    tag         => 'fieldset',
+    label       => 'Decisions',
+    render_list => [ 'nlrb_decisions', 'osha_citations', ],
+);
+
+has_field 'nlrb_decisions' => ( type => '+NLRBDecision', );
+has_field 'osha_citations' => ( type => '+OSHACitation', );
 
 has_block 'relations_block' => (
     tag         => 'fieldset',
