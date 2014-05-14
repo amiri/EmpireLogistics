@@ -15,10 +15,11 @@ done Work Stoppage
 done Modified Forms
 done Warehouse
 done Add notes/description to all major elements
-
 done Add osha and nlrb to labor-action
 done Add rail_line to labor_organization
 
+
+Add rail_line rel to company
 Add labor_org, company rels to rail-line
 
 Add country select menu
