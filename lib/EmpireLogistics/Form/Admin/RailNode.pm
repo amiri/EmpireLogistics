@@ -9,6 +9,11 @@ with 'EmpireLogistics::Role::Form::Util';
 
 has '+name'       => (default => 'rail-node-form');
 has '+item_class' => (default => 'RailNode');
+has 'address_relation' => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => 'rail_node_addresses',
+);
 has 'js_files'    => (
     is      => 'ro',
     isa     => 'ArrayRef',
@@ -35,7 +40,7 @@ has_block 'basic_block' => (
 has_block 'location_block' => (
     tag         => 'fieldset',
     label       => 'Location',
-    render_list => ['latitude', 'longitude', 'geometry',],
+    render_list => ['latitude', 'longitude', 'geometry', 'address_block',],
 );
 
 has_block 'relations_block' => (
@@ -106,6 +111,46 @@ has_field 'labor_organizations' => (
 has_field 'work_stoppages' => (
     type => '+WorkStoppage',
 );
+
+# Addresses
+has_block 'address_block' => (
+    tag           => 'fieldset',
+    render_list   => ['addresses', 'add_address'],
+    label         => 'Addresses',
+    wrapper_class => 'addresses',
+);
+has_field 'addresses' => (
+    type           => 'Repeatable',
+    setup_for_js   => 1,
+    do_wrapper     => 1,
+    do_label       => 0,
+    num_when_empty => 1,
+    num_extra      => 0,
+    init_contains  => {
+        widget_wrapper => 'Simple',
+        tags           => {wrapper_tag => 'fieldset', controls_div => 1},
+        wrapper_class  => ['well-lg'],
+    },
+    widget_wrapper => 'Simple',
+    tags           => {controls_div => 1},
+    wrapper_class  => ['well-lg'],
+);
+has_field 'addresses.contains' => (type => '+Address',);
+
+has_field 'add_address' => (
+    type          => 'AddElement',
+    repeatable    => 'addresses',
+    value         => 'Add another address',
+    element_class => ['btn btn-info']
+);
+
+sub options_addresses {
+    my $self = shift;
+    my $options =
+        [map { {label => $_->addresses->street_address, value => $_->id,} }
+            $self->item->addresses->active->all];
+    return $options;
+}
 
 has_field 'submit' => (
     type          => 'Submit',

@@ -74,6 +74,14 @@ __PACKAGE__->has_many(
 	cascade_copy => 0, cascade_delete => 0
   },
 );
+__PACKAGE__->has_many(
+    "rail_node_addresses",
+    "EmpireLogistics::Schema::Result::RailNodeAddress",
+    {"foreign.rail_node" => "self.id"},
+    {   cascade_copy   => 0,
+        cascade_delete => 0,
+    },
+);
 
 __PACKAGE__->many_to_many(
     'companies' => 'company_rail_nodes', 'company',
@@ -87,8 +95,11 @@ __PACKAGE__->many_to_many(
     'work_stoppages' => 'rail_node_work_stoppages', 'work_stoppage',
     {where => {'me.delete_time' => undef}},
 );
-
-
+__PACKAGE__->many_to_many(
+    'addresses' => 'rail_node_addresses',
+    'address',
+    {where => {'me.delete_time' => undef}},
+);
 
 __PACKAGE__->belongs_to(
     "object_type" =>

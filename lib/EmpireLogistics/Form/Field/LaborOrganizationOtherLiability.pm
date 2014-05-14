@@ -2,6 +2,7 @@ package EmpireLogistics::Form::Field::LaborOrganizationOtherLiability;
 
 use HTML::FormHandler::Moose;
 use List::AllUtils qw/any/;
+use HTML::FormHandler::Types ( 'Printable', 'NotAllDigits' );
 extends 'EmpireLogistics::Form::Field::LaborOrganizationCompound';
 with 'EmpireLogistics::Role::Form::Util';
 

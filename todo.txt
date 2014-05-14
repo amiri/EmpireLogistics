@@ -1,11 +1,22 @@
-Places
-    Lookup addresses / info for
-        - etc/data/3pl/companies.txt
-        - etc/data/3pl/unions/wikipedia_labor_unions.html
+done add unique indexes to company and labor org types
+done add not nullable to company and labor org types
+done add foreign keys to company and labor org types
+done add indexes to foreign keys on company and labor org types
 
-    Download photos for
-        - ports
-        - rail nodes
-        - warehouses
+done Add Work Stoppage Type
+done New Schema Class
 
-Import original data
+
+
+done New Forms
+done Labor Organization
+done Company
+done Work Stoppage
+done Modified Forms
+done Warehouse
+
+Add osha and nlrb to warehouse and to labor-action
+Add rail_line to labor_organization
+Add labor_org, company rels to rail-line
+Add notes/description to all major elements
+Add media to all major elements
