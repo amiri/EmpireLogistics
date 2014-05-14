@@ -21,5 +21,7 @@
 </div>
 [% END %]
 <script type="text/javascript">
-    CKEDITOR.replace("description");
+    if ($("#description").length) {
+        CKEDITOR.replace("description");
+    }
 </script>

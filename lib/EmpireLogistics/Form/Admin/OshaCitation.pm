@@ -35,7 +35,7 @@ has_block 'basic_block' => (
 has_block 'relations_block' => (
     tag         => 'fieldset',
     label       => 'Relationships',
-    render_list => [ 'companies', 'labor_organizations', ],
+    render_list => [ 'companies', 'labor_organizations', 'work_stoppages',],
 );
 
 has_field 'id' => (
@@ -91,6 +91,10 @@ has_field 'issuance_date' => (
 
 has_field "companies"           => ( type => '+Company', );
 has_field "labor_organizations" => ( type => '+LaborOrganization', );
+# Work Stoppages
+has_field 'work_stoppages' => (
+    type => '+WorkStoppage',
+);
 
 has_field 'submit' => (
     type          => 'Submit',

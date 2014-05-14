@@ -18,54 +18,56 @@ jQuery(function($) {
                     "aaSorting": [[0, "desc"]],
                     "bDestroy": true
                 });
-                if ($('#affiliates, #affiliations') && typeof affiliationsOptions !== 'undefined') {
+                if ($('#affiliates, #affiliations').length && typeof affiliationsOptions !== 'undefined') {
                     $('#affiliates, #affiliations').select2(affiliationsOptions);
                 }
 
-                if ($('#companies') && typeof companiesOptions !== 'undefined') {
+                if ($('#companies').length && typeof companiesOptions !== 'undefined') {
                     $('#companies').select2(companiesOptions);
                 }
 
-                if ($('#labor-organization-payee-single') && typeof laborOrganizationPayeeSingleOptions !== 'undefined') {
+                if ($('#labor-organization-payee-single').length && typeof laborOrganizationPayeeSingleOptions !== 'undefined') {
                     $('#labor-organization-payee-single').select2(laborOrganizationPayeeSingleOptions);
                 }
 
-                if ($('#labor-organization-payees') && typeof laborOrganizationPayeesOptions !== 'undefined') {
+                if ($('#labor-organization-payees').length && typeof laborOrganizationPayeesOptions !== 'undefined') {
                     $('#labor-organization-payees').select2(laborOrganizationPayeesOptions);
                 }
 
-                if ($('#labor-organizations') && typeof laborOrganizationsOptions !== 'undefined') {
+                if ($('#labor-organizations').length && typeof laborOrganizationsOptions !== 'undefined') {
                     $('#labor-organizations').select2(laborOrganizationsOptions);
                 }
 
-                if ($('#nlrb-decisions') && typeof nlrbDecisionsOptions !== 'undefined') {
+                if ($('#nlrb-decisions').length && typeof nlrbDecisionsOptions !== 'undefined') {
                     $('#nlrb-decisions').select2(nlrbDecisionsOptions);
                 }
 
-                if ($('#osha-citations') && typeof oshaCitationsOptions !== 'undefined') {
+                if ($('#osha-citations').length && typeof oshaCitationsOptions !== 'undefined') {
                     $('#osha-citations').select2(oshaCitationsOptions);
                 }
 
-                if ($('#ports') && typeof portsOptions !== 'undefined') {
+                if ($('#ports').length && typeof portsOptions !== 'undefined') {
                     $('#ports').select2(portsOptions);
                 }
 
-                if ($('#rail-lines') && typeof railLinesOptions !== 'undefined') {
+                if ($('#rail-lines').length && typeof railLinesOptions !== 'undefined') {
                     $('#rail-lines').select2(railLinesOptions);
                 }
 
-                if ($('#rail-nodes') && typeof railNodesOptions !== 'undefined') {
+                if ($('#rail-nodes').length && typeof railNodesOptions !== 'undefined') {
                     $('#rail-nodes').select2(railNodesOptions);
                 }
 
-                if ($('#warehouses') && typeof warehouseOptions !== 'undefined') {
+                if ($('#warehouses').length && typeof warehouseOptions !== 'undefined') {
                     $('#warehouses').select2(warehousesOptions);
                 }
 
-                if ($('#work-stoppages') && typeof workStoppagesOptions !== 'undefined') {
+                if ($('#work-stoppages').length && typeof workStoppagesOptions !== 'undefined') {
                     $('#work-stoppages').select2(workStoppagesOptions);
                 }
-                CKEDITOR.replace("description");
+                if ($("#description").length) {
+                    CKEDITOR.replace("description");
+                }
                 ajaxifyForm();
             };
 

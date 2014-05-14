@@ -58,6 +58,15 @@ __PACKAGE__->has_many(
 	cascade_copy => 0, cascade_delete => 0
   },
 );
+__PACKAGE__->has_many(
+  "work_stoppage_nlrb_decisions",
+  "EmpireLogistics::Schema::Result::WorkStoppageNlrbDecision",
+  { "foreign.nlrb_decision" => "self.id" },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
+);
 
 __PACKAGE__->many_to_many(
 "companies", "company_nlrb_decisions", "company"
@@ -65,7 +74,10 @@ __PACKAGE__->many_to_many(
 __PACKAGE__->many_to_many(
 "labor_organizations", "labor_organization_nlrb_decisions", "labor_organization"
 );
-
+__PACKAGE__->many_to_many(
+    'work_stoppages' => 'work_stoppage_nlrb_decisions', 'work_stoppage',
+    {where => {'me.delete_time' => undef}},
+);
 
 
 __PACKAGE__->belongs_to(

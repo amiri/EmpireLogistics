@@ -59,12 +59,25 @@ __PACKAGE__->has_many(
 	cascade_copy => 0, cascade_delete => 0
   },
 );
+__PACKAGE__->has_many(
+  "work_stoppage_osha_citations",
+  "EmpireLogistics::Schema::Result::WorkStoppageOshaCitation",
+  { "foreign.osha_citation" => "self.id" },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
+);
 
 __PACKAGE__->many_to_many(
 "companies", "company_osha_citations", "company"
 );
 __PACKAGE__->many_to_many(
 "labor_organizations", "labor_organization_osha_citations", "labor_organization"
+);
+__PACKAGE__->many_to_many(
+    'work_stoppages' => 'work_stoppage_osha_citations', 'work_stoppage',
+    {where => {'me.delete_time' => undef}},
 );
 
 
