@@ -79,7 +79,6 @@ has_field 'delete_time' => (
 has_field 'junction_id' => (
     type     => 'Integer',
     label    => 'Junction ID',
-    required => 1,
 );
 has_field 'name' => (
     type     => 'Text',
