@@ -102,9 +102,12 @@ sub post_index : Chained('base') PathPart('') Args(0) POST {
         grep { /bSearchable/ } keys %{$c->req->body_params};
     if (scalar(@search_params > 1)) {
         $search_attr{'-or'} = [
-            map {{
-                $_ => {-ilike => qq|%$search_text%|}
-            }} @search_params
+            map {
+                my $col_string = $_.'::text ilike ?';
+                {
+                    \[qq/$col_string/, '%'.$search_text.'%'],
+                }
+            } @search_params
         ] if $search_text;
     } else {
         $search_attr{$search_params[0]} = {-ilike => qq|%$search_text%|}
