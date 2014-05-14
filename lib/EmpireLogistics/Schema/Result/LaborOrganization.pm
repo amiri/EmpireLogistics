@@ -349,6 +349,15 @@ __PACKAGE__->has_many(
   },
 );
 __PACKAGE__->has_many(
+  "labor_organization_rail_lines",
+  "EmpireLogistics::Schema::Result::LaborOrganizationRailLine",
+  { "foreign.labor_organization" => "self.id" },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
+);
+__PACKAGE__->has_many(
   "labor_organization_warehouses",
   "EmpireLogistics::Schema::Result::LaborOrganizationWarehouse",
   { "foreign.labor_organization" => "self.id" },
@@ -387,6 +396,10 @@ __PACKAGE__->many_to_many(
 );
 __PACKAGE__->many_to_many(
     'rail_nodes' => 'labor_organization_rail_nodes', 'rail_node',
+    {where => {'me.delete_time' => undef}},
+);
+__PACKAGE__->many_to_many(
+    'rail_lines' => 'labor_organization_rail_lines', 'rail_line',
     {where => {'me.delete_time' => undef}},
 );
 __PACKAGE__->many_to_many(

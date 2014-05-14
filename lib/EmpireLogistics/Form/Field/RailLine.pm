@@ -6,7 +6,6 @@ with 'EmpireLogistics::Role::Form::Util';
 
 sub build_label { 'Associated RailLines' }
 sub build_id { 'rail-lines' }
-sub build_element_attr { { 'data-placeholder'  => 'Enter Associated RailLines' } }
 
 no HTML::FormHandler::Moose;
 

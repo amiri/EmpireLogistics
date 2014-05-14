@@ -279,6 +279,7 @@ has_block 'relations_block' => (
     render_list => [
         'ports',
         'rail_nodes',
+        'rail_lines',
         'warehouses',
         'work_stoppages',
     ],
@@ -975,6 +976,7 @@ has_field 'labor_organization_payees' => (
 
 has_field 'ports'          => (type => '+Port',);
 has_field 'rail_nodes'     => (type => '+RailNode',);
+has_field 'rail_lines'     => (type => '+RailLine',);
 has_field 'warehouses'     => (type => '+Warehouse',);
 has_field 'work_stoppages' => (type => '+WorkStoppage',);
 has_field 'nlrb_decisions' => (type => '+NLRBDecision',);

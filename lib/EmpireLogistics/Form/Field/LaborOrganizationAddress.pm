@@ -27,14 +27,18 @@ has_field 'id' => (
 has_field 'year' => (
     type  => 'Year',
     label => 'Year',
-    default_method => \&default_year,
+    empty_select => '-- Select One --',
 );
-sub default_year {
-    my $self = shift;
-    return DateTime->now->year;
-}
 
 has_field 'address' => ( type => '+LaborOrganizationAddress::Address', );
+
+sub validate {
+    my $self          = shift;
+    my $year_required = 0;
+    $year_required = 1 if any { defined $_->value } @{$self->sorted_fields};
+    $self->field('year')->add_error("Labor organization year required")
+        if $year_required;
+}
 
 no HTML::FormHandler::Moose;
 
