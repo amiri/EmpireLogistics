@@ -77,7 +77,7 @@ sub validate {
     my $year_required = 0;
     $year_required = 1 if any { defined $_->value } @{$self->sorted_fields};
     $self->field('year')->add_error("Sale receipt year required")
-        if $year_required;
+        if $year_required and not $self->field("year")->value;
 }
 
 no HTML::FormHandler::Moose;

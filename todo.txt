@@ -19,6 +19,7 @@ done Add osha and nlrb to labor-action
 done Add rail_line to labor_organization
 done Add rail_line rel to company
 done Add labor_org, company rels to rail-line
+done add port_tonnage field to ports
 
 Add country select menu
 Add state select menu

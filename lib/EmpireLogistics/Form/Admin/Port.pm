@@ -14,6 +14,11 @@ has 'address_relation' => (
     isa     => 'Str',
     default => 'port_addresses',
 );
+has 'tonnage_relation' => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => 'port_tonnages',
+);
 has 'js_files' => (
     is      => 'ro',
     isa     => 'ArrayRef',
@@ -31,6 +36,7 @@ sub build_render_list {
         'restrictions_block', 'pilotage_block',      'tugs_block',
         'quarantine_block',   'communication_block', 'facilities_block',
         'cranes_block',       'services_block',      'supplies_block',
+        'tonnage_block',
         'submit',
     ];
 }
@@ -57,6 +63,36 @@ has_block 'location_block' => (
     tag         => 'fieldset',
     label       => 'Location',
     render_list => ['latitude', 'longitude', 'geometry', 'address_block',],
+);
+
+has_block 'tonnage_block' => (
+    tag         => 'fieldset',
+    label       => 'Yearly Tonnage Statistics',
+    render_list => ['port_tonnages', 'add_port_tonnage'],
+);
+has_field 'port_tonnages' => (
+    type           => 'Repeatable',
+    setup_for_js   => 1,
+    do_wrapper     => 1,
+    do_label       => 0,
+    num_when_empty => 1,
+    num_extra      => 0,
+    init_contains  => {
+        widget_wrapper => 'Simple',
+        tags           => {wrapper_tag => 'fieldset', controls_div => 1},
+        wrapper_class  => ['well-lg'],
+    },
+    widget_wrapper => 'Simple',
+    tags           => {controls_div => 1},
+    wrapper_class  => ['well-lg'],
+);
+has_field 'port_tonnages.contains' => (type => '+PortTonnage',);
+
+has_field 'add_port_tonnage' => (
+    type          => 'AddElement',
+    repeatable    => 'port_tonnages',
+    value         => 'Add another port tonnage record',
+    element_class => ['btn btn-info']
 );
 
 has_field 'description'         => (type => 'TextArea', element_wrapper_class => ['col-lg-10'], apply => [Printable, NotAllDigits],);
