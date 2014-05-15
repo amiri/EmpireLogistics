@@ -122,6 +122,8 @@ var workStoppagesOptions = {
 };
 $(document).ready(function() {
     $("#work-stoppages").select2(workStoppagesOptions);
+    $("#companies").select2(companiesOptions);
+    $("#labor-organizations").select2(laborOrganizationsOptions);
 });
 
 

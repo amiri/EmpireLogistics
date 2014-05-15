@@ -88,8 +88,19 @@ has_block 'geometry_block' => (
 has_block 'relations_block' => (
     tag         => 'fieldset',
     label       => 'Relationships',
-    render_list => ['work_stoppages',],
+    render_list => ['work_stoppages','labor_organizations','companies',],
 );
+
+# Companies
+has_field 'companies' => (
+    type => '+Company',
+);
+
+# Labor Organizations
+has_field 'labor_organizations' => (
+    type => '+LaborOrganization',
+);
+
 
 has_field 'id' => (
     type     => 'Integer',

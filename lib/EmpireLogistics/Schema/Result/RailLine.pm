@@ -87,11 +87,37 @@ __PACKAGE__->has_many(
 	cascade_copy => 0, cascade_delete => 0
   },
 );
+__PACKAGE__->has_many(
+  "company_rail_lines",
+  "EmpireLogistics::Schema::Result::CompanyRailLine",
+  { "foreign.rail_line" => "self.id" },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
+);
+__PACKAGE__->has_many(
+  "labor_organization_rail_lines",
+  "EmpireLogistics::Schema::Result::LaborOrganizationRailLine",
+  { "foreign.rail_line" => "self.id" },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
+);
 
 __PACKAGE__->many_to_many(
     'work_stoppages' => 'rail_line_work_stoppages', 'work_stoppage'
 );
 
+__PACKAGE__->many_to_many(
+    'companies' => 'company_rail_lines', 'company',
+    {where => {'me.delete_time' => undef}},
+);
+__PACKAGE__->many_to_many(
+    'labor_organizations' => 'labor_organization_rail_lines', 'labor_organization',
+    {where => {'me.delete_time' => undef}},
+);
 
 
 
