@@ -3,7 +3,6 @@ package EmpireLogistics::Form::Admin::LaborOrganization;
 use HTML::FormHandler::Moose;
 use HTML::FormHandler::Types ('NoSpaces', 'Printable', 'NotAllDigits',);
 use MooseX::Types::URI qw/Uri/;
-use Carp::Always;
 use namespace::autoclean;
 extends 'EmpireLogistics::Form::BaseDB';
 with 'EmpireLogistics::Role::Form::Util';

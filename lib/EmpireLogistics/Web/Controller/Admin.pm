@@ -22,7 +22,7 @@ sub auto : Private {
         $c->user_session->{backref} = $backref;
         $c->flash->{alert} =  [{ class => 'danger', message => 'Access denied. Log in first.'}];
         $c->redirect_and_detach("/login");
-        return 1;
+        return 0;
     }
     $c->check_user_roles(qw/admin/)
         or $c->detach(qw/Controller::Root access_denied/);
