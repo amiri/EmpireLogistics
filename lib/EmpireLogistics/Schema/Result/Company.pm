@@ -96,6 +96,15 @@ __PACKAGE__->has_many(
   },
 );
 __PACKAGE__->has_many(
+  "company_rail_lines",
+  "EmpireLogistics::Schema::Result::CompanyRailLine",
+  { "foreign.company" => "self.id" },
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
+);
+__PACKAGE__->has_many(
   "company_warehouses",
   "EmpireLogistics::Schema::Result::CompanyWarehouse",
   { "foreign.company" => "self.id" },
@@ -113,6 +122,9 @@ __PACKAGE__->many_to_many(
 );
 __PACKAGE__->many_to_many(
     'rail_nodes' => 'company_rail_nodes', 'rail_node'
+);
+__PACKAGE__->many_to_many(
+    'rail_lines' => 'company_rail_lines', 'rail_line'
 );
 __PACKAGE__->many_to_many(
     'warehouses' => 'company_warehouses', 'warehouse'

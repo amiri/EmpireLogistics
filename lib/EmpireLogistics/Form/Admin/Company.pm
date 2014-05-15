@@ -42,7 +42,7 @@ has_block 'basic_block' => (
 has_block 'relations_block' => (
     tag         => 'fieldset',
     label       => 'Relationships',
-    render_list => [ 'ports', 'rail_nodes', 'warehouses' ],
+    render_list => [ 'ports', 'rail_nodes', 'rail_lines', 'warehouses' ],
 );
 has_block 'decisions_block' => (
     tag         => 'fieldset',
@@ -122,6 +122,7 @@ has_field 'add_address' => (
 
 has_field 'ports'      => ( type => '+Port', );
 has_field 'rail_nodes' => ( type => '+RailNode', );
+has_field 'rail_lines' => ( type => '+RailLine', );
 has_field 'warehouses' => ( type => '+Warehouse', );
 has_field 'nlrb_decisions' => ( type => '+NLRBDecision', );
 has_field 'osha_citations' => ( type => '+OSHACitation', );
