@@ -51,11 +51,13 @@ has_field 'delete_time' => (
     deflate_method => \&deflate_delete_time,
     inflate_method => \&inflate_delete_time,
 );
-has_field 'year'   => (type => 'Year', empty_select => '-- Select One --',);
-has_field 'book_value' => (type => 'Integer',);
-has_field 'cash_paid' => (type => 'Integer',);
-has_field 'cost' => (type => 'Integer',);
-has_field 'description' => (type => 'TextArea',);
+has_field 'year' => (type => 'Year', empty_select => '-- Select One --',);
+has_field 'book_value'  => (type => 'Integer',);
+has_field 'cash_paid'   => (type => 'Integer',);
+has_field 'cost'        => (type => 'Integer',);
+has_field 'description' => (
+    type => 'TextArea', element_wrapper_class => ['col-lg-10'],
+);
 has_field 'investment_type' => (
     type           => 'Select',
     empty_select   => '-- Select One --',
@@ -66,7 +68,8 @@ sub options_investment_type {
     my $self = shift;
     return [
         map { {label => $_, value => $_,} } @{
-            $self->form->schema->resultset("LaborOrganizationInvestmentPurchase")
+            $self->form->schema->resultset(
+                "LaborOrganizationInvestmentPurchase")
                 ->result_source->column_info('investment_type')->{extra}{list}
         }
     ];

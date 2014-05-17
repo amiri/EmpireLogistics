@@ -1,7 +1,8 @@
 package EmpireLogistics::Form::Admin::RailLine;
 
 use HTML::FormHandler::Moose;
-use HTML::FormHandler::Types ( 'NoSpaces', 'Printable', 'NotAllDigits' );
+use HTML::FormHandler::Types ('NoSpaces', 'PrintableAndNewline',
+    'NotAllDigits');
 use MooseX::Types::URI qw/Uri/;
 use namespace::autoclean;
 extends 'EmpireLogistics::Form::BaseDB';
@@ -18,8 +19,10 @@ has 'js_files'    => (
 );
 
 sub build_render_list {
-    return ['metadata_block', 'basic_block', 'details_block', 'owners_block',
-        'trackage_block', 'geometry_block', 'relations_block', 'submit',];
+    return [
+        'metadata_block', 'basic_block',    'details_block',   'owners_block',
+        'trackage_block', 'geometry_block', 'relations_block', 'submit',
+    ];
 }
 has_block 'metadata_block' => (
     tag         => 'fieldset',
@@ -40,7 +43,9 @@ has_block 'basic_block' => (
     ],
 );
 
-has_field 'description'         => (type => 'TextArea', element_wrapper_class => ['col-lg-10'], apply => [Printable, NotAllDigits],);
+has_field 'description' => (
+    type => 'TextArea', element_wrapper_class => ['col-lg-10'],
+);
 has_block 'details_block' => (
     tag         => 'fieldset',
     label       => 'Details',
@@ -88,7 +93,7 @@ has_block 'geometry_block' => (
 has_block 'relations_block' => (
     tag         => 'fieldset',
     label       => 'Relationships',
-    render_list => ['work_stoppages','labor_organizations','companies',],
+    render_list => ['work_stoppages', 'labor_organizations', 'companies',],
 );
 
 # Companies
@@ -100,7 +105,6 @@ has_field 'companies' => (
 has_field 'labor_organizations' => (
     type => '+LaborOrganization',
 );
-
 
 has_field 'id' => (
     type     => 'Integer',
@@ -135,16 +139,16 @@ has_field 'link_id' => (
     required => 1,
 );
 has_field 'route_id' => (
-    type     => 'Text',
-    label    => 'Route ID',
+    type  => 'Text',
+    label => 'Route ID',
 );
 has_field 'miles' => (
-    type     => 'Text',
-    label    => 'Miles',
+    type  => 'Text',
+    label => 'Miles',
 );
 has_field 'direction' => (
-    type     => 'Text',
-    label    => 'Direction',
+    type  => 'Text',
+    label => 'Direction',
 );
 has_field 'track_type' => (
     type  => 'Text',
@@ -171,53 +175,53 @@ has_field 'military_subsystem' => (
     label => 'Military Subsystem',
 );
 has_field 'signal_system' => (
-    type     => 'Text',
-    label    => 'Signal System',
+    type  => 'Text',
+    label => 'Signal System',
 );
 has_field 'traffic_density' => (
-    type     => 'Text',
-    label    => 'Traffic Density',
+    type  => 'Text',
+    label => 'Traffic Density',
 );
 has_field 'line_class' => (
-    type     => 'Text',
-    label    => 'Line Class',
+    type  => 'Text',
+    label => 'Line Class',
 );
 has_field 'a_junction' => (
-    type     => 'Text',
-    label    => 'Origin Junction',
+    type  => 'Text',
+    label => 'Origin Junction',
 );
 has_field 'b_junction' => (
-    type     => 'Text',
-    label    => 'Destination Junction',
+    type  => 'Text',
+    label => 'Destination Junction',
 );
 has_field 'subdivision' => (
-    type     => 'Text',
-    label    => 'Subdivision',
+    type  => 'Text',
+    label => 'Subdivision',
 );
 has_field 'owner1' => (
-    type     => 'Text',
-    label    => 'Primary Owner',
+    type  => 'Text',
+    label => 'Primary Owner',
 );
 has_field 'owner2' => (
-    type     => 'Text',
-    label    => 'Secondary Owner',
+    type  => 'Text',
+    label => 'Secondary Owner',
 );
 has_field 'trackage_rights1' => (
-    type     => 'Text',
-    label    => 'Primary Trackage Rights',
+    type  => 'Text',
+    label => 'Primary Trackage Rights',
 );
 
 has_field 'trackage_rights2' => (
-    type     => 'Text',
-    label    => 'Secondary Trackage Rights',
+    type  => 'Text',
+    label => 'Secondary Trackage Rights',
 );
 has_field 'trackage_rights3' => (
-    type     => 'Text',
-    label    => 'Other Trackage Rights',
+    type  => 'Text',
+    label => 'Other Trackage Rights',
 );
 
 # Location
-has_field 'geometry'  => (type => 'TextArea', disabled => 1, readonly => 1,);
+has_field 'geometry' => (type => 'TextArea', disabled => 1, readonly => 1,);
 
 # Work Stoppages
 has_field 'work_stoppages' => (

@@ -2,7 +2,7 @@ package EmpireLogistics::Form::Field::LaborOrganizationOtherLiability;
 
 use HTML::FormHandler::Moose;
 use List::AllUtils qw/any/;
-use HTML::FormHandler::Types ( 'Printable', 'NotAllDigits' );
+use HTML::FormHandler::Types ('PrintableAndNewline', 'NotAllDigits');
 extends 'EmpireLogistics::Form::Field::LaborOrganizationCompound';
 with 'EmpireLogistics::Role::Form::Util';
 
@@ -17,11 +17,12 @@ has 'item' => (
 sub _build_item {
     my $self = shift;
     return unless $self->field('id')->fif;
-    my $liability = $self->form->item->labor_organization_other_liabilities->find(
+    my $liability =
+        $self->form->item->labor_organization_other_liabilities->find(
         {
             id => $self->field('id')->fif,
         }
-    );
+        );
     return $liability;
 }
 
@@ -52,8 +53,10 @@ has_field 'delete_time' => (
     inflate_method => \&inflate_delete_time,
 );
 has_field 'year' => (type => 'Year', empty_select => '-- Select One --',);
-has_field 'amount'  => (type => 'Integer',);
-has_field 'description'         => (type => 'TextArea', element_wrapper_class => ['col-lg-10'], apply => [Printable, NotAllDigits],);
+has_field 'amount' => (type => 'Integer',);
+has_field 'description' => (
+    type => 'TextArea', element_wrapper_class => ['col-lg-10'],
+);
 
 has_field 'rm_element' => (
     type          => 'Display',

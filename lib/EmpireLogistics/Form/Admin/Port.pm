@@ -1,7 +1,8 @@
 package EmpireLogistics::Form::Admin::Port;
 
 use HTML::FormHandler::Moose;
-use HTML::FormHandler::Types ( 'NoSpaces', 'Printable', 'NotAllDigits' );
+use HTML::FormHandler::Types ('NoSpaces', 'PrintableAndNewline',
+    'NotAllDigits');
 use JSON::Any;
 use namespace::autoclean;
 extends 'EmpireLogistics::Form::BaseDB';
@@ -95,7 +96,9 @@ has_field 'add_port_tonnage' => (
     element_class => ['btn btn-info']
 );
 
-has_field 'description'         => (type => 'TextArea', element_wrapper_class => ['col-lg-10'], apply => [Printable, NotAllDigits],);
+has_field 'description' => (
+    type => 'TextArea', element_wrapper_class => ['col-lg-10'],
+);
 
 # Companies
 has_field 'companies' => (
@@ -153,7 +156,8 @@ sub options_addresses {
 }
 
 has_block 'overview_block' => (
-    tag         => 'fieldset',
+    tag => 'fieldset',
+
     #class       => ['col-md-6'],
     label       => 'Overview',
     render_list => [
@@ -165,7 +169,8 @@ has_block 'overview_block' => (
 );
 
 has_block 'characteristics_block' => (
-    tag         => 'fieldset',
+    tag => 'fieldset',
+
     #class       => ['col-md-6'],
     label       => 'Basic Characteristics',
     render_list => [
@@ -311,14 +316,19 @@ has_field 'anchor_depth'       => (type => 'Text',);
 has_field 'oil_terminal_depth' => (type => 'Text',);
 
 # Characteristics
-has_field 'tide_range'          => (type => 'Integer',);
-has_field 'max_vessel_size'     => (type => 'Text', required => 1,);
-has_field 'shelter'             => (type => 'Text',);
-has_field 'good_holding_ground' => (type => 'Boolean',element_wrapper_class => ['col-lg-5', 'col-lg-offset-2',],);
-has_field 'turning_basin'       => (type => 'Boolean',element_wrapper_class => ['col-lg-5', 'col-lg-offset-2',],);
-has_field 'first_port_of_entry' => (type => 'Boolean',element_wrapper_class => ['col-lg-5', 'col-lg-offset-2',],);
-has_field 'us_representative'   => (type => 'Boolean',element_wrapper_class => ['col-lg-5', 'col-lg-offset-2',],);
-has_field 'eta_message'         => (type => 'Boolean',element_wrapper_class => ['col-lg-5', 'col-lg-offset-2',],);
+has_field 'tide_range'      => (type => 'Integer',);
+has_field 'max_vessel_size' => (type => 'Text', required => 1,);
+has_field 'shelter'         => (type => 'Text',);
+has_field 'good_holding_ground' => (type => 'Boolean',
+    element_wrapper_class => ['col-lg-5', 'col-lg-offset-2',],);
+has_field 'turning_basin' => (type => 'Boolean',
+    element_wrapper_class => ['col-lg-5', 'col-lg-offset-2',],);
+has_field 'first_port_of_entry' => (type => 'Boolean',
+    element_wrapper_class => ['col-lg-5', 'col-lg-offset-2',],);
+has_field 'us_representative' => (type => 'Boolean',
+    element_wrapper_class => ['col-lg-5', 'col-lg-offset-2',],);
+has_field 'eta_message' => (type => 'Boolean',
+    element_wrapper_class => ['col-lg-5', 'col-lg-offset-2',],);
 
 # Location
 has_field 'longitude' => (type => 'Text', required => 1,);
@@ -327,26 +337,34 @@ has_field 'geometry'  => (type => 'Text', disabled => 1, readonly => 1,);
 has_field 'country' => (type => 'Text',);
 
 # Restrictions
-has_field 'entry_tide_restriction'  => (type => 'InlineBoolean', do_wrapper => 0,);
-has_field 'entry_swell_restriction' => (type => 'InlineBoolean', do_wrapper => 0,);
-has_field 'entry_ice_restriction'   => (type => 'InlineBoolean', do_wrapper => 0,);
-has_field 'entry_other_restriction' => (type => 'InlineBoolean', do_wrapper => 0,);
-has_field 'overhead_limits'         => (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'entry_tide_restriction' =>
+    (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'entry_swell_restriction' =>
+    (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'entry_ice_restriction' =>
+    (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'entry_other_restriction' =>
+    (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'overhead_limits' => (type => 'InlineBoolean', do_wrapper => 0,);
 
 # Pilotage
-has_field 'pilotage_required'         => (type => 'InlineBoolean', do_wrapper => 0,);
-has_field 'pilotage_available'        => (type => 'InlineBoolean', do_wrapper => 0,);
-has_field 'pilotage_local_assistance' => (type => 'InlineBoolean', do_wrapper => 0,);
-has_field 'pilotage_advisable'        => (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'pilotage_required'  => (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'pilotage_available' => (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'pilotage_local_assistance' =>
+    (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'pilotage_advisable' => (type => 'InlineBoolean', do_wrapper => 0,);
 
 # Tugs
 has_field 'tugs_can_salvage' => (type => 'InlineBoolean', do_wrapper => 0,);
 has_field 'tugs_can_assist'  => (type => 'InlineBoolean', do_wrapper => 0,);
 
 # Quarantine
-has_field 'quarantine_pratique_required'           => (type => 'InlineBoolean', do_wrapper => 0,);
-has_field 'quarantine_sscc_certification_required' => (type => 'InlineBoolean', do_wrapper => 0,);
-has_field 'quarantine_other_required'              => (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'quarantine_pratique_required' =>
+    (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'quarantine_sscc_certification_required' =>
+    (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'quarantine_other_required' =>
+    (type => 'InlineBoolean', do_wrapper => 0,);
 
 # Communications
 has_field 'comm_phone' => (type => 'InlineBoolean', do_wrapper => 0,);
@@ -357,11 +375,14 @@ has_field 'comm_air'   => (type => 'InlineBoolean', do_wrapper => 0,);
 has_field 'comm_rail'  => (type => 'InlineBoolean', do_wrapper => 0,);
 
 # Offloading
-has_field 'load_offload_wharf'       => (type => 'InlineBoolean', do_wrapper => 0,);
-has_field 'load_offload_anchor'      => (type => 'InlineBoolean', do_wrapper => 0,);
-has_field 'load_offload_medium_moor' => (type => 'InlineBoolean', do_wrapper => 0,);
-has_field 'load_offload_beach_moor'  => (type => 'InlineBoolean', do_wrapper => 0,);
-has_field 'load_offload_ice_moor'    => (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'load_offload_wharf'  => (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'load_offload_anchor' => (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'load_offload_medium_moor' =>
+    (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'load_offload_beach_moor' =>
+    (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'load_offload_ice_moor' =>
+    (type => 'InlineBoolean', do_wrapper => 0,);
 
 # Facilities
 has_field 'medical_facilities'   => (type => 'InlineBoolean', do_wrapper => 0,);
@@ -370,20 +391,25 @@ has_field 'degaussing_available' => (type => 'InlineBoolean', do_wrapper => 0,);
 has_field 'dirty_ballast'        => (type => 'InlineBoolean', do_wrapper => 0,);
 
 # Cranes
-has_field 'fixed_cranes'            => (type => 'InlineBoolean', do_wrapper => 0,);
-has_field 'mobile_cranes'           => (type => 'InlineBoolean', do_wrapper => 0,);
-has_field 'floating_cranes'         => (type => 'InlineBoolean', do_wrapper => 0,);
-has_field 'cranes_lift_100_tons'    => (type => 'InlineBoolean', do_wrapper => 0,);
-has_field 'cranes_lift_50_100_tons' => (type => 'InlineBoolean', do_wrapper => 0,);
-has_field 'cranes_lift_25_49_tons'  => (type => 'InlineBoolean', do_wrapper => 0,);
-has_field 'cranes_lift_0_24_tons'   => (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'fixed_cranes'         => (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'mobile_cranes'        => (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'floating_cranes'      => (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'cranes_lift_100_tons' => (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'cranes_lift_50_100_tons' =>
+    (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'cranes_lift_25_49_tons' =>
+    (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'cranes_lift_0_24_tons' =>
+    (type => 'InlineBoolean', do_wrapper => 0,);
 
 # Services
-has_field 'longshore_services'            => (type => 'InlineBoolean', do_wrapper => 0,);
-has_field 'electrical_services'           => (type => 'InlineBoolean', do_wrapper => 0,);
-has_field 'steam_services'                => (type => 'InlineBoolean', do_wrapper => 0,);
-has_field 'navigation_equipment_services' => (type => 'InlineBoolean', do_wrapper => 0,);
-has_field 'electrical_repair_services'    => (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'longshore_services'  => (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'electrical_services' => (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'steam_services'      => (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'navigation_equipment_services' =>
+    (type => 'InlineBoolean', do_wrapper => 0,);
+has_field 'electrical_repair_services' =>
+    (type => 'InlineBoolean', do_wrapper => 0,);
 
 # Supplies
 has_field 'supplies_provisions' => (type => 'InlineBoolean', do_wrapper => 0,);

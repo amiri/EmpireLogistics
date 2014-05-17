@@ -1,7 +1,8 @@
 package EmpireLogistics::Form::Admin::RailNode;
 
 use HTML::FormHandler::Moose;
-use HTML::FormHandler::Types ( 'NoSpaces', 'Printable', 'NotAllDigits' );
+use HTML::FormHandler::Types ('NoSpaces', 'PrintableAndNewline',
+    'NotAllDigits');
 use MooseX::Types::URI qw/Uri/;
 use namespace::autoclean;
 extends 'EmpireLogistics::Form::BaseDB';
@@ -14,7 +15,7 @@ has 'address_relation' => (
     isa     => 'Str',
     default => 'rail_node_addresses',
 );
-has 'js_files'    => (
+has 'js_files' => (
     is      => 'ro',
     isa     => 'ArrayRef',
     default => sub {
@@ -23,7 +24,8 @@ has 'js_files'    => (
 );
 
 sub build_render_list {
-    return ['metadata_block', 'basic_block', 'location_block','relations_block', 'submit',];
+    return ['metadata_block', 'basic_block', 'location_block',
+        'relations_block', 'submit',];
 }
 has_block 'metadata_block' => (
     tag         => 'fieldset',
@@ -77,8 +79,8 @@ has_field 'delete_time' => (
     deflate_method => \&deflate_delete_time,
 );
 has_field 'junction_id' => (
-    type     => 'Integer',
-    label    => 'Junction ID',
+    type  => 'Integer',
+    label => 'Junction ID',
 );
 has_field 'name' => (
     type     => 'Text',
@@ -89,7 +91,9 @@ has_field 'incident_links' => (
     type  => 'Integer',
     label => 'Links',
 );
-has_field 'description'         => (type => 'TextArea', element_wrapper_class => ['col-lg-10'], apply => [Printable, NotAllDigits],);
+has_field 'description' => (
+    type => 'TextArea', element_wrapper_class => ['col-lg-10'],
+);
 
 # Location
 has_field 'longitude' => (type => 'Text', required => 1,);

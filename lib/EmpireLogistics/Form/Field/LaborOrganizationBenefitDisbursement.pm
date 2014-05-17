@@ -2,7 +2,7 @@ package EmpireLogistics::Form::Field::LaborOrganizationBenefitDisbursement;
 
 use HTML::FormHandler::Moose;
 use List::AllUtils qw/any/;
-use HTML::FormHandler::Types ( 'Printable', 'NotAllDigits' );
+use HTML::FormHandler::Types ('PrintableAndNewline', 'NotAllDigits');
 extends 'EmpireLogistics::Form::Field::LaborOrganizationCompound';
 with 'EmpireLogistics::Role::Form::Util';
 
@@ -55,8 +55,10 @@ has_field 'delete_time' => (
 has_field 'name'   => (type => 'Text',);
 has_field 'year'   => (type => 'Year', empty_select => '-- Select One --',);
 has_field 'amount' => (type => 'Integer',);
-has_field 'description'         => (type => 'TextArea', element_wrapper_class => ['col-lg-10'], apply => [Printable, NotAllDigits],);
-has_field 'paid_to'     => (type => 'Text',);
+has_field 'description' => (
+    type => 'TextArea', element_wrapper_class => ['col-lg-10'],
+);
+has_field 'paid_to' => (type => 'Text',);
 
 has_field 'rm_element' => (
     type          => 'Display',

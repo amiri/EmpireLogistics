@@ -1,7 +1,8 @@
 package EmpireLogistics::Form::Admin::LaborOrganization;
 
 use HTML::FormHandler::Moose;
-use HTML::FormHandler::Types ('NoSpaces', 'Printable', 'NotAllDigits',);
+use HTML::FormHandler::Types ('NoSpaces', 'PrintableAndNewline',
+    'NotAllDigits',);
 use MooseX::Types::URI qw/Uri/;
 use namespace::autoclean;
 extends 'EmpireLogistics::Form::BaseDB';
@@ -113,7 +114,6 @@ has 'sale_receipt_relation' => (
     default => 'labor_organization_sale_receipts',
 );
 
-
 sub build_render_list {
     return [
         'metadata_block',
@@ -192,7 +192,9 @@ has_field 'url' => (
     html5_type_attr => 'url',
     apply           => [Uri],
 );
-has_field 'description'         => (type => 'TextArea', element_wrapper_class => ['col-lg-10'], apply => [Printable, NotAllDigits],);
+has_field 'description' =>
+    (type => 'TextArea', element_wrapper_class => ['col-lg-10'],
+);
 has_field 'usdol_filing_number' => (type => 'Text',);
 has_field 'organization_type'   => (type => '+LaborOrganizationType',);
 
@@ -321,9 +323,9 @@ has_field 'labor_organization_account_payables' => (
         tags           => {wrapper_tag => 'fieldset', controls_div => 1},
         wrapper_class  => ['well-lg'],
     },
-    widget_wrapper => 'Bootstrap3',
-    tags           => {controls_div => 1},
-    wrapper_class  => ['well-lg'],
+    widget_wrapper        => 'Bootstrap3',
+    tags                  => {controls_div => 1},
+    wrapper_class         => ['well-lg'],
     element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_account_payables.contains' =>
@@ -349,9 +351,9 @@ has_field 'labor_organization_account_receivables' => (
         tags           => {wrapper_tag => 'fieldset', controls_div => 1},
         wrapper_class  => ['well-lg'],
     },
-    widget_wrapper => 'Bootstrap3',
-    tags           => {controls_div => 1},
-    wrapper_class  => ['well-lg'],
+    widget_wrapper        => 'Bootstrap3',
+    tags                  => {controls_div => 1},
+    wrapper_class         => ['well-lg'],
     element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_account_receivables.contains' =>
@@ -392,9 +394,9 @@ has_field 'labor_organization_fixed_assets' => (
         tags           => {wrapper_tag => 'fieldset', controls_div => 1},
         wrapper_class  => ['well-lg'],
     },
-    widget_wrapper => 'Bootstrap3',
-    tags           => {controls_div => 1},
-    wrapper_class  => ['well-lg'],
+    widget_wrapper        => 'Bootstrap3',
+    tags                  => {controls_div => 1},
+    wrapper_class         => ['well-lg'],
     element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_fixed_assets.contains' =>
@@ -420,9 +422,9 @@ has_field 'labor_organization_investment_assets' => (
         tags           => {wrapper_tag => 'fieldset', controls_div => 1},
         wrapper_class  => ['well-lg'],
     },
-    widget_wrapper => 'Bootstrap3',
-    tags           => {controls_div => 1},
-    wrapper_class  => ['well-lg'],
+    widget_wrapper        => 'Bootstrap3',
+    tags                  => {controls_div => 1},
+    wrapper_class         => ['well-lg'],
     element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_investment_assets.contains' =>
@@ -448,9 +450,9 @@ has_field 'labor_organization_other_assets' => (
         tags           => {wrapper_tag => 'fieldset', controls_div => 1},
         wrapper_class  => ['well-lg'],
     },
-    widget_wrapper => 'Bootstrap3',
-    tags           => {controls_div => 1},
-    wrapper_class  => ['well-lg'],
+    widget_wrapper        => 'Bootstrap3',
+    tags                  => {controls_div => 1},
+    wrapper_class         => ['well-lg'],
     element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_other_assets.contains' =>
@@ -476,9 +478,9 @@ has_field 'labor_organization_total_assets' => (
         tags           => {wrapper_tag => 'fieldset', controls_div => 1},
         wrapper_class  => ['well-lg'],
     },
-    widget_wrapper => 'Bootstrap3',
-    tags           => {controls_div => 1},
-    wrapper_class  => ['well-lg'],
+    widget_wrapper        => 'Bootstrap3',
+    tags                  => {controls_div => 1},
+    wrapper_class         => ['well-lg'],
     element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_total_assets.contains' =>
@@ -490,8 +492,6 @@ has_field 'add_labor_organization_total_assets' => (
     value         => 'Add another total asset',
     element_class => ['btn btn-info'],
 );
-
-
 
 has_block 'disbursements_block' => (
     tag         => 'fieldset',
@@ -510,7 +510,6 @@ has_block 'disbursements_block' => (
     ],
 );
 
-
 has_field 'labor_organization_benefit_disbursements' => (
     type           => 'Repeatable',
     setup_for_js   => 1,
@@ -524,9 +523,9 @@ has_field 'labor_organization_benefit_disbursements' => (
         tags           => {wrapper_tag => 'fieldset', controls_div => 1},
         wrapper_class  => ['well-lg'],
     },
-    widget_wrapper => 'Bootstrap3',
-    tags           => {controls_div => 1},
-    wrapper_class  => ['well-lg'],
+    widget_wrapper        => 'Bootstrap3',
+    tags                  => {controls_div => 1},
+    wrapper_class         => ['well-lg'],
     element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_benefit_disbursements.contains' =>
@@ -538,7 +537,6 @@ has_field 'add_labor_organization_benefit_disbursements' => (
     value         => 'Add another benefit disbursement',
     element_class => ['btn btn-info'],
 );
-
 
 has_field 'labor_organization_investment_purchases' => (
     type           => 'Repeatable',
@@ -553,9 +551,9 @@ has_field 'labor_organization_investment_purchases' => (
         tags           => {wrapper_tag => 'fieldset', controls_div => 1},
         wrapper_class  => ['well-lg'],
     },
-    widget_wrapper => 'Bootstrap3',
-    tags           => {controls_div => 1},
-    wrapper_class  => ['well-lg'],
+    widget_wrapper        => 'Bootstrap3',
+    tags                  => {controls_div => 1},
+    wrapper_class         => ['well-lg'],
     element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_investment_purchases.contains' =>
@@ -567,7 +565,6 @@ has_field 'add_labor_organization_investment_purchases' => (
     value         => 'Add another investment purchase',
     element_class => ['btn btn-info'],
 );
-
 
 has_field 'labor_organization_general_disbursements' => (
     type           => 'Repeatable',
@@ -582,9 +579,9 @@ has_field 'labor_organization_general_disbursements' => (
         tags           => {wrapper_tag => 'fieldset', controls_div => 1},
         wrapper_class  => ['well-lg'],
     },
-    widget_wrapper => 'Bootstrap3',
-    tags           => {controls_div => 1},
-    wrapper_class  => ['well-lg'],
+    widget_wrapper        => 'Bootstrap3',
+    tags                  => {controls_div => 1},
+    wrapper_class         => ['well-lg'],
     element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_general_disbursements.contains' =>
@@ -596,9 +593,6 @@ has_field 'add_labor_organization_general_disbursements' => (
     value         => 'Add another general disbursement',
     element_class => ['btn btn-info'],
 );
-
-
-
 
 has_field 'labor_organization_officer_disbursements' => (
     type           => 'Repeatable',
@@ -613,9 +607,9 @@ has_field 'labor_organization_officer_disbursements' => (
         tags           => {wrapper_tag => 'fieldset', controls_div => 1},
         wrapper_class  => ['well-lg'],
     },
-    widget_wrapper => 'Bootstrap3',
-    tags           => {controls_div => 1},
-    wrapper_class  => ['well-lg'],
+    widget_wrapper        => 'Bootstrap3',
+    tags                  => {controls_div => 1},
+    wrapper_class         => ['well-lg'],
     element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_officer_disbursements.contains' =>
@@ -627,9 +621,6 @@ has_field 'add_labor_organization_officer_disbursements' => (
     value         => 'Add another officer disbursement',
     element_class => ['btn btn-info'],
 );
-
-
-
 
 has_field 'labor_organization_total_disbursements' => (
     type           => 'Repeatable',
@@ -644,9 +635,9 @@ has_field 'labor_organization_total_disbursements' => (
         tags           => {wrapper_tag => 'fieldset', controls_div => 1},
         wrapper_class  => ['well-lg'],
     },
-    widget_wrapper => 'Bootstrap3',
-    tags           => {controls_div => 1},
-    wrapper_class  => ['well-lg'],
+    widget_wrapper        => 'Bootstrap3',
+    tags                  => {controls_div => 1},
+    wrapper_class         => ['well-lg'],
     element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_total_disbursements.contains' =>
@@ -658,34 +649,6 @@ has_field 'add_labor_organization_total_disbursements' => (
     value         => 'Add another total disbursement',
     element_class => ['btn btn-info'],
 );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 has_block 'loans_block' => (
     tag         => 'fieldset',
@@ -710,9 +673,9 @@ has_field 'labor_organization_loans_payable' => (
         tags           => {wrapper_tag => 'fieldset', controls_div => 1},
         wrapper_class  => ['well-lg'],
     },
-    widget_wrapper => 'Bootstrap3',
-    tags           => {controls_div => 1},
-    wrapper_class  => ['well-lg'],
+    widget_wrapper        => 'Bootstrap3',
+    tags                  => {controls_div => 1},
+    wrapper_class         => ['well-lg'],
     element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_loans_payable.contains' =>
@@ -737,9 +700,9 @@ has_field 'labor_organization_loans_receivable' => (
         tags           => {wrapper_tag => 'fieldset', controls_div => 1},
         wrapper_class  => ['well-lg'],
     },
-    widget_wrapper => 'Bootstrap3',
-    tags           => {controls_div => 1},
-    wrapper_class  => ['well-lg'],
+    widget_wrapper        => 'Bootstrap3',
+    tags                  => {controls_div => 1},
+    wrapper_class         => ['well-lg'],
     element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_loans_receivable.contains' =>
@@ -751,19 +714,6 @@ has_field 'add_labor_organization_loans_receivable' => (
     value         => 'Add another loan receivable',
     element_class => ['btn btn-info'],
 );
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 has_block 'liabilities_block' => (
     tag         => 'fieldset',
@@ -788,9 +738,9 @@ has_field 'labor_organization_other_liabilities' => (
         tags           => {wrapper_tag => 'fieldset', controls_div => 1},
         wrapper_class  => ['well-lg'],
     },
-    widget_wrapper => 'Bootstrap3',
-    tags           => {controls_div => 1},
-    wrapper_class  => ['well-lg'],
+    widget_wrapper        => 'Bootstrap3',
+    tags                  => {controls_div => 1},
+    wrapper_class         => ['well-lg'],
     element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_other_liabilities.contains' =>
@@ -815,9 +765,9 @@ has_field 'labor_organization_total_liabilities' => (
         tags           => {wrapper_tag => 'fieldset', controls_div => 1},
         wrapper_class  => ['well-lg'],
     },
-    widget_wrapper => 'Bootstrap3',
-    tags           => {controls_div => 1},
-    wrapper_class  => ['well-lg'],
+    widget_wrapper        => 'Bootstrap3',
+    tags                  => {controls_div => 1},
+    wrapper_class         => ['well-lg'],
     element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_total_liabilities.contains' =>
@@ -829,12 +779,6 @@ has_field 'add_labor_organization_total_liabilities' => (
     value         => 'Add another total liability',
     element_class => ['btn btn-info'],
 );
-
-
-
-
-
-
 
 has_block 'receipts_block' => (
     tag         => 'fieldset',
@@ -862,9 +806,9 @@ has_field 'labor_organization_total_receipts' => (
         tags           => {wrapper_tag => 'fieldset', controls_div => 1},
         wrapper_class  => ['well-lg'],
     },
-    widget_wrapper => 'Bootstrap3',
-    tags           => {controls_div => 1},
-    wrapper_class  => ['well-lg'],
+    widget_wrapper        => 'Bootstrap3',
+    tags                  => {controls_div => 1},
+    wrapper_class         => ['well-lg'],
     element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_total_receipts.contains' =>
@@ -890,9 +834,9 @@ has_field 'labor_organization_sale_receipts' => (
         tags           => {wrapper_tag => 'fieldset', controls_div => 1},
         wrapper_class  => ['well-lg'],
     },
-    widget_wrapper => 'Bootstrap3',
-    tags           => {controls_div => 1},
-    wrapper_class  => ['well-lg'],
+    widget_wrapper        => 'Bootstrap3',
+    tags                  => {controls_div => 1},
+    wrapper_class         => ['well-lg'],
     element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_sale_receipts.contains' =>
@@ -918,9 +862,9 @@ has_field 'labor_organization_other_receipts' => (
         tags           => {wrapper_tag => 'fieldset', controls_div => 1},
         wrapper_class  => ['well-lg'],
     },
-    widget_wrapper => 'Bootstrap3',
-    tags           => {controls_div => 1},
-    wrapper_class  => ['well-lg'],
+    widget_wrapper        => 'Bootstrap3',
+    tags                  => {controls_div => 1},
+    wrapper_class         => ['well-lg'],
     element_wrapper_class => ['col-lg-10'],
 );
 has_field 'labor_organization_other_receipts.contains' =>
@@ -932,27 +876,6 @@ has_field 'add_labor_organization_other_receipts' => (
     value         => 'Add another miscellaneous receipt',
     element_class => ['btn btn-info'],
 );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 has_block 'payees_block' => (
     tag         => 'fieldset',
@@ -966,12 +889,8 @@ has_field 'labor_organization_payees' => (
     type         => '+LaborOrganizationPayee',
     id           => 'labor-organization-payees',
     label        => 'Payees',
-    element_attr => { 'data-placeholder' => 'Enter Payees' },
+    element_attr => {'data-placeholder' => 'Enter Payees'},
 );
-
-
-
-
 
 has_field 'ports'          => (type => '+Port',);
 has_field 'rail_nodes'     => (type => '+RailNode',);

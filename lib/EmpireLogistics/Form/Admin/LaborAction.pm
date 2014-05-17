@@ -1,18 +1,19 @@
 package EmpireLogistics::Form::Admin::LaborAction;
 
 use HTML::FormHandler::Moose;
-use HTML::FormHandler::Types ( 'NoSpaces', 'Printable', 'NotAllDigits', );
+use HTML::FormHandler::Types ('NoSpaces', 'PrintableAndNewline',
+    'NotAllDigits',);
 use namespace::autoclean;
 extends 'EmpireLogistics::Form::BaseDB';
 with 'EmpireLogistics::Role::Form::Util';
 
-has '+name'       => ( default => 'labor-action-form' );
-has '+item_class' => ( default => 'WorkStoppage' );
-has 'js_files' => (
+has '+name'       => (default => 'labor-action-form');
+has '+item_class' => (default => 'WorkStoppage');
+has 'js_files'    => (
     is      => 'ro',
     isa     => 'ArrayRef',
     default => sub {
-        [ '/js/admin/labor-action.js', ];
+        ['/js/admin/labor-action.js',];
     },
 );
 
@@ -52,11 +53,11 @@ has_block 'basic_block' => (
 has_block 'decisions_block' => (
     tag         => 'fieldset',
     label       => 'Decisions',
-    render_list => [ 'nlrb_decisions', 'osha_citations', ],
+    render_list => ['nlrb_decisions', 'osha_citations',],
 );
 
-has_field 'nlrb_decisions' => ( type => '+NLRBDecision', );
-has_field 'osha_citations' => ( type => '+OSHACitation', );
+has_field 'nlrb_decisions' => (type => '+NLRBDecision',);
+has_field 'osha_citations' => (type => '+OSHACitation',);
 
 has_block 'relations_block' => (
     tag         => 'fieldset',
@@ -87,10 +88,10 @@ has_field 'warehouses' => (
 );
 
 has_field 'id' => (
-    type  => 'Integer',
+    type     => 'Integer',
     disabled => 1,
     readonly => 1,
-    label => 'Labor Action ID',
+    label    => 'Labor Action ID',
 );
 has_field 'create_time' => (
     type            => 'Timestamp',
@@ -114,11 +115,11 @@ has_field 'delete_time' => (
     deflate_method => \&deflate_delete_time,
 );
 
-has_field 'name' => ( type => 'Text', required => 1, );
+has_field 'name' => (type => 'Text', required => 1,);
 has_field 'work_stoppage_type' => (
-    type => 'Select',
-    label => 'Labor Action Type',
-    required => 1,
+    type         => 'Select',
+    label        => 'Labor Action Type',
+    required     => 1,
     empty_select => '-- Select One --',
 );
 
@@ -127,12 +128,14 @@ sub options_work_stoppage_type {
     return $self->schema->resultset('WorkStoppageType')->form_options;
 }
 
-has_field 'description'         => (type => 'TextArea', element_wrapper_class => ['col-lg-10'], apply => [Printable, NotAllDigits],);
+has_field 'description' => (
+    type => 'TextArea', element_wrapper_class => ['col-lg-10'],
+);
 has_field 'start_date' => (
     type            => 'Date',
     label           => 'Start Date',
     html5_type_attr => 'date',
-    required => 1,
+    required        => 1,
 );
 has_field 'end_date' => (
     type            => 'Date',
@@ -152,9 +155,8 @@ has_field 'submit' => (
     type          => 'Submit',
     widget        => 'ButtonTag',
     value         => 'Save',
-    element_class => [ 'btn', 'btn-primary' ],
+    element_class => ['btn', 'btn-primary'],
 );
-
 
 __PACKAGE__->meta->make_immutable;
 

@@ -70,7 +70,9 @@ has_field 'book_value'   => (type => 'Integer',);
 has_field 'cost_basis'   => (type => 'Integer',);
 has_field 'depreciation' => (type => 'Integer',);
 has_field 'value'        => (type => 'Integer',);
-has_field 'description'  => (type => 'Text',);
+has_field 'description' => (
+    type => 'TextArea', element_wrapper_class => ['col-lg-10'],
+);
 
 has_field 'rm_element' => (
     type          => 'Display',

@@ -1,7 +1,7 @@
 package EmpireLogistics::Form::Register;
 
 use HTML::FormHandler::Moose;
-use HTML::FormHandler::Types ( 'NoSpaces', 'Printable', 'NotAllDigits' );
+use HTML::FormHandler::Types ( 'NoSpaces', 'PrintableAndNewline', 'NotAllDigits' );
 use MooseX::Types::Common::String ('StrongPassword');
 use namespace::autoclean;
 extends 'EmpireLogistics::Form::Base';
@@ -24,7 +24,7 @@ has_field 'email' => (
 );
 has_field 'password' => (
     type      => 'Password',
-    apply     => [ NoSpaces, Printable, NotAllDigits, StrongPassword ],
+    apply     => [ NoSpaces, PrintableAndNewline, NotAllDigits, StrongPassword ],
     minlength => 8,
     required  => 1,
 );

@@ -1,7 +1,7 @@
 package EmpireLogistics::Form::Admin::Warehouse;
 
 use HTML::FormHandler::Moose;
-use HTML::FormHandler::Types ( 'Printable', 'NotAllDigits' );
+use HTML::FormHandler::Types ('PrintableAndNewline', 'NotAllDigits');
 use namespace::autoclean;
 extends 'EmpireLogistics::Form::BaseDB';
 with 'EmpireLogistics::Role::Form::Util';
@@ -128,7 +128,9 @@ sub options_owner {
     my $self = shift;
     return $self->schema->resultset('WarehouseOwner')->form_options;
 }
-has_field 'description'         => (type => 'TextArea', element_wrapper_class => ['col-lg-10'], apply => [Printable, NotAllDigits],);
+has_field 'description' =>
+    (type => 'TextArea', element_wrapper_class => ['col-lg-10'],
+);
 has_field 'area' => (type => 'Integer', label => 'Area (square feet)');
 has_field 'submit' => (
     type          => 'Submit',

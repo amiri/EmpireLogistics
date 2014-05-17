@@ -52,11 +52,13 @@ has_field 'delete_time' => (
 );
 
 has_field 'year' => (type => 'Year', empty_select => '-- Select One --',);
-has_field 'amount_received' => (type => 'Integer');
-has_field 'book_value' => (type => 'Integer');
-has_field 'cost' => (type => 'Integer');
+has_field 'amount_received'   => (type => 'Integer');
+has_field 'book_value'        => (type => 'Integer');
+has_field 'cost'              => (type => 'Integer');
 has_field 'gross_sales_price' => (type => 'Integer');
-has_field 'description' => (type => 'TextArea');
+has_field 'description' => (
+    type => 'TextArea', element_wrapper_class => ['col-lg-10'],
+);
 
 has_field 'rm_element' => (
     type          => 'Display',
@@ -85,5 +87,4 @@ no HTML::FormHandler::Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
-
 

@@ -1,14 +1,15 @@
 package EmpireLogistics::Form::Admin::User;
 
 use HTML::FormHandler::Moose;
-use HTML::FormHandler::Types ( 'NoSpaces', 'Printable', 'NotAllDigits' );
+use HTML::FormHandler::Types ('NoSpaces', 'PrintableAndNewline',
+    'NotAllDigits');
 use MooseX::Types::Common::String ('StrongPassword');
 use namespace::autoclean;
 extends 'EmpireLogistics::Form::BaseDB';
 with 'EmpireLogistics::Role::Form::Util';
 
-has '+name'       => ( default => 'user-form' );
-has '+item_class' => ( default => 'User' );
+has '+name'       => (default => 'user-form');
+has '+item_class' => (default => 'User');
 
 sub build_render_list {
     return [
@@ -50,12 +51,14 @@ has_block 'text_block' => (
 
 has_block 'notes_block' => (
     tag => 'fieldset',
+
     #class => ['col-md-6'],
     label       => 'Notes',
     render_list => ['notes'],
 );
 has_block 'description_block' => (
     tag => 'fieldset',
+
     #class => ['col-md-6'],
     label       => 'Description',
     render_list => ['description'],
@@ -96,19 +99,21 @@ has_field 'email' => (
 );
 has_field 'password' => (
     type      => 'Password',
-    widget => 'Text',
-    apply     => [ NoSpaces, Printable, NotAllDigits, StrongPassword ],
+    widget    => 'Text',
+    apply     => [NoSpaces, PrintableAndNewline, NotAllDigits, StrongPassword],
     minlength => 8,
-    noupdate => 1,
+    noupdate  => 1,
 );
 has_field 'nickname' => (
     type     => 'Text',
     required => 1,
     label    => "Display Name",
 );
-has_field 'description'         => (type => 'TextArea', element_wrapper_class => ['col-lg-10'], apply => [Printable, NotAllDigits],);
-has_field 'notes'       => ( type => 'TextArea', );
-has_field 'roles'       => (
+has_field 'description' => (
+    type => 'TextArea', element_wrapper_class => ['col-lg-10'],
+);
+has_field 'notes' => (type => 'TextArea',);
+has_field 'roles' => (
     type   => 'Multiple',
     widget => 'CheckboxGroup',
 );
@@ -116,12 +121,12 @@ has_field 'submit' => (
     type          => 'Submit',
     widget        => 'ButtonTag',
     value         => 'Save',
-    element_class => [ 'btn', 'btn-primary' ],
+    element_class => ['btn', 'btn-primary'],
 );
 
 sub options_roles {
     my $self = shift;
-    my @options = map { { label => ucfirst( $_->name ), value => $_->id } }
+    my @options = map { {label => ucfirst($_->name), value => $_->id} }
         $self->schema->resultset("Role")->all;
     return \@options;
 }

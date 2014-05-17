@@ -1,7 +1,7 @@
 package EmpireLogistics::Form::Admin::WarehouseOwner;
 
 use HTML::FormHandler::Moose;
-use HTML::FormHandler::Types ( 'Printable', 'NotAllDigits' );
+use HTML::FormHandler::Types ( 'PrintableAndNewline', 'NotAllDigits' );
 use namespace::autoclean;
 extends 'EmpireLogistics::Form::BaseDB';
 with 'EmpireLogistics::Role::Form::Util';
@@ -40,7 +40,7 @@ has_field 'name' => (
     type     => 'Text',
     label    => 'Name',
     required => 1,
-    apply    => [ Printable, NotAllDigits ],
+    apply    => [ PrintableAndNewline, NotAllDigits ],
 );
 has_field 'submit' => (
     type          => 'Submit',
