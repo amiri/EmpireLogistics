@@ -161,7 +161,7 @@ has_block 'overview_block' => (
     #class       => ['col-md-6'],
     label       => 'Overview',
     render_list => [
-        'port_name',        'harbor_size',
+        'port_name',        'country', 'harbor_size',
         'harbor_type',      'channel_depth',
         'cargo_pier_depth', 'anchor_depth',
         'oil_terminal_depth',
