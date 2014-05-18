@@ -33,11 +33,11 @@ has 'js_files' => (
 sub build_render_list {
     return [
         'metadata_block', 'basic_block', 'location_block',
-        'relations_block',
+        'relations_block','offloading_block',
         'restrictions_block', 'pilotage_block',      'tugs_block',
         'quarantine_block',   'communication_block', 'facilities_block',
         'cranes_block',       'services_block',      'supplies_block',
-        'tonnage_block',
+        'tonnage_block', 
         'submit',
     ];
 }
