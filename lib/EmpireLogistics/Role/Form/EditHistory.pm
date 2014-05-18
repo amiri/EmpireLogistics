@@ -165,6 +165,12 @@ sub get_edit_history {
             }
             $row->{original_value}
                 = $edit_field->get_column('original_value');
+            if ( lc $row->{field_name} eq 'description' ) {
+                $row->{original_value} =
+                    length($row->{original_value}) > 50
+                    ? substr($row->{original_value}, 0, 50) . "..."
+                    : $row->{original_value};
+            }
 
             if (   $self->field($accessor)
                 && $self->field($accessor)->type_attr eq 'checkbox' )
