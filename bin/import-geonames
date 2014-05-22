@@ -6,3 +6,5 @@ psql -U postgres -q -d $DB < etc/schema/create_geonames.sql
 
 zcat etc/data/country_state_city_postal_codes.sql.gz | psql -U postgres -q -d $DB
 for tbl in `psql -U postgres -qAt -c "select tablename from pg_tables where schemaname = 'public';" $DB` ; do psql -U postgres -q -c "alter table \"$tbl\" owner to el" $DB ; done
+
+psql -U el -q -d $DB < etc/schema/geonames_triggers.sql
