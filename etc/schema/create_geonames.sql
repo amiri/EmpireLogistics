@@ -1,4 +1,13 @@
 
+BEGIN;
+
+-- Alter rail_subdivision_state
+
+ALTER TABLE rail_subdivision_state DROP CONSTRAINT rail_subdivision_state_state_fkey;
+DROP INDEX rail_subdivision_state_state_idx;
+ALTER TABLE rail_subdivision_state ALTER COLUMN state SET DATA TYPE TEXT;
+UPDATE rail_subdivision_state sub SET state = s.abbreviation FROM state s WHERE sub.state = s.id::text;
+
 DROP TABLE IF EXISTS timezone cascade;
 CREATE TABLE timezone (
     id serial not null primary key,
@@ -99,7 +108,7 @@ CREATE TABLE state (
     name_ascii text not null,
     geonameid integer not null,
     alternate_names text,
-    admin1 character varying(20),
+    abbreviation character varying(20),
     country integer not null references country(id) on delete cascade,
     population integer,
     timezone integer not null references timezone(id)
@@ -107,7 +116,7 @@ CREATE TABLE state (
 ALTER TABLE state ADD CONSTRAINT unique_state_country_name UNIQUE (name,country);
 create index on state (name);
 create index on state (name_ascii);
-create index on state (admin1);
+create index on state (abbreviation);
 create index on state (country);
 
 DROP TABLE IF EXISTS city cascade;
@@ -157,3 +166,5 @@ ALTER TABLE postal_code ADD CONSTRAINT unique_postal_code_state_country UNIQUE (
 create index on postal_code(postal_code);
 create index on postal_code(state);
 create index on postal_code(country);
+
+COMMIT;

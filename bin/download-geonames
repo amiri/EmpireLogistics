@@ -286,7 +286,7 @@ SELECT AddGeometryColumn ('public','cities1000','the_geom',900913,'POINT',2);
 UPDATE cities1000 SET the_geom = ST_PointFromText('POINT(' || longitude || ' ' || latitude || ')', 900913);
 CREATE INDEX idx_cities1000_the_geom ON public.cities1000 USING gist(the_geom);
 EOT
-echo "'----- DONE with import"
+echo "----- DONE with import"
 
 psql -U postgres -q -c "grant all privileges on database $DB to el"
 psql -U postgres -q -c "alter database $DB owner to el"
