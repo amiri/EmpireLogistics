@@ -20,4 +20,5 @@ na-rail-*.json
 *.db
 /scratch/*
 Vagrantfile
-/todo.txt
+todo.txt
+/test/*

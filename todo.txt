@@ -21,6 +21,15 @@ done Add rail_line rel to company
 done Add labor_org, company rels to rail-line
 done add port_tonnage field to ports
 
+
+migrate state to new state
+city
+state
+continent
+timezone
+currency
+postalcode
+
 Add country select menu
 Add state select menu
 Change country entries to relations
