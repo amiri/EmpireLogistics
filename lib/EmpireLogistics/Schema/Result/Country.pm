@@ -154,6 +154,11 @@ __PACKAGE__->has_many(
     {order_by => {-desc => "create_time"}},
 );
 
+sub name {
+    my $self = shift;
+    return $self->official_name ? $self->official_name : $self->name;
+}
+
 __PACKAGE__->meta->make_immutable;
 
 1;

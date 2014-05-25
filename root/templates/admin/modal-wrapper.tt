@@ -13,6 +13,7 @@
 <script type='text/javascript' src='/js/admin/edit-history.js'></script>
 <script type='text/javascript' src='/js/modal-ajax-form-submit.js'></script>
 <script type='text/javascript' src='/js/lib/ckeditor/ckeditor.js'></script>
+<script type='text/javascript' src='/js/admin/address.js'></script>
 <script type="text/javascript">
     if ($("#description").length) {
         CKEDITOR.replace("description");

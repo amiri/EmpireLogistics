@@ -31,15 +31,15 @@ __PACKAGE__->add_columns(
   "delete_time",
   { data_type => "timestamp with time zone", is_nullable => 1 },
   "street_address",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "text", is_nullable => 0 },
   "city",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "integer", is_nullable => 1 },
   "state",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "integer", is_nullable => 1 },
   "postal_code",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "integer", is_nullable => 1 },
   "country",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "integer", is_nullable => 0 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->has_many(
@@ -102,6 +102,43 @@ __PACKAGE__->many_to_many(
 );
 __PACKAGE__->many_to_many(
     'warehouses' => 'warehouse_addresses' => 'warehouse',
+);
+
+__PACKAGE__->belongs_to(
+  "country",
+  "EmpireLogistics::Schema::Result::Country",
+  {"foreign.id" => "self.country"},
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
+);
+__PACKAGE__->might_have(
+  "city",
+  "EmpireLogistics::Schema::Result::City",
+  {"foreign.id" => "self.city"},
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
+);
+__PACKAGE__->might_have(
+  "state",
+  "EmpireLogistics::Schema::Result::State",
+  {"foreign.id" => "self.state"},
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
+);
+__PACKAGE__->might_have(
+  "postal_code",
+  "EmpireLogistics::Schema::Result::PostalCode",
+  {"foreign.id" => "self.postal_code"},
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
 );
 
 __PACKAGE__->belongs_to(

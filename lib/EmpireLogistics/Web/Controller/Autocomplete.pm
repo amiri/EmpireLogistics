@@ -494,6 +494,239 @@ sub post_labor_organization_payees_ids : Chained('base')
     $c->stash->{json_data} = \@options;
 }
 
+sub post_country : Chained('base') PathPart('country') Args(0) POST {
+    my ($self, $c) = @_;
+    return unless $c->req->is_xhr;
+    my $prefix     = lc $c->req->param('q');
+    my $country_rs = $c->model('DB::Country')->active->search(
+        {
+            -or => [
+                {name                => {-ilike => '%' . $prefix . '%'}},
+                {official_name       => {-ilike => '%' . $prefix . '%'}},
+                {official_name_ascii => {-ilike => '%' . $prefix . '%'}},
+                {iso_alpha2          => {-ilike => '%' . $prefix . '%'}},
+                {iso_alpha3          => {-ilike => '%' . $prefix . '%'}},
+                {alternate_names     => {-ilike => '%' . $prefix . '%'}},
+
+      #{'country_affiliation_parents.country.name'=> {-ilike => $prefix . '%'}},
+            ]
+        }, {
+            order_by => ['name', 'official_name', 'official_name_ascii'],
+        }
+    );
+    my @country_options;
+    while (my $country = $country_rs->next) {
+        push @country_options, {
+            text => $country->official_name,
+            id   => $country->id,
+            };
+    }
+    my $results = {
+        results => \@country_options,
+        more    => 0,
+        context => {id => '123'},
+    };
+    $c->stash->{json_data} = $results;
+}
+
+sub post_country_ids : Chained('base') PathPart('country-ids') Args(0) POST {
+    my ($self, $c) = @_;
+    return unless $c->req->is_xhr;
+    my $query = $c->req->param('q');
+    my @ids = split(',', $query);
+    my @options;
+    foreach my $id (@ids) {
+        my $country = $c->model('DB::Country')->active->find({id => $id});
+        next unless $country;
+        push @options, {id => $id, text => $country->full_name};
+    }
+    $c->stash->{json_data} = \@options;
+}
+
+sub post_state : Chained('base') PathPart('state') Args(0) POST {
+    my ($self, $c) = @_;
+    return unless $c->req->is_xhr;
+    my $prefix   = lc $c->req->param('q');
+    my $state_rs = $c->model('DB::State')->active->search(
+        {
+            -or => [
+                {name            => {-ilike => '%' . $prefix . '%'}},
+                {name_ascii      => {-ilike => '%' . $prefix . '%'}},
+                {alternate_names => {-ilike => '%' . $prefix . '%'}},
+
+          #{'state_affiliation_parents.state.name'=> {-ilike => $prefix . '%'}},
+            ]
+        }, {
+            order_by => ['name', 'name_ascii'],
+        }
+    );
+    my @state_options;
+    while (my $state = $state_rs->next) {
+        push @state_options, {
+            text => $state->name,
+            id   => $state->id,
+            };
+    }
+    my $results = {
+        results => \@state_options,
+        more    => 0,
+        context => {id => '123'},
+    };
+    $c->stash->{json_data} = $results;
+}
+
+sub post_state_ids : Chained('base') PathPart('state-ids') Args(0) POST {
+    my ($self, $c) = @_;
+    return unless $c->req->is_xhr;
+    my $query = $c->req->param('q');
+    my @ids = split(',', $query);
+    my @options;
+    foreach my $id (@ids) {
+        my $state = $c->model('DB::State')->active->find({id => $id});
+        next unless $state;
+        push @options, {id => $id, text => $state->full_name};
+    }
+    $c->stash->{json_data} = \@options;
+}
+
+sub post_city : Chained('base') PathPart('city') Args(0) POST {
+    my ($self, $c) = @_;
+    return unless $c->req->is_xhr;
+    my $prefix  = lc $c->req->param('q');
+    my $city_rs = $c->model('DB::City')->active->search(
+        {
+            -or => [
+                {name            => {-ilike => '%' . $prefix . '%'}},
+                {name_ascii      => {-ilike => '%' . $prefix . '%'}},
+                {alternate_names => {-ilike => '%' . $prefix . '%'}},
+
+            #{'city_affiliation_parents.city.name'=> {-ilike => $prefix . '%'}},
+            ]
+        }, {
+            order_by => ['name', 'name_ascii'],
+        }
+    );
+    my @city_options;
+    while (my $city = $city_rs->next) {
+        push @city_options, {
+            text => $city->name,
+            id   => $city->id,
+            };
+    }
+    my $results = {
+        results => \@city_options,
+        more    => 0,
+        context => {id => '123'},
+    };
+    $c->stash->{json_data} = $results;
+}
+
+sub post_city_ids : Chained('base') PathPart('city-ids') Args(0) POST {
+    my ($self, $c) = @_;
+    return unless $c->req->is_xhr;
+    my $query = $c->req->param('q');
+    my @ids = split(',', $query);
+    my @options;
+    foreach my $id (@ids) {
+        my $city = $c->model('DB::City')->active->find({id => $id});
+        next unless $city;
+        push @options, {id => $id, text => $city->full_name};
+    }
+    $c->stash->{json_data} = \@options;
+}
+
+sub post_postal_codes : Chained('base') PathPart('postal-code') Args(0) POST {
+    my ($self, $c) = @_;
+    return unless $c->req->is_xhr;
+    my $prefix         = lc $c->req->param('q');
+    my $postal_code_rs = $c->model('DB::PostalCode')->active->search(
+        {
+            -or => [
+                {postal_code => {-ilike => '%' . $prefix . '%'}},
+
+            #{'city_affiliation_parents.city.name'=> {-ilike => $prefix . '%'}},
+            ]
+        }, {
+            order_by => ['postal_code'],
+        }
+    );
+    my @postal_code_options;
+    while (my $postal_code = $postal_code_rs->next) {
+        push @postal_code_options, {
+            text => $postal_code->name,
+            id   => $postal_code->id,
+            };
+    }
+    my $results = {
+        results => \@postal_code_options,
+        more    => 0,
+        context => {id => '123'},
+    };
+    $c->stash->{json_data} = $results;
+}
+
+sub post_postal_code_ids : Chained('base')
+    PathPart('postal-code-ids') Args(0) POST {
+    my ($self, $c) = @_;
+    return unless $c->req->is_xhr;
+    my $query = $c->req->param('q');
+    my @ids = split(',', $query);
+    my @options;
+    foreach my $id (@ids) {
+        my $postal_code =
+            $c->model('DB::PostalCode')->active->find({id => $id});
+        next unless $postal_code;
+        push @options, {id => $id, text => $postal_code->postal_code};
+    }
+    $c->stash->{json_data} = \@options;
+}
+
+sub state_options : Chained('base') PathPart('state-options') Args(0) POST {
+    my ($self, $c) = @_;
+    return unless $c->req->is_xhr;
+    my $country_id = $c->req->param('country');
+    return unless $country_id;
+    my $state_rs =
+        $c->model('DB::State')->search({country => $country_id})->active;
+    my @state_options = ();
+    while (my $state = $state_rs->next) {
+        push @state_options, {
+            text => $state->name,
+            id   => $state->id,
+            };
+    }
+    $c->stash->{json_data} = \@state_options;
+}
+
+sub city_and_postal_options : Chained('base')
+    PathPart('city-and-postal-options') Args(0) POST {
+    my ($self, $c) = @_;
+    return unless $c->req->is_xhr;
+    my $state_id = $c->req->param('state');
+    return unless $state_id;
+    my $city_rs = $c->model('DB::City')->search({state => $state_id})->active;
+    my $postal_code_rs =
+        $c->model('DB::PostalCode')->search({state => $state_id})->active;
+    my @city_options = ();
+    while (my $city = $city_rs->next) {
+        push @city_options, {
+            text => $city->name,
+            id   => $city->id,
+        };
+    }
+    my @postal_options = ();
+    while (my $postal_code = $postal_code_rs->next) {
+        push @postal_options, {
+            text => $postal_code->postal_code,
+            id   => $postal_code->id,
+        };
+    }
+    $c->stash->{json_data} = {
+        city   => \@city_options,
+        postal => \@postal_options,
+    };
+}
+
 
 __PACKAGE__->meta->make_immutable;
 

@@ -233,7 +233,7 @@ var railLinesOptions = {
                 dataType: "json",
                 method: 'POST'
             }).done(function(data) {
-                callback(data);
+    callback(data);
             });
         }
     }

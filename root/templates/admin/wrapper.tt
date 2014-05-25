@@ -6,6 +6,7 @@
 [% c.add_jsfile('/js/lib/dataTables.bootstrap.js') %]
 [% c.add_jsfile('/js/lib/dataTables.num-html-sort.js') %]
 [% c.add_jsfile('/js/lib/ckeditor/ckeditor.js') %]
+[% c.add_jsfile('/js/admin/address.js') %]
 <h1>Administration</h1>
 <div class="row">
     <div class="col-md-2" id="admin-nav">

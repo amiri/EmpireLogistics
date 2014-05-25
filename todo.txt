@@ -20,18 +20,20 @@ done Add rail_line to labor_organization
 done Add rail_line rel to company
 done Add labor_org, company rels to rail-line
 done add port_tonnage field to ports
+done migrate state to new state
+done city
+done state
+done continent
+done timezone
+done currency
+done postalcode
+done Add country select menu
+done Add state select menu
+done Add city select menu
+done Add postal-code select menu
+done Change port: belongs_to_country, country relation
 
 
-migrate state to new state
-city
-state
-continent
-timezone
-currency
-postalcode
+Change address: belongs_to country, street_address required, country, city, state, postal_code relations
 
-Add country select menu
-Add state select menu
-Change country entries to relations
-Change state entries to relations
 Add media to all major elements

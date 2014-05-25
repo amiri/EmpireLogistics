@@ -33,7 +33,7 @@ __PACKAGE__->add_columns(
   "port_name",
   { data_type => "text", is_nullable => 1 },
   "country",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "integer", is_nullable => 0 },
   "harbor_size",
   { data_type => "text", is_nullable => 1 },
   "harbor_type",
@@ -238,6 +238,15 @@ __PACKAGE__->has_many(
   },
 );
 
+__PACKAGE__->belongs_to(
+  "country",
+  "EmpireLogistics::Schema::Result::Country",
+  {"foreign.id" => "self.country"},
+  {
+	where => { "me.delete_time" => undef },
+	cascade_copy => 0, cascade_delete => 0
+  },
+);
 
 __PACKAGE__->belongs_to(
     "object_type" =>
