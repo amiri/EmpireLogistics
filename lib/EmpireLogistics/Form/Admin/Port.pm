@@ -37,7 +37,7 @@ sub build_render_list {
         'restrictions_block', 'pilotage_block',      'tugs_block',
         'quarantine_block',   'communication_block', 'facilities_block',
         'cranes_block',       'services_block',      'supplies_block',
-        'tonnage_block', 
+        'tonnage_block',
         'submit',
     ];
 }
@@ -334,7 +334,7 @@ has_field 'eta_message' => (type => 'Boolean',
 has_field 'longitude' => (type => 'Text', required => 1,);
 has_field 'latitude'  => (type => 'Text', required => 1,);
 has_field 'geometry'  => (type => 'Text', disabled => 1, readonly => 1,);
-has_field 'country' => (type => 'Text',);
+has_field 'country' => (type => '+Country',);
 
 # Restrictions
 has_field 'entry_tide_restriction' =>

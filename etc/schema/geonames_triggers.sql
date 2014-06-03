@@ -8,15 +8,6 @@ create trigger update_time before update on state for each row execute procedure
 create trigger update_time before update on city for each row execute procedure update_timestamp();
 create trigger update_time before update on postal_code for each row execute procedure update_timestamp();
 
-insert into object_type (name) values
-      ('timezone')
-    , ('continent')
-    , ('currency')
-    , ('country')
-    , ('city')
-    , ('postal_code')
-;
-
 
 -- Alter rail_subdivision_state
 

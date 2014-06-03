@@ -33,13 +33,13 @@ __PACKAGE__->add_columns(
   "street_address",
   { data_type => "text", is_nullable => 0 },
   "city",
-  { data_type => "integer", is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "state",
-  { data_type => "integer", is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "postal_code",
-  { data_type => "integer", is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "country",
-  { data_type => "integer", is_nullable => 0 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->has_many(
@@ -79,6 +79,12 @@ __PACKAGE__->has_many(
   },
 );
 __PACKAGE__->has_many(
+  "rail_node_addresses",
+  "EmpireLogistics::Schema::Result::RailNodeAddress",
+  { "foreign.address" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->has_many(
   "warehouse_addresses",
   "EmpireLogistics::Schema::Result::WarehouseAddress",
   { "foreign.address" => "self.id" },
@@ -105,39 +111,49 @@ __PACKAGE__->many_to_many(
 );
 
 __PACKAGE__->belongs_to(
-  "country",
-  "EmpireLogistics::Schema::Result::Country",
-  {"foreign.id" => "self.country"},
-  {
-	where => { "me.delete_time" => undef },
-	cascade_copy => 0, cascade_delete => 0
-  },
-);
-__PACKAGE__->might_have(
   "city",
   "EmpireLogistics::Schema::Result::City",
-  {"foreign.id" => "self.city"},
+  { id => "city" },
   {
+    is_deferrable => 0,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "NO ACTION",
 	where => { "me.delete_time" => undef },
-	cascade_copy => 0, cascade_delete => 0
   },
 );
-__PACKAGE__->might_have(
+__PACKAGE__->belongs_to(
   "state",
   "EmpireLogistics::Schema::Result::State",
-  {"foreign.id" => "self.state"},
+  { id => "state" },
   {
+    is_deferrable => 0,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "NO ACTION",
 	where => { "me.delete_time" => undef },
-	cascade_copy => 0, cascade_delete => 0
   },
 );
-__PACKAGE__->might_have(
+__PACKAGE__->belongs_to(
   "postal_code",
   "EmpireLogistics::Schema::Result::PostalCode",
-  {"foreign.id" => "self.postal_code"},
+  { id => "postal_code" },
   {
+    is_deferrable => 0,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "NO ACTION",
 	where => { "me.delete_time" => undef },
-	cascade_copy => 0, cascade_delete => 0
+  },
+);
+__PACKAGE__->belongs_to(
+  "country",
+  "EmpireLogistics::Schema::Result::Country",
+  { id => "country" },
+  {
+    on_delete     => "CASCADE",
+    on_update     => "NO ACTION",
+	where => { "me.delete_time" => undef },
   },
 );
 

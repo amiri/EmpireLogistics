@@ -48,6 +48,12 @@ __PACKAGE__->add_unique_constraint(
   "unique_postal_code_state_country",
   ["postal_code", "state", "country"],
 );
+__PACKAGE__->has_many(
+  "addresses",
+  "EmpireLogistics::Schema::Result::Address",
+  { "foreign.postal_code" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
 __PACKAGE__->belongs_to(
   "country",
   "EmpireLogistics::Schema::Result::Country",

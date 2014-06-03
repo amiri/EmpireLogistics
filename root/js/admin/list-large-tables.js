@@ -23,6 +23,15 @@ $(document).ready(function() {
                     el['mRender'] = function(data, type, row) {
                         return null;
                     };
+                }
+                else if (el.mData === 'country') {
+                    el['mRender'] = function(data, type, row) {
+                        if (data) {
+                            return '<a href="' + row.edit_url + '">' + data.iso_alpha2 + '</a>';
+                        } else {
+                            return '';
+                        }
+                    };
                 } else {
                     el['mRender'] = function(data, type, row) {
                         if (data) {
@@ -53,7 +62,7 @@ $(document).ready(function() {
                         }
                     });
                 }
-            });
+            }).fnSetFilteringDelay(500);
         }
     });
 });

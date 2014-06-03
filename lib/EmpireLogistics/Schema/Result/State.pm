@@ -46,13 +46,10 @@ __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("unique_state_country_name", ["name", "country"]);
 
 __PACKAGE__->has_many(
-    "rail_subdivision_states",
-    "EmpireLogistics::Schema::Result::RailSubdivisionState",
-    {"foreign.state" => "self.id"},
-    {
-        where => {"me.delete_time" => undef},
-        cascade_copy => 0, cascade_delete => 0
-    },
+  "addresses",
+  "EmpireLogistics::Schema::Result::Address",
+  { "foreign.state" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 __PACKAGE__->has_many(
   "cities",
@@ -69,6 +66,12 @@ __PACKAGE__->belongs_to(
 __PACKAGE__->has_many(
   "postal_codes",
   "EmpireLogistics::Schema::Result::PostalCode",
+  { "foreign.state" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->has_many(
+  "rail_subdivision_states",
+  "EmpireLogistics::Schema::Result::RailSubdivisionState",
   { "foreign.state" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );

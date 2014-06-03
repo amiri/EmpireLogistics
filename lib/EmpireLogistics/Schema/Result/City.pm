@@ -64,6 +64,12 @@ __PACKAGE__->add_columns(
   { data_type => "geometry", is_nullable => 1, size => "12544,3519" },
 );
 __PACKAGE__->set_primary_key("id");
+__PACKAGE__->has_many(
+  "addresses",
+  "EmpireLogistics::Schema::Result::Address",
+  { "foreign.city" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
 __PACKAGE__->belongs_to(
   "country",
   "EmpireLogistics::Schema::Result::Country",

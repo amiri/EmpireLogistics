@@ -17,7 +17,7 @@ jQuery(function($) {
                     "sPaginationType": "bootstrap",
                     "aaSorting": [[0, "desc"]],
                     "bDestroy": true
-                });
+                }).fnSetFilteringDelay(500);
                 if ($('#affiliates, #affiliations').length && typeof affiliationsOptions !== 'undefined') {
                     $('#affiliates, #affiliations').select2(affiliationsOptions);
                 }

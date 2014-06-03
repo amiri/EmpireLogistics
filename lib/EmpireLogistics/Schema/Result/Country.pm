@@ -79,6 +79,12 @@ __PACKAGE__->add_unique_constraint("unique_country_name_tld", ["name", "tld"]);
 __PACKAGE__->add_unique_constraint("unique_country_official_name", ["official_name"]);
 __PACKAGE__->add_unique_constraint("unique_country_official_name_ascii", ["official_name_ascii"]);
 __PACKAGE__->has_many(
+  "addresses",
+  "EmpireLogistics::Schema::Result::Address",
+  { "foreign.country" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->has_many(
   "cities",
   "EmpireLogistics::Schema::Result::City",
   { "foreign.country" => "self.id" },
@@ -100,6 +106,12 @@ __PACKAGE__->belongs_to(
     on_delete     => "CASCADE",
     on_update     => "NO ACTION",
   },
+);
+__PACKAGE__->has_many(
+  "ports",
+  "EmpireLogistics::Schema::Result::Port",
+  { "foreign.country" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 __PACKAGE__->has_many(
   "postal_codes",

@@ -534,13 +534,15 @@ sub post_country_ids : Chained('base') PathPart('country-ids') Args(0) POST {
     return unless $c->req->is_xhr;
     my $query = $c->req->param('q');
     my @ids = split(',', $query);
+    $c->log->warn("In posr country ids: ", @ids);
     my @options;
     foreach my $id (@ids) {
+        $c->log->warn("Looping through ids");
         my $country = $c->model('DB::Country')->active->find({id => $id});
         next unless $country;
-        push @options, {id => $id, text => $country->full_name};
+        push @options, {id => $id, text => $country->name};
     }
-    $c->stash->{json_data} = \@options;
+    $c->stash->{json_data} = scalar(@options) == 0 ? {} : scalar(@options) > 1 ? \@options : $options[0];
 }
 
 sub post_state : Chained('base') PathPart('state') Args(0) POST {
@@ -584,9 +586,9 @@ sub post_state_ids : Chained('base') PathPart('state-ids') Args(0) POST {
     foreach my $id (@ids) {
         my $state = $c->model('DB::State')->active->find({id => $id});
         next unless $state;
-        push @options, {id => $id, text => $state->full_name};
+        push @options, {id => $id, text => $state->name};
     }
-    $c->stash->{json_data} = \@options;
+    $c->stash->{json_data} = scalar(@options) == 0 ? {} : scalar(@options) > 1 ? \@options : $options[0];
 }
 
 sub post_city : Chained('base') PathPart('city') Args(0) POST {
@@ -630,9 +632,9 @@ sub post_city_ids : Chained('base') PathPart('city-ids') Args(0) POST {
     foreach my $id (@ids) {
         my $city = $c->model('DB::City')->active->find({id => $id});
         next unless $city;
-        push @options, {id => $id, text => $city->full_name};
+        push @options, {id => $id, text => $city->name};
     }
-    $c->stash->{json_data} = \@options;
+    $c->stash->{json_data} = scalar(@options) == 0 ? {} : scalar(@options) > 1 ? \@options : $options[0];
 }
 
 sub post_postal_codes : Chained('base') PathPart('postal-code') Args(0) POST {
@@ -653,7 +655,7 @@ sub post_postal_codes : Chained('base') PathPart('postal-code') Args(0) POST {
     my @postal_code_options;
     while (my $postal_code = $postal_code_rs->next) {
         push @postal_code_options, {
-            text => $postal_code->name,
+            text => $postal_code->postal_code,
             id   => $postal_code->id,
             };
     }
@@ -678,7 +680,7 @@ sub post_postal_code_ids : Chained('base')
         next unless $postal_code;
         push @options, {id => $id, text => $postal_code->postal_code};
     }
-    $c->stash->{json_data} = \@options;
+    $c->stash->{json_data} = scalar(@options) == 0 ? {} : scalar(@options) > 1 ? \@options : $options[0];
 }
 
 sub state_options : Chained('base') PathPart('state-options') Args(0) POST {

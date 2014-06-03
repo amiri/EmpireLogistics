@@ -3,6 +3,6 @@ $(document).ready(function() {
         "sPaginationType": "bootstrap",
         "aaSorting": [[0, "desc"]],
         "bDestroy": true
-    });
+    }).fnSetFilteringDelay(500);
 });
 

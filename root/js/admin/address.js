@@ -30,6 +30,7 @@ var countryOptions = {
                 dataType: "json",
                 method: 'POST'
             }).done(function(data) {
+                console.log(data);
                 callback(data);
             });
         }

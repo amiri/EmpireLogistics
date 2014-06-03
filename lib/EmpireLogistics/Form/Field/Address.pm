@@ -47,14 +47,14 @@ has_field 'delete_time' => (
     inflate_method => \&inflate_delete_time,
 );
 has_field 'street_address' => (type => 'Text',);
-has_field 'country'        => (type => 'Text',);
-has_field 'state'          => (type => 'Text',);
-has_field 'city'           => (type => 'Text',);
-has_field 'postal_code'    => (type => 'Text',);
-#has_field 'country'        => (type => '+Country',);
-#has_field 'state'          => (type => '+State',);
-#has_field 'city'           => (type => '+City',);
-#has_field 'postal_code'    => (type => '+PostalCode',);
+#has_field 'country'        => (type => 'Text',);
+#has_field 'state'          => (type => 'Text',);
+#has_field 'city'           => (type => 'Text',);
+#has_field 'postal_code'    => (type => 'Text',);
+has_field 'country'        => (type => '+Country',);
+has_field 'state'          => (type => '+State',);
+has_field 'city'           => (type => '+City',);
+has_field 'postal_code'    => (type => '+PostalCode',);
 has_field 'rm_element'     => (
     type          => 'Display',
     label         => "Remove and Delete",

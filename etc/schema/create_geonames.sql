@@ -127,7 +127,7 @@ CREATE TABLE city (
     delete_time timestamptz default null,
     name text not null,
     name_ascii text,
-    geonameid integer not null,
+    geonameid integer,
     alternate_names text,
     latitude double precision,
     longitude double precision,

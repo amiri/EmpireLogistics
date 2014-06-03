@@ -5,6 +5,6 @@ $(document).ready(function() {
             "sType": "num-html",
             "aTargets": [0]
         }]
-    });
+    }).fnSetFilteringDelay(500);
 });
 
