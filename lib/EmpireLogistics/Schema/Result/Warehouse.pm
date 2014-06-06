@@ -86,6 +86,12 @@ __PACKAGE__->has_many(
   },
 );
 __PACKAGE__->has_many(
+  "warehouse_medias",
+  "EmpireLogistics::Schema::Result::WarehouseMedia",
+  { "foreign.warehouse" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->has_many(
   "warehouse_walmarts",
   "EmpireLogistics::Schema::Result::WarehouseWalmart",
   { "foreign.warehouse" => "self.id" },
@@ -116,6 +122,7 @@ __PACKAGE__->many_to_many(
 __PACKAGE__->many_to_many(
     'work_stoppages' => 'warehouse_work_stoppages', 'work_stoppage'
 );
+__PACKAGE__->many_to_many("medias", "warehouse_medias", "media");
 __PACKAGE__->belongs_to(
     "owner",
     "EmpireLogistics::Schema::Result::WarehouseOwner",

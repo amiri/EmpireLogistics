@@ -82,6 +82,13 @@ __PACKAGE__->has_many(
         cascade_delete => 0,
     },
 );
+__PACKAGE__->has_many(
+  "rail_node_medias",
+  "EmpireLogistics::Schema::Result::RailNodeMedia",
+  { "foreign.rail_node" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->many_to_many("medias", "rail_node_medias", "media");
 
 __PACKAGE__->many_to_many(
     'companies' => 'company_rail_nodes', 'company',

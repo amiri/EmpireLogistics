@@ -47,6 +47,27 @@ __PACKAGE__->add_columns(
 );
 __PACKAGE__->set_primary_key("id");
 
+__PACKAGE__->has_many(
+  "port_medias",
+  "EmpireLogistics::Schema::Result::PortMedia",
+  { "foreign.media" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->has_many(
+  "rail_node_medias",
+  "EmpireLogistics::Schema::Result::RailNodeMedia",
+  { "foreign.media" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->has_many(
+  "warehouse_medias",
+  "EmpireLogistics::Schema::Result::WarehouseMedia",
+  { "foreign.media" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->many_to_many("ports", "port_medias", "port");
+__PACKAGE__->many_to_many("rail_nodes", "rail_node_medias", "rail_node");
+__PACKAGE__->many_to_many("warehouses", "warehouse_medias", "warehouse");
 
 
 

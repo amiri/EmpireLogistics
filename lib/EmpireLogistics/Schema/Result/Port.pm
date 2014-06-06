@@ -220,6 +220,12 @@ __PACKAGE__->has_many(
     },
 );
 __PACKAGE__->has_many(
+  "port_medias",
+  "EmpireLogistics::Schema::Result::PortMedia",
+  { "foreign.port" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->has_many(
   "port_tonnages",
   "EmpireLogistics::Schema::Result::PortTonnage",
   { "foreign.port" => "self.id" },
@@ -247,6 +253,8 @@ __PACKAGE__->belongs_to(
 	cascade_copy => 0, cascade_delete => 0
   },
 );
+
+__PACKAGE__->many_to_many("medias", "port_medias", "media");
 
 __PACKAGE__->belongs_to(
     "object_type" =>
