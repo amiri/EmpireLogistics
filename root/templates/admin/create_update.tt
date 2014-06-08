@@ -3,6 +3,9 @@
 [% FOR js_file IN form.js_files %]
 [% c.add_jsfile(js_file) %]
 [% END %]
+[% FOR stylesheet IN form.stylesheets %]
+[% c.add_stylesheet(stylesheet) %]
+[% END %]
 [% form.render_repeatable_js %]
 [% UNLESS c.req.is_xhr %]
 <h4><a href="/admin">Back to Admin Page</a></h4>

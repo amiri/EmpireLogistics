@@ -1,9 +1,9 @@
 package EmpireLogistics::Schema::Result::Media;
 
-
-
 use Moose;
 use MooseX::MarkAsMethods autoclean => 1;
+use Data::UUID;
+use Image::Magick;
 
 extends 'EmpireLogistics::Schema::Result';
 
@@ -104,6 +104,118 @@ __PACKAGE__->has_many(
     },
     { order_by => { -desc => "create_time" } },
 );
+
+sub uuid {
+    my $self = shift;
+    return Data::UUID->create_from_name($self->id);
+}
+
+sub url {
+    my ($self, $format, %args) = @_;
+    my $secure      = $args{secure} || 0;
+    my $filename    = $args{filename};
+
+    # If a width was passed but not a height, assume it's a
+    # maximum width and calculate a proportional height
+    if ($format) {
+        my ($width, $height) = ($format =~ m%^(\d+)?x(\d+)?$%);
+        if ($width && !$height) {
+            $format = ($self->width && ($width < $self->width)) ?
+                $width . 'x' . $self->inner_height($width) : undef;
+        }
+    }
+
+    $filename ||= $self->uuid;
+
+    my $url = $self->pathname($format) . $self->basename($format);
+
+    return $url;
+}
+
+=head2 pathname
+
+Returns the file path including leading and trailing slashes, but excluding the
+base filename for the media. This is used along with the base filename in URLs,
+on disk, and in S3 keys.
+
+=cut
+
+sub pathname {
+    my ($self, $format) = @_;
+    $format ||= 'original';
+    return "/media/$format/";
+}
+
+=head2 basename
+
+Returns the suggested base filename (e.g., "XXXXXXXX.jpg") for the media. Does
+not include any path or SEO keyword information.
+
+=cut
+
+sub basename {
+    my ($self, $format) = @_;
+    return $self->uuid . '.' . $self->extension($format);
+}
+
+=head2 extension
+
+Returns the preferred extension for the content type of the specified format.
+
+=cut
+
+sub extension {
+    my ($self, $format) = @_;
+    my $content_type = $self->mime_content_type($format);
+    my $extension = $self->_extension_for_content_type($content_type);
+    return $extension;
+}
+
+sub mime_content_type {
+    my ($self, $format) = @_;
+
+    $format ||= 'original';
+
+    # Extension based on the original format content type
+    if ($format eq 'original') {
+        return $self->content_type;
+    }
+
+    # We always convert to JPG for non-original formats
+    return 'image/png';
+}
+
+=head2 _extension_for_content_type
+
+Returns our preferred filename extension given a MIME type.
+
+=cut
+
+my %extension_alternatives = (
+    'jpeg'      => 'jpg',
+    'x-jpeg'    => 'jpg',
+    'pjpeg'     => 'jpg',
+    'x-png'     => 'png',
+    'x-bmp'     => 'bmp',
+    'svg+xml'   => 'svg',
+    'x-svg'     => 'svg',
+    'x-gif'     => 'gif',
+    'x-tiff'    => 'jpg',
+    'tiff'      => 'jpg',
+    'pdf'       => 'pdf',
+);
+
+sub _extension_for_content_type {
+    my $self = shift;
+    my ($content_type) = @_;
+
+    return undef unless($content_type =~ m{^(?:image|application)/(.*)});
+
+    my $extension = $1;
+
+    return $extension_alternatives{$extension} || $extension;
+}
+
 
 __PACKAGE__->meta->make_immutable;
 1;

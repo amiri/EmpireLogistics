@@ -28,6 +28,7 @@ requires "Config::General";
 requires "Crypt::Eksblowfish::Bcrypt";
 requires "Crypt::CBC";
 requires "Crypt::OpenSSL::AES";
+requires "Data::UUID";
 requires "DateTime";
 requires "DateTime::Format::Strptime";
 requires "DateTime::Format::Pg";

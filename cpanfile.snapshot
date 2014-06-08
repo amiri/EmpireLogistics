@@ -1877,6 +1877,13 @@ DISTRIBUTIONS
       Term::ANSIColor 3
       Test::More 0.88
       version 0.77
+  Data-UUID-1.219
+    pathname: R/RJ/RJBS/Data-UUID-1.219.tar.gz
+    provides:
+      Data::UUID 1.219
+    requirements:
+      Digest::MD5 0
+      ExtUtils::MakeMaker 0
   Data-Visitor-0.30
     pathname: D/DO/DOY/Data-Visitor-0.30.tar.gz
     provides:
