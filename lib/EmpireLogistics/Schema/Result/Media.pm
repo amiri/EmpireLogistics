@@ -3,7 +3,10 @@ package EmpireLogistics::Schema::Result::Media;
 use Moose;
 use MooseX::MarkAsMethods autoclean => 1;
 use Data::UUID;
+use IO::All;
+use Try::Tiny;
 use Image::Magick;
+use File::Path qw/make_path/;
 
 extends 'EmpireLogistics::Schema::Result';
 
@@ -30,8 +33,8 @@ __PACKAGE__->add_columns(
   },
   "delete_time",
   { data_type => "timestamp with time zone", is_nullable => 1 },
-  "url",
-  { data_type => "text", is_nullable => 0 },
+  "uuid",
+  { data_type => "uuid", is_nullable => 0, size => 16 },
   "mime_type",
   { data_type => "text", is_nullable => 0 },
   "width",
@@ -46,6 +49,7 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("id");
+__PACKAGE__->add_unique_constraint("unique_uuid", ["uuid"]);
 
 __PACKAGE__->has_many(
   "port_medias",
@@ -105,12 +109,7 @@ __PACKAGE__->has_many(
     { order_by => { -desc => "create_time" } },
 );
 
-sub uuid {
-    my $self = shift;
-    return Data::UUID->create_from_name($self->id);
-}
-
-sub url {
+sub file_url {
     my ($self, $format, %args) = @_;
     my $secure      = $args{secure} || 0;
     my $filename    = $args{filename};
@@ -155,7 +154,7 @@ not include any path or SEO keyword information.
 
 sub basename {
     my ($self, $format) = @_;
-    return $self->uuid . '.' . $self->extension($format);
+    return lc $self->uuid . '.' . $self->extension($format);
 }
 
 =head2 extension
@@ -178,10 +177,10 @@ sub mime_content_type {
 
     # Extension based on the original format content type
     if ($format eq 'original') {
-        return $self->content_type;
+        return $self->mime_type;
     }
 
-    # We always convert to JPG for non-original formats
+    # We always convert to png for non-original formats
     return 'image/png';
 }
 
@@ -209,13 +208,52 @@ sub _extension_for_content_type {
     my $self = shift;
     my ($content_type) = @_;
 
-    return undef unless($content_type =~ m{^(?:image|application)/(.*)});
+    return undef unless ($content_type =~ m{^(?:image|application)/(.*)});
 
     my $extension = $1;
 
     return $extension_alternatives{$extension} || $extension;
 }
 
+sub store_format {
+    my ($self, $format, $rcontent) = @_;
+
+    # Store the media on local disk (always)
+    my $stored_on_disk = $self->store_on_disk($format, $rcontent);
+
+    return $stored_on_disk;
+}
+
+sub store_on_disk {
+    my ($self, $format, $rcontent) = @_;
+
+    my $disk_filename = $self->disk_filename($format);
+
+    return try {
+        io($disk_filename)->binary->print($$rcontent);
+        1;
+    } catch {
+        die "ERROR: Unable to store media on disk: $_";
+        undef;
+    };
+}
+
+sub disk_filename {
+    my ($self, $format) = @_;
+
+    my $srcroot   = EmpireLogistics::Config->srcroot;
+    my $directory = $srcroot . '/root/images' . $self->pathname($format);
+    try {
+        make_path($directory) unless -d $directory;
+    }
+    catch {
+        die "Could not make directory: $_";
+    };
+
+    my $disk_filename = $directory . $self->basename($format);
+    return $disk_filename;
+}
 
 __PACKAGE__->meta->make_immutable;
+
 1;

@@ -1,15 +1,16 @@
 package EmpireLogistics::Form::Admin::Media;
 
 use HTML::FormHandler::Moose;
-use HTML::FormHandler::Types ('NoSpaces', 'PrintableAndNewline', 'NotAllDigits');
+use HTML::FormHandler::Types ('NoSpaces', 'PrintableAndNewline',
+    'NotAllDigits');
 use MooseX::Types::URI qw/FileUri/;
 use namespace::autoclean;
 extends 'EmpireLogistics::Form::BaseDB';
 with 'EmpireLogistics::Role::Form::Util';
 
-has '+name'       => (default => 'media-form');
-has '+item_class' => (default => 'Media');
-has '+enctype' => ( default => 'multipart/form-data');
+has '+name'               => (default => 'media-form');
+has '+item_class'         => (default => 'Media');
+has '+enctype'            => (default => 'multipart/form-data');
 has 'js_files' => (
     is      => 'ro',
     isa     => 'ArrayRef',
@@ -32,7 +33,7 @@ has 'stylesheets' => (
 
 sub build_render_list {
     return [
-        'metadata_block',  'basic_block',   'annotations_block',
+        'metadata_block',  'basic_block', 'annotations_block',
         'relations_block', 'submit',
     ];
 }
@@ -46,24 +47,25 @@ has_block 'metadata_block' => (
 has_block 'basic_block' => (
     tag         => 'fieldset',
     label       => 'Basic Information',
-    render_list => ['file', 'preview', 'url', 'mime_type','width','height'],
+    render_list => ['file', 'preview', 'uuid', 'mime_type', 'width', 'height'],
 );
 
 has_block 'annotations_block' => (
-    tag => 'fieldset',
-    label => 'Annotations',
-    render_list => ['caption','alt','description'],
+    tag         => 'fieldset',
+    label       => 'Annotations',
+    render_list => ['caption', 'alt', 'description'],
 );
 
 has_block 'relations_block' => (
-    tag => 'fieldset',
-    label => 'Relationships',
-    render_list => ['ports','rail_nodes','warehouses'],
+    tag         => 'fieldset',
+    label       => 'Relationships',
+    render_list => ['ports', 'rail_nodes', 'warehouses'],
 );
 
 has_field 'id' => (
-    type     => 'Integer',
-    disabled => 1,
+    type => 'Integer',
+
+    #disabled => 1,
     readonly => 1,
     label    => 'Media ID',
 );
@@ -90,30 +92,33 @@ has_field 'delete_time' => (
 );
 
 has_field 'file' => (
-    label        => 'File',
-    type         => 'Upload',
-    widget       => 'Upload',
-    max_size     => 5242880,
-    min_size     => 1048576,
-    title        => '',
-    element_attr => { 'accept' => 'image/*', "data-ajax-url" => '/admin/media/add-media' },
+    label    => 'File',
+    type     => 'Upload',
+    widget   => 'Upload',
+    max_size => 5242880,
+
+    #min_size     => 524288,
+    title => '',
+    element_attr =>
+        {'accept' => 'image/*', "data-ajax-url" => '/admin/media/add-media'},
 );
 
 has_field 'preview' => (
-    label        => 'Preview',
-    type         => 'Display',
+    label         => 'Preview',
+    type          => 'Display',
     render_method => \&render_preview,
 );
 
 sub render_preview {
-    my $self = shift;
-    my $id = $self->id;
+    my $self  = shift;
+    my $id    = $self->id;
     my $media = $self->parent->item;
-    my $output = qq{<div class="form-group"><label class="col-lg-2 control-label" for="$id">};
+    my $output =
+        qq{<div class="form-group"><label class="col-lg-2 control-label" for="$id">};
     $output .= $self->label;
     $output .= qq{</label>};
     $output .= qq{<div class="col-lg-5">};
-    my $url = $media ? $media->url : '';
+    my $url = $media ? '/images/'.$media->file_url : '';
     $output .= qq{
         <div class="img-container preview">
             <img src="$url" width="545" />
@@ -126,21 +131,28 @@ sub render_preview {
         </div>
     };
     $output .= qq{</div>};
-    $output .= qq{<div class="col-lg-3"><div class="row"><div class="img-preview"></div></div></div>};
+    $output .= qq{
+        <div class="col-lg-3">
+            <div class="row">
+                <div class="img-preview"></div>
+            </div>
+        </div>
+    };
     $output .= qq{</div>};
     return $output;
 }
 
-has_field 'url' => (
+has_field 'uuid' => (
     type     => 'Text',
-    label    => 'Name',
+    label    => 'UUID',
     apply    => [NoSpaces, PrintableAndNewline],
     required => 1,
+    unique   => 1,
 );
 
 has_field 'mime_type' => (
-    type     => 'Text',
-    label    => 'MIME Type',
+    type         => 'Text',
+    label        => 'MIME Type',
     element_attr => {readonly => 1},
 );
 
@@ -171,9 +183,9 @@ has_field 'description' => (
     label => 'Description',
 );
 
-has_field 'ports'          => (type => '+Port',);
-has_field 'rail_nodes'     => (type => '+RailNode',);
-has_field 'warehouses'     => (type => '+Warehouse',);
+has_field 'ports'      => (type => '+Port',);
+has_field 'rail_nodes' => (type => '+RailNode',);
+has_field 'warehouses' => (type => '+Warehouse',);
 
 has_field 'submit' => (
     type          => 'Submit',

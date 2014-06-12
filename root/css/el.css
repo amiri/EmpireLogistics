@@ -204,6 +204,6 @@ div.form-control.btn.btn-info.add_element {
 }
 
 .img-preview {
-    width: 345px;
-    height: 194px;
+    max-width: 345px;
+    max-height: 194px;
 }

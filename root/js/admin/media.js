@@ -195,6 +195,7 @@ $(document).ready(function() {
             xhr.onload = function() {
                 $(progressBar).remove();
                 var newData = JSON.parse(this.responseText);
+                console.log(newData);
                 $(field).animate({
                     backgroundColor: "#dff0d8"
                 }).animate({
@@ -265,6 +266,10 @@ $(document).ready(function() {
                             $(newImageField).attr('src', result);
                         }
                     }
+                    var imageKey = $(uploadField).attr('name');
+                    // Could not get blob upload to work, so use base64
+                    // encoding (dataURI).
+                    formData.append("file", result);
                     xhr.send(formData);
                 }
             };

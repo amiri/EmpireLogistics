@@ -213,11 +213,14 @@ sub column_definitions : Chained('base') PathPart('column-definitions')
 sub create : Chained('base') PathPart('create') Args(0) {
     my ($self, $c) = @_;
     my $template = "create_update.tt";
-    if ($c->req->is_xhr && lc $c->req->method eq 'get') {
-        $template = 'multi_create.tt';
+
+    my $creation = $c->req->param('id') ? 0 : 1;
+    if ($c->req->param('id')) {
+        my $item = $self->model->find($c->req->param('id'));
+        $c->stash->{object} = $item;
     }
 
-    $c->stash(creation => 1, template => "admin/$template",);
+    $c->stash(creation => $creation, template => "admin/$template",);
     return $self->form_create($c, $template,);
 }
 
@@ -350,10 +353,15 @@ sub form_create {
     my $form;
     $c->log->debug("I do not have for and am not making a new form");
     $form = $c->stash->{form};
+    my $item;
+    if ($c->stash->{object}) {
+        $item = $c->stash->{object};
+    }
     my $action = $c->uri_for(
         $c->controller($self->namespace . $self->class)->action_for('create')
     );
     $form->action($action);
+    $form->is_create($creation);
     $c->stash(
         template  => "admin/$template",
         form      => $form,
@@ -369,6 +377,7 @@ sub form_create {
     $form->process(
         schema => $c->stash->{schema},
         params => $c->req->body_params,
+        ($item ? (item => $item) : ()),
     );
     $c->stash(fillinform => $form->fif);
     return unless $form->validated;

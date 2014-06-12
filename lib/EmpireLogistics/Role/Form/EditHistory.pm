@@ -8,7 +8,7 @@ has 'is_create' => ( is => 'rw' );
 before 'update_model' => sub {
     my $self = shift;
     if ( !$self->item || ( $self->item && !$self->item->in_storage ) ) {
-        $self->is_create(1);
+        $self->is_create(1) unless defined $self->is_create;
     }
 };
 
@@ -19,6 +19,7 @@ sub save_edit_history {
     my @edit_history_fields = ();
     foreach my $field ( $self->sorted_fields ) {
         next if $field->type_attr eq 'submit';
+        next if $field->type_attr eq 'file';
 
         # Skip nonexistent submission fields
         next if not exists $self->values->{ $field->name };
