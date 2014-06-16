@@ -139,7 +139,7 @@ deploy_revision "empirelogistics" do
   symlink_before_migrate       nil
   create_dirs_before_symlink   []
   purge_before_symlink         []
-  symlinks                     ({"backups" => "backups", "logs" => "logs","local" => "local","perl" => "perl", "python" => "python", "tiles" => "tiles"})
+  symlinks                     ({"backups" => "backups", "logs" => "logs","local" => "local","perl" => "perl", "python" => "python", "tiles" => "tiles", "media" => "root/images/media"})
   scm_provider Chef::Provider::Git
 end
 
