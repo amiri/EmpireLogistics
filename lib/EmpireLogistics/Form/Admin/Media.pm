@@ -138,7 +138,7 @@ sub render_preview {
     $output .= $self->label;
     $output .= qq{</label>};
     $output .= qq{<div class="col-lg-5">};
-    my $url = $media ? '/images/'.$media->file_url : '';
+    my $url = $media ? '/' . $media->file_url : '';
     $output .= qq{
         <div class="img-container preview">
             <img src="$url" width="545" />
@@ -217,8 +217,8 @@ has_field 'submit' => (
 around 'update_model', sub {
     my ($orig, $self, @args) = @_;
 
-    warn "AROUND MEDIA UPDATE MODEL";
-    delete @{$self->values}{qw/data-x1 data-y1 data-x2 data-y2 data-height data-width/};
+    delete @{$self->values}
+        {qw/data-x1 data-y1 data-x2 data-y2 data-height data-width/};
 
     my $return = $self->$orig(@args);
 

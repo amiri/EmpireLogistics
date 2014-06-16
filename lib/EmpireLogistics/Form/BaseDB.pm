@@ -139,8 +139,6 @@ around 'update_model', sub {
     } else {
         delete $self->values->{delete_time};             # don't touch
     }
-    warn "AROUND UPDATE MODEL: ";
-    warn p $self->values;
 
     $self->save_edit_history;
 

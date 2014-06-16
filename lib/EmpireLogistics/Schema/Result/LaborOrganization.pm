@@ -456,7 +456,8 @@ __PACKAGE__->has_many(
 sub full_name {
     my $self = shift;
     my $name = $self->name;
-    $name .= ' (' . $self->organization_type->name . ') ' unless $self->organization_type->name eq 'local';
+    $name .= ' (' . $self->organization_type->name . ') '
+        unless $self->organization_type->name eq 'local';
     $name .= ' ' . $self->local_prefix  if $self->local_prefix;
     $name .= ' ' . $self->local_type    if $self->local_type;
     $name .= ' #' . $self->local_number if $self->local_number;
@@ -464,10 +465,8 @@ sub full_name {
     return $name;
 }
 
-use Data::Printer;
 around 'add_to_addresses' => sub {
-    my ($orig,$self) = (shift,shift);
-    warn p @_;
+    my ($orig, $self) = (shift, shift);
     $self->$orig(@_);
 };
 

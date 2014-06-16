@@ -112,16 +112,18 @@ __PACKAGE__->has_many(
 
 sub file_url {
     my ($self, $format, %args) = @_;
-    my $secure      = $args{secure} || 0;
-    my $filename    = $args{filename};
+    my $secure = $args{secure} || 0;
+    my $filename = $args{filename};
 
     # If a width was passed but not a height, assume it's a
     # maximum width and calculate a proportional height
     if ($format) {
         my ($width, $height) = ($format =~ m%^(\d+)?x(\d+)?$%);
         if ($width && !$height) {
-            $format = ($self->width && ($width < $self->width)) ?
-                $width . 'x' . $self->inner_height($width) : undef;
+            $format =
+                ($self->width && ($width < $self->width))
+                ? $width . 'x' . $self->inner_height($width)
+                : undef;
         }
     }
 
@@ -167,7 +169,7 @@ Returns the preferred extension for the content type of the specified format.
 sub extension {
     my ($self, $format) = @_;
     my $content_type = $self->mime_content_type($format);
-    my $extension = $self->_extension_for_content_type($content_type);
+    my $extension    = $self->_extension_for_content_type($content_type);
     return $extension;
 }
 
@@ -192,17 +194,17 @@ Returns our preferred filename extension given a MIME type.
 =cut
 
 my %extension_alternatives = (
-    'jpeg'      => 'jpg',
-    'x-jpeg'    => 'jpg',
-    'pjpeg'     => 'jpg',
-    'x-png'     => 'png',
-    'x-bmp'     => 'bmp',
-    'svg+xml'   => 'svg',
-    'x-svg'     => 'svg',
-    'x-gif'     => 'gif',
-    'x-tiff'    => 'jpg',
-    'tiff'      => 'jpg',
-    'pdf'       => 'pdf',
+    'jpeg'    => 'jpg',
+    'x-jpeg'  => 'jpg',
+    'pjpeg'   => 'jpg',
+    'x-png'   => 'png',
+    'x-bmp'   => 'bmp',
+    'svg+xml' => 'svg',
+    'x-svg'   => 'svg',
+    'x-gif'   => 'gif',
+    'x-tiff'  => 'jpg',
+    'tiff'    => 'jpg',
+    'pdf'     => 'pdf',
 );
 
 sub _extension_for_content_type {
@@ -233,7 +235,8 @@ sub store_on_disk {
     return try {
         $image->write(file => $disk_filename);
         1;
-    } catch {
+    }
+    catch {
         die "ERROR: Unable to store media on disk: $_";
         undef;
     };
@@ -243,7 +246,7 @@ sub disk_filename {
     my ($self, $format) = @_;
 
     my $srcroot   = EmpireLogistics::Config->srcroot;
-    my $directory = $srcroot . '/root/images' . $self->pathname($format);
+    my $directory = $srcroot . '/root' . $self->pathname($format);
     try {
         make_path($directory) unless -d $directory;
     }
@@ -273,9 +276,10 @@ sub update_media {
 
     # Extract information from the image itself
     my $imager = Imager->new;
-    my $image = $imager->read(file => $self->disk_filename) or die "Could not read file in update_media: $!";
+    my $image = $imager->read(file => $self->disk_filename)
+        or die "Could not read file in update_media: $!";
     my $type = $image->tags(name => 'i_format');
-    my $mime_type   = 'image/'.$type;
+    my $mime_type = 'image/' . $type;
 
     if ($crop_width and $crop_height and $x1 and $y1 and $x2 and $y2) {
         $image = $image->crop(
@@ -285,9 +289,9 @@ sub update_media {
             bottom => $y2
         );
     }
-    my $width       = $image->getwidth;
-    my $height      = $image->getheight;
-    
+    my $width  = $image->getwidth;
+    my $height = $image->getheight;
+
     my $stored = $self->store_format('original', $image);
 
     if ($stored) {
