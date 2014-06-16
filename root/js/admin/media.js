@@ -153,34 +153,42 @@ $(document).ready(function() {
     });
     image.cropper("enable");
 
-    // Handle ajax uploads
-    $(document).on('change', '#media-form input[type="file"]', function(e) {
-        console.log(e);
+    var handleImageCrop = function() {
+        // Remove error classes
+        if ($("#server-error")) {
+            $("#server-error").remove();
+        }
+        if ($("#size-error")) {
+            $("#size-error").remove();
+        }
+        //console.log(arguments);
+        //console.log(this);
 
-        var field = $($(this).get(0));
+        var field = $($('#media-form input[type="file"]').get(0));
 
-        console.log(field);
+        //console.log(field);
 
         var fieldName = field.attr('id');
         var fieldPrefix = fieldName.replace(/\.file/, "");
         var fieldId = '#' + fieldPrefix;
 
-        console.log(fieldId);
+        //console.log(fieldId);
 
         var fileWrapperDiv = $($(field).closest('.col-lg-5').get(0));
+        var fieldSet = $($(field).closest('fieldset').get(0));
 
         // Get the media div and img inside so we can change it later.
         var mediaField = $(field).find(".img-container").get(0);
         var imageField = $(mediaField).find("img").get(0);
 
-        console.log(fileWrapperDiv);
+        //console.log(fileWrapperDiv);
 
         var progressBar = document.createElement('div');
         $(progressBar).addClass('media-upload-progress');
         $(fileWrapperDiv).append($(progressBar));
 
         var action = field.data('ajax-url');
-        console.log(action);
+        //console.log(action);
 
         var reader = new FileReader();
         var formData = new FormData();
@@ -195,8 +203,8 @@ $(document).ready(function() {
             xhr.onload = function() {
                 $(progressBar).remove();
                 var newData = JSON.parse(this.responseText);
-                console.log(newData);
-                $(field).animate({
+                //console.log(newData);
+                $(fieldSet).animate({
                     backgroundColor: "#dff0d8"
                 }).animate({
                     backgroundColor: "#ffffff"
@@ -230,15 +238,16 @@ $(document).ready(function() {
                     }
                 });
                 imageAjax.cropper("enable");
-                console.log(imageAjax);
+                //console.log(imageAjax);
             };
             xhr.onerror = function(e) {
                 var errorNotice = document.createElement('div');
                 $(errorNotice).addClass('alert-danger');
+                $(errorNotice).attr("id","server-error");
                 var errorString = document.createElement("<p>A server-side error occurred: " + e.target.status + "</p>");
                 $(errorNotice).append($(errorString));
                 $(fileWrapperDiv).append($(errorNotice));
-                $(field).animate({
+                $(fieldSet).animate({
                     backgroundColor: "#f2dede"
                 }).animate({
                     backgroundColor: "#ffffff"
@@ -249,13 +258,37 @@ $(document).ready(function() {
 
         xhr.open('POST', action, true);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        formData.append("id", $('#id').val());
+        formData.append("uuid", $('#uuid').val());
+        formData.append('data-x1',$dataX1.val());
+        formData.append('data-y1',$dataY1.val());
+        formData.append('data-x2',$dataX2.val());
+        formData.append('data-y2',$dataY2.val());
+        formData.append('data-height',$dataHeight.val());
+        formData.append('data-width',$dataWidth.val());
 
-        if (this.files[0]) {
-            var uploadField = this;
-            reader.readAsDataURL(this.files[0]);
+        //console.log(field);
+        if (document.getElementById('file').files[0]) {
+            //console.log("File upload");
+            var uploadField = document.getElementById('file');
+            var file = uploadField.files[0];
+            //console.log(file.size);
+            if (file.size > 5242880) {
+                var errorNotice = document.createElement('div');
+                $(errorNotice).addClass('alert-danger');
+                $(errorNotice).attr("id","size-error");
+                var errorP = document.createElement("p");
+                var errorText = document.createTextNode("File larger than 5MB (" + file.size + ")");
+                errorP.appendChild(errorText);
+                $(errorNotice).append($(errorP));
+                $(fileWrapperDiv).append($(errorNotice));
+                return false;
+            }
+            reader.readAsDataURL(uploadField.files[0]);
             reader.onloadend = function(e) {
                 var result = e.target.result;
-                console.log(result);
+                //console.log("Result: ");
+                //console.log(result);
                 if (result !== null) {
                     if (imageField) {
                         $(imageField).attr('src', result);
@@ -269,13 +302,24 @@ $(document).ready(function() {
                     var imageKey = $(uploadField).attr('name');
                     // Could not get blob upload to work, so use base64
                     // encoding (dataURI).
+                    //console.log($dataX1);
+                    //console.log($dataY1);
+                    //console.log($dataX2);
+                    //console.log($dataY2);
+                    //console.log($dataHeight);
+                    //console.log($dataWidth);
                     formData.append("file", result);
                     xhr.send(formData);
                 }
             };
-        } else {}
-
-    });
-
+        } else {
+            //console.log("No file upload");
+            xhr.send(formData);
+        }
+    
+    }
+    // Handle ajax uploads
+    $(document).on('change', '#media-form input[type="file"]', handleImageCrop);
+    $(document).on('click', '#media-form button#crop', handleImageCrop);
 });
 

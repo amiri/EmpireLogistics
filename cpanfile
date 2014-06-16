@@ -56,6 +56,7 @@ requires "HTML::FormHandler::Model::DBIC";
 requires "HTML::Selector::XPath";
 requires "IO::All";
 requires "Image::Magick", "6.77, < 6.82";
+requires "Imager";
 requires "JSON::Any";
 requires "JSON::XS";
 requires "Lingua::Conjunction";

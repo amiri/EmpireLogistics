@@ -4,7 +4,7 @@ use Moose;
 use MooseX::MarkAsMethods autoclean => 1;
 use MooseX::NonMoose;
 use Data::UUID;
-use Image::Magick;
+use Imager;
 use Data::Printer;
 use DateTime;
 
@@ -26,7 +26,7 @@ sub _build_labels {
         create_time => "Create Time",
         update_time => "Update Time",
         delete_time => "Deleted",
-        uuid         => 'UUID',
+        uuid        => 'UUID',
         mime_type   => 'MIME Type',
         width       => 'Width',
         height      => 'Height',
@@ -34,6 +34,11 @@ sub _build_labels {
         alt         => 'Alt Text',
         description => 'Description',
     };
+}
+
+sub new_uuid {
+    my $self = shift;
+    return Data::UUID->new->create_str;
 }
 
 =head2 update_or_create_from_raw_data
@@ -45,23 +50,36 @@ Creates or update the Media object from the raw data and stores.
 
 sub update_or_create_from_raw_data {
     my ($class, %args) = @_;
-    my $media = $args{media} || undef;
-    my $data        = $args{data} or die "no data";
-    my $caption     = $args{caption};
     my $alt         = $args{alt};
-    my $uuid         = $args{uuid} || Data::UUID->new->create_str;
+    my $caption     = $args{caption};
+    my $crop_height = $args{crop_height};
+    my $crop_width  = $args{crop_width};
+    my $data        = $args{data} or die "no data";
     my $description = $args{description};
-
-    warn "My uuid is $uuid";
+    my $id          = $args{id};
+    my $media       = $args{media} || undef;
+    my $uuid        = $args{uuid} || $class->new_uuid;
+    my $x1          = $args{x1};
+    my $x2          = $args{x2};
+    my $y1          = $args{y1};
+    my $y2          = $args{y2};
 
     # Extract information from the image itself
-    my $magick = Image::Magick->new;
-    $magick->BlobToImage($data);
-    my $magick_type = $magick->Get('magick')
-        or die 'Could not load the image';
-    my $mime_type = $magick->MagickToMime($magick_type);
-    my $width        = $magick->Get('width');
-    my $height       = $magick->Get('height');
+    my $imager    = Imager->new;
+    my $image     = $imager->read(data => $data) or die "Could not read data in update_or_create_from_raw_data: $!";
+    my $type      = $image->tags(name => 'i_format');
+    my $mime_type = 'image/' . $type;
+
+    if ($crop_width and $crop_height and $x1 and $y1 and $x2 and $y2) {
+        $image = $image->crop(
+            left   => $x1,
+            right  => $x2,
+            top    => $y1,
+            bottom => $y2
+        );
+    }
+    my $width  = $image->getwidth;
+    my $height = $image->getheight;
 
     if ($media) {
         $media->mime_type($mime_type);
@@ -70,23 +88,21 @@ sub update_or_create_from_raw_data {
         $media->caption($caption)         if ($caption);
         $media->description($description) if ($description);
         $media->alt($alt)                 if ($alt);
-        $media->uuid($uuid)                 if ($uuid);
-        $media->update;
+        $media->uuid($uuid)               if ($uuid);
     } else {
-        warn "I am creating a new media";
         $media = $class->create({
             mime_type   => $mime_type,
             width       => $width,
             height      => $height,
             caption     => $caption,
             alt         => $alt,
-            uuid         => $uuid,
+            uuid        => $uuid,
             description => $description,
         }) or die 'Could not create a media object';
     }
 
     # Store the image on disk
-    my $stored = $media->store_format('original', \$data);
+    my $stored = $media->store_format('original', $image);
 
     # If storing the image fails, delete the Media record
     unless ($stored) {

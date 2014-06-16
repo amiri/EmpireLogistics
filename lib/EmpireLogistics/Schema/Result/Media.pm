@@ -5,8 +5,9 @@ use MooseX::MarkAsMethods autoclean => 1;
 use Data::UUID;
 use IO::All;
 use Try::Tiny;
-use Image::Magick;
+use Imager;
 use File::Path qw/make_path/;
+use Data::Printer;
 
 extends 'EmpireLogistics::Schema::Result';
 
@@ -216,21 +217,21 @@ sub _extension_for_content_type {
 }
 
 sub store_format {
-    my ($self, $format, $rcontent) = @_;
+    my ($self, $format, $image) = @_;
 
     # Store the media on local disk (always)
-    my $stored_on_disk = $self->store_on_disk($format, $rcontent);
+    my $stored_on_disk = $self->store_on_disk($format, $image);
 
     return $stored_on_disk;
 }
 
 sub store_on_disk {
-    my ($self, $format, $rcontent) = @_;
+    my ($self, $format, $image) = @_;
 
     my $disk_filename = $self->disk_filename($format);
 
     return try {
-        io($disk_filename)->binary->print($$rcontent);
+        $image->write(file => $disk_filename);
         1;
     } catch {
         die "ERROR: Unable to store media on disk: $_";
@@ -252,6 +253,55 @@ sub disk_filename {
 
     my $disk_filename = $directory . $self->basename($format);
     return $disk_filename;
+}
+
+sub update_media {
+    my $self = shift;
+    my %args = @_;
+
+    my $alt         = $args{alt};
+    my $caption     = $args{caption};
+    my $crop_height = $args{crop_height};
+    my $crop_width  = $args{crop_width};
+    my $description = $args{description};
+    my $id          = $args{id};
+    my $uuid        = $args{uuid};
+    my $x1          = $args{x1};
+    my $x2          = $args{x2};
+    my $y1          = $args{y1};
+    my $y2          = $args{y2};
+
+    # Extract information from the image itself
+    my $imager = Imager->new;
+    my $image = $imager->read(file => $self->disk_filename) or die "Could not read file in update_media: $!";
+    my $type = $image->tags(name => 'i_format');
+    my $mime_type   = 'image/'.$type;
+
+    if ($crop_width and $crop_height and $x1 and $y1 and $x2 and $y2) {
+        $image = $image->crop(
+            left   => $x1,
+            right  => $x2,
+            top    => $y1,
+            bottom => $y2
+        );
+    }
+    my $width       = $image->getwidth;
+    my $height      = $image->getheight;
+    
+    my $stored = $self->store_format('original', $image);
+
+    if ($stored) {
+        $self->mime_type($mime_type);
+        $self->width($width);
+        $self->height($height);
+        $self->caption($caption)         if ($caption);
+        $self->description($description) if ($description);
+        $self->alt($alt)                 if ($alt);
+        $self->uuid($uuid)               if ($uuid);
+        $self->update;
+        $self->discard_changes;
+    }
+    return $self;
 }
 
 __PACKAGE__->meta->make_immutable;

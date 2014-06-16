@@ -35,21 +35,7 @@ sub add_media : Chained('base') : PathPart('add-media') Args(0) {
     $c->forward('add_or_update_media', [{file => $file}]);
     my $media = $c->stash->{media};
     $c->error("Could not create or retrieve media") unless ($media);
-    my $response = {
-        map { $_ => $media->$_ }
-            qw/
-            id
-            create_time
-            uuid
-            mime_type
-            width
-            height
-            caption
-            alt
-            description
-            /
-    };
-    $c->stash->{json_data} = $response;
+    $c->stash->{json_data} = $media;
 }
 
 =head2 add_or_update_media
@@ -64,22 +50,34 @@ our $args as args.
 sub add_or_update_media : Private {
     my ($self, $c, $args) = @_;
 
-    my $file = $args->{file} or die "No file";
-    my @pieces = split(",", $file);
-    $file = MIME::Base64::decode_base64($pieces[1]);
-    my %media_info = ();
-    @media_info{qw/id caption alt uuid description/} =
-        @{$c->req->params}{qw/id caption alt uuid description/};
-    my ($original_media, $new_media);
-    if ($media_info{id}) {
-        $original_media = $c->model("DB::Media")->find($media_info{id});
-        $c->stash->{media} = $original_media;
-    } else {
-        $new_media =
-            $c->model("DB::Media")
-            ->update_or_create_from_raw_data(%media_info, data => $file,);
-        $c->stash->{media} = $new_media;
+    my $file = $args->{file};
+    if ($file) {
+        my @pieces = split(",", $file);
+        $file = MIME::Base64::decode_base64($pieces[1]);
     }
+    my %media_info = ();
+    @media_info{
+        qw/id caption alt uuid description x1 y1 x2 y2 crop_height crop_width/
+        } =
+        @{$c->req->params}{
+        qw/id caption alt uuid description data-x1 data-y1 data-x2 data-y2 data-height data-width/
+        };
+
+    my ($original_media, $new_media);
+    
+    if ($media_info{id}) {
+        $original_media = $c->model('DB::Media')->find({id => $media_info{id}});
+        $media_info{media} = $original_media if $original_media;
+    }
+
+    if ($file) {
+        $new_media = $c->model("DB::Media")
+            ->update_or_create_from_raw_data(%media_info, data => $file,);
+    } elsif ($original_media) {
+        $new_media = $original_media->update_media(%media_info);
+    }
+
+    $c->stash->{media} = $new_media;
     return 1;
 }
 

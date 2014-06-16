@@ -47,7 +47,7 @@ has_block 'metadata_block' => (
 has_block 'basic_block' => (
     tag         => 'fieldset',
     label       => 'Basic Information',
-    render_list => ['file', 'preview', 'uuid', 'mime_type', 'width', 'height'],
+    render_list => ['file', 'preview', 'data-x1', 'data-y1', 'data-x2', 'data-y2', 'data-height', 'data-width','uuid', 'mime_type', 'width', 'height'],
 );
 
 has_block 'annotations_block' => (
@@ -109,6 +109,26 @@ has_field 'preview' => (
     render_method => \&render_preview,
 );
 
+has_field 'data-x1' => (
+    type => 'Hidden',
+);
+has_field 'data-y1' => (
+    type => 'Hidden',
+);
+has_field 'data-x2' => (
+    type => 'Hidden',
+);
+has_field 'data-y2' => (
+    type => 'Hidden',
+);
+has_field 'data-height' => (
+    type => 'Hidden',
+);
+has_field 'data-width' => (
+    type => 'Hidden',
+);
+
+
 sub render_preview {
     my $self  = shift;
     my $id    = $self->id;
@@ -122,12 +142,6 @@ sub render_preview {
     $output .= qq{
         <div class="img-container preview">
             <img src="$url" width="545" />
-            <input id="data-x1" type="hidden" />
-            <input id="data-y1" type="hidden" />
-            <input id="data-x2" type="hidden" />
-            <input id="data-y2" type="hidden" />
-            <input id="data-height" type="hidden" />
-            <input id="data-width" type="hidden" />
         </div>
     };
     $output .= qq{</div>};
@@ -135,6 +149,12 @@ sub render_preview {
         <div class="col-lg-3">
             <div class="row">
                 <div class="img-preview"></div>
+
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="row">
+                <button type="button" name="crop" id="crop" class="btn btn-default">Crop</button>
             </div>
         </div>
     };
@@ -193,6 +213,17 @@ has_field 'submit' => (
     value         => 'Save',
     element_class => ['btn', 'btn-primary'],
 );
+
+around 'update_model', sub {
+    my ($orig, $self, @args) = @_;
+
+    warn "AROUND MEDIA UPDATE MODEL";
+    delete @{$self->values}{qw/data-x1 data-y1 data-x2 data-y2 data-height data-width/};
+
+    my $return = $self->$orig(@args);
+
+    return $return;
+};
 
 __PACKAGE__->meta->make_immutable;
 
