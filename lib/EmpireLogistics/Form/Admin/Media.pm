@@ -138,7 +138,7 @@ sub render_preview {
     $output .= $self->label;
     $output .= qq{</label>};
     $output .= qq{<div class="col-lg-5">};
-    my $url = $media ? '/' . $media->file_url : '';
+    my $url = $media ? $media->file_url : '';
     $output .= qq{
         <div class="img-container preview">
             <img src="$url" width="545" />
