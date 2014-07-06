@@ -141,7 +141,7 @@ sub render_preview {
     my $url = $media ? $media->file_url : '';
     $output .= qq{
         <div class="img-container preview">
-            <img src="$url" width="545" />
+            <img src="$url" />
         </div>
     };
     $output .= qq{</div>};
@@ -152,9 +152,14 @@ sub render_preview {
 
             </div>
         </div>
+        <br />
         <div class="col-lg-3">
             <div class="row">
-                <button type="button" name="crop" id="crop" class="btn btn-default">Crop</button>
+                <div class="button-group">
+                    <button type="button" name="crop" id="crop" class="btn btn-default">Crop</button>
+                    <button type="button" name="disable-crop" id="disable-crop" class="btn btn-danger">Disable</button>
+                    <button type="button" name="enable-crop" id="enable-crop" class="btn btn-success">Enable</button>
+                </div>
             </div>
         </div>
     };

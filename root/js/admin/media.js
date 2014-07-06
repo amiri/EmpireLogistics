@@ -154,6 +154,9 @@ $(document).ready(function() {
     image.cropper("enable");
 
     var handleImageCrop = function() {
+        console.log(arguments);
+        var cropClick = arguments[0] == "cropClick" ? true : false;
+        console.log(cropClick);
         // Remove error classes
         if ($("#server-error")) {
             $("#server-error").remove();
@@ -244,8 +247,10 @@ $(document).ready(function() {
                 var errorNotice = document.createElement('div');
                 $(errorNotice).addClass('alert-danger');
                 $(errorNotice).attr("id","server-error");
-                var errorString = document.createElement("<p>A server-side error occurred: " + e.target.status + "</p>");
-                $(errorNotice).append($(errorString));
+                var errorTag = document.createElement("p");
+                var errorString = document.createTextNode("A server-side error occurred: " + e.target.status);
+                errorTag.appendChild(errorString);
+                $(errorNotice).append($(errorTag));
                 $(fileWrapperDiv).append($(errorNotice));
                 $(fieldSet).animate({
                     backgroundColor: "#f2dede"
@@ -268,8 +273,8 @@ $(document).ready(function() {
         formData.append('data-width',$dataWidth.val());
 
         //console.log(field);
-        if (document.getElementById('file').files[0]) {
-            //console.log("File upload");
+        if (document.getElementById('file').files[0] && !cropClick) {
+            console.log("File upload");
             var uploadField = document.getElementById('file');
             var file = uploadField.files[0];
             //console.log(file.size);
@@ -313,13 +318,21 @@ $(document).ready(function() {
                 }
             };
         } else {
-            //console.log("No file upload");
+            console.log("No file upload");
             xhr.send(formData);
         }
     
     }
     // Handle ajax uploads
     $(document).on('change', '#media-form input[type="file"]', handleImageCrop);
-    $(document).on('click', '#media-form button#crop', handleImageCrop);
+    $(document).on('click', '#media-form button#crop', function(e) {
+        handleImageCrop("cropClick");
+    });
+    $(document).on('click', '#media-form button#disable-crop', function() {
+        image.cropper("disable"); 
+    });
+    $(document).on('click', '#media-form button#enable-crop', function() {
+        image.cropper("enable"); 
+    });
 });
 

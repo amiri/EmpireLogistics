@@ -56,24 +56,55 @@ sub add_or_update_media : Private {
         $file = MIME::Base64::decode_base64($pieces[1]);
     }
     my %media_info = ();
-    @media_info{
-        qw/id caption alt uuid description x1 y1 x2 y2 crop_height crop_width/
-        } =
-        @{$c->req->params}{
-        qw/id caption alt uuid description data-x1 data-y1 data-x2 data-y2 data-height data-width/
-        };
+    @media_info{qw/
+        id
+        caption
+        alt
+        uuid
+        description
+        x1
+        y1
+        x2
+        y2
+        crop_height
+        crop_width
+    /} = @{$c->req->params}{qw/
+        id
+        caption
+        alt
+        uuid
+        description
+        data-x1
+        data-y1
+        data-x2
+        data-y2
+        data-height
+        data-width
+    /};
 
     my ($original_media, $new_media);
     
+    # If we have an ID already, it's an edit, so put the original media into the media_info hash
     if ($media_info{id}) {
+        $c->log->warn("We have an ID already, so we will put original_media into hash");
         $original_media = $c->model('DB::Media')->find({id => $media_info{id}});
         $media_info{media} = $original_media if $original_media;
     }
 
+    # If we have a file body param, update or create the media. If we have an original media, it
+    # should be updated.
     if ($file) {
+        $c->log->warn("We have a file body param, so we will update or create from raw data");
+        # If we have file and original media, upload the new file and delete
+        # any crop data, so the original media is replaced.
+        $c->log->warn("    With a file body param, we also have original_media, so delete crop data") if $original_media;
+        delete @media_info{qw/x1 y1 x2 y2 crop_height crop_width/} if $original_media;
         $new_media = $c->model("DB::Media")
             ->update_or_create_from_raw_data(%media_info, data => $file,);
+    # If we have no file, but still an original media, edit the original
+    # media with what are presumably crop options.
     } elsif ($original_media) {
+        $c->log->warn("We have an original media and no file body param, so we will update original media");
         $new_media = $original_media->update_media(%media_info);
     }
 

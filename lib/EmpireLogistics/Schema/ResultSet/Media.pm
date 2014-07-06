@@ -70,7 +70,7 @@ sub update_or_create_from_raw_data {
     my $type      = $image->tags(name => 'i_format');
     my $mime_type = 'image/' . $type;
 
-    if ($crop_width and $crop_height and $x1 and $y1 and $x2 and $y2) {
+    if ($crop_width and $crop_height and defined $x1 and defined $y1 and defined $x2 and defined $y2) {
         $image = $image->crop(
             left   => $x1,
             right  => $x2,

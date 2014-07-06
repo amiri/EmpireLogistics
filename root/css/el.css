@@ -203,7 +203,18 @@ div.form-control.btn.btn-info.add_element {
     font-size: 120%;
 }
 
-.img-preview {
-    max-width: 345px;
-    max-height: 194px;
+.row .img-preview {
+    width: 345px;
+    height: 194px;
+    overflow: hidden;
+
+}
+.img-container.preview {
+    max-width: 545px; 
+    max-height: 326px;
+    overflow: hidden;
+}
+.img-container.preview img {
+    width: 490px;
+    height: 276px;
 }
