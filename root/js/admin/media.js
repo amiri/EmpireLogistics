@@ -155,7 +155,7 @@ $(document).ready(function() {
 
     var handleImageCrop = function() {
         console.log(arguments);
-        var cropClick = arguments[0] == "cropClick" ? true : false;
+        var cropClick = arguments[0] == "cropClick" ? true: false;
         console.log(cropClick);
         // Remove error classes
         if ($("#server-error")) {
@@ -166,17 +166,14 @@ $(document).ready(function() {
         }
         //console.log(arguments);
         //console.log(this);
-
         var field = $($('#media-form input[type="file"]').get(0));
 
         //console.log(field);
-
         var fieldName = field.attr('id');
         var fieldPrefix = fieldName.replace(/\.file/, "");
         var fieldId = '#' + fieldPrefix;
 
         //console.log(fieldId);
-
         var fileWrapperDiv = $($(field).closest('.col-lg-5').get(0));
         var fieldSet = $($(field).closest('fieldset').get(0));
 
@@ -185,14 +182,12 @@ $(document).ready(function() {
         var imageField = $(mediaField).find("img").get(0);
 
         //console.log(fileWrapperDiv);
-
         var progressBar = document.createElement('div');
         $(progressBar).addClass('media-upload-progress');
         $(fileWrapperDiv).append($(progressBar));
 
         var action = field.data('ajax-url');
         //console.log(action);
-
         var reader = new FileReader();
         var formData = new FormData();
 
@@ -228,9 +223,11 @@ $(document).ready(function() {
                 $dataWidth = $("#data-width");
 
                 imageAjax.cropper({
-                    aspectRatio: 16/9,
+                    aspectRatio: 16 / 9,
                     preview: ".img-preview",
-                    data: { width: 380 },
+                    data: {
+                        width: 380
+                    },
                     done: function(data) {
                         $dataX1.val(data.x1);
                         $dataY1.val(data.y1);
@@ -246,7 +243,7 @@ $(document).ready(function() {
             xhr.onerror = function(e) {
                 var errorNotice = document.createElement('div');
                 $(errorNotice).addClass('alert-danger');
-                $(errorNotice).attr("id","server-error");
+                $(errorNotice).attr("id", "server-error");
                 var errorTag = document.createElement("p");
                 var errorString = document.createTextNode("A server-side error occurred: " + e.target.status);
                 errorTag.appendChild(errorString);
@@ -265,15 +262,15 @@ $(document).ready(function() {
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
         formData.append("id", $('#id').val());
         formData.append("uuid", $('#uuid').val());
-        formData.append('data-x1',$dataX1.val());
-        formData.append('data-y1',$dataY1.val());
-        formData.append('data-x2',$dataX2.val());
-        formData.append('data-y2',$dataY2.val());
-        formData.append('data-height',$dataHeight.val());
-        formData.append('data-width',$dataWidth.val());
+        formData.append('data-x1', $dataX1.val());
+        formData.append('data-y1', $dataY1.val());
+        formData.append('data-x2', $dataX2.val());
+        formData.append('data-y2', $dataY2.val());
+        formData.append('data-height', $dataHeight.val());
+        formData.append('data-width', $dataWidth.val());
 
         //console.log(field);
-        if (document.getElementById('file').files[0] && !cropClick) {
+        if (document.getElementById('file').files[0] && ! cropClick) {
             console.log("File upload");
             var uploadField = document.getElementById('file');
             var file = uploadField.files[0];
@@ -281,7 +278,7 @@ $(document).ready(function() {
             if (file.size > 5242880) {
                 var errorNotice = document.createElement('div');
                 $(errorNotice).addClass('alert-danger');
-                $(errorNotice).attr("id","size-error");
+                $(errorNotice).attr("id", "size-error");
                 var errorP = document.createElement("p");
                 var errorText = document.createTextNode("File larger than 5MB (" + file.size + ")");
                 errorP.appendChild(errorText);
@@ -321,7 +318,7 @@ $(document).ready(function() {
             console.log("No file upload");
             xhr.send(formData);
         }
-    
+
     }
     // Handle ajax uploads
     $(document).on('change', '#media-form input[type="file"]', handleImageCrop);
@@ -329,10 +326,18 @@ $(document).ready(function() {
         handleImageCrop("cropClick");
     });
     $(document).on('click', '#media-form button#disable-crop', function() {
-        image.cropper("disable"); 
+        console.log("Disabled crop");
+        image.cropper("disable");
+        $('#media-form button#crop').on('click', function(){return false;});
+        $('#media-form input[type="file"]').on('click', function(){return false});
     });
     $(document).on('click', '#media-form button#enable-crop', function() {
-        image.cropper("enable"); 
+        console.log("Enabled crop");
+        image.cropper("enable");
+        $('#media-form button#crop').bind('click', function(e) {
+            handleImageCrop("cropClick");
+        });
+        $('#media-form input[type="file"]').bind('change', handleImageCrop);
     });
 });
 
