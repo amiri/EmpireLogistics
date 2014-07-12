@@ -126,6 +126,8 @@ EOS
 
 around 'update_model', sub {
     my ($orig, $self, @args) = @_;
+    my $item = $self->item;
+    warn "I am in update_model";
 
     # Transform delete_time into datetime, if needed
     if (    $self->values->{delete_time}
@@ -140,12 +142,89 @@ around 'update_model', sub {
         delete $self->values->{delete_time};             # don't touch
     }
 
+    my $media = delete $self->values->{media}; 
+
+    warn "About to save edit history";
     $self->save_edit_history;
 
+    warn "About to call orig";
     my $return = $self->$orig(@args);
+    warn "Called orig";
 
+    if (defined($media) && ref($media) eq 'ARRAY') {
+        warn "Processing media stuff after orig";
+        my $i = 0;
+        for my $media_upload (@{$media}) {
+            my $new_media;
+            my $med = $self->field('media')->fif;
+            my $original_media =
+                (ref($self->field('media')->item) eq 'ARRAY')
+                ? $self->field('media')->item->[$i]
+                : ($self->field('media')->item
+                    && ($media_upload->{id} eq $self->field('media')->item->id))
+                ? $self->field('media')->item
+                : undef;
+            $new_media = $self->process_media($media_upload, $original_media);
+            $item->update_or_create_related(
+                $self->media_relation,
+                {media => $new_media->id}
+            );
+            $i++;
+        }
+    }
+
+    warn "About to return product of orig";
     return $return;
 };
+
+sub process_media {
+    my ( $self, $params, $original_media ) = @_;
+
+    # Handle delete time
+    if ( defined( $params->{delete_time} ) ) {
+        if ( $params->{delete_time} ) {
+            $params->{delete_time} = CE::DateTime->now;
+        }
+        else {
+            $params->{delete_time} = undef;
+        }
+    }
+
+    # Handle media data, etc.
+    my $new_file_data =
+        ( $params->{file} ) ? $params->{file}->slurp :
+        undef;
+    delete $params->{file};
+
+    my $new_media;
+    my @wanted_keys = qw/caption alt_text author author_url/;
+    if ( !$original_media || !$original_media->in_storage ) {
+        die "You did not upload a file for this new media"
+            unless $new_file_data;
+        $new_media = $self->schema->resultset('Media')->update_or_create_from_raw_data(
+            ( map { $_ => $params->{$_} } @wanted_keys ),
+            ( $original_media ? ( media => $original_media ) : () ),
+            ( $new_file_data  ? ( data  => $new_file_data )  : () ),
+        );
+    }
+    else {
+        if ($new_file_data) {
+            $new_media = $self->schema->resultset('Media')->update_or_create_from_raw_data(
+                ( map { $_ => $params->{$_} } @wanted_keys ),
+                media => $original_media,
+                ( $new_file_data ? ( data => $new_file_data ) : () ),
+            );
+        }
+        else {
+            $new_media = $original_media->update($params);
+        }
+    }
+    $new_media->discard_changes;
+    return $new_media;
+}
+
+
+
 
 __PACKAGE__->meta->make_immutable;
 

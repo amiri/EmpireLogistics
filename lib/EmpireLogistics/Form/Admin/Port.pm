@@ -10,6 +10,8 @@ with 'EmpireLogistics::Role::Form::Util';
 
 has '+name'       => (default => 'port-form');
 has '+item_class' => (default => 'Port');
+has '+enctype'           => (default => 'multipart/form-data');
+
 has 'address_relation' => (
     is      => 'ro',
     isa     => 'Str',
@@ -20,19 +22,25 @@ has 'tonnage_relation' => (
     isa     => 'Str',
     default => 'port_tonnages',
 );
+has 'media_relation' => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => 'port_medias',
+);
 has 'js_files' => (
     is      => 'ro',
     isa     => 'ArrayRef',
     default => sub {
         [
             '/js/admin/port.js',
+            '/js/admin/repeatable_media.js',
         ];
     },
 );
 
 sub build_render_list {
     return [
-        'metadata_block', 'basic_block', 'location_block',
+        'metadata_block', 'basic_block', 'media_block', 'location_block',
         'relations_block','offloading_block',
         'restrictions_block', 'pilotage_block',      'tugs_block',
         'quarantine_block',   'communication_block', 'facilities_block',
@@ -51,13 +59,45 @@ has_block 'relations_block' => (
 has_block 'metadata_block' => (
     tag         => 'fieldset',
     label       => 'Metadata',
-    render_list => ['id', 'create_time', 'update_time', 'delete_time',],
+    render_list => ['id', 'item_id', 'create_time', 'update_time', 'delete_time',],
 );
 
 has_block 'basic_block' => (
     tag         => 'fieldset',
     label       => 'Basic Information',
     render_list => ['overview_block', 'characteristics_block', 'description'],
+);
+
+has_block 'media_block' => (
+    tag         => 'fieldset',
+    label       => 'Media',
+    render_list => ['media', 'add_media'],
+);
+
+has_field 'media' => (
+    type           => 'Repeatable',
+    setup_for_js   => 1,
+    do_wrapper     => 1,
+    do_label       => 0,
+    num_when_empty => 1,
+    num_extra      => 0,
+    init_contains  => {
+        widget_wrapper => 'Simple',
+        tags           => {wrapper_tag => 'fieldset', controls_div => 1},
+        wrapper_class  => ['well-lg'],
+    },
+    widget_wrapper => 'Simple',
+    tags           => {controls_div => 1},
+    wrapper_class  => ['well-lg'],
+    options_method => \&options_media,
+);
+has_field 'media.contains' => ( type => '+PortMedia', );
+
+has_field 'add_media' => (
+    type          => 'AddElement',
+    repeatable    => 'media',
+    value         => 'Add another media',
+    element_class => ['btn btn-info']
 );
 
 has_block 'location_block' => (
@@ -137,6 +177,7 @@ has_field 'addresses' => (
     widget_wrapper => 'Simple',
     tags           => {controls_div => 1},
     wrapper_class  => ['well-lg'],
+    options_method => \&options_addresses,
 );
 has_field 'addresses.contains' => (type => '+Address',);
 
@@ -147,13 +188,25 @@ has_field 'add_address' => (
     element_class => ['btn btn-info']
 );
 
-sub options_addresses {
-    my $self = shift;
-    my $options =
-        [map { {label => $_->addresses->street_address, value => $_->id,} }
-            $self->item->addresses->active->all];
-    return $options;
-}
+#sub options_media {
+    #my $self = shift;
+    #my $options = [
+        #map {{
+                #label => $_->caption,
+                #value => $_->id,
+        #}} $self->item->media->all
+    #];
+    #warn p $options;
+    #return $options;
+#}
+
+#sub options_addresses {
+    #my $self = shift;
+    #my $options =
+        #[map { {label => $_->addresses->street_address, value => $_->id,} }
+            #$self->item->addresses->active->all];
+    #return $options;
+#}
 
 has_block 'overview_block' => (
     tag => 'fieldset',
@@ -283,6 +336,12 @@ has_block 'misc_block' => (
 has_field 'id' => (
     type  => 'Hidden',
     label => 'Port ID',
+);
+has_field 'item_id' => (
+    type  => 'Hidden',
+    accessor => 'id',
+    readonly => 1,
+    disabled => 1,
 );
 has_field 'create_time' => (
     type            => 'Timestamp',

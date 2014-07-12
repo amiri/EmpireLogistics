@@ -27,7 +27,7 @@ around delete => sub {
         return $self;
     }
 
-    return $self->orig(@_);
+    return $self->$orig(@_);
 };
 
 around insert => sub {

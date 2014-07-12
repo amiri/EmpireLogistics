@@ -254,7 +254,7 @@ __PACKAGE__->belongs_to(
   },
 );
 
-__PACKAGE__->many_to_many("medias", "port_medias", "media");
+__PACKAGE__->many_to_many("media", "port_medias", "media");
 
 __PACKAGE__->belongs_to(
     "object_type" =>
