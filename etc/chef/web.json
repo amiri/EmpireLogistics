@@ -219,8 +219,9 @@
         "languages": "plpgsql"
       }
     ],
-    "external_pid_file": "/var/run/postgresql/9.3-main.pid",
-    "ident_file": "/etc/postgresql/9.3/main/pg_ident.conf"
+    "external_pid_file": "/var/lib/postgresql/9.3/main/postmaster.pid",
+    "ident_file": "/etc/postgresql/9.3/main/pg_ident.conf",
+    "unix_socket_directory": "/var/lib/postgresql/9.3/main/"
   },
   "postgis": {
     "version": "2.1"
