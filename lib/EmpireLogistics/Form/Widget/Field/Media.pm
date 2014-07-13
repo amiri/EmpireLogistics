@@ -17,7 +17,9 @@ sub render_element {
             qq|\n<img src="${\$media->file_url}" />\n|;
     }
 
+    $output .= qq{<div class="top-buffer">};
     $output .= $self->render_subfield($result, $self->field('rm_element'));
+    $output .= qq{</div>}; # row, top-buffer for rm_element
     $output .= qq{</div>}; # media-image
     $output .= qq{<div class="media-info col-lg-8">};
     foreach my $subfield ( grep { !($_->name eq 'rm_element') } $self->sorted_fields ) {

@@ -222,3 +222,6 @@ div.form-control.btn.btn-info.add_element {
     max-width: 355px;
     max-height: 200px;
 }
+.top-buffer {
+    margin-top: 1em;
+}
