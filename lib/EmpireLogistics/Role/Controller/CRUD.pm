@@ -435,6 +435,7 @@ sub add_media : Chained('base') : PathPart('add-media') Args(0) {
     $c->forward('add_or_update_media', [{file => $file}]);
     my $media = $c->stash->{media};
     $c->error("Could not create or retrieve media") unless ($media);
+    $c->stash->{object}->add_to_media($media) if ($media and $c->stash->{object});
     $c->stash->{json_data} = $media;
 }
 

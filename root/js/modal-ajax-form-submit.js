@@ -2,6 +2,8 @@ jQuery(function($) {
     function ajaxifyForm() {
         $('div.modal-body form').on('submit', function(event) {
             var $form = $(this);
+            var fileFields = $form.find("div.media-info input");
+            fileFields.prop('disabled', true);
             var $container = $('.modal.fade.in');
             var $target = $container.find('.modal-body');
             var objectType = $container.data('object-type');

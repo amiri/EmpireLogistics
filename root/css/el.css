@@ -207,6 +207,9 @@ div.form-control.btn.btn-info.add_element {
 .modal-body .row .details {
     font-size: 120%;
 }
+.modal-dialog {
+    width: 800px;
+}
 
 .row .img-preview {
     width: 345px;

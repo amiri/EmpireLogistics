@@ -19,3 +19,4 @@
         CKEDITOR.replace("description");
     }
 </script>
+[% c.add_jsfile('/js/refresh-modals.js') %]

@@ -4,6 +4,7 @@
 [% c.add_jsfile('/js/lib/dataTables.num-html-sort.js') %]
 [% c.add_jsfile('/js/lib/dataTables.filter-delay.js') %]
 [% c.add_jsfile('/js/admin/edit-history.js') %]
+[% c.add_jsfile('/js/refresh-modals.js') %]
 <div class="modal fade" id="rail-line-modal" data-object-type="Rail Line" tabindex="-1" role="dialog" aria-labelledby="Edit Rail Line" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
