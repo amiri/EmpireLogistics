@@ -57,7 +57,9 @@ sub update_or_create_from_raw_data {
     my $description = $args{description};
     my $id          = $args{id};
     my $media       = $args{media} || undef;
-    my $uuid        = $args{uuid} || $class->new_uuid;
+    # Give a new UUID when we have a new file, regardless
+    # to whether it has an id.
+    my $uuid        = $class->new_uuid;
     my $x1          = $args{x1};
     my $x2          = $args{x2};
     my $y1          = $args{y1};
@@ -106,8 +108,9 @@ sub update_or_create_from_raw_data {
     # If storing the image fails, delete the Media record
     unless ($stored) {
         $media->delete_time(DateTime->now);
-        $media->update;
     }
+    $media->update;
+    $media->discard_changes;
 
     return $media;
 }

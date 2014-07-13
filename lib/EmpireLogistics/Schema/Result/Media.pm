@@ -285,6 +285,7 @@ sub update_media {
     my $type = $image->tags(name => 'i_format');
     my $mime_type = 'image/' . $type;
 
+    # Give a new uuid, e.g., file name, when cropping.
     if ($crop_width and $crop_height and defined $x1 and defined $y1 and defined $x2 and defined $y2) {
         $image = $image->crop(
             left   => $x1,
@@ -292,6 +293,8 @@ sub update_media {
             top    => $y1,
             bottom => $y2
         );
+        $uuid = $self->result_source->schema->resultset('Media')->new_uuid;
+        $self->uuid($uuid);
     }
     my $width  = $image->getwidth;
     my $height = $image->getheight;
