@@ -110,6 +110,11 @@ __PACKAGE__->has_many(
     { order_by => { -desc => "create_time" } },
 );
 
+sub _build_edit_url {
+    my $self = shift;
+    return '/admin/media/'.$self->id.'/edit';
+}
+
 sub file_url {
     my ($self, $format, %args) = @_;
     my $secure = $args{secure} || 0;

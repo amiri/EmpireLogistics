@@ -155,7 +155,7 @@ sub render_preview {
         <br />
         <div class="col-lg-3">
             <div class="row">
-                <div class="button-group">
+                <div class="button-group top-buffer">
                     <button type="button" name="crop" id="crop" class="btn btn-default">Crop</button>
                     <button type="button" name="disable-crop" id="disable-crop" class="btn btn-danger">Disable</button>
                     <button type="button" name="enable-crop" id="enable-crop" class="btn btn-success">Enable</button>

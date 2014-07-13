@@ -14,9 +14,16 @@ __PACKAGE__->load_components(
 );
 
 has 'edit_url' => (
-    is => 'rw',
-    isa => Uri,
+    is      => 'rw',
+    isa     => Uri,
+    coerce  => 1,
+    lazy    => 1,
+    builder => '_build_edit_url',
 );
+
+sub _build_edit_url {
+    return '';
+}
 
 around delete => sub {
     my ( $orig, $self ) = ( shift, shift );
