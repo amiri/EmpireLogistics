@@ -4,34 +4,49 @@ use HTML::FormHandler::Moose;
 use HTML::FormHandler::Types ('PrintableAndNewline', 'NotAllDigits');
 use namespace::autoclean;
 extends 'EmpireLogistics::Form::BaseDB';
-with 'EmpireLogistics::Role::Form::Util';
 
 has '+name'       => (default => 'warehouse-form');
 has '+item_class' => (default => 'Warehouse');
+has '+enctype'           => (default => 'multipart/form-data');
+
+
 has 'address_relation' => (
     is      => 'ro',
     isa     => 'Str',
     default => 'warehouse_addresses',
 );
 
+has 'media_relation' => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => 'warehouse_medias',
+);
+
 has 'js_files' => (
     is      => 'ro',
     isa     => 'ArrayRef',
     default => sub {
-        ['/js/admin/warehouse.js',];
+        [
+            '/js/admin/warehouse.js',
+            '/js/admin/repeatable_media.js',
+        ];
     },
 );
 
+with 'EmpireLogistics::Role::Form::Util';
+with 'EmpireLogistics::Role::Form::HasMedia';
+
+
 sub build_render_list {
     return [
-        'metadata_block',  'basic_block', 'location_block',
+        'metadata_block',  'basic_block', 'media_block','location_block',
         'relations_block', 'submit',
     ];
 }
 has_block 'metadata_block' => (
     tag         => 'fieldset',
     label       => 'Metadata',
-    render_list => ['id', 'create_time', 'update_time', 'delete_time',],
+    render_list => ['id', 'item_id', 'create_time', 'update_time', 'delete_time',],
 );
 
 has_block 'relations_block' => (

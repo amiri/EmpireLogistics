@@ -1,32 +1,24 @@
-package EmpireLogistics::Form::Field::PortMedia;
+package EmpireLogistics::Form::Field::Media;
 
 use HTML::FormHandler::Moose;
-use HTML::FormHandler::Types ('NoSpaces', 'PrintableAndNewline',
-    'NotAllDigits');
+use HTML::FormHandler::Types ('NoSpaces', 'PrintableAndNewline', 'NotAllDigits');
 extends 'EmpireLogistics::Form::Field::ELCompound';
 with 'EmpireLogistics::Role::Form::Util';
-use Data::Printer;
 
-has '+widget'         => (default => '+EmpireLogistics::Form::Widget::Field::Media');
-
-has 'item' =>
-    (is => 'rw', clearer => 'clear_item', lazy => 1, builder => 'build_item');
+has '+widget' => (default => '+EmpireLogistics::Form::Widget::Field::Media');
+has 'item'    => (is => 'rw', clearer => 'clear_item', lazy => 1, builder => 'build_item');
 
 sub build_item {
     my $self = shift;
-    my $pm;
-    #warn p $self->form->item;
-    #return $self->form->item->find_related('port_medias', {media => $self->field('id')->fif});
-    if ($self->form->item && $self->form->item->port_medias->count && $self->field('id')->fif) {
-        $pm = $self->form->item->port_medias->find({media => $self->field('id')->fif})->media;
-        #$pm = $self->form->item->port_medias->first->media;
-    }
-    return $pm;
+    my $m;
+    $m = $self->form->item->find_related($self->form->media_relation,
+        {media => $self->field('id')->fif})
+        if $self->field('id')->fif;
+    return $m;
 }
 
 has_field 'id' => (
     type  => 'PrimaryKey',
-    label => 'PortMedia ID',
 );
 has_field 'file' => (
     label        => 'File:',
@@ -54,7 +46,7 @@ sub render_blog_tag {
     $output .= $self->label;
     $output .= qq{</label><div class="col-lg-5">};
     $output .=
-        qq{<input type="text" class="form-control" placeholder="$placeholder" value="$value" id="$parent_id.blog_tag" readonly="1" /><p class="small">Paste blog tag into your blog img src to display image.</p></div></div>};
+        qq{<input type="text" class="form-control" placeholder="$placeholder" value="$value" id="$parent_id.blog_tag" readonly="1" /><p class="small">Paste blog tag into your blog where you would like to display the image.</p></div></div>};
     return $output;
 }
 

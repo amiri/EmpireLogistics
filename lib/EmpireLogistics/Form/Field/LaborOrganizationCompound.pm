@@ -3,6 +3,7 @@ package EmpireLogistics::Form::Field::LaborOrganizationCompound;
 use HTML::FormHandler::Moose;
 extends 'HTML::FormHandler::Field::Compound';
 
+has '+widget' => (default => '+EmpireLogistics::Form::Widget::Field::BorderedCompound');
 sub build_wrapper_class { [''] }
 sub build_element_wrapper_class {
     ['col-lg-12', 'col-lg-offset-0', 'compact-field']

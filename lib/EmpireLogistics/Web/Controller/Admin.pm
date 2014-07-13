@@ -4,7 +4,6 @@ use Moose;
 use MooseX::MethodAttributes;
 use EmpireLogistics::Config;
 use List::AllUtils qw/uniq/;
-use Data::Printer;
 use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller' }

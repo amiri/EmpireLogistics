@@ -190,8 +190,13 @@ div.form-control.btn.btn-info.add_element {
 }
 .compact-field .form-group {
     margin-bottom: 5px;
-
 }
+.compact-field > .form-group.bordered {
+    padding: 1em;
+    margin: 0.5em;
+    border: dotted 1px #cccccc;
+}
+
 .compact-field .form-group .form-control {
     height: 30px;
     line-height: 1;

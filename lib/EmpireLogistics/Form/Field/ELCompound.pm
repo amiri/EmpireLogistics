@@ -5,7 +5,7 @@ extends 'HTML::FormHandler::Field::Compound';
 
 sub build_wrapper_class { [''] }
 sub build_element_wrapper_class {
-    ['col-lg-10', 'compact-field']
+    ['col-lg-10', 'compact-field', 'col-lg-offset-2',]
 }
 has '+widget_wrapper' => (default => 'Bootstrap3');
 has '+do_wrapper'     => (default => 1);

@@ -6,15 +6,13 @@ use MooseX::StrictConstructor;
 use DateTimeX::Easy;
 use IO::All;
 use Text::CSV_XS;
-use Text::CSV::Encoded coder_class =>
-    'Text::CSV::Encoded::Coder::EncodeGuess';
+use Text::CSV::Encoded coder_class => 'Text::CSV::Encoded::Coder::EncodeGuess';
 use Try::Tiny;
 use List::AllUtils qw/none/;
 use Lingua::Conjunction;
 use EmpireLogistics::Schema;
 use EmpireLogistics::Config;
 use Scalar::Util ();
-use Data::Printer;
 extends 'Catalyst::Model';
 with 'Catalyst::Component::InstancePerContext';
 

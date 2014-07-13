@@ -5,7 +5,6 @@ use namespace::autoclean;
 use EmpireLogistics::Form::Admin::Media;
 use EmpireLogistics::Form::Admin::Restore;
 use EmpireLogistics::Form::Admin::Delete;
-use Data::Printer;
 
 BEGIN { extends qw/EmpireLogistics::Web::Controller::Admin/; }
 

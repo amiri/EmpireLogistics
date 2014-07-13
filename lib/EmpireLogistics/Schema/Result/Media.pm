@@ -7,7 +7,6 @@ use IO::All;
 use Try::Tiny;
 use Imager;
 use File::Path qw/make_path/;
-use Data::Printer;
 
 extends 'EmpireLogistics::Schema::Result';
 
@@ -287,7 +286,6 @@ sub update_media {
     my $mime_type = 'image/' . $type;
 
     if ($crop_width and $crop_height and defined $x1 and defined $y1 and defined $x2 and defined $y2) {
-        warn "Cropping image in media::result::update_media";
         $image = $image->crop(
             left   => $x1,
             right  => $x2,
@@ -301,7 +299,6 @@ sub update_media {
     my $stored = $self->store_format('original', $image);
 
     if ($stored) {
-        warn "Updating DB in media::result::update_media";
         $self->mime_type($mime_type);
         $self->width($width);
         $self->height($height);

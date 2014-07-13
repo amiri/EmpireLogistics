@@ -88,7 +88,7 @@ __PACKAGE__->has_many(
   { "foreign.rail_node" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
-__PACKAGE__->many_to_many("medias", "rail_node_medias", "media");
+__PACKAGE__->many_to_many("media", "rail_node_medias", "media");
 
 __PACKAGE__->many_to_many(
     'companies' => 'company_rail_nodes', 'company',

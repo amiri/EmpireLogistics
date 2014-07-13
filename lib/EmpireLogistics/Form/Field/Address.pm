@@ -4,6 +4,7 @@ use HTML::FormHandler::Moose;
 extends 'EmpireLogistics::Form::Field::ELCompound';
 with 'EmpireLogistics::Role::Form::Util';
 
+has '+widget' => (default => '+EmpireLogistics::Form::Widget::Field::BorderedCompound');
 # This is to allow us to save edit_history for this field.
 has 'item' => (
     is      => 'rw',
@@ -47,10 +48,6 @@ has_field 'delete_time' => (
     inflate_method => \&inflate_delete_time,
 );
 has_field 'street_address' => (type => 'Text',);
-#has_field 'country'        => (type => 'Text',);
-#has_field 'state'          => (type => 'Text',);
-#has_field 'city'           => (type => 'Text',);
-#has_field 'postal_code'    => (type => 'Text',);
 has_field 'country'        => (type => '+Country',);
 has_field 'state'          => (type => '+State',);
 has_field 'city'           => (type => '+City',);

@@ -1,7 +1,6 @@
 package EmpireLogistics::Form::BaseDB;
 
 use HTML::FormHandler::Moose;
-use Data::Printer;
 use namespace::autoclean;
 extends 'HTML::FormHandler::Model::DBIC';
 
@@ -127,7 +126,6 @@ EOS
 around 'update_model', sub {
     my ($orig, $self, @args) = @_;
     my $item = $self->item;
-    warn "I am in update_model";
 
     # Transform delete_time into datetime, if needed
     if (    $self->values->{delete_time}
@@ -144,15 +142,11 @@ around 'update_model', sub {
 
     my $media = delete $self->values->{media}; 
 
-    warn "About to save edit history";
     $self->save_edit_history;
 
-    warn "About to call orig";
     my $return = $self->$orig(@args);
-    warn "Called orig";
 
     if (defined($media) && ref($media) eq 'ARRAY') {
-        warn "Processing media stuff after orig";
         my $i = 0;
         for my $media_upload (@{$media}) {
             my $new_media;
@@ -173,7 +167,6 @@ around 'update_model', sub {
         }
     }
 
-    warn "About to return product of orig";
     return $return;
 };
 

@@ -1,6 +1,7 @@
 package EmpireLogistics::Role::Form::EditHistory;
 
 use Moose::Role;
+use Scalar::Util qw/blessed/;
 requires 'user_id';
 
 has 'is_create' => ( is => 'rw' );
@@ -83,6 +84,9 @@ sub get_edit_history_field_from_object {
     if ( $field->value_changed ) {
         my $field_name = $field->accessor;
         my $init_value = $item->$field_name;
+        # Don't use inflated references, like DBIC related objects,
+        # as init-values. Deflate to id.
+        $init_value = (blessed($init_value) and $init_value->can('id')) ? $init_value->id : $init_value;
         if ( $field->value ne $init_value ) {
             my $value = $field->value;
             if ( $field->html_element eq 'select' ) {

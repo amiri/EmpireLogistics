@@ -5,6 +5,7 @@ use List::AllUtils qw/any/;
 extends 'EmpireLogistics::Form::Field::ELCompound';
 with 'EmpireLogistics::Role::Form::Util';
 
+has '+widget' => (default => '+EmpireLogistics::Form::Widget::Field::BorderedCompound');
 # This is to allow us to save edit_history for this field.
 has 'item' => (
     is      => 'rw',

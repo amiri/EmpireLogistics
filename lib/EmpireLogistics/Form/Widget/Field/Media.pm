@@ -8,7 +8,7 @@ sub render_element {
     $result ||= $self->result;
 
     my $output = '';
-    $output .= qq{<div class="form-group">};
+    $output .= qq{<div class="form-group bordered">};
     $output .= qq{<div class="row">};
     $output .= qq{<div class="media-image col-lg-4">};
     my $media = $self->item;
@@ -20,7 +20,7 @@ sub render_element {
     $output .= $self->render_subfield($result, $self->field('rm_element'));
     if ($media) {
         $output .=
-            qq|<p><a href="${\$media->edit_url}">Edit this media</a></p>|;
+            qq|<p><a href="${\$media->edit_url}">Crop this media</a></p>|;
     }
     $output .= qq{</div>};    # row, top-buffer for rm_element
     $output .= qq{</div>};    # media-image
@@ -30,7 +30,7 @@ sub render_element {
     }
     $output .= qq{</div>};    # media-info
     $output .= qq{</div>};    # row
-    $output .= qq{</div>};    # form-group
+    $output .= qq{</div>};    # form-group bordered
     $output =~ s/^\n//;       # remove newlines so they're not duplicated
     return $output;
 }

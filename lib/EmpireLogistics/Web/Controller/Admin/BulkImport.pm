@@ -2,7 +2,6 @@ package EmpireLogistics::Web::Controller::Admin::BulkImport;
 
 use Moose;
 use MooseX::MethodAttributes;
-use Data::Printer;
 use Try::Tiny;
 use aliased 'EmpireLogistics::Form::Admin::BulkImport';
 use namespace::autoclean;

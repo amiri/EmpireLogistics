@@ -5,7 +5,6 @@ use MooseX::MarkAsMethods autoclean => 1;
 use MooseX::NonMoose;
 use Data::UUID;
 use Imager;
-use Data::Printer;
 use DateTime;
 
 extends 'EmpireLogistics::Schema::ResultSet';
