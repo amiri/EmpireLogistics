@@ -223,22 +223,26 @@ sub create : Chained('base') PathPart('create') Args(0) {
 
 sub edit : Chained('object') PathPart('edit') Args(0) {
     my ($self, $c) = @_;
-    #my $form   = $c->stash->{form};
+    my $item = $c->stash->{object};
     my $form = $self->form->new(
         schema => $c->model('DB')->schema,
         user_id => $c->user->id,
-        item => $c->stash->{object},
+        item => $item,
     );
     my $action = $c->uri_for(
         $c->controller($self->namespace . $self->class)->action_for('edit'),
         [$c->stash->{object}->id]
     );
     $form->action($action);
-    $form->item($c->stash->{object});
+    $form->item($item);
+
+    # Add a "View on map" link
+    my $map_url = $item->map_url;
 
     $c->stash(
         template => "admin/create_update.tt",
         creation => 0,
+        map_url => $map_url,
     );
     if (lc $c->req->method eq 'post') {
         my $params = {

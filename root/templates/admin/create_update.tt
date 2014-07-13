@@ -13,6 +13,9 @@
 [% END %]
 [% page_title = (creation == 1 ? 'Create ' _ class_name : 'Edit ' _ item.name) %]
 <h3>[% page_title %]</h3>
+[% IF map_url %]
+<h4><a href="[% map_url %]">Zoom to [% item.name %] on Map</a></h4>
+[% END %]
 <div>
     [% form.render %]
 </div>

@@ -21,8 +21,21 @@ has 'edit_url' => (
     builder => '_build_edit_url',
 );
 
+has 'map_url' => (
+    is => 'ro',
+    isa => Uri,
+    coerce => 1,
+    lazy => 1,
+    builder => '_build_map_url',
+);
+
 sub _build_edit_url {
     return '';
+}
+sub _build_map_url {
+    my $self = shift;
+    return undef unless $self->can('latitude') and $self->can('longitude');
+    return '/#13/'.$self->latitude.'/'.$self->longitude;
 }
 
 around delete => sub {
