@@ -218,3 +218,7 @@ div.form-control.btn.btn-info.add_element {
     width: 490px;
     height: 276px;
 }
+.media-image img {
+    max-width: 355px;
+    max-height: 200px;
+}

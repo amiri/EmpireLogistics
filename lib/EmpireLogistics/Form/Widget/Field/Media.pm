@@ -14,7 +14,7 @@ sub render_element {
     $output .= qq{<div class="media-image col-lg-4">};
     if (my $media = $self->item) {
         $output .=
-            qq|\n<img src="${\$media->file_url}" height="200" width="300" />\n|;
+            qq|\n<img src="${\$media->file_url}" />\n|;
     }
 
     $output .= $self->render_subfield($result, $self->field('rm_element'));
