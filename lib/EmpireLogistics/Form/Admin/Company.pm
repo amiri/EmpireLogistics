@@ -134,6 +134,7 @@ has_field 'submit' => (
     widget        => 'ButtonTag',
     value         => 'Save',
     element_class => ['btn', 'btn-primary'],
+    element_wrapper_class => ['col-lg-5', 'col-lg-offset-0', 'buffer'],
 );
 
 __PACKAGE__->meta->make_immutable;

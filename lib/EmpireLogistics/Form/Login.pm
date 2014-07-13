@@ -27,6 +27,7 @@ has_field 'submit' => (
     widget => 'ButtonTag',
     value => 'Login',
     element_class => ['btn','btn-primary'],
+    element_wrapper_class => ['col-lg-5', 'col-lg-offset-0', 'buffer'],
 );
 
 sub validate_email {

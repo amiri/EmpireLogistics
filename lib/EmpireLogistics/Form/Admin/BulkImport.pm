@@ -33,8 +33,13 @@ has_field 'sample_data' => (
 
 sub html_sample_data {
     my $self = shift;
-    return
-        qq|<a class="sample-data">Download Sample CSV data for the object type selected</a>|;
+    return qq|<div class="form-group sample-data">
+                  <div class="col-lg-5 col-lg-offset-2">
+                  <div class="alert alert-warning">
+                      <p><a>Download Sample CSV data for the object type selected</a></p>
+                  </div>
+                  </div>
+              </div>|;
 }
 
 has_field 'file' => (
@@ -49,6 +54,7 @@ has_field 'submit' => (
     widget        => 'ButtonTag',
     value         => 'Upload CSV',
     element_class => [ 'btn', 'btn-primary' ],
+    element_wrapper_class => ['col-lg-5', 'col-lg-offset-0', 'buffer'],
 );
 
 sub _build_validator {
