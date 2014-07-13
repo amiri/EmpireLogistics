@@ -113,6 +113,10 @@ sub get_edit_history_field {
         my $field_name = $field->name;
         my $init_value
             = $field->init_value || $field->parent->item->$field_name;
+
+        if ($field->type_attr eq 'checkbox') {
+            return if (not defined $init_value and $field->value == 0);
+        }
         if ( $field->html_element eq 'select' ) {
             $value      = $field->as_label;
             $init_value = $field->as_label($init_value);
