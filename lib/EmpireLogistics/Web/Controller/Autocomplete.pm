@@ -159,7 +159,7 @@ sub post_ports : Chained('base') PathPart('ports') Args(0) POST {
     my @port_options;
     while ( my $port = $port_rs->next ) {
         push @port_options, {
-            text => $port->name.', '.$port->country,
+            text => $port->name.', '.$port->country->official_name,
             id   => $port->id,
         };
     }
@@ -182,7 +182,7 @@ sub post_ports_ids : Chained('base') PathPart('ports-ids') Args(0) POST {
         next unless $port;
         push @options, {
             id => $id,
-            text => $port->name.', '.$port->country,
+            text => $port->name.', '.$port->country->official_name,
         };
     }
     $c->stash->{json_data} = \@options;
@@ -534,10 +534,8 @@ sub post_country_ids : Chained('base') PathPart('country-ids') Args(0) POST {
     return unless $c->req->is_xhr;
     my $query = $c->req->param('q');
     my @ids = split(',', $query);
-    $c->log->warn("In posr country ids: ", @ids);
     my @options;
     foreach my $id (@ids) {
-        $c->log->warn("Looping through ids");
         my $country = $c->model('DB::Country')->active->find({id => $id});
         next unless $country;
         push @options, {id => $id, text => $country->name};

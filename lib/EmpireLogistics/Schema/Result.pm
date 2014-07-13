@@ -34,7 +34,7 @@ sub _build_edit_url {
 }
 sub _build_map_url {
     my $self = shift;
-    return undef unless $self->can('latitude') and $self->can('longitude');
+    return '' unless $self->can('latitude') and $self->can('longitude');
     return '/#13/'.$self->latitude.'/'.$self->longitude;
 }
 
