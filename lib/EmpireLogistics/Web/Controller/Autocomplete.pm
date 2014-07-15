@@ -727,6 +727,173 @@ sub city_and_postal_options : Chained('base')
     };
 }
 
+# Search navbar
+sub search : Chained('base') PathPart('search') Args(0) POST {
+    my ($self, $c) = @_;
+    return unless $c->req->is_xhr;
+    my $prefix  = lc $c->req->param('q');
+    # Port results
+    my $port_rs = $c->model('DB::Port')->active->search(
+        {
+            port_name => {-ilike => '%' . $prefix . '%'}
+        },
+        {
+            order_by  => ['port_name']
+        }
+    );
+    my @port_options;
+    while (my $port = $port_rs->next) {
+        my $text = $port->name . ', ' . $port->country->official_name;
+        push @port_options, {
+            text => "<a href='${$port->details_url}'>".$text.'</a>',
+            id   => $port->id,
+        };
+    }
+    # Warehouse results
+    my $warehouse_rs = $c->model('DB::Warehouse')->active->search(
+        {
+            -or => [
+                { "me.name" => { -ilike => '%' . $prefix . '%' } },
+                {"owner.name" => { -ilike => '%' . $prefix . '%' } },
+            ],
+        },
+        {
+            join => qw/owner/,
+            prefetch => qw/owner/,
+            order_by => ['me.name'],
+        }
+    );
+    my @warehouse_options;
+    while ( my $warehouse = $warehouse_rs->next ) {
+        push @warehouse_options, {
+            text => "<a href='${$warehouse->details_url}'>".$warehouse->name . ' ('.$warehouse->owner->name.')</a>',
+            id   => $warehouse->id,
+        };
+    }
+
+    # Rail line results
+    my $rail_line_rs = $c->model('DB::RailLine')->active->search(
+        {   -or => [
+                { owner1 => { -ilike => '%' . $prefix . '%' } },
+                { subdivision => { -ilike => '%' . $prefix . '%' } },
+                { a_junction => { -ilike => '%' . $prefix . '%' } },
+                { b_junction => { -ilike => '%' . $prefix . '%' } },
+                { route_id => { -ilike => '%' . $prefix . '%' } },
+                { link_id => { -ilike => '%' . $prefix . '%' } },
+            ],
+        },
+        { order_by => ['owner1','subdivision','a_junction','b_junction','route_id','link_id',] }
+    );
+    my @rail_line_options;
+    while ( my $rail_line = $rail_line_rs->next ) {
+        my $text =
+            $rail_line->owner1
+            . ( $rail_line->subdivision ? ' Sub. ' . $rail_line->subdivision : '')
+            . ', '
+            . $rail_line->a_junction . ' to '
+            . $rail_line->b_junction
+            . ($rail_line->route_id ? ', Rte. ' . $rail_line->route_id : '')
+            . ', Link #'
+            . $rail_line->link_id;
+        push @rail_line_options, {
+            text => "<a href='${$rail_line->details_url}'>".$text.'</a>',
+            id   => $rail_line->id,
+        };
+    }
+
+    # Rail node results
+    my $rail_node_rs = $c->model('DB::RailNode')->active->search(
+        {
+            -or => [
+                { name => { -ilike => '%' . $prefix . '%' } },
+                \[q/junction_id::text ilike ?/, '%'.$prefix.'%'],
+            ],
+        },
+        { order_by => ['name'] }
+    );
+    my @rail_node_options;
+    while ( my $rail_node = $rail_node_rs->next ) {
+        my $text = $rail_node->name . ' #' . $rail_node->junction_id;
+        push @rail_node_options, {
+            text => "<a href='${$rail_node->details_url}'>".$text.'</a>',
+            id   => $rail_node->id,
+        };
+    }
+
+    # NLRB decisions
+    my $nlrb_decision_rs = $c->model('DB::NlrbDecision')->active->search(
+        {   -or => [
+                { citation_number => { -ilike => '%'.$prefix.'%'} },
+                { case_number => { -ilike => '%'.$prefix.'%'} },
+                { 'url' => { -ilike => '%' . $prefix . '%' } },
+            ],
+        },
+        { order_by => ['issuance_date'] }
+    );
+    my @nlrb_decision_options;
+    while ( my $nlrb_decision = $nlrb_decision_rs->next ) {
+        my $text = qq{Case No. }.$nlrb_decision->case_number.qq{, Citation #}.$nlrb_decision->citation_number.qq{ (}.$nlrb_decision->issuance_date->ymd.qq{)};
+        push @nlrb_decision_options, {
+            text => "<a href='${$nlrb_decision->details_url}'>".$text.'</a>',
+            id => $nlrb_decision->id,
+        };
+    }
+
+    # Osha citations
+    my $osha_citation_rs = $c->model('DB::OshaCitation')->active->search(
+        {   -or => [
+                { inspection_number => { -ilike => '%'.$prefix.'%', } },
+                { 'url' => { -ilike => '%' . $prefix . '%' } },
+            ],
+        },
+        { order_by => ['issuance_date'] }
+    );
+    my @osha_citation_options;
+    while ( my $osha_citation = $osha_citation_rs->next ) {
+        my $text = qq{Inspection No. }.$osha_citation->inspection_number.qq{, Citation #}.$osha_citation->citation_number.qq{ (}.$osha_citation->issuance_date->ymd.qq{)};
+        push @osha_citation_options, {
+            text => "<a href='${$osha_citation->details_url}'>".$text.'</a>',
+            id => $osha_citation->id,
+        };
+    }
+
+    # Collate results
+    my $results;
+    $results->{results} = [];
+    $results->{more}    = 0;
+    $results->{context} = {id => '123'};
+    push @{$results->{results}}, {
+        text     => "NLRB Decisions",
+        children => \@nlrb_decision_options,
+
+    } if scalar(@nlrb_decision_options);
+    push @{$results->{results}}, {
+        text     => "OSHA Citations",
+        children => \@osha_citation_options,
+
+    } if scalar(@osha_citation_options);
+    push @{$results->{results}}, {
+        text     => "Ports",
+        children => \@port_options,
+
+    } if scalar(@port_options);
+    push @{$results->{results}}, {
+        text     => "Rail Lines",
+        children => \@rail_line_options,
+
+    } if scalar(@rail_line_options);
+    push @{$results->{results}}, {
+        text     => "Railyards",
+        children => \@rail_node_options,
+
+    } if scalar(@rail_node_options);
+    push @{$results->{results}}, {
+        text     => "Warehouses",
+        children => \@warehouse_options,
+
+    } if scalar(@warehouse_options);
+    $c->stash->{json_data} = $results;
+}
 
 __PACKAGE__->meta->make_immutable;
 

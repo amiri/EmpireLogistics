@@ -60,6 +60,7 @@ sub capture_object : Chained('capture_model') PathPart('') CaptureArgs(1) GET {
     my $template = 'details/display.tt';
     $c->stash->{object}   = $object;
     $c->stash->{template} = $template;
+    $c->stash->{map_url} = $object->map_url;
     return 1;
 }
 

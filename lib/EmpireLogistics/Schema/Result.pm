@@ -4,6 +4,7 @@ use Moose;
 use MooseX::Types::URI qw/Uri/;
 use MooseX::MarkAsMethods autoclean => 1;
 use MooseX::NonMoose;
+use Data::Printer;
 
 extends 'DBIx::Class::Core';
 
@@ -21,6 +22,15 @@ has 'edit_url' => (
     builder => '_build_edit_url',
 );
 
+has 'details_url' => (
+    is      => 'rw',
+    isa     => Uri,
+    coerce  => 1,
+    lazy    => 1,
+    builder => '_build_details_url',
+);
+
+
 has 'map_url' => (
     is => 'ro',
     isa => Uri,
@@ -29,9 +39,28 @@ has 'map_url' => (
     builder => '_build_map_url',
 );
 
+sub path_for_model {
+    my $self = shift;
+    return {
+        RailLine => 'rail-line',
+        RailNode => 'rail-node',
+        Port => 'port',
+        Warehouse => 'warehouse',
+        RailInterline => 'rail-interline',
+    };
+}
+
 sub _build_edit_url {
     return '';
 }
+
+sub _build_details_url {
+    my $self = shift;
+    my $model_name = $self->result_source->source_name;
+    my $url = '/details/'.$self->path_for_model->{$model_name}.'/'.$self->id;
+    return $url;
+}
+
 sub _build_map_url {
     my $self = shift;
     return '' unless $self->can('latitude') and $self->can('longitude');

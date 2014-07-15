@@ -1,5 +1,8 @@
 <div>
 <h1>[% model %] [% object.name %]</h1>
+[% IF map_url %]
+<h2><a href="[% map_url %]">Zoom to [% object.name %] on Map</a></h2>
+[% END %]
     <div class="row">
         <div class="col-lg-11 col-lg-offset-1">
             [% FOREACH col IN object.result_source.columns %]
