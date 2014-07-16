@@ -88,5 +88,13 @@ __PACKAGE__->has_many(
     { order_by => { -desc => "create_time" } },
 );
 
+sub name {
+    my $self = shift;
+    return
+          $self->forwarding_node . " - "
+        . $self->receiving_node . " ("
+        . $self->junction_code . ")";
+}
+
 __PACKAGE__->meta->make_immutable;
 1;

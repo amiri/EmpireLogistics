@@ -63,6 +63,32 @@ sub _build_details_url {
 
 sub _build_map_url {
     my $self = shift;
+    if ($self->result_source->source_name eq 'RailLine') {
+        my ($coordinates) = $self->result_source->schema->storage->dbh_do(
+            sub {
+                my ( $storage, $dbh, $geometry ) = @_;
+                $dbh->selectrow_arrayref(
+                    "SELECT ST_Y(ST_Transform(ST_SetSRID(ST_StartPoint(ST_lineMerge('$geometry')),900913),4326)),ST_X(ST_Transform(ST_SetSRID(ST_StartPoint(ST_lineMerge('$geometry')),900913),4326)) from rail_line"
+                );
+            },
+            ( $self->geometry )
+        );
+        my ($lat,$lon) = @$coordinates;
+        return '/#13/'.$lat.'/'.$lon;
+    }
+    if ($self->result_source->source_name eq 'RailInterline') {
+        my ($coordinates) = $self->result_source->schema->storage->dbh_do(
+            sub {
+                my ( $storage, $dbh, $geometry ) = @_;
+                $dbh->selectrow_arrayref(
+                    "SELECT ST_Y(ST_Transform(ST_SetSRID(ST_StartPoint(ST_lineMerge('$geometry')),900914),4326)),ST_X(ST_Transform(ST_SetSRID(ST_StartPoint(ST_lineMerge('$geometry')),900914),4326)) from rail_interline"
+                );
+            },
+            ( $self->geometry )
+        );
+        my ($lat,$lon) = @$coordinates;
+        return '/#13/'.$lat.'/'.$lon;
+    }
     return '' unless $self->can('latitude') and $self->can('longitude');
     return '/#13/'.$self->latitude.'/'.$self->longitude;
 }
