@@ -48,3 +48,9 @@ geo_rels_to_address 2014-05-25T21:12:43Z Amiri Barksdale <amiribarksdale@gmail.c
 media_rels 2014-06-05T13:27:33Z Amiri Barksdale <amiribarksdale@gmail.com> # Add media relationships to port, rail node, and warehouse
 media_uuid 2014-06-12T15:34:53Z Amiri Barksdale <amiribarksdale@gmail.com> # Change media url to uuid col
 @media_uuid 2014-06-12T15:45:55Z Amiri Barksdale <amiribarksdale@gmail.com># Here we change the name of a url column to a uuid for media
+
+blog_tables 2014-07-17T15:54:59Z Amiri Barksdale <amiribarksdale@gmail.com> # Add blog tables
+@blog_tabls 2014-07-17T16:05:50Z Amiri Barksdale <amiribarksdale@gmail.com># Here we add the blog table.
+
+unique_blog_title 2014-07-17T16:09:49Z Amiri Barksdale <amiribarksdale@gmail.com> # Add unique blog title
+@unique_blog_url_title 2014-07-17T16:11:48Z Amiri Barksdale <amiribarksdale@gmail.com># Make blog title urls unique
