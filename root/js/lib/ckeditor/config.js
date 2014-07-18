@@ -42,5 +42,7 @@ CKEDITOR.editorConfig = function( config ) {
     config.entities_greek = false;
     config.entities_latin = false;
     config.entities_additional = '';
+    config.allowedContent = true;
+    config.extraAllowedContent = 'iframe[*]';
 
 };
