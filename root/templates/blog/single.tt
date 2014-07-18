@@ -1,1 +1,10 @@
-[% blog %]
+<div class="row col-lg-11">
+    <h2>[% blog.title %]</h2>
+    <p><em>[% blog.create_time.day_name %], [% blog.create_time.month_name %] [% blog.create_time.day %], [% blog.create_time.year %]</em></p>
+
+    <div class="row"
+    [% blog.body %]
+    </div>
+
+    <p>[% blog.author.nickname %]</p>
+</div>

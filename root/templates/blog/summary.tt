@@ -1,0 +1,7 @@
+<div class="blog-summary row nested">
+    <h4><a href="[% c.uri_for(c.controller('Blog').action_for('capture_single'), [blog.url_title]) %]">[% blog.title %]</a></h4>
+    <p>[% blog.excerpt %]</p>
+    <p>[% blog.author.nickname %]</p>
+    <p><a href="[% c.uri_for(c.controller('Blog').action_for('capture_single'), [blog.url_title]) %]">Continue reading</a>
+</div>
+

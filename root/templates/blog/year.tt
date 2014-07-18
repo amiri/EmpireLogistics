@@ -1,1 +1,19 @@
-[% blogs.size %]
+<h3>[% start.year %]</h3>
+
+<div class="row col-lg-11">
+    [% FOREACH month IN blogs_for_year.nsort %]
+        <div class="row nested">
+            <h4>[% months.$month %] [% start.year %]</h4>
+            [% FOREACH day IN blogs_for_year.$month.nsort %]
+                <div class="row nested">
+                    <h5>[% months.$month %] [% day %]</h5>
+                    [% FOREACH blog IN blogs_for_year.$month.$day %]
+                        [% PROCESS 'blog/summary.tt', blog = blog %]
+                    [% END %]
+                </div>
+
+
+            [% END %]
+        </div>
+    [% END %]
+</div>

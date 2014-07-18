@@ -5,7 +5,28 @@
 <div class="row">
     <div class="col-lg-2" id="admin-nav">
         <ul class="nav nav-stacked" id="sidebar">
-              <li>Navigation stuff</li>
+        [% FOREACH year IN calendar.nsort.reverse %]
+            <li>
+                <a href="[% c.uri_for(c.controller('Blog').action_for('capture_single'), [year]) %]">[% year %]</a>
+                [% FOREACH month IN calendar.$year.nsort.reverse %]
+                    <ul>
+                        <a href="[% c.uri_for(c.controller('Blog').action_for('month'), [year,month])%]">[% months.$month %]</a>
+                        [% FOREACH day IN calendar.$year.$month.nsort.reverse %]
+                            <li class="nested">
+                                <a href="[% c.uri_for(c.controller('Blog').action_for('day'), [year,month,day])%]">[% day %]</a>
+                                <ul>
+                                    [% FOREACH blog IN calendar.$year.$month.$day %]
+                                        <li>
+                                            <a href="[% c.uri_for(c.controller('Blog').action_for('capture_single'), [blog.url_title])%]">[% blog.title %]</a>
+                                        </li>
+                                    [% END %]
+                                </ul>
+                            </li>
+                        [% END %]
+                    </ul>
+                [% END %]
+            </li>
+        [% END %]
         </ul>
     </div>
     <div class="col-lg-10">

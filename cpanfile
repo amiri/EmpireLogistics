@@ -54,6 +54,8 @@ requires "Geo::Coder::Google";
 requires "HTML::FormHandler";
 requires "HTML::FormHandler::Model::DBIC";
 requires "HTML::Selector::XPath";
+requires "HTML::Tree";
+requires "HTML::Query";
 requires "IO::All";
 requires "Image::Magick", "6.77, < 6.82";
 requires "Imager";

@@ -2,7 +2,22 @@ package EmpireLogistics::Schema::Result::Blog;
 
 use Moose;
 use MooseX::MarkAsMethods autoclean => 1;
+use HTML::TreeBuilder 5 -weak;
+use HTML::Query 'query';
+use Data::Printer;
 extends 'EmpireLogistics::Schema::Result';
+
+has 'treebuilder' => (
+    is => 'ro',
+    isa => 'HTML::TreeBuilder',
+    lazy => 1,
+    builder => '_build_treebuilder',
+);
+
+sub _build_treebuilder {
+    my $self = shift;
+    return HTML::TreeBuilder->new();
+}
 
 __PACKAGE__->table("blog");
 __PACKAGE__->add_columns(
@@ -78,6 +93,15 @@ __PACKAGE__->has_many(
     },
     { order_by => { -desc => "create_time" } },
 );
+
+sub excerpt {
+    my $self = shift;
+    my $parsed = $self->treebuilder->parse($self->body);
+    my @ps = $parsed->query('p')->get_elements;
+    my $first_p = $ps[0];
+    my $excerpt = $first_p->as_trimmed_text;
+    return $excerpt;
+}
 
 __PACKAGE__->meta->make_immutable;
 

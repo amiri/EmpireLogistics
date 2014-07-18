@@ -183,7 +183,7 @@ form.navbar-form .form-group .topnav-search {
 	padding-left:15px;
 	padding-right:15px;
 }
-body.admin {
+body.admin, body.blog {
 	background-color:#fff;
 }
 .checkbox-inline label {
@@ -246,4 +246,13 @@ div.form-control.btn.btn-info.add_element {
 }
 .select2-results {
     max-height: 500px;
+}
+ul, ol {
+    list-style-type: none;
+}
+.blog-summary {
+    border-bottom: dotted 1px #cccccc;
+}
+.nested {
+    margin-left: 1em;
 }

@@ -6,6 +6,7 @@ use Scalar::Util qw/looks_like_number/;
 use DateTime;
 use DateTime::Format::Pg;
 use namespace::autoclean;
+use Data::Printer;
 extends 'Catalyst::Controller';
 
 has 'dt' => (
@@ -29,13 +30,49 @@ sub begin :Private {
 
 sub base : Chained('/') PathPart('blog') CaptureArgs(0) GET {
     my ($self, $c) = @_;
+    my $blog_rs = $c->model('DB::Blog')->active;
+    my %calendar = ();
+
+    while (my $blog = $blog_rs->next) {
+        my $year = $blog->create_time->year;
+        my $month = $blog->create_time->month;
+        my $day = $blog->create_time->day;
+        $calendar{$year}{$month}{$day} = [] unless ref($calendar{$year}{$month}{$day}) eq 'ARRAY';
+        push @{$calendar{$year}{$month}{$day}}, $blog;
+    }
+    $c->log->warn(p %calendar);
+    my $months = { 
+        1  => 'January',
+        2  => 'February',
+        3  => 'March',
+        4  => 'April',
+        5  => 'May',
+        6  => 'June',
+        7  => 'July',
+        8  => 'August',
+        9  => 'September',
+        10 => 'October',
+        11 => 'November',
+        12 => 'December',
+    };
+
+    $c->stash(
+        blog_rs => $blog_rs,
+        months => $months,
+        calendar => \%calendar,
+    );
 }
 
 sub all : Chained('base') PathPart('') Args(0) GET {
     my ($self, $c) = @_;
-    my @blogs = $c->model('DB::Blog')->active->all;
+    my @blogs = $c->stash->{blog_rs}->all;
+    my %all_blogs = ();
+    for my $blog (@blogs) {
+        $all_blogs{$blog->create_time->year}{$blog->create_time->month}{$blog->create_time->day} = [] unless ref($all_blogs{$blog->create_time->year}{$blog->create_time->month}{$blog->create_time->day}) eq 'ARRAY';
+        push @{$all_blogs{$blog->create_time->year}{$blog->create_time->month}{$blog->create_time->day}}, $blog;
+    }
     $c->stash(
-        blogs => \@blogs,
+        all_blogs => \%all_blogs,
     );
 }
 
@@ -63,14 +100,20 @@ sub year : Private {
         day   => 1,
     );
     my $end_dt = $self->dt->format_datetime($end);
-    my @blogs  = $c->model('DB::Blog')->active->search(
+    my @blogs = $c->stash->{blog_rs}->search(
         {
             create_time => {">=" => $start_dt,},
             create_time => {"<"  => $end_dt,},
         }
     );
+    my %blogs_for_year = ();
+    for my $blog (@blogs) {
+        $blogs_for_year{$blog->create_time->month}{$blog->create_time->day} = [] unless ref($blogs_for_year{$blog->create_time->month}{$blog->create_time->day}) eq 'ARRAY';
+        push @{$blogs_for_year{$blog->create_time->month}{$blog->create_time->day}}, $blog;
+    }
     $c->stash(
-        blogs    => \@blogs,
+        start => $start,
+        blogs_for_year => \%blogs_for_year,
         template => 'blog/year.tt',
     );
     return 1;
@@ -92,14 +135,20 @@ sub month : Chained('base') PathPart('') Args(2) GET {
         day   => 1,
     );
     my $end_dt = $self->dt->format_datetime($end);
-    my @blogs  = $c->model('DB::Blog')->active->search(
+    my @blogs = $c->stash->{blog_rs}->search(
         {
             create_time => {">=" => $start_dt,},
             create_time => {"<"  => $end_dt,},
         }
     );
+    my %blogs_for_day = ();
+    for my $blog (@blogs) {
+        $blogs_for_day{$blog->create_time->day} = [] unless ref($blogs_for_day{$blog->create_time->day}) eq 'ARRAY';
+        push @{$blogs_for_day{$blog->create_time->day}}, $blog;
+    }
     $c->stash(
-        blogs => \@blogs,
+        start => $start,
+        blogs_for_day => \%blogs_for_day,
     );
 }
 
@@ -120,7 +169,7 @@ sub day : Chained('base') PathPart('') Args(3) GET {
         day   => $day + 1,
     );
     my $end_dt = $self->dt->format_datetime($end);
-    my @blogs  = $c->model('DB::Blog')->active->search(
+    my @blogs = $c->stash->{blog_rs}->search(
         {
             create_time => {">=" => $start_dt,},
             create_time => {"<"  => $end_dt,},
@@ -128,6 +177,7 @@ sub day : Chained('base') PathPart('') Args(3) GET {
     );
     $c->stash(
         blogs => \@blogs,
+        start => $start,
     );
 }
 
@@ -148,7 +198,7 @@ sub single : Chained('base') PathPart('') Args(4) GET {
         day   => $day + 1,
     );
     my $end_dt = $self->dt->format_datetime($end);
-    my $blog   = $c->model('DB::Blog')->active->search(
+    my $blog = $c->stash->{blog_rs}->search(
         {
             create_time => {">=" => $start_dt,},
             create_time => {"<"  => $end_dt,},
@@ -159,12 +209,13 @@ sub single : Chained('base') PathPart('') Args(4) GET {
     )->single;
     $c->stash(
         blog => $blog,
+        template => 'blog/single.tt',
     );
 }
 
 sub single_title : Private {
     my ($self, $c, $title) = @_;
-    my $blog = $c->model('DB::Blog')->active->search(
+    my $blog = $c->stash->{blog_rs}->search(
         {
             url_title => $title,
         }, {

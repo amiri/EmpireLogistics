@@ -43,7 +43,7 @@ has_block 'basic_block' => (
     tag         => 'fieldset',
     label       => 'Basic',
     render_list => [
-        'title', 'url_title', 'body', 'author',
+        'title', 'url_title', 'body', 'media_tags','author',
     ],
 );
 
@@ -86,10 +86,30 @@ has_field 'url_title' => (
     apply => [NoSpaces, NotAllDigits],
 );
 
+has_field 'media_tags' => (
+    type          => 'Display',
+    label         => 'Media Tags',
+    render_method => \&render_media_tags,
+);
+
+sub render_media_tags {
+    my $self      = shift;
+    my $output = qq{<div class="form-group"><label class="col-lg-2 control-label" for="media_tags">};
+    $output .= $self->label;
+    $output .= qq{</label><div class="col-lg-5">};
+    $output .=
+        qq{<div class="alert alert-info"><p class="small">Insert images with [MediaID:\$id] and YouTube videos with [Youtube:\$id] where you would like them in your post.</p></div></div></div>};
+    return $output;
+}
+
 has_field 'body' => (
     type  => 'TextArea',
     label => 'Body',
-    apply => [PrintableAndNewline, NotAllDigits],
+    apply => [
+        NotAllDigits,
+        { transform => \&media_links,}
+    ],
+    element_wrapper_class => ['col-lg-10'],
 );
 
 has_field 'author' => (
@@ -105,7 +125,6 @@ sub options_author {
             value => $_->id,
         }} $self->schema->resultset("User")->active->all
     ];
-    #return $self->user_id;
 }
 
 has_field 'submit' => (
@@ -116,7 +135,8 @@ has_field 'submit' => (
     element_wrapper_class => ['col-lg-5', 'col-lg-offset-0', 'buffer'],
 );
 
+
+
 __PACKAGE__->meta->make_immutable;
 
 1;
-

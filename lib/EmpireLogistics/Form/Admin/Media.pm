@@ -47,7 +47,7 @@ has_block 'metadata_block' => (
 has_block 'basic_block' => (
     tag         => 'fieldset',
     label       => 'Basic Information',
-    render_list => ['file', 'preview', 'data-x1', 'data-y1', 'data-x2', 'data-y2', 'data-height', 'data-width','uuid', 'mime_type', 'width', 'height'],
+    render_list => ['file', 'preview', 'blog_tag', 'data-x1', 'data-y1', 'data-x2', 'data-y2', 'data-height', 'data-width','uuid', 'mime_type', 'width', 'height'],
 );
 
 has_block 'annotations_block' => (
@@ -108,6 +108,27 @@ has_field 'preview' => (
     type          => 'Display',
     render_method => \&render_preview,
 );
+
+has_field 'blog_tag' => (
+    type          => 'Display',
+    label         => 'Blog Tag',
+    render_method => \&render_blog_tag,
+);
+
+sub render_blog_tag {
+    my $self      = shift;
+    my $id        = $self->form->field('id')->fif;
+    my $value     = $id ? "[MediaID:$id]<br>" : "";
+    my $placeholder = "Media not saved yet";
+    my $output =
+        qq{<div class="form-group"><label class="col-lg-2 control-label" for="blog_tag">};
+    $output .= $self->label;
+    $output .= qq{</label><div class="col-lg-5">};
+    $output .=
+        qq{<input type="text" class="form-control" placeholder="$placeholder" value="$value" id="blog_tag" readonly="1" /><p class="small">Paste blog tag into your blog where you would like to display the image.</p></div></div>};
+    return $output;
+}
+
 
 has_field 'data-x1' => (
     type => 'Hidden',

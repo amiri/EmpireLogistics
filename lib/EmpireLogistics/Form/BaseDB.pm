@@ -3,6 +3,7 @@ package EmpireLogistics::Form::BaseDB;
 use HTML::FormHandler::Moose;
 use namespace::autoclean;
 extends 'HTML::FormHandler::Model::DBIC';
+with 'EmpireLogistics::Role::Form::Util';
 
 has '+field_name_space'  => (default => 'EmpireLogistics::Form::Field');
 has '+widget_name_space' => (default => 'EmpireLogistics::Form::Widget');
@@ -139,10 +140,14 @@ around 'update_model', sub {
     } else {
         delete $self->values->{delete_time};             # don't touch
     }
-    use Data::Printer;
-    #delete $self->values->{create_time};
-    #delete $self->values->{update_time};
-    #warn p $self->values;
+
+    # Handle blog titles
+    if (exists $self->values->{title} and exists $self->values->{url_title}) {
+        if ($self->values->{title} and not $self->values->{url_title}) {
+            my $url_title = $self->url_friendly($self->values->{title});
+            $self->values->{url_title} = $url_title;
+        }
+    }
 
     my $media = delete $self->values->{media}; 
 

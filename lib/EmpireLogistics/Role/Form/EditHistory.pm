@@ -166,7 +166,7 @@ sub get_edit_history {
                 $row->{new_value}
                     =~ s/^(.*)/'*' x length($row->{new_value})/e;
             }
-            if ( lc $row->{field_name} eq 'description' ) {
+            if ( lc $row->{field_name} eq 'description' || lc $row->{field_name} eq 'body' ) {
                 $row->{new_value} =
                     length($row->{new_value}) > 50
                     ? substr($row->{new_value}, 0, 50) . "..."
@@ -174,7 +174,7 @@ sub get_edit_history {
             }
             $row->{original_value}
                 = $edit_field->get_column('original_value');
-            if ( lc $row->{field_name} eq 'description' ) {
+            if ( lc $row->{field_name} eq 'description' || lc $row->{field_name} eq 'body' ) {
                 $row->{original_value} =
                     length($row->{original_value}) > 50
                     ? substr($row->{original_value}, 0, 50) . "..."

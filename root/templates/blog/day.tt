@@ -1,1 +1,7 @@
-[% blogs.size %]
+<h3>[% start.day_name %], [% start.month_name %] [% start.day %], [% start.year %]</h3>
+
+<div class="row col-lg-11">
+    [% FOREACH blog IN blogs %]
+        [% PROCESS 'blog/summary.tt', blog = blog %]
+    [% END %]
+</div>

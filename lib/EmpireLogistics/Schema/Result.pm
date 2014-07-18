@@ -107,8 +107,6 @@ around delete => sub {
 
 around insert => sub {
     my ( $orig, $self ) = ( shift, shift );
-    use Data::Printer;
-    warn p $self;
 
     if (    $self->can('geometry')
         and $self->can('latitude')
