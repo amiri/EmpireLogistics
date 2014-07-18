@@ -98,7 +98,7 @@ sub render_media_tags {
     $output .= $self->label;
     $output .= qq{</label><div class="col-lg-5">};
     $output .=
-        qq{<div class="alert alert-info"><p class="small">Insert images with [MediaID:\$id] and YouTube videos with [Youtube:\$id] where you would like them in your post.</p></div></div></div>};
+        qq{<div class="alert alert-info"><p class="small">Insert images with [MediaID:\$id] and YouTube videos with [YoutubeID:\$id] where you would like them in your post.</p></div></div></div>};
     return $output;
 }
 

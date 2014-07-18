@@ -103,6 +103,11 @@ sub excerpt {
     return $excerpt;
 }
 
+sub url {
+    my $self = shift;
+    return '/blog/'.$self->url_title.'/';
+}
+
 __PACKAGE__->meta->make_immutable;
 
 1;

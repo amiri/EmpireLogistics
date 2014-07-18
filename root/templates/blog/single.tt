@@ -2,7 +2,7 @@
     <h2>[% blog.title %]</h2>
     <p><em>[% blog.create_time.day_name %], [% blog.create_time.month_name %] [% blog.create_time.day %], [% blog.create_time.year %]</em></p>
 
-    <div class="row"
+    <div class="row nested"
     [% blog.body %]
     </div>
 

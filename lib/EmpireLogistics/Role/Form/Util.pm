@@ -57,7 +57,6 @@ sub url_friendly {
 
 sub media_links {
     my ($value, $field) = @_;
-    warn "Entering media links";
     my $new_value = youtube_video_links($value, $field);
     $new_value = image_links($new_value, $field);
     return $new_value;
@@ -68,12 +67,12 @@ sub youtube_video_links {
     my $new_value;
     $new_value = $value;
     if ($new_value) {
-        while ($new_value =~ /\[Youtube\:\s*(.+)\]/) {
+        while ($new_value =~ /\[YoutubeID\:\s*(.+)\]/) {
             my $youtube_id = $1;
             my $replace_with =
                 qq{<iframe width="560" height="315" src="//www.youtube.com/embed/$youtube_id" frameborder="0" allowfullscreen></iframe>};
             $new_value =~ s{
-                \[Youtube\:\s*(\w+)\]
+                \[YoutubeID\:\s*(.+)\]
             }{
                 $replace_with
             }xg;
