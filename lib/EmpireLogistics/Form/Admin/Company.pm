@@ -60,7 +60,7 @@ has_block 'address_block' => (
 
 has_field 'id' => (
     type     => 'Integer',
-    disabled => 1,
+    #disabled => 1,
     readonly => 1,
     label    => 'Company ID',
 );
@@ -68,7 +68,7 @@ has_field 'create_time' => (
     type            => 'Timestamp',
     label           => 'Create time',
     format          => "%Y-%m-%d %r %z",
-    readonly        => 1,
+    #readonly        => 1,
     html5_type_attr => 'datetime',
     disabled        => 1,
 );
@@ -76,7 +76,7 @@ has_field 'update_time' => (
     type            => 'Timestamp',
     label           => 'Update time',
     format          => "%Y-%m-%d %r %z",
-    readonly        => 1,
+    #readonly        => 1,
     html5_type_attr => 'datetime',
     disabled        => 1,
 );

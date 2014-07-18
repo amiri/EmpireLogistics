@@ -16,16 +16,14 @@ __PACKAGE__->add_columns(
   "create_time",
   {
     data_type     => "timestamp with time zone",
-    default_value => \"current_timestamp",
+    default_value => \'now()',
     is_nullable   => 0,
-    original      => { default_value => \"now()" },
   },
   "update_time",
   {
     data_type     => "timestamp with time zone",
-    default_value => \"current_timestamp",
+    default_value => \'now()',
     is_nullable   => 0,
-    original      => { default_value => \"now()" },
   },
   "delete_time",
   { data_type => "timestamp with time zone", is_nullable => 1 },

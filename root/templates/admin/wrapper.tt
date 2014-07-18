@@ -26,4 +26,7 @@
     if ($("#description").length) {
         CKEDITOR.replace("description");
     }
+    if ($("#body").length) {
+        CKEDITOR.replace("body");
+    }
 </script>

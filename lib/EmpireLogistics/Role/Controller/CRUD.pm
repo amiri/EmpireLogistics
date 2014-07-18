@@ -364,11 +364,11 @@ sub form_create {
     my ($form, $item);
     $c->log->debug("I do not have for and am not making a new form");
     #$form = $c->stash->{form};
-    $item = $c->stash->{item_rs}->new_result({});
+    #$item = $c->stash->{item_rs}->new_result({});
     $form = $self->form->new(
         schema => $c->model('DB')->schema,
         user_id => $c->user->id,
-        item => $item,
+        #item => $item,
     );
     if ($c->stash->{object}) {
         $item = $c->stash->{object};

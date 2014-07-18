@@ -139,6 +139,10 @@ around 'update_model', sub {
     } else {
         delete $self->values->{delete_time};             # don't touch
     }
+    use Data::Printer;
+    #delete $self->values->{create_time};
+    #delete $self->values->{update_time};
+    #warn p $self->values;
 
     my $media = delete $self->values->{media}; 
 

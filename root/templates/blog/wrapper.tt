@@ -1,0 +1,15 @@
+[% WRAPPER 'wrapper.tt'
+    body_class = 'blog'
+%]
+<h1>Blog</h1>
+<div class="row">
+    <div class="col-lg-2" id="admin-nav">
+        <ul class="nav nav-stacked" id="sidebar">
+              <li>Navigation stuff</li>
+        </ul>
+    </div>
+    <div class="col-lg-10">
+    [% content %]
+    </div>
+</div>
+[% END %]
