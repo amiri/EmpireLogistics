@@ -187,6 +187,70 @@ DISTRIBUTIONS
       Test::More 0
       parent 0
       perl 5.008001
+  Badger-0.09
+    pathname: A/AB/ABW/Badger-0.09.tar.gz
+    provides:
+      Badger 0.09
+      Badger::App undef
+      Badger::Apps undef
+      Badger::Base undef
+      Badger::Base::Trial undef
+      Badger::Class 0.01
+      Badger::Class::Config undef
+      Badger::Class::Methods undef
+      Badger::Class::Vars undef
+      Badger::Codec undef
+      Badger::Codec::Base64 undef
+      Badger::Codec::Chain undef
+      Badger::Codec::Encode undef
+      Badger::Codec::Encoding undef
+      Badger::Codec::HTML undef
+      Badger::Codec::JSON undef
+      Badger::Codec::Storable undef
+      Badger::Codec::TT undef
+      Badger::Codec::URI undef
+      Badger::Codec::URL undef
+      Badger::Codec::Unicode undef
+      Badger::Codec::YAML undef
+      Badger::Codecs undef
+      Badger::Config undef
+      Badger::Config::Item undef
+      Badger::Config::Schema undef
+      Badger::Constants 0.01
+      Badger::Debug undef
+      Badger::Exception undef
+      Badger::Exporter 0.01
+      Badger::Factory undef
+      Badger::Factory::Class undef
+      Badger::Filesystem undef
+      Badger::Filesystem::Base undef
+      Badger::Filesystem::Directory undef
+      Badger::Filesystem::File undef
+      Badger::Filesystem::Path undef
+      Badger::Filesystem::Virtual undef
+      Badger::Filesystem::Visitor undef
+      Badger::Hub undef
+      Badger::Hub::Badger undef
+      Badger::Log undef
+      Badger::Log::File undef
+      Badger::Logic undef
+      Badger::Logic::And undef
+      Badger::Logic::Expr undef
+      Badger::Logic::Item undef
+      Badger::Logic::Not undef
+      Badger::Logic::Or undef
+      Badger::Mixin undef
+      Badger::Prototype undef
+      Badger::Rainbow undef
+      Badger::Reporter undef
+      Badger::Reporter::App undef
+      Badger::Test undef
+      Badger::Test::Manager undef
+      Badger::Timestamp undef
+      Badger::URL undef
+      Badger::Utils 0.01
+    requirements:
+      ExtUtils::MakeMaker 0
   CGI-Simple-1.113
     pathname: A/AN/ANDYA/CGI-Simple-1.113.tar.gz
     provides:
@@ -3726,6 +3790,14 @@ DISTRIBUTIONS
       HTML::Tagset 3
       XSLoader 0
       perl 5.008
+  HTML-Query-0.08
+    pathname: K/KA/KAMELKEV/HTML-Query-0.08.tar.gz
+    provides:
+      HTML::Query 0.08
+    requirements:
+      Badger 0.03
+      ExtUtils::MakeMaker 0
+      HTML::Tree 3.23
   HTML-Selector-XPath-0.16
     pathname: C/CO/CORION/HTML-Selector-XPath-0.16.tar.gz
     provides:
