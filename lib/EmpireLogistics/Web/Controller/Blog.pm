@@ -40,7 +40,6 @@ sub base : Chained('/') PathPart('blog') CaptureArgs(0) GET {
         $calendar{$year}{$month}{$day} = [] unless ref($calendar{$year}{$month}{$day}) eq 'ARRAY';
         push @{$calendar{$year}{$month}{$day}}, $blog;
     }
-    $c->log->warn(p %calendar);
     my $months = { 
         1  => 'January',
         2  => 'February',
