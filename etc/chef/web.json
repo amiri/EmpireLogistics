@@ -58,12 +58,13 @@
     "npm_packages": [
       "topojson",
       "grunt",
+      "grunt-init",
       "grunt-cli",
       "grunt-md5",
       "grunt-contrib-concat",
       "grunt-contrib-cssmin",
-      "grunt-contrib-watch",
-      "grunt-contrib-uglify"
+      "grunt-contrib-uglify",
+      "grunt-contrib-jshint"
     ],
     "hold_packages": [
       "libpq-dev",

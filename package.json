@@ -1,0 +1,21 @@
+{
+  "name": "EmpireLogistics",
+  "version": "0.0.1",
+  "description": "Mapping Logistics Against the Empire",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/amiri/EmpireLogistics.git"
+  },
+  "author": "Amiri Barksdale",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/amiri/EmpireLogistics/issues"
+  },
+  "homepage": "https://github.com/amiri/EmpireLogistics"
+}
