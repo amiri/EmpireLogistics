@@ -56,7 +56,14 @@
       "https://github.com/migurski/TileStache/archive/master.tar.gz"
     ],
     "npm_packages": [
-      "topojson"
+      "topojson",
+      "grunt",
+      "grunt-cli",
+      "grunt-md5",
+      "grunt-contrib-concat",
+      "grunt-contrib-cssmin",
+      "grunt-contrib-watch",
+      "grunt-contrib-uglify"
     ],
     "hold_packages": [
       "libpq-dev",
