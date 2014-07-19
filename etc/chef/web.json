@@ -58,6 +58,8 @@
     "npm_packages": [
       "topojson",
       "grunt",
+      "grunt-userev",
+      "grunt-filerev",
       "grunt-init",
       "grunt-cli",
       "grunt-md5",

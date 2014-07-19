@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "Mapping Logistics Against the Empire",
   "directories": {
-    "doc": "docs"
+    "doc": "docs",
+    "test": "test"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,5 +18,20 @@
   "bugs": {
     "url": "https://github.com/amiri/EmpireLogistics/issues"
   },
-  "homepage": "https://github.com/amiri/EmpireLogistics"
+  "homepage": "https://github.com/amiri/EmpireLogistics",
+  "main": "index.js",
+  "dependencies": {
+    "grunt": "~0.4.5",
+    "grunt-md5": "~0.1.11",
+    "grunt-contrib-concat": "~0.4.0",
+    "grunt-contrib-uglify": "~0.5.0",
+    "grunt-contrib-cssmin": "~0.10.0",
+    "grunt-cli": "~0.1.13",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-init": "~0.3.2",
+    "topojson": "~1.6.15",
+    "grunt-filerev": "~0.2.1",
+    "grunt-userev": "0.0.6"
+  },
+  "devDependencies": {}
 }

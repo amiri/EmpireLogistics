@@ -1,5 +1,6 @@
 <span class="hidden hash" data-hash="[% c.stash.hash_location || c.user_session.hash_location %]"></span>
 <script>
+    L.Icon.Default.imagePath = '/js/lib/leaflet/images';
     var map = L.map('map', {
         maxZoom: 16
     });

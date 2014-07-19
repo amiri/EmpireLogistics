@@ -251,6 +251,7 @@ include_recipe "postgresql::service"
 include_recipe "nginx::source"
 include_recipe "nodejs"
 include_recipe "npm"
+include_recipe "grunt_cookbook"
 include_recipe "sudo"
 include_recipe "perl"
 
@@ -396,6 +397,15 @@ node["el"]["npm_packages"].each do |package|
   npm_package package do
     action :install
   end
+end
+
+grunt_cookbook_npm "/var/local/EmpireLogistics/current" do
+  action :install
+end
+
+grunt_cookbook_grunt "/var/local/EmpireLogistics/current" do
+  action :task
+  task "default"
 end
 
 cookbook_file "nginx.conf" do

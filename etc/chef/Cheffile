@@ -26,3 +26,5 @@ cookbook "user",
     :git => "https://github.com/fnichol/chef-user"
 cookbook "openssh"
 cookbook "postfix"
+cookbook "grunt",
+    :git => "https://github.com/MattSurabian/grunt_cookbook"

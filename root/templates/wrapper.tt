@@ -6,25 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="/css/lib/select2.css">
-    <link rel="stylesheet" href="/css/lib/select2-bootstrap.css">
-    <link rel="stylesheet" href="/css/el.css" type="text/css" />
+    <link rel="stylesheet" href="/css/site.min.a98af453.css" type="text/css" />
     [% stylesheets() %]
 
-    <script src="//code.jquery.com/jquery-latest.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <script src="//cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-    <script src="//d3js.org/d3.v3.min.js"></script>
-    <script src="//d3js.org/topojson.v1.min.js"></script>
-    <script src="/js/lib/leaflet-hash.js"></script>
-    <script src="/js/lib/TileLayer.custom_d3_geoJSON.js"></script>
-    <script src="//d3js.org/d3.geo.tile.v0.min.js"></script>
-    <script src="/js/lib/d3-bootstrap.min.js"></script>
-    <script src="/js/lib/select2.js"></script>
-    <script src="/js/lib/jquery.animate-colors-min.js"></script>
-    <script src="/js/searchbar.js"></script>
+
+    <script src="/js/site.min.77bc8765.js"></script>
     [% jsfiles() %]
     <title>Empire Logistics</title>
 </head>
