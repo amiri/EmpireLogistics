@@ -362,7 +362,7 @@ sub form_create {
     my ($self, $c, $template, $form_number) = @_;
     my $creation = $c->stash->{creation};
     my ($form, $item);
-    $c->log->debug("I do not have for and am not making a new form");
+    #$c->log->debug("I do not have for and am not making a new form");
     #$form = $c->stash->{form};
     #$item = $c->stash->{item_rs}->new_result({});
     $form = $self->form->new(
