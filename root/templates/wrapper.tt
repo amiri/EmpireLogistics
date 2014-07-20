@@ -6,11 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="/css/site.min.a98af453.css" type="text/css" />
+    <link rel="stylesheet" href="/css/site.min.bd908cc5.css" type="text/css" />
     [% stylesheets() %]
 
 
-    <script src="/js/site.min.77bc8765.js"></script>
+    <script type="text/javascript">
+        window.CKEDITOR_BASEPATH = '/js/lib/ckeditor/';
+    </script>
+    <script src="/js/site.min.7288186c.js"></script>
     [% jsfiles() %]
     <title>Empire Logistics</title>
 </head>

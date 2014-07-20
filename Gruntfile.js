@@ -11,6 +11,7 @@ module.exports = function(grunt) {
                     "root/css/lib/select2.css",
                     "root/css/lib/select2-bootstrap.css",
                     "root/css/lib/leaflet.css",
+                    "root/css/lib/dataTables.bootstrap.css",
                     "root/css/el.css",
                 ],
                 dest: "root/css/site.css",
@@ -28,7 +29,15 @@ module.exports = function(grunt) {
                     "root/js/lib/d3-bootstrap.min.js",
                     "root/js/lib/select2.js",
                     "root/js/lib/jquery.animate-colors-min.js",
+                    "root/js/lib/jquery.dataTables.min.js",
+                    "root/js/lib/dataTables.bootstrap.js",
+                    "root/js/lib/dataTables.num-html-sort.js",
+                    "root/js/lib/dataTables.filter-delay.js",
+                    "root/js/lib/ckeditor/ckeditor.js",
                     "root/js/searchbar.js",
+                    "root/js/admin/edit-history.js",
+                    "root/js/refresh-modals.js",
+                    "root/js/admin/address.js",
                 ],
                 dest: "root/js/site.js"
             }
@@ -62,11 +71,14 @@ module.exports = function(grunt) {
             }
         },
         userev: {
+            options: {
+                hash: /(\.[a-f0-9]{8})\.[a-z]+$/,
+            },
             css: { // Link to minified css in index html.
                 src: 'root/templates/wrapper.tt',
                 options: {
                     patterns: {
-                        'Linking versioned css': /(css\/[a-z0-9.]*\.css)/,
+                        'Linking versioned css': /(css\/site\.min\.[a-z0-9.]*\.css)/,
                     },
                 },
             },
@@ -74,7 +86,7 @@ module.exports = function(grunt) {
                 src: 'root/templates/wrapper.tt',
                 options: {
                     patterns: {
-                        'Linking versioned js': /(js\/[a-z0-9.]*\.js)/,
+                        'Linking versioned js': /(js\/site\.min\.[a-z0-9.]*\.js)/,
                     },
                 },
             },
