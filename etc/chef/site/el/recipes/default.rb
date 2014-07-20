@@ -251,7 +251,7 @@ include_recipe "postgresql::service"
 include_recipe "nginx::source"
 include_recipe "nodejs"
 include_recipe "npm"
-include_recipe "grunt_cookbook"
+include_recipe "grunt"
 include_recipe "sudo"
 include_recipe "perl"
 
