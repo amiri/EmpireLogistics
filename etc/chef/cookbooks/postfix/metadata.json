@@ -1,10 +1,10 @@
 {
   "name": "postfix",
-  "version": "3.1.8",
+  "version": "3.3.1",
   "description": "Installs and configures postfix for client or outbound relayhost, or to do SASL auth",
   "long_description": "",
-  "maintainer": "Opscode, Inc.",
-  "maintainer_email": "cookbooks@opscode.com",
+  "maintainer": "Chef Software, Inc.",
+  "maintainer_email": "cookbooks@getchef.com",
   "license": "Apache 2.0",
   "platforms": {
     "ubuntu": ">= 0.0.0",
@@ -35,7 +35,17 @@
     },
     "postfix/aliases": {
       "display_name": "Postfix Aliases",
-      "description": "Hash of Postfix aliases mapping a name to a value.  Example 'root' => 'operator@example.com'.  See aliases man page for details.",
+      "description": "Hash of Postfix aliases mapping a name to a value. Example 'root' => 'operator@example.com'. See aliases man page for details.",
+      "type": "hash"
+    },
+    "postfix/transports": {
+      "display_name": "Postfix Transports",
+      "description": "Hash of Postfix transports mapping a destination to a smtp server. Example 'my.domain' => 'smtp:outbound-relay.my.domain'. See transport man page for details.",
+      "type": "hash"
+    },
+    "postfix/access": {
+      "display_name": "Postfix Access Table",
+      "description": "Hash of Postfix accesses mapping a pattern to a action.  Example 'domain.tld' => 'OK'.  See access man page for details.",
       "type": "hash"
     },
     "postfix/mail_type": {
@@ -70,6 +80,8 @@
     "postfix": "Installs and configures postfix",
     "postfix::sasl_auth": "Set up postfix to auth to a server with sasl",
     "postfix::aliases": "Manages /etc/aliases",
+    "postfix::transports": "Manages /etc/postfix/transport",
+    "postfix::access": "Manages /etc/postfix/access",
     "postfix::client": "Searches for the relayhost based on an attribute",
     "postfix::server": "Sets the mail_type attribute to master"
   }

@@ -27,6 +27,7 @@
   },
   "run_list": [
     "recipe[apt]",
+    "recipe[el-python]",
     "recipe[el]"
   ],
   "authorization": {
@@ -57,7 +58,7 @@
     ],
     "npm_packages": [
       "topojson",
-      "grunt",
+      "grunt@~0.4.1",
       "grunt-userev",
       "grunt-filerev",
       "grunt-init",

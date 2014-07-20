@@ -28,7 +28,7 @@ module Windows
     # returns windows friendly version of the provided path,
     # ensures backslashes are used everywhere
     def win_friendly_path(path)
-      path.gsub(::File::SEPARATOR, ::File::ALT_SEPARATOR) if path
+      path.gsub(::File::SEPARATOR, ::File::ALT_SEPARATOR || '\\') if path
     end
 
     # account for Window's wacky File System Redirector
@@ -65,9 +65,9 @@ module Windows
     def cached_file(source, checksum=nil, windows_path=true)
       @installer_file_path ||= begin
 
-        if source =~ ::URI::ABS_URI && %w[http https].include?(URI.parse(source).scheme)
-          uri = ::URI.parse(::URI.unescape(source))
-          cache_file_path = "#{Chef::Config[:file_cache_path]}/#{::File.basename(uri.path)}"
+        if source =~ ::URI::ABS_URI && %w[ftp http https].include?(URI.parse(source).scheme)
+          uri = ::URI.parse(source)
+          cache_file_path = "#{Chef::Config[:file_cache_path]}/#{::File.basename(::URI.unescape(uri.path))}"
           Chef::Log.debug("Caching a copy of file #{source} at #{cache_file_path}")
           r = Chef::Resource::RemoteFile.new(cache_file_path, run_context)
           r.source(source)

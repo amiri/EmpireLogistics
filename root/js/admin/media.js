@@ -154,9 +154,9 @@ $(document).ready(function() {
     image.cropper("enable");
 
     var handleImageCrop = function() {
-        console.log(arguments);
+        //console.log(arguments);
         var cropClick = arguments[0] == "cropClick" ? true: false;
-        console.log(cropClick);
+        //console.log(cropClick);
         // Remove error classes
         if ($("#server-error")) {
             $("#server-error").remove();
@@ -271,7 +271,7 @@ $(document).ready(function() {
 
         //console.log(field);
         if (document.getElementById('file').files[0] && ! cropClick) {
-            console.log("File upload");
+            //console.log("File upload");
             var uploadField = document.getElementById('file');
             var file = uploadField.files[0];
             //console.log(file.size);
@@ -315,7 +315,7 @@ $(document).ready(function() {
                 }
             };
         } else {
-            console.log("No file upload");
+            //console.log("No file upload");
             xhr.send(formData);
         }
 

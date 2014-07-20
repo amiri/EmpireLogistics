@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/optiflows-cookbooks/conffile.png)](https://travis-ci.org/optiflows-cookbooks/conffile)
 # conffile cookbook
 
 # Requirements

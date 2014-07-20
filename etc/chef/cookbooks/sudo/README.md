@@ -81,6 +81,14 @@ node.default['authorization']['sudo']['sudoers_defaults'] = [
 ]
 ```
 
+*FreeBSD*
+```ruby
+node.default['authorization']['sudo']['sudoers_defaults'] = [
+  'env_reset',
+  'secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"'
+]
+```
+
 *RHEL family 5.x*
 The version of sudo in RHEL 5 may not support `+=`, as used in `env_keep`, so its a single string.
 
@@ -222,6 +230,12 @@ case it is not already</td>
       <td>user</td>
       <td>user to provide sudo privileges to</td>
       <td><tt>tomcat</tt></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>defaults</td>
+      <td>array of defaults this user has</td>
+      <td><tt>['!requiretty','env_reset']</tt></td>
       <td></td>
     </tr>
     <tr>

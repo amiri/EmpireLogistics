@@ -39,11 +39,10 @@ This change in namespace to `node['postfix']['main']` should allow for greater f
 * `node['postfix']['main']['myhostname']` - defaults to fqdn from Ohai
 * `node['postfix']['main']['mydomain']` - defaults to domain from Ohai
 * `node['postfix']['main']['myorigin']` - defaults to $myhostname
-* `node['postfix']['main']['mynetworks']` - default is `127.0.0.0/8`
+* `node['postfix']['main']['mynetworks']` - default is nil, which forces Postfix to default to loopback addresses.
 * `node['postfix']['main']['inet_interfaces']` - set to `loopback-only`, or `all` for server recipe
 * `node['postfix']['main']['alias_maps']` - set to `hash:/etc/aliases`
 * `node['postfix']['main']['mailbox_size_limit']` - set to `0` (disabled)
-* `node['postfix']['main']['recipient_delimiter']` - set to `+`
 * `node['postfix']['main']['mydestination']` - default fqdn, hostname, localhost.localdomain, localhost
 * `node['postfix']['main']['smtpd_use_tls']` - (yes/no); default yes. See conditional cert/key attributes.
   - `node['postfix']['main']['smtpd_tls_cert_file']` - conditional attribute, set to full path of server's x509 certificate.
@@ -59,6 +58,18 @@ This change in namespace to `node['postfix']['main']` should allow for greater f
   - `node['postfix']['main']['relayhost']` - Set to empty string
   - `node['postfix']['sasl']['smtp_sasl_user_name']` - SASL user to authenticate as.  Default empty
   - `node['postfix']['sasl']['smtp_sasl_passwd']` - SASL password to use.  Default empty.
+* `node['postfix']['sender_canonical_map_entries']` - (hash with key value pairs); default not configured.  Setup generic canonical maps. See `man 5 canonical`. If has at least one value, then will be enabled in config.
+* `node['postfix']['smtp_generic_map_entries']` - (hash with key value pairs); default not configured.  Setup generic postfix maps. See `man 5 generic`. If has at least one value, then will be enabled in config.
+
+Example of json role config, for setup *_map_entries:
+
+`postfix : {`
+
+`...`
+
+`"smtp_generic_map_entries" : { "root@youinternaldomain.local" : "admin@example.com", "admin@youinternaldomain.local" : "admin@example.com" }`
+
+`}`
 
 ### master.cf template attributes
 * `node['postfix']['master']['submission'] - Whether to use submission (TCP 587) daemon. (true/false); default false
@@ -96,7 +107,7 @@ http://wiki.opscode.com/display/chef/Templates#Templates-TemplateLocationSpecifi
 
 Usage
 -----
-On systems that should simply send mail directly to a relay, or out to the internet, use `recipe[postfix]` and modify the `node['postfix']['relayhost']` attribute via a role.
+On systems that should simply send mail directly to a relay, or out to the internet, use `recipe[postfix]` and modify the `node['postfix']['main']['relayhost']` attribute via a role.
 
 On systems that should be the MX for a domain, set the attributes accordingly and make sure the `node['postfix']['mail_type']` attribute is `master`. See __Examples__ for information on how to use `recipe[postfix::server]` to do this automatically.
 
@@ -114,8 +125,8 @@ The `base` role is applied to all nodes in the environment.
 name "base"
 run_list("recipe[postfix]")
 override_attributes(
-  "mail_type" => "client",
   "postfix" => {
+    "mail_type" => "client",
     "main" => {
       "mydomain" => "example.com",
       "myorigin" => "example.com",
@@ -239,10 +250,10 @@ override_attributes(
 
 License & Authors
 -----------------
-- Author:: Joshua Timberman <joshua@opscode.com>
+- Author:: Joshua Timberman <joshua@getchef.com>
 
 ```text
-Copyright:: 2009-2012, Opscode, Inc
+Copyright:: 2009-2014, Chef Software, Inc
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -1,6 +1,6 @@
 # encoding: utf-8
-# Author:: Joshua Timberman <joshua@opscode.com>
-# Copyright:: Copyright (c) 2009, Opscode, Inc.
+# Author:: Joshua Timberman <joshua@getchef.com>
+# Copyright:: Copyright 2009-2014, Chef Software, Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,21 +21,33 @@ default['postfix']['relayhost_role'] = 'relayhost'
 default['postfix']['multi_environment_relay'] = false
 default['postfix']['use_procmail'] = false
 default['postfix']['aliases'] = {}
+default['postfix']['transports'] = {}
+default['postfix']['access'] = {}
 default['postfix']['main_template_source'] = 'postfix'
 default['postfix']['master_template_source'] = 'postfix'
 default['postfix']['sender_canonical_map_entries'] = {}
+default['postfix']['smtp_generic_map_entries'] = {}
 
 case node['platform']
 when 'smartos'
   default['postfix']['conf_dir'] = '/opt/local/etc/postfix'
   default['postfix']['aliases_db'] = '/opt/local/etc/postfix/aliases'
+  default['postfix']['transport_db'] = '/opt/local/etc/postfix/transport'
 when 'omnios'
   default['postfix']['conf_dir'] = '/opt/omni/etc/postfix'
   default['postfix']['aliases_db'] = 'opt/omni/etc/postfix/aliases'
+  default['postfix']['transport_db'] = '/opt/omni/etc/postfix/transport'
+  default['postfix']['access_db'] = '/opt/local/etc/postfix/aliases'
+when 'omnios'
+  default['postfix']['conf_dir'] = '/opt/omni/etc/postfix'
+  default['postfix']['aliases_db'] = 'opt/omni/etc/postfix/aliases'
+  default['postfix']['access_db'] = 'opt/omni/etc/postfix/aliases'
   default['postfix']['uid'] = 11
 else
   default['postfix']['conf_dir'] = '/etc/postfix'
   default['postfix']['aliases_db'] = '/etc/aliases'
+  default['postfix']['transport_db'] = '/etc/postfix/transport'
+  default['postfix']['access_db'] = '/etc/postfix/access'
 end
 
 # Non-default main.cf attributes
@@ -48,10 +60,11 @@ default['postfix']['main']['mydestination'] = [node['postfix']['main']['myhostna
 default['postfix']['main']['smtpd_use_tls'] = 'yes'
 default['postfix']['main']['smtp_use_tls'] = 'yes'
 default['postfix']['main']['alias_maps'] = ["hash:#{node['postfix']['aliases_db']}"]
+default['postfix']['main']['transport_maps'] = [ "hash:#{node['postfix']['transport_db']}" ]
+default['postfix']['main']['access_maps'] = ["hash:#{node['postfix']['access_db']}"]
 default['postfix']['main']['mailbox_size_limit'] = 0
-default['postfix']['main']['recipient_delimiter'] = '+'
 default['postfix']['main']['smtp_sasl_auth_enable'] = 'no'
-default['postfix']['main']['mynetworks'] = '127.0.0.0/8'
+default['postfix']['main']['mynetworks'] = nil
 default['postfix']['main']['inet_interfaces'] = 'loopback-only'
 
 # Conditional attributes
@@ -89,6 +102,18 @@ if node['postfix']['main']['smtp_sasl_auth_enable'] == 'yes'
   default['postfix']['sasl']['smtp_sasl_user_name'] = ''
   default['postfix']['sasl']['smtp_sasl_passwd']    = ''
   default['postfix']['main']['relayhost'] = ''
+end
+
+if node['postfix']['use_virtual_aliases'] == 'yes'
+  default['postfix']['main']['virtual_alias_domains'] = []
+  case node['platform']
+  when 'smartos'
+    default['postfix']['virtual_alias_db'] = '/opt/local/etc/postfix/virtual'
+  else
+    default['postfix']['virtual_alias_db'] = '/etc/postfix/virtual'
+  end
+  default['postfix']['main']['virtual_alias_maps'] = "hash:#{node['postfix']['virtual_alias_db']}"
+  default['postfix']['virtual_aliases'] = {}
 end
 
 # # Default main.cf attributes according to `postconf -d`

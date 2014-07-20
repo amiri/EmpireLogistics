@@ -1,9 +1,9 @@
 # encoding: utf-8
-# Author:: Joshua Timberman(<joshua@opscode.com>)
+# Author:: Joshua Timberman(<joshua@getchef.com>)
 # Cookbook Name:: postfix
 # Recipe:: default
 #
-# Copyright 2009-2012, Opscode, Inc.
+# Copyright 2009-2014, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,9 +20,7 @@
 
 package 'postfix'
 
-if node['postfix']['use_procmail']
-  package 'procmail'
-end
+package 'procmail' if node['postfix']['use_procmail']
 
 case node['platform_family']
 when 'rhel', 'fedora'
@@ -37,7 +35,7 @@ when 'rhel', 'fedora'
     not_if '/usr/bin/test /etc/alternatives/mta -ef /usr/sbin/sendmail.postfix'
   end
 when 'omnios'
-  manifest_path = ::File.join(Chef::Config[:file_cache_path], "manifest-postfix.xml")
+  manifest_path = ::File.join(Chef::Config[:file_cache_path], 'manifest-postfix.xml')
 
   # we need to manage the postfix group and user
   # and then subscribe to the package install because it creates a
@@ -61,14 +59,14 @@ when 'omnios'
     source 'manifest-postfix.xml.erb'
     owner 'root'
     group 'root'
-    mode 00644
-    notifies :run, "execute[load postfix manifest]", :immediately
+    mode '0644'
+    notifies :run, 'execute[load postfix manifest]', :immediately
   end
 
-  execute "load postfix manifest" do
+  execute 'load postfix manifest' do
     action :nothing
     command "svccfg import #{manifest_path}"
-    notifies :restart, "service[postfix]"
+    notifies :restart, 'service[postfix]'
   end
 end
 
@@ -77,17 +75,36 @@ execute 'update-postfix-sender_canonical' do
   action :nothing
 end
 
-if !node['postfix']['sender_canonical_map_entries'].empty?
+unless node['postfix']['sender_canonical_map_entries'].empty?
   template "#{node['postfix']['conf_dir']}/sender_canonical" do
     owner 'root'
     group 0
-    mode  '0644'
+    mode '0644'
     notifies :run, 'execute[update-postfix-sender_canonical]'
     notifies :reload, 'service[postfix]'
   end
 
-  if !node['postfix']['main'].key?('sender_canonical_maps')
+  unless node['postfix']['main'].key?('sender_canonical_maps')
     node.set['postfix']['main']['sender_canonical_maps'] = "hash:#{node['postfix']['conf_dir']}/sender_canonical"
+  end
+end
+
+execute 'update-postfix-smtp_generic' do
+  command "postmap #{node['postfix']['conf_dir']}/smtp_generic"
+  action :nothing
+end
+
+if !node['postfix']['smtp_generic_map_entries'].empty?
+  template "#{node['postfix']['conf_dir']}/smtp_generic" do
+    owner 'root'
+    group 0
+    mode  '0644'
+    notifies :run, 'execute[update-postfix-smtp_generic]'
+    notifies :reload, 'service[postfix]'
+  end
+
+  if !node['postfix']['main'].key?('smtp_generic_maps')
+    node.set['postfix']['main']['smtp_generic_maps'] = "hash:#{node['postfix']['conf_dir']}/smtp_generic"
   end
 end
 
@@ -96,7 +113,7 @@ end
     source "#{cfg}.cf.erb"
     owner 'root'
     group 0
-    mode 00644
+    mode '0644'
     notifies :restart, 'service[postfix]'
     variables(settings: node['postfix'][cfg])
     cookbook node['postfix']["#{cfg}_template_source"]

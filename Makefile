@@ -34,6 +34,7 @@ prereqs:
 	sudo gem install rdoc
 	sudo gem install librarian-chef
 	sudo gem install chef-rewind
+	sudo gem update `gem list | cut -d ' ' -f 1`
 
 .PHONY: chef
 

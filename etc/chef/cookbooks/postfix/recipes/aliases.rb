@@ -1,5 +1,5 @@
 # encoding: utf-8
-# Copyright:: Copyright (c) 2012, Opscode, Inc.
+# Copyright:: Copyright 2012-2014, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ include_recipe 'postfix'
 
 execute 'update-postfix-aliases' do
   command 'newaliases'
-  environment :PATH => "#{ENV['PATH']}:/opt/omni/bin:/opt/omni/sbin" if platform_family?('omnios')
+  environment PATH: "#{ENV['PATH']}:/opt/omni/bin:/opt/omni/sbin" if platform_family?('omnios')
   action :nothing
 end
 

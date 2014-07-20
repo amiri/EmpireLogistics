@@ -8,7 +8,7 @@ $(document).ready(function() {
     };
 
     var handleImageUpload = function() {
-        console.log(arguments);
+        //console.log(arguments);
         // Remove error classes
         if ($("#server-error")) {
             $("#server-error").remove();
@@ -18,7 +18,7 @@ $(document).ready(function() {
         }
         var itemID = $('#item_id').get(0);
         var itemIDVal = $(itemID).val();
-        console.log("Parent item id: " + itemIDVal);
+        //console.log("Parent item id: " + itemIDVal);
         if (itemIDVal.length == 0) {
             var saveFirst = document.createElement("div");
             $(saveFirst).addClass("alert");
@@ -36,25 +36,25 @@ $(document).ready(function() {
             field = field[0];
         }
 
-        console.log("Field we deal with: ");
-        console.log(field);
-        console.log("Field prefix: ");
-        console.log(fieldPrefix);
+        //console.log("Field we deal with: ");
+        //console.log(field);
+        //console.log("Field prefix: ");
+        //console.log(fieldPrefix);
 
         // Get the media div and img inside so we can change it later.
         var mediaField = $(field).find(".media-image").get(0);
         var imageField = $(mediaField).find("img").get(0);
 
-        console.log("Media image field: ");
-        console.log(mediaField);
-        console.log("Media image image field: ");
-        console.log(imageField);
+        //console.log("Media image field: ");
+        //console.log(mediaField);
+        //console.log("Media image image field: ");
+        //console.log(imageField);
 
         // Get the media info div so we can put a progress bar in it.
         var mediaInfoField = $(field).find(".media-info").get(0);
 
-        console.log("Media Info field: ");
-        console.log(mediaInfoField);
+        //console.log("Media Info field: ");
+        //console.log(mediaInfoField);
 
         // Put the progress bar in the media
         var progressBar = document.createElement('div');
@@ -63,16 +63,16 @@ $(document).ready(function() {
 
         var fieldInputs = $(field).find("input,textarea");
 
-        console.log("Field inputs: ");
-        console.log(fieldInputs);
+        //console.log("Field inputs: ");
+        //console.log(fieldInputs);
 
         // Declare form action and some tools we need
         var form = $(field).closest("form").get(0);
-        console.log("Form: ");
-        console.log(form);
+        //console.log("Form: ");
+        //console.log(form);
         var formAction = $(form).attr('action') + '/add-item-media';
-        console.log("Form action: ");
-        console.log(formAction);
+        //console.log("Form action: ");
+        //console.log(formAction);
         var reader = new FileReader();
         var formData = new FormData();
 
@@ -119,7 +119,7 @@ $(document).ready(function() {
         // Start processing the image, and then after
         // it is loaded, gather the other params.
         if (this.files[0]) {
-            console.log("Abot to do something");
+            //console.log("Abot to do something");
             var uploadField = this;
             reader.readAsDataURL(this.files[0]);
             reader.onloadend = function(e) {
@@ -181,7 +181,7 @@ $(document).ready(function() {
                 }
             };
         } else {
-            console.log("Didn't do anything");
+            //console.log("Didn't do anything");
         }
     }
     $(document).on('change', '#media input[type="file"]', handleImageUpload);

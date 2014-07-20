@@ -17,16 +17,19 @@
 # limitations under the License.
 #
 
-default['authorization']['sudo']['groups']            = []
+default['authorization']['sudo']['groups']            = ['sysadmin']
 default['authorization']['sudo']['users']             = []
 default['authorization']['sudo']['passwordless']      = false
 default['authorization']['sudo']['include_sudoers_d'] = false
 default['authorization']['sudo']['agent_forwarding']  = false
 default['authorization']['sudo']['sudoers_defaults']  = ['!lecture,tty_tickets,!fqdn']
+default['authorization']['sudo']['command_aliases']   = []
 
 case node['platform_family']
 when 'smartos'
   default['authorization']['sudo']['prefix'] = '/opt/local/etc'
+when 'freebsd'
+  default['authorization']['sudo']['prefix'] = '/usr/local/etc'
 else
   default['authorization']['sudo']['prefix'] = '/etc'
 end

@@ -20,14 +20,16 @@
 actions :install, :remove
 default_action :install
 
-attribute :user,       :kind_of => String,          :default => nil
-attribute :group,      :kind_of => String,          :default => nil
-attribute :commands,   :kind_of => Array,           :default => ['ALL']
-attribute :host,       :kind_of => String,          :default => 'ALL'
-attribute :runas,      :kind_of => String,          :default => 'ALL'
-attribute :nopasswd,   :equal_to => [true, false],  :default => false
-attribute :template,   :kind_of => String,          :default => nil
-attribute :variables,  :kind_of => Hash,            :default => nil
+attribute :user,            :kind_of => String,           :default => nil
+attribute :group,           :kind_of => String,           :default => nil
+attribute :commands,        :kind_of => Array,            :default => ['ALL']
+attribute :host,            :kind_of => String,           :default => 'ALL'
+attribute :runas,           :kind_of => String,           :default => 'ALL'
+attribute :nopasswd,        :equal_to => [true, false],   :default => false
+attribute :template,        :kind_of => String,           :default => nil
+attribute :variables,       :kind_of => Hash,             :default => nil
+attribute :defaults,        :kind_of => Array,            :default => []
+attribute :command_aliases, :kind_of => Array,            :default => []
 
 # Set default for the supports attribute in initializer since it is
 # a 'reserved' attribute name
@@ -36,3 +38,13 @@ def initialize(*args)
   @action = :install
   @supports = { :report => true, :exception => true }
 end
+
+state_attrs :commands,
+            :group,
+            :host,
+            :nopasswd,
+            :runas,
+            :template,
+            :user,
+            :variables,
+            :command_aliases
