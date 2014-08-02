@@ -19,7 +19,7 @@ module.exports = function(grunt) {
             js: {
                 src: [
                     "root/js/lib/jquery-latest.min.js",
-                    "root/js/lib/bootstrap.min.js",
+                    "root/js/lib/bootstrap-patched.js",
                     "root/js/lib/leaflet.js",
                     "root/js/lib/leaflet-hash.js",
                     "root/js/lib/d3.v3.min.js",
@@ -90,6 +90,43 @@ module.exports = function(grunt) {
                     },
                 },
             },
+        },
+        watch: {
+          stuff: {
+            files: [
+                "root/js/lib/jquery-latest.min.js",
+                "root/js/lib/bootstrap.min.js",
+                "root/js/lib/leaflet.js",
+                "root/js/lib/leaflet-hash.js",
+                "root/js/lib/d3.v3.min.js",
+                "root/js/lib/topojson.v1.min.js",
+                "root/js/lib/TileLayer.custom_d3_geoJSON.js",
+                "root//d3js.org/d3.geo.tile.v0.min.js",
+                "root/js/lib/d3-bootstrap.min.js",
+                "root/js/lib/select2.js",
+                "root/js/lib/jquery.animate-colors-min.js",
+                "root/js/lib/jquery.dataTables.min.js",
+                "root/js/lib/dataTables.bootstrap.js",
+                "root/js/lib/dataTables.num-html-sort.js",
+                "root/js/lib/dataTables.filter-delay.js",
+                "root/js/lib/ckeditor/ckeditor.js",
+                "root/js/searchbar.js",
+                "root/js/admin/edit-history.js",
+                "root/js/refresh-modals.js",
+                "root/js/admin/address.js",
+                "root/css/lib/bootstrap.min.css",
+                "root/css/lib/bootstrap-theme.min.css",
+                "root/css/lib/select2.css",
+                "root/css/lib/select2-bootstrap.css",
+                "root/css/lib/leaflet.css",
+                "root/css/lib/dataTables.bootstrap.css",
+                "root/css/el.css"
+            ],
+            tasks: ['default'],
+            options: {
+              spawn: false,
+            },
+          },
         }
     });
 
@@ -99,6 +136,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-filerev');
     grunt.loadNpmTasks('grunt-userev');
+    grunt.loadNpmTasks('grunt-contrib-watch');
 
     // Default task(s).
     grunt.registerTask('default', ['concat', 'cssmin', 'uglify', 'filerev', 'userev']);

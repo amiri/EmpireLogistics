@@ -39,15 +39,15 @@
             var mouseWidth = e.pageX;
             var pageWidth = $(window).width();
             var menuWidth = $(settings.menuSelector).width();
-            
+
             // opening menu would pass the side of the page
             if (mouseWidth + menuWidth > pageWidth &&
                 menuWidth < mouseWidth) {
                 return mouseWidth - menuWidth;
-            } 
+            }
             return mouseWidth;
-        }        
-        
+        }
+
         function getTopLocation(e) {
             var mouseHeight = e.pageY;
             var pageHeight = $(window).height();
@@ -57,7 +57,7 @@
             if (mouseHeight + menuHeight > pageHeight &&
                 menuHeight < mouseHeight) {
                 return mouseHeight - menuHeight;
-            } 
+            }
             return mouseHeight;
         }
 
@@ -67,6 +67,14 @@
 function isFunction(functionToCheck) {
     var getType = {};
     return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+}
+
+function circleOffset(tip, elem, pos, actualWidth, actualHeight) {
+    var radius = elem.r.animVal.value;
+    var topOffset = (pos.top + pos.height / 2 - actualHeight / 2) + radius;
+    var leftOffset = (pos.left + pos.width) + (radius * 2);
+    var offset = { top: topOffset, left: leftOffset};
+    return offset;
 }
 
 L.TileLayer.custom_d3_geoJSON = L.TileLayer.extend({
@@ -118,7 +126,8 @@ L.TileLayer.custom_d3_geoJSON = L.TileLayer.extend({
                             "html":true,
                             "animation":false,
                             "container":"body",
-                            "trigger":"hover"
+                            "trigger":"hover",
+                            "placement": "auto top"
                         });
                 }
                 if (self.options.type === "circle") {
@@ -184,11 +193,12 @@ L.TileLayer.custom_d3_geoJSON = L.TileLayer.extend({
                             "html":true,
                             "animation":false,
                             "container":"body",
-                            "trigger":"hover"
-                        });
+                            "trigger":"hover",
+                            "offset": circleOffset
+                        })
+                        ;
                 }
             });
         }
     }
 });
-

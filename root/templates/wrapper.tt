@@ -6,14 +6,46 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="/css/site.min.bd908cc5.css" type="text/css" />
+    [% IF is_production %]
+        <link rel="stylesheet" href="/css/site.min.bd908cc5.css" type="text/css" />
+    [% ELSE %]
+        <link rel="stylesheet" href="/css/lib/bootstrap.min.css" type="text/css" />
+        <link rel="stylesheet" href="/css/lib/bootstrap-theme.min.css" type="text/css" />
+        <link rel="stylesheet" href="/css/lib/select2.css" type="text/css" />
+        <link rel="stylesheet" href="/css/lib/select2-bootstrap.css" type="text/css" />
+        <link rel="stylesheet" href="/css/lib/leaflet.css" type="text/css" />
+        <link rel="stylesheet" href="/css/lib/dataTables.bootstrap.css" type="text/css" />
+        <link rel="stylesheet" href="/css/el.css" type="text/css" />
+    [% END %]
     [% stylesheets() %]
-
 
     <script type="text/javascript">
         window.CKEDITOR_BASEPATH = '/js/lib/ckeditor/';
     </script>
-    <script src="/js/site.min.7288186c.js"></script>
+    [% IF is_production %]
+        <script type="text/javascript" src="/js/site.min.e1446a2a.js"></script>
+    [% ELSE %]
+        <script type="text/javascript" src="/js/lib/jquery-latest.min.js"></script>
+        <script type="text/javascript" src="/js/lib/bootstrap-patched.js"></script>
+        <script type="text/javascript" src="/js/lib/leaflet.js"></script>
+        <script type="text/javascript" src="/js/lib/leaflet-hash.js"></script>
+        <script type="text/javascript" src="/js/lib/d3.v3.min.js"></script>
+        <script type="text/javascript" src="/js/lib/topojson.v1.min.js"></script>
+        <script type="text/javascript" src="/js/lib/TileLayer.custom_d3_geoJSON.js"></script>
+        <script type="text/javascript" src="//d3js.org/d3.geo.tile.v0.min.js"></script>
+        <script type="text/javascript" src="/js/lib/d3-bootstrap.min.js"></script>
+        <script type="text/javascript" src="/js/lib/select2.js"></script>
+        <script type="text/javascript" src="/js/lib/jquery.animate-colors-min.js"></script>
+        <script type="text/javascript" src="/js/lib/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="/js/lib/dataTables.bootstrap.js"></script>
+        <script type="text/javascript" src="/js/lib/dataTables.num-html-sort.js"></script>
+        <script type="text/javascript" src="/js/lib/dataTables.filter-delay.js"></script>
+        <script type="text/javascript" src="/js/lib/ckeditor/ckeditor.js"></script>
+        <script type="text/javascript" src="/js/searchbar.js"></script>
+        <script type="text/javascript" src="/js/admin/edit-history.js"></script>
+        <script type="text/javascript" src="/js/refresh-modals.js"></script>
+        <script type="text/javascript" src="/js/admin/address.js"></script>
+    [% END %]
     [% jsfiles() %]
     <title>Empire Logistics</title>
 </head>

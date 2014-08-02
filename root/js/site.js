@@ -231,15 +231,15 @@ return c>=ys?n?"M0,"+i+"A"+i+","+i+" 0 1,1 0,"+-i+"A"+i+","+i+" 0 1,1 0,"+i+"M0,
             var mouseWidth = e.pageX;
             var pageWidth = $(window).width();
             var menuWidth = $(settings.menuSelector).width();
-            
+
             // opening menu would pass the side of the page
             if (mouseWidth + menuWidth > pageWidth &&
                 menuWidth < mouseWidth) {
                 return mouseWidth - menuWidth;
-            } 
+            }
             return mouseWidth;
-        }        
-        
+        }
+
         function getTopLocation(e) {
             var mouseHeight = e.pageY;
             var pageHeight = $(window).height();
@@ -249,7 +249,7 @@ return c>=ys?n?"M0,"+i+"A"+i+","+i+" 0 1,1 0,"+-i+"A"+i+","+i+" 0 1,1 0,"+i+"M0,
             if (mouseHeight + menuHeight > pageHeight &&
                 menuHeight < mouseHeight) {
                 return mouseHeight - menuHeight;
-            } 
+            }
             return mouseHeight;
         }
 
@@ -259,6 +259,19 @@ return c>=ys?n?"M0,"+i+"A"+i+","+i+" 0 1,1 0,"+-i+"A"+i+","+i+" 0 1,1 0,"+i+"M0,
 function isFunction(functionToCheck) {
     var getType = {};
     return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+}
+
+function circlePlacement(tip,element) {
+    console.log(tip);
+    $tip = $(tip);
+    $element = $(element);
+    console.log($tip);
+    console.log($element);
+    console.log($element.offsetWidth());
+    console.log($element.offsetHeight());
+    console.log($element.cy());
+    console.log($element.cx());
+    $tip.addClass('right').css({top: $element.cy, left: $element.cx});
 }
 
 L.TileLayer.custom_d3_geoJSON = L.TileLayer.extend({
@@ -376,7 +389,8 @@ L.TileLayer.custom_d3_geoJSON = L.TileLayer.extend({
                             "html":true,
                             "animation":false,
                             "container":"body",
-                            "trigger":"hover"
+                            "trigger":"hover",
+                            "placement": circlePlacement,
                         });
                 }
             });

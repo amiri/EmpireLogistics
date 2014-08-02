@@ -104,10 +104,12 @@ $PARAMETERS{default} = {
             migrate => 1,
         },
     },
+    is_production => 0,
 };
 
 $PARAMETERS{"localhost"} = {
     %{ clone $PARAMETERS{'default'} },
+    is_production => 1,
 };
 
 $PARAMETERS{development} = {

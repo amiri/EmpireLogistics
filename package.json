@@ -31,7 +31,8 @@
     "grunt-init": "~0.3.2",
     "topojson": "~1.6.15",
     "grunt-filerev": "~0.2.1",
-    "grunt-userev": "0.0.6"
+    "grunt-userev": "0.0.6",
+    "grunt-contrib-watch": "~0.6.1"
   },
   "devDependencies": {}
 }
