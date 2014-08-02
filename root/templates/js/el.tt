@@ -2,7 +2,8 @@
 <script>
     L.Icon.Default.imagePath = '/js/lib/leaflet/images';
     var map = L.map('map', {
-        maxZoom: 16
+        maxZoom: 16,
+        zoomControl: false
     });
     var hash = new L.Hash(map);
     if (!window.location.hash) {
@@ -19,7 +20,8 @@
     }).addTo(map);
     openStreet.addTo(map);
     var baseLayers = {
-        "OpenStreetMap": openStreet
+        //"<h4>Filter Layers</h4>": openStreet
+        //"OpenStreetMap": openStreet
     };
     var overlays = {};
 
@@ -522,6 +524,7 @@
         var div = L.DomUtil.create('div', 'info legend'),
         elType = ["Rail Line", "Rail Node", "Rail Interline", "Port", "Costco", "Target", "Walmart", "Krogers", "Walgreens", "Amazon", "Home Depot", "Ikea"],
         color = ["black", "red", "goldenrod", "dodgerblue", "blueviolet", "fuchsia", "darkorange", "mediumslateblue", "limegreen", "forestgreen", "maroon", "navy"];
+        div.innerHTML += '<h4>Legend</h4>';
 
         for (var i = 0; i < color.length; i++) {
             div.innerHTML += '<i style="background:' + color[i] + '"></i> ' + elType[i] + '<br>';
@@ -536,4 +539,7 @@
         "collapsed": false,
         "autoZIndex": true
     }).addTo(map);
+    $(document).ready(function(){
+        $("div.leaflet-control-layers.leaflet-control-layers-expanded.leaflet-control").prepend('<h4>Filter Layers</h4>');
+    });
 </script>

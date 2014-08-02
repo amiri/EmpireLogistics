@@ -3,7 +3,7 @@ html,body,#map
 	height:100%;
 	margin:0;
 	padding:0;
-	padding-bottom:25px;
+	padding-bottom:40px;
 	width:100%;
 }
 
@@ -181,7 +181,13 @@ form.navbar-form .form-group .topnav-search {
 	padding-left:15px;
 	padding-right:15px;
 }
-body.admin, body.blog {
+
+.navbar .container-fluid {
+    padding-bottom: 15px;
+    padding-top: 15px;
+}
+
+body.admin, body.blog, body.about {
 	background-color:#fff;
 }
 .checkbox-inline label {
@@ -253,4 +259,13 @@ ul, ol {
 }
 .nested {
     margin-left: 1em;
+}
+.add-node {
+    position: absolute;
+    left: 0;
+    bottom: -39px;
+}
+.header-text {
+	font-size:48px;
+    font-weight: 700;
 }

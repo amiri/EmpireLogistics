@@ -39,6 +39,11 @@ sub default : Path {
     $c->response->status(404);
 }
 
+sub about :Chained('/') PathPart('about') Args(0) GET {
+    my ($self,$c) = @_;
+    $c->stash->{template} = 'about.tt';
+}
+
 sub access_denied : Private {
     my ( $self, $c ) = @_;
     $c->stash->{template} = 'error_401.tt';
