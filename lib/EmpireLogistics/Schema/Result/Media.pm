@@ -114,6 +114,100 @@ sub _build_edit_url {
     return '/admin/media/'.$self->id.'/edit';
 }
 
+sub inner_height {
+    my ($self, $max_width) = @_;
+
+    my $inner_height = $self->height;
+    if ($max_width < $self->width) {
+        $inner_height =
+            sprintf("%.0f", $self->height * $max_width / $self->width);
+    }
+
+    return ($inner_height);
+}
+
+sub make_format {
+    my ($self, $format, $roriginal_content,
+        $original_magick, $undef_ok, $file_type) = @_;
+
+    $file_type ||= 'jpg';
+    $roriginal_content ||=
+        $self->get_content('original', { undef_ok => $undef_ok });
+
+    die "ERROR: Media ", $self->media_id, " missing original content\n"
+        unless ($roriginal_content);
+
+    return $roriginal_content if ($format eq 'original');
+
+    my $inner_magick;
+    if ($original_magick) {
+        $inner_magick = $original_magick->Clone;
+    } else {
+        $inner_magick = Image::Magick->new;
+        $inner_magick->BlobToImage($$roriginal_content);
+    }
+
+    my ($width, $height) = ($format =~ m%^(\d+)x(\d+)$%);
+    die "ERROR: Invalid media format: $format" unless ($width && $height);
+
+    # Scale the image so it will just fit inside the new format
+    my ($inner_width, $inner_height) = $self->inner_dimensions($width, $height);
+    my $error = $inner_magick->Resize(
+        width   => $inner_width,
+        height  => $inner_height,
+        filter  => 'Box',
+    );
+    die "ERROR: Unable to Image::Magick::Resize: $error" if ($error);
+
+    # Put the inner image (above) centered on a full-sized white background
+    my $magick = Image::Magick->new(magick => $file_type);
+    $magick->Set(size => $width . 'x' . $height);
+
+    # Default background to white
+    my $background = 'xc:white';
+
+    # Keep background transparent if we have a .png (for #11038)
+    $background = 'xc:none' if ($file_type eq 'png');
+    $magick->ReadImage($background);
+    $error = $magick->Composite(
+        image   => $inner_magick,
+        gravity => 'Center',
+    );
+    die "ERROR: Unable to Image::Magick::Composite: $error" if ($error);
+
+    my ($new_content) = $magick->ImageToBlob;
+
+    # Save the content for this new format so we don't have to build it again
+    $self->store_format($format, \$new_content, $file_type);
+
+    return \$new_content;
+}
+
+sub get_content {
+    my ($self, $format, $opts, $file_type) = @_;
+
+    # Try local disk cache
+    my $rcontent = $self->get_content_from_disk($format, $opts, $file_type);
+    return $rcontent if ($rcontent);
+    return undef;
+}
+
+sub get_content_from_disk {
+    my ($self, $format, $opts, $file_type) = @_;
+    my $disk_filename = $self->disk_filename($format, $file_type);
+
+    return
+        try {
+            File::Slurp::read_file(
+                $disk_filename,
+                scalar_ref => 1
+            );
+        } catch {
+            undef
+        };
+}
+
+
 sub file_url {
     my ($self, $format, %args) = @_;
     my $secure = $args{secure} || 0;

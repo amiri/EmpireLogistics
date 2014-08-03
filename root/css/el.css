@@ -88,6 +88,7 @@ path
 .popover
 {
 	max-width:600px;
+    min-width:330px;
 }
 
 span.rail-line-bug
@@ -268,4 +269,9 @@ ul, ol {
 .header-text {
 	font-size:48px;
     font-weight: 700;
+}
+.background-image {
+    -moz-background-clip: padding;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
 }

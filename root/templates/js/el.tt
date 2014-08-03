@@ -349,7 +349,11 @@
 
     // Port
     function portTitle(d) {
-        var html = "<span class='port-bug'></span>" + d.properties.name;
+        var html = "";
+        if (d.properties.media) {
+            html += "<div class='background-image' style='background-image:url(/media/330w/"+d.properties.media+")'></div>";
+        }
+        html += "<span class='port-bug'></span>" + d.properties.name;
         return html;
     }
     function portPopoverContent(d) {
