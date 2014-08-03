@@ -59,7 +59,7 @@ sub base : Chained('') PathPart('') CaptureArgs(0) {
 
 sub object : Chained('base') PathPart('') CaptureArgs(1) {
     my ($self, $c, $id) = @_;
-    $c->stash(object => $self->model->find({ id => $id}, {key => 'primary'});
+    $c->stash(object => $self->model->find({ id => $id}, {key => 'primary'}));
 }
 
 sub get_index : Chained('base') PathPart('') Args(0) GET {
