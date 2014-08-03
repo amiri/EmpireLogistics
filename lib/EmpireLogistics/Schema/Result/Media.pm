@@ -153,7 +153,6 @@ sub make_format {
         xpixels => $inner_width,
         ypixels => $inner_height,
     );
-    warn p $scaled;
 
     # Put the inner image (above) centered on a full-sized white background
     my $imager = Imager->new(xsize => $width, ysize => $height, channels => 4)->compose(
@@ -162,12 +161,12 @@ sub make_format {
         top => int(($height/2)+0.5) - int(($inner_height/2)+0.5),
     );
 
-    warn p $imager;
-
     # Save the content for this new format so we don't have to build it again
     $self->store_format($format, $imager, $file_type);
 
-    return \$imager;
+    my $data;
+    $imager->write(type => $file_type, data => \$data);
+    return $data;
 }
 
 sub inner_dimensions {
@@ -204,10 +203,6 @@ sub get_content_from_disk {
     return
         try {
             io($disk_filename)->slurp;
-            #File::Slurp::read_file(
-            #    $disk_filename,
-            #    scalar_ref => 1
-            #);
         } catch {
             undef
         };

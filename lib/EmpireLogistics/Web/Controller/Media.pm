@@ -64,6 +64,7 @@ sub index: Chained('/') PathPart('media') Args(2) {
         $c->error("Unable to load media $uuid");
     }
 
+    $c->res->content_length(length($rcontent));
     # Return the media we found (or created) on disk
     $c->res->body($rcontent);
 
