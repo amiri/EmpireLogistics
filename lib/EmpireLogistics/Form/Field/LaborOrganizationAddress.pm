@@ -18,7 +18,7 @@ sub _build_item {
     my $self    = shift;
     my $address = $self->form->item->labor_organization_addresses->active->find({
         id => $self->field('id')->fif,
-    });
+    }, { key => 'primary' });
     return $address;
 }
 

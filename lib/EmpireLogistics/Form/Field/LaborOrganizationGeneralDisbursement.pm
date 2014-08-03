@@ -20,7 +20,7 @@ sub _build_item {
         $self->form->item->labor_organization_general_disbursements->find(
         {
             id => $self->field('id')->fif,
-        }
+        }, {key => 'primary'}
         );
     return $asset;
 }

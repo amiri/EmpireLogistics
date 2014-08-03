@@ -17,7 +17,7 @@ has 'item' => (
 sub _build_item {
     my $self = shift;
     return unless $self->field('id')->fif;
-    my $tonnage = $self->form->item->port_tonnages->find({id => $self->field('id')->fif});
+    my $tonnage = $self->form->item->port_tonnages->find({id => $self->field('id')->fif}, {key => 'primary'});
     return $tonnage;
 }
 

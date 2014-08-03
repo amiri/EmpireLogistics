@@ -19,7 +19,7 @@ sub _build_item {
     my $asset = $self->form->item->labor_organization_other_assets->find(
         {
             id => $self->field('id')->fif,
-        }
+        }, {key => 'primary'}
     );
     return $asset;
 }

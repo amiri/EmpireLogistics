@@ -19,7 +19,7 @@ sub _build_item {
     my $receipt = $self->form->item->labor_organization_sale_receipts->find(
         {
             id => $self->field('id')->fif,
-        }
+        }, {key => 'primary'}
     );
     return $receipt;
 }

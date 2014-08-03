@@ -89,7 +89,7 @@ sub image_links {
         while ($new_value =~ /\[MediaID\:\s*(\w+)\]/) {
             my $media_id = $1;
             my $media =
-                $field->form->schema->resultset('Media')->find({id => $media_id});
+                $field->form->schema->resultset('Media')->find({id => $media_id}, {key => 'primary'});
             my $url    = $media->file_url;
             my $width  = $media->width;
             my $height = $media->height;

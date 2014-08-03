@@ -43,7 +43,7 @@ sub post_companies_ids : Chained('base') PathPart('companies-ids') Args(0)
     my @ids = split( ',', $query );
     my @options;
     foreach my $id (@ids) {
-        my $company = $c->model('DB::Company')->active->find( { id => $id } );
+        my $company = $c->model('DB::Company')->active->find( { id => $id }, {key => 'primary'} );
         next unless $company;
         push @options, { id => $id, text => $company->name };
     }
@@ -96,7 +96,7 @@ sub post_labor_organizations_ids : Chained('base')
     my @options;
     foreach my $id (@ids) {
         my $labor_organization = $c->model('DB::LaborOrganization')
-            ->active->find( { id => $id } );
+            ->active->find( { id => $id }, {key => 'primary'} );
         next unless $labor_organization;
         push @options, { id => $id, text => $labor_organization->full_name };
     }
@@ -141,7 +141,7 @@ sub post_work_stoppages_ids : Chained('base') PathPart('work-stoppages-ids')
     my @options;
     foreach my $id (@ids) {
         my $work_stoppage
-            = $c->model('DB::WorkStoppage')->active->find( { id => $id } );
+            = $c->model('DB::WorkStoppage')->active->find( { id => $id }, {key => 'primary'} );
         next unless $work_stoppage;
         push @options, { id => $id, text => $work_stoppage->name };
     }
@@ -178,7 +178,7 @@ sub post_ports_ids : Chained('base') PathPart('ports-ids') Args(0) POST {
     my @ids = split( ',', $query );
     my @options;
     foreach my $id (@ids) {
-        my $port = $c->model('DB::Port')->active->find( { id => $id } );
+        my $port = $c->model('DB::Port')->active->find( { id => $id }, {key => 'primary'}  );
         next unless $port;
         push @options, {
             id => $id,
@@ -226,7 +226,7 @@ sub post_warehouses_ids : Chained('base') PathPart('warehouses-ids') Args(0) POS
     my @ids = split( ',', $query );
     my @options;
     foreach my $id (@ids) {
-        my $warehouse = $c->model('DB::Warehouse')->active->find( { id => $id } );
+        my $warehouse = $c->model('DB::Warehouse')->active->find( { id => $id }, {key => 'primary'}  );
         next unless $warehouse;
         push @options, {
             id => $id,
@@ -271,7 +271,7 @@ sub post_rail_nodes_ids : Chained('base') PathPart('rail-nodes-ids') Args(0) POS
     my @options;
     foreach my $id (@ids) {
         my $rail_node
-            = $c->model('DB::RailNode')->active->find( { id => $id } );
+            = $c->model('DB::RailNode')->active->find( { id => $id }, {key => 'primary'}  );
         next unless $rail_node;
         push @options,
             {
@@ -317,7 +317,7 @@ sub post_osha_citations_ids : Chained('base') PathPart('osha-citations-ids') Arg
     my @ids = split( ',', $query );
     my @options;
     foreach my $id (@ids) {
-        my $osha_citation = $c->model('DB::OshaCitation')->active->find( { id => $id } );
+        my $osha_citation = $c->model('DB::OshaCitation')->active->find( { id => $id }, {key => 'primary'}  );
         next unless $osha_citation;
         my $text = qq{Inspection No. }.$osha_citation->inspection_number.qq{, Citation #}.$osha_citation->citation_number.qq{ (}.$osha_citation->issuance_date->ymd.qq{)};
         push @options, {
@@ -365,7 +365,7 @@ sub post_nlrb_decisions_ids : Chained('base') PathPart('nlrb-decisions-ids') Arg
     my @ids = split( ',', $query );
     my @options;
     foreach my $id (@ids) {
-        my $nlrb_decision = $c->model('DB::NlrbDecision')->active->find( { id => $id } );
+        my $nlrb_decision = $c->model('DB::NlrbDecision')->active->find( { id => $id }, {key => 'primary'}  );
         next unless $nlrb_decision;
         my $text = qq{Case No. }.$nlrb_decision->case_number.qq{, Citation #}.$nlrb_decision->citation_number.qq{ (}.$nlrb_decision->issuance_date->ymd.qq{)};
         push @options, {
@@ -424,7 +424,7 @@ sub post_rail_lines_ids : Chained('base') PathPart('rail-lines-ids') Args(0) POS
     my @options;
     foreach my $id (@ids) {
         my $rail_line
-            = $c->model('DB::RailLine')->active->find( { id => $id } );
+            = $c->model('DB::RailLine')->active->find( { id => $id }, {key => 'primary'}  );
         next unless $rail_line;
         my $text =
             $rail_line->owner1
@@ -484,7 +484,7 @@ sub post_labor_organization_payees_ids : Chained('base')
     my @options;
     foreach my $id (@ids) {
         my $payee = $c->model('DB::LaborOrganizationPayee')
-            ->active->find( { id => $id } );
+            ->active->find( { id => $id }, {key => 'primary'}  );
         next unless $payee;
         push @options, {
             id => $id,
@@ -536,7 +536,7 @@ sub post_country_ids : Chained('base') PathPart('country-ids') Args(0) POST {
     my @ids = split(',', $query);
     my @options;
     foreach my $id (@ids) {
-        my $country = $c->model('DB::Country')->active->find({id => $id});
+        my $country = $c->model('DB::Country')->active->find({id => $id}, {key => 'primary'} );
         next unless $country;
         push @options, {id => $id, text => $country->name};
     }
@@ -582,7 +582,7 @@ sub post_state_ids : Chained('base') PathPart('state-ids') Args(0) POST {
     my @ids = split(',', $query);
     my @options;
     foreach my $id (@ids) {
-        my $state = $c->model('DB::State')->active->find({id => $id});
+        my $state = $c->model('DB::State')->active->find({id => $id}, {key => 'primary'} );
         next unless $state;
         push @options, {id => $id, text => $state->name};
     }
@@ -628,7 +628,7 @@ sub post_city_ids : Chained('base') PathPart('city-ids') Args(0) POST {
     my @ids = split(',', $query);
     my @options;
     foreach my $id (@ids) {
-        my $city = $c->model('DB::City')->active->find({id => $id});
+        my $city = $c->model('DB::City')->active->find({id => $id}, {key => 'primary'} );
         next unless $city;
         push @options, {id => $id, text => $city->name};
     }
@@ -674,7 +674,7 @@ sub post_postal_code_ids : Chained('base')
     my @options;
     foreach my $id (@ids) {
         my $postal_code =
-            $c->model('DB::PostalCode')->active->find({id => $id});
+            $c->model('DB::PostalCode')->active->find({id => $id}, {key => 'primary'} );
         next unless $postal_code;
         push @options, {id => $id, text => $postal_code->postal_code};
     }

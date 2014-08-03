@@ -59,7 +59,7 @@ sub base : Chained('') PathPart('') CaptureArgs(0) {
 
 sub object : Chained('base') PathPart('') CaptureArgs(1) {
     my ($self, $c, $id) = @_;
-    $c->stash(object => $self->model->find($id));
+    $c->stash(object => $self->model->find({ id => $id}, {key => 'primary'});
 }
 
 sub get_index : Chained('base') PathPart('') Args(0) GET {
@@ -213,7 +213,7 @@ sub create : Chained('base') PathPart('create') Args(0) {
 
     my $creation = $c->req->param('id') ? 0 : 1;
     if ($c->req->param('id')) {
-        my $item = $self->model->find($c->req->param('id'));
+        my $item = $self->model->find({ id => $c->req->param('id')}, {key => 'primary'});
         $c->stash->{object} = $item;
     }
 
@@ -333,7 +333,7 @@ sub delete_relation : Chained('capture_relation') PathPart('') Args {
     } elsif ($id and not $bridged) {
         my $relation = $c->stash->{relation};
         my $object   = $c->stash->{object};
-        $object->$relation->find($id)->delete;
+        $object->$relation->find({ id => $id}, {key => 'primary'})->delete;
     }
     $c->stash->{json_data} = {success => 1};
 }
@@ -488,10 +488,10 @@ sub add_or_update_media : Private {
     /};
 
     my ($original_media, $new_media);
-    
+
     # If we have an ID already, it's an edit, so put the original media into the media_info hash
     if ($media_info{id}) {
-        $original_media = $c->model('DB::Media')->find({id => $media_info{id}});
+        $original_media = $c->model('DB::Media')->find({id => $media_info{id}}, {key => 'primary'});
         $media_info{media} = $original_media if $original_media;
     }
 

@@ -21,7 +21,7 @@ sub _build_item {
         $self->form->item->labor_organization_benefit_disbursements->find(
         {
             id => $self->field('id')->fif,
-        }
+        }, {key => 'primary'}
         );
     return $asset;
 }

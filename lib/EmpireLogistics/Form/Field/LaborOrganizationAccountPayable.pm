@@ -19,7 +19,8 @@ sub _build_item {
     my $account =
         $self->form->item->labor_organization_account_payables->find(
         {   id => $self->field('id')->fif,
-        });
+        }, {key => 'primary'}
+    );
     return $account;
 }
 

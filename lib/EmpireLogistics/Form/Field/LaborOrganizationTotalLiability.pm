@@ -19,7 +19,7 @@ sub _build_item {
     my $liability = $self->form->item->labor_organization_total_liabilities->find(
         {
             id => $self->field('id')->fif,
-        }
+        }, {key => 'primary'}
     );
     return $liability;
 }

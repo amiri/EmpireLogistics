@@ -17,7 +17,7 @@ sub _build_item {
     my $self = shift;
     return unless $self->field('id')->fif;
     my $address =
-        $self->form->item->addresses->find({id => $self->field('id')->fif});
+        $self->form->item->addresses->find({id => $self->field('id')->fif}, {key => 'primary'});
     return $address;
 }
 
