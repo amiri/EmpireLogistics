@@ -271,7 +271,13 @@ ul, ol {
     font-weight: 700;
 }
 .background-image {
+    padding: 0;
+    margin-top:0;
+    margin-bottom: 1em;
+    width: 330px;
+    height: calc(330px * 9/16);
     -moz-background-clip: padding;
     -webkit-background-clip: padding-box;
     background-clip: padding-box;
+    background-size: contain;
 }

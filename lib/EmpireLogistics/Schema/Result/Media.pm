@@ -6,6 +6,7 @@ use Data::UUID;
 use IO::All;
 use Try::Tiny;
 use Imager;
+use Data::Printer;
 use File::Path qw/make_path/;
 
 extends 'EmpireLogistics::Schema::Result';
@@ -128,59 +129,63 @@ sub inner_height {
 
 sub make_format {
     my ($self, $format, $roriginal_content,
-        $original_magick, $undef_ok, $file_type) = @_;
+        $original_imager, $undef_ok, $file_type) = @_;
 
-    $file_type ||= 'jpg';
+    $file_type ||= 'png';
     $roriginal_content ||=
         $self->get_content('original', { undef_ok => $undef_ok });
 
-    die "ERROR: Media ", $self->media_id, " missing original content\n"
+    die "ERROR: Media ", $self->id, " missing original content\n"
         unless ($roriginal_content);
 
     return $roriginal_content if ($format eq 'original');
 
-    my $inner_magick;
-    if ($original_magick) {
-        $inner_magick = $original_magick->Clone;
-    } else {
-        $inner_magick = Image::Magick->new;
-        $inner_magick->BlobToImage($$roriginal_content);
-    }
+    my $inner_imager;
+    $inner_imager = Imager->new;
+    $inner_imager->read(data => $roriginal_content);
 
     my ($width, $height) = ($format =~ m%^(\d+)x(\d+)$%);
     die "ERROR: Invalid media format: $format" unless ($width && $height);
 
     # Scale the image so it will just fit inside the new format
     my ($inner_width, $inner_height) = $self->inner_dimensions($width, $height);
-    my $error = $inner_magick->Resize(
-        width   => $inner_width,
-        height  => $inner_height,
-        filter  => 'Box',
+    my $scaled = $inner_imager->scale(
+        xpixels => $inner_width,
+        ypixels => $inner_height,
     );
-    die "ERROR: Unable to Image::Magick::Resize: $error" if ($error);
+    warn p $scaled;
 
     # Put the inner image (above) centered on a full-sized white background
-    my $magick = Image::Magick->new(magick => $file_type);
-    $magick->Set(size => $width . 'x' . $height);
-
-    # Default background to white
-    my $background = 'xc:white';
-
-    # Keep background transparent if we have a .png (for #11038)
-    $background = 'xc:none' if ($file_type eq 'png');
-    $magick->ReadImage($background);
-    $error = $magick->Composite(
-        image   => $inner_magick,
-        gravity => 'Center',
+    my $imager = Imager->new(xsize => $width, ysize => $height, channels => 4)->compose(
+        src => $scaled,
+        left => int(($width/2)+0.5) - int(($inner_width/2)+0.5),
+        top => int(($height/2)+0.5) - int(($inner_height/2)+0.5),
     );
-    die "ERROR: Unable to Image::Magick::Composite: $error" if ($error);
 
-    my ($new_content) = $magick->ImageToBlob;
+    warn p $imager;
 
     # Save the content for this new format so we don't have to build it again
-    $self->store_format($format, \$new_content, $file_type);
+    $self->store_format($format, $imager, $file_type);
 
-    return \$new_content;
+    return \$imager;
+}
+
+sub inner_dimensions {
+    my ($self, $max_width, $max_height) = @_;
+
+    my $original_width = $self->width;
+    my $original_height = $self->height;
+
+    my $width_ratio  = $original_width  / $max_width;
+    my $height_ratio = $original_height / $max_height;
+
+    return ($max_width, sprintf("%.0f", $original_height / $width_ratio))
+        if (($width_ratio >= $height_ratio) && ($width_ratio > 1.0));
+
+    return (sprintf("%.0f", $original_width / $height_ratio), $max_height)
+        if (($width_ratio < $height_ratio) && ($height_ratio > 1.0));
+
+    return ($original_width, $original_height);
 }
 
 sub get_content {
@@ -198,10 +203,11 @@ sub get_content_from_disk {
 
     return
         try {
-            File::Slurp::read_file(
-                $disk_filename,
-                scalar_ref => 1
-            );
+            io($disk_filename)->slurp;
+            #File::Slurp::read_file(
+            #    $disk_filename,
+            #    scalar_ref => 1
+            #);
         } catch {
             undef
         };

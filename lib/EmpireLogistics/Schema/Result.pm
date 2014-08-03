@@ -5,6 +5,7 @@ use MooseX::Types::URI qw/Uri/;
 use MooseX::MarkAsMethods autoclean => 1;
 use MooseX::NonMoose;
 use Data::Printer;
+use IPC::System::Simple qw/capturex/;
 
 extends 'DBIx::Class::Core';
 
@@ -145,8 +146,107 @@ around update => sub {
         );
         $self->geometry($geometry);
     }
-    $self->$orig(@_);
+    my $updated = $self->$orig(@_);
+    $updated->invalidate_cache if $self->can('geometry');
+    return $updated;
 };
+
+sub invalidate_cache {
+    my $self = shift;
+    my $layer_for_rs = {
+        RailLine      => 'rail_lines',
+        Port          => 'ports',
+        RailInterline => 'rail_interlines',
+        RailNode      => 'rail_nodes',
+        Warehouse     => 'warehouses',
+    };
+    my ($coordinates) = $self->result_source->schema->storage->dbh_do(
+        sub {
+            my ( $storage, $dbh, $geometry ) = @_;
+            $dbh->selectrow_arrayref(qq{
+                select
+                st_y(
+                    st_transform(
+                        st_setsrid(
+                            st_makepoint(
+                                st_xmin(
+                                    st_extent('$geometry')
+                                ),
+                                st_ymin(
+                                    st_extent('$geometry')
+                                )
+                            ),
+                        900913),
+                    4326)
+                ),
+                st_x(
+                    st_transform(
+                        st_setsrid(
+                            st_makepoint(
+                                st_xmin(
+                                    st_extent('$geometry')
+                                ),
+                                st_ymin(
+                                    st_extent('$geometry')
+                                )
+                            ),
+                        900913),
+                    4326)
+                ),
+                st_y(
+                    st_transform(
+                        st_setsrid(
+                            st_makepoint(
+                                st_xmax(
+                                    st_extent('$geometry')
+                                ),
+                                st_ymax(
+                                    st_extent('$geometry')
+                                )
+                            ),
+                        900913),
+                    4326)
+                ),
+                st_x(
+                    st_transform(
+                        st_setsrid(
+                            st_makepoint(
+                                st_xmax(
+                                    st_extent('$geometry')
+                                ),
+                                st_ymax(
+                                    st_extent('$geometry')
+                                )
+                            ),
+                        900913),
+                    4326)
+                )
+            });
+        },
+        ( $self->geometry )
+    );
+    my ($minlat, $minlon, $maxlat, $maxlon) = @$coordinates;
+    warn "Minlat: $minlat; minlon: $minlon; maxlat: $maxlat; maxlon: $maxlon";
+    my @args = (
+        "--config",
+        EmpireLogistics::Config->srcroot . '/etc/empirelogistics_tiles.cfg',
+        "--layer",
+        $layer_for_rs->{$self->result_source->source_name},
+        "--bbox",
+        $minlat, $minlon, $maxlat, $maxlon,
+        "--output-directory",
+        EmpireLogistics::Config->srcroot.'/shared/tiles',
+        "--ignore-cached",
+        "--extension",
+        'json',
+        (1 .. 16),
+    );
+    my $message = capturex(EmpireLogistics::Config->srcroot . '/bin/tilestache-seed.py', @args);
+    warn "Tilestache-seed command: ", EmpireLogistics::Config->srcroot . '/bin/tilestache-seed.py', map {"$_ "} @args;
+    warn "Tilestache-seed says: $message";
+    return 1;
+}
+
 
 sub edit_history_save {
     my $self = shift;

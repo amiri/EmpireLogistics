@@ -23,3 +23,4 @@ Vagrantfile
 todo.txt
 /test/*
 root/media
+shared/tiles/*/*/*
