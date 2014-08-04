@@ -234,8 +234,6 @@ sub invalidate_cache {
         $layer_for_rs->{$self->result_source->source_name},
         "--bbox",
         $minlat, $minlon, $maxlat, $maxlon,
-        "--output-directory",
-        EmpireLogistics::Config->srcroot.'/shared/tiles',
         "--ignore-cached",
         "--extension",
         'json',
