@@ -161,6 +161,13 @@
         var html = "<span class='rail-line-bug'></span>" + d.properties.name + " (2012)";
         return html;
     }
+    function railLineMedia(d) {
+        var html = "";
+        if (d.properties.media) {
+            html += "<div class='background-image' style='background-image:url(\"/media/330w/"+d.properties.media+"\")'></div>";
+        }
+        return html;
+    }
     function railLinePopoverContent(d) {
         var html = "<dl class='dl-horizontal'>";
         if (d.properties.owner) {
@@ -217,6 +224,13 @@
         var html = "<span class='rail-interline-bug'></span>" + d.properties.junction_code;
         return html;
     }
+    function railInterlineMedia(d) {
+        var html = "";
+        if (d.properties.media) {
+            html += "<div class='background-image' style='background-image:url(\"/media/330w/"+d.properties.media+"\")'></div>";
+        }
+        return html;
+    }
     function railInterlinePopoverContent(d) {
         var html = "<dl class='dl-horizontal'>";
         if (d.properties.forwarding_node) {
@@ -263,6 +277,13 @@
         var html = "<span class='rail-node-bug'></span>" + d.properties.name;
         return html;
     }
+    function railNodeMedia(d) {
+        var html = "";
+        if (d.properties.media) {
+            html += "<div class='background-image' style='background-image:url(\"/media/330w/"+d.properties.media+"\")'></div>";
+        }
+        return html;
+    }
     function railNodePopoverContent(d) {
         var html = "<dl class='dl-horizontal'>";
         if (d.properties.incident_links) {
@@ -295,6 +316,13 @@
     // Warehouse
     function warehouseTitle(d) {
         var html = "<span class='warehouse-bug'></span>" + d.properties.name;
+        return html;
+    }
+    function warehouseMedia(d) {
+        var html = "";
+        if (d.properties.media) {
+            html += "<div class='background-image' style='background-image:url(\"/media/330w/"+d.properties.media+"\")'></div>";
+        }
         return html;
     }
     function warehousePopoverContent(d) {
@@ -348,11 +376,15 @@
     }
 
     // Port
-    function portTitle(d) {
+    function portMedia(d) {
         var html = "";
         if (d.properties.media) {
             html += "<div class='background-image' style='background-image:url(\"/media/330w/"+d.properties.media+"\")'></div>";
         }
+        return html;
+    }
+    function portTitle(d) {
+        var html = "";
         html += "<span class='port-bug'></span>" + d.properties.name;
         return html;
     }
@@ -425,6 +457,7 @@
         attribution: 'Rail: <a href="http://cta.ornl.gov/transnet/index.html">CTA</a>',
         title: railLineTitle,
         content: railLinePopoverContent,
+        media: railLineMedia,
         mouseover: railLineMouseover,
         mouseout: railLineMouseout,
         click: railLineClick,
@@ -446,6 +479,7 @@
         style: railLineStyle,
         title: railInterlineTitle,
         content: railInterlinePopoverContent,
+        media: railInterlineMedia,
         mouseover: railInterlineMouseover,
         mouseout: railInterlineMouseout,
         click: railInterlineClick,
@@ -468,6 +502,7 @@
         attribution: 'Ports: <a href="http://msi.nga.mil/NGAPortal/MSI.portal?_nfpb=true&_pageLabel=msi_portal_page_62&pubCode=0015">NGA</a>; TEU data: <a href="http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/national_transportation_atlas_database/2013/points.html">USDOT</a>',
         title: portTitle,
         content: portPopoverContent,
+        media: portMedia,
         mouseover: portMouseover,
         mouseout: portMouseout,
         click: portClick,
@@ -489,6 +524,7 @@
         attribution: 'Wal-Mart: <a href="http://www.mwpvl.com/">© MWPVL</a>, Target: <a href="https://corporate.target.com/careers/global-locations/distribution-center-locations">© Target</a>',
         title: warehouseTitle,
         content: warehousePopoverContent,
+        media: warehouseMedia,
         mouseover: warehouseMouseover,
         mouseout: warehouseMouseout,
         click: warehouseClick,
@@ -510,6 +546,7 @@
         fill: "red",
         title: railNodeTitle,
         content: railNodePopoverContent,
+        media: railNodeMedia,
         mouseover: railNodeMouseover,
         mouseout: railNodeMouseout,
         click: railNodeClick,

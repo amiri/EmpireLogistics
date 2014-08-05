@@ -1360,7 +1360,7 @@ if (typeof jQuery === "undefined") { throw new Error("Bootstrap's JavaScript req
     placement: 'right',
     trigger: 'click',
     content: '',
-    template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
+    template: '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-media"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
   })
 
 
@@ -1379,8 +1379,12 @@ if (typeof jQuery === "undefined") { throw new Error("Bootstrap's JavaScript req
     var $tip    = this.tip()
     var title   = this.getTitle()
     var content = this.getContent()
+    var media = this.getMedia()
 
     $tip.find('.popover-title')[this.options.html ? 'html' : 'text'](title)
+    $tip.find('.popover-media').empty()[ // we use append for html objects to maintain js events
+      this.options.html ? (typeof media == 'string' ? 'html' : 'append') : 'text'
+    ](media)
     $tip.find('.popover-content').empty()[ // we use append for html objects to maintain js events
       this.options.html ? (typeof content == 'string' ? 'html' : 'append') : 'text'
     ](content)
@@ -1394,6 +1398,16 @@ if (typeof jQuery === "undefined") { throw new Error("Bootstrap's JavaScript req
 
   Popover.prototype.hasContent = function () {
     return this.getTitle() || this.getContent()
+  }
+
+  Popover.prototype.getMedia= function () {
+    var $e = this.$element
+    var o  = this.options
+
+    return $e.attr('data-media')
+      || (typeof o.content == 'function' ?
+            o.media.call($e[0]) :
+            o.media)
   }
 
   Popover.prototype.getContent = function () {
