@@ -8,7 +8,7 @@
 
     <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900' rel='stylesheet' type='text/css'>
     [% IF is_production %]
-        <link rel="stylesheet" href="/css/site.min.bd908cc5.css" type="text/css" />
+        <link rel="stylesheet" href="/css/site.min.a853d776.css" type="text/css" />
     [% ELSE %]
         <link rel="stylesheet" href="/css/lib/bootstrap.min.css" type="text/css" />
         <link rel="stylesheet" href="/css/lib/bootstrap-theme.min.css" type="text/css" />
@@ -24,7 +24,7 @@
         window.CKEDITOR_BASEPATH = '/js/lib/ckeditor/';
     </script>
     [% IF is_production %]
-        <script type="text/javascript" src="/js/site.min.e1446a2a.js"></script>
+        <script type="text/javascript" src="/js/site.min.4fd0d2f1.js"></script>
     [% ELSE %]
         <script type="text/javascript" src="/js/lib/jquery-latest.min.js"></script>
         <script type="text/javascript" src="/js/lib/bootstrap-patched.js"></script>

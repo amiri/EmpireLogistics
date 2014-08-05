@@ -1822,257 +1822,338 @@ div.DTFC_LeftFootWrapper table {
 
 html,body,#map
 {
-	height:100%;
-	margin:0;
-	padding:0;
-	padding-bottom:25px;
-	width:100%;
+    height:100%;
+    margin:0;
+    padding:0;
+    padding-bottom:40px;
+    width:100%;
+    font-family:'Roboto';
 }
 
 body
 {
-	background-color:#ddd;
-	font-family:Helvetica Neue, Helvetica, Arial, sans-serif;
-	font-size:12px;
-	margin:0;
+    background-color:#ddd;
+    font-size:12px;
+    margin:0;
 }
+
 path
 {
-	fill:none;
-	stroke-linecap:round;
+    fill:none;
+    stroke-linecap:round;
 }
 
 .rail-line
 {
-	fill:none;
-	stroke:#000;
-	stroke-linejoin:round;
-	stroke-width:4;
+    fill:none;
+    stroke:#000;
+    stroke-linejoin:round;
+    stroke-width:4;
 }
 
 .embargo
 {
-	stroke:#D2691E;
+    stroke:#D2691E;
 }
 
 .suspended
 {
-	stroke:#B8860B;
+    stroke:#B8860B;
 }
 
 .abandoned
 {
-	stroke:#696969;
+    stroke:#696969;
 }
 
 .rail-interline
 {
-	fill:none;
-	stroke:#DAA520;
-	stroke-linejoin:round;
-	stroke-width:4;
+    fill:none;
+    stroke:#DAA520;
+    stroke-linejoin:round;
+    stroke-width:4;
 }
 
 .info
 {
-	padding:6px 8px;
-	background:#FFF;
-	background:rgba(255,255,255,0.9);
-	box-shadow:0 0 15px rgba(0,0,0,0.2);
-	border-radius:5px;
+    padding:6px 8px;
+    background:#FFF;
+    background:rgba(255,255,255,0.9);
+    box-shadow:0 0 15px rgba(0,0,0,0.2);
+    border-radius:5px;
 }
 
 .legend
 {
-	line-height:18px;
-	color:#555;
+    line-height:18px;
+    color:#555;
 }
 
 .legend i
 {
-	width:18px;
-	height:18px;
-	float:left;
-	margin-right:8px;
-	opacity:1;
+    width:18px;
+    height:18px;
+    float:left;
+    margin-right:8px;
+    opacity:1;
 }
 
 .stroke-highlight
 {
-	stroke:#5bc0de;
+    stroke:#5bc0de;
 }
 
 .fill-highlight
 {
-	fill:#5bc0de;
+    fill:#5bc0de;
 }
 
 .popover
 {
-	max-width:600px;
+    max-width:600px;
+    min-width:330px;
+    padding:0px;
 }
 
 span.rail-line-bug
 {
-	background-color:transparent;
-	background-image:url(/images/railroad.png);
-	background-repeat:no-repeat;
-	margin-right:1em;
-	background-size:contain;
-	height:18px;
-	width:18px;
-	display:inline-block;
+    background-color:transparent;
+    background-image:url(/images/railroad.png);
+    background-repeat:no-repeat;
+    margin-right:1em;
+    background-size:contain;
+    height:18px;
+    width:18px;
+    display:inline-block;
 }
 
 span.rail-node-bug
 {
-	background-color:transparent;
-	background-image:url(/images/rail-node.png);
-	background-repeat:no-repeat;
-	margin-right:1em;
-	background-size:contain;
-	height:18px;
-	width:18px;
-	display:inline-block;
+    background-color:transparent;
+    background-image:url(/images/rail-node.png);
+    background-repeat:no-repeat;
+    margin-right:1em;
+    background-size:contain;
+    height:18px;
+    width:18px;
+    display:inline-block;
 }
 
 span.rail-interline-bug
 {
-	background-color:transparent;
-	background-image:url(/images/rail-interline.png);
-	background-repeat:no-repeat;
-	margin-right:1em;
-	background-size:contain;
-	height:18px;
-	width:18px;
-	display:inline-block;
+    background-color:transparent;
+    background-image:url(/images/rail-interline.png);
+    background-repeat:no-repeat;
+    margin-right:1em;
+    background-size:contain;
+    height:18px;
+    width:18px;
+    display:inline-block;
 }
 
 span.port-bug
 {
-	background-color:transparent;
-	background-image:url(/images/port.png);
-	background-repeat:no-repeat;
-	margin-right:1em;
-	background-size:contain;
-	height:18px;
-	width:18px;
-	display:inline-block;
+    background-color:transparent;
+    background-image:url(/images/port.png);
+    background-repeat:no-repeat;
+    margin-right:1em;
+    background-size:contain;
+    height:18px;
+    width:18px;
+    display:inline-block;
 }
 
 span.warehouse-bug
 {
-	background-color:transparent;
-	background-image:url(/images/warehouse.png);
-	background-repeat:no-repeat;
-	margin-right:1em;
-	background-size:contain;
-	height:18px;
-	width:18px;
-	display:inline-block;
+    background-color:transparent;
+    background-image:url(/images/warehouse.png);
+    background-repeat:no-repeat;
+    margin-right:1em;
+    background-size:contain;
+    height:18px;
+    width:18px;
+    display:inline-block;
 }
 
 .dl-horizontal hr
 {
-	margin-top:10px;
-	margin-bottom:10px;
+    margin-top:10px;
+    margin-bottom:10px;
 }
 
 div#control-bar
 {
-	width:100%;
-	background-color:#ddd;
-	margin:0;
-	padding:0;
+    width:100%;
+    background-color:#ddd;
+    margin:0;
+    padding:0;
 }
 
 .el-top-navbar
 {
-	margin-bottom:0;
-	-webkit-box-shadow:0 3px 3px 3px rgba(0,0,0,0.2);
-	-moz-box-shadow:0 3px 3px 3px rgba(0,0,0,0.2);
-	box-shadow:0 3px 3px 3px rgba(0,0,0,0.2);
+    margin-bottom:0;
+    -webkit-box-shadow:0 3px 3px 3px rgba(0,0,0,0.2);
+    -moz-box-shadow:0 3px 3px 3px rgba(0,0,0,0.2);
+    box-shadow:0 3px 3px 3px rgba(0,0,0,0.2);
 }
 
-form.navbar-form .form-group .topnav-search {
-    width: 100%;
+form.navbar-form .form-group .topnav-search
+{
+    width:100%;
 }
 
 .container-fluid
 {
-	padding-left:15px;
-	padding-right:15px;
-}
-body.admin, body.blog {
-	background-color:#fff;
-}
-.checkbox-inline label {
-    font-weight: 400;
-}
-div.form-control.btn.btn-info.add_element {
-    width: auto;
-}
-.compact-field .form-group {
-    margin-bottom: 5px;
-}
-.compact-field > .form-group.bordered {
-    padding: 1em;
-    margin: 0.5em;
-    border: dotted 1px #cccccc;
+    padding-left:15px;
+    padding-right:15px;
 }
 
-.compact-field .form-group .form-control {
-    height: 30px;
-    line-height: 1;
-}
-.row .details {
-    font-size: 150%;
-}
-.modal-body .row .details {
-    font-size: 120%;
-}
-.modal-dialog {
-    width: 800px;
+.navbar .container-fluid
+{
+    padding-bottom:15px;
+    padding-top:15px;
 }
 
-.row .img-preview {
-    width: 345px;
-    height: 194px;
-    overflow: hidden;
+body.admin,body.blog,body.about
+{
+    background-color:#fff;
+}
 
+.checkbox-inline label
+{
+    font-weight:400;
 }
-.img-container.preview {
-    max-width: 545px;
-    max-height: 326px;
-    overflow: hidden;
+
+div.form-control.btn.btn-info.add_element
+{
+    width:auto;
 }
-.img-container.preview img {
-    width: 490px;
-    height: 276px;
+
+.compact-field .form-group
+{
+    margin-bottom:5px;
 }
-.media-image img {
-    max-width: 355px;
-    max-height: 200px;
+
+.compact-field > .form-group.bordered
+{
+    padding:1em;
+    margin:.5em;
+    border:dotted 1px #CCC;
 }
-.top-buffer {
-    margin-top: 1em;
+
+.compact-field .form-group .form-control
+{
+    height:30px;
+    line-height:1;
 }
-.bottom-buffer {
-    margin-bottom: 1em;
+
+.row .details
+{
+    font-size:150%;
 }
-.buffer {
-    margin-top: 1em;
-    margin-bottom: 1em;
+
+.modal-body .row .details
+{
+    font-size:120%;
 }
-.select2-results {
-    max-height: 500px;
+
+.modal-dialog
+{
+    width:800px;
 }
-ul, ol {
-    list-style-type: none;
+
+.row .img-preview
+{
+    width:345px;
+    height:194px;
+    overflow:hidden;
 }
-.blog-summary {
-    border-bottom: dotted 1px #cccccc;
+
+.img-container.preview
+{
+    max-width:545px;
+    max-height:326px;
+    overflow:hidden;
 }
-.nested {
-    margin-left: 1em;
+
+.img-container.preview img
+{
+    width:490px;
+    height:276px;
+}
+
+.media-image img
+{
+    max-width:355px;
+    max-height:200px;
+}
+
+.top-buffer
+{
+    margin-top:1em;
+}
+
+.bottom-buffer
+{
+    margin-bottom:1em;
+}
+
+.buffer
+{
+    margin-top:1em;
+    margin-bottom:1em;
+}
+
+.select2-results
+{
+    max-height:500px;
+}
+
+ul,ol
+{
+    list-style-type:none;
+}
+
+.blog-summary
+{
+    border-bottom:dotted 1px #CCC;
+}
+
+.nested
+{
+    margin-left:1em;
+}
+
+.add-node
+{
+    position:absolute;
+    left:0;
+    bottom:-39px;
+}
+
+#header-text
+{
+    font-family:'Roboto';
+    font-weight:900;
+    font-size:60px;
+    text-transform:uppercase;
+    color: #777;
+    -webkit-text-fill-color: transparent;
+    background: -webkit-linear-gradient(transparent, transparent),url(/images/containers2.png);
+    background-size: contain;
+    background: -o-linear-gradient(transparent, transparent);
+    -webkit-background-clip: text;
+}
+
+.background-image
+{
+    padding:0;
+    margin-top:0;
+    margin-bottom:1em;
+    width:330px;
+    height:calc(330px*9/16);
+    -moz-background-clip:padding;
+    -webkit-background-clip:padding-box;
+    background-clip:padding-box;
+    background-size:contain;
 }

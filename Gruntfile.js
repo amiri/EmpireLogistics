@@ -14,7 +14,7 @@ module.exports = function(grunt) {
                     "root/css/lib/dataTables.bootstrap.css",
                     "root/css/el.css",
                 ],
-                dest: "root/css/site.css",
+                dest: "root/css/site.min.css",
             },
             js: {
                 src: [
@@ -42,12 +42,12 @@ module.exports = function(grunt) {
                 dest: "root/js/site.js"
             }
         },
-        cssmin: {
-            css: {
-                src: 'root/css/site.css',
-                dest: 'root/css/site.min.css'
-            }
-        },
+        //cssmin: {
+            //css: {
+                //src: 'root/css/site.css',
+                //dest: 'root/css/site.min.css'
+            //}
+        //},
         uglify: {
             js: {
                 files: {
@@ -139,6 +139,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     // Default task(s).
-    grunt.registerTask('default', ['concat', 'cssmin', 'uglify', 'filerev', 'userev']);
+    grunt.registerTask('default', ['concat', 'uglify', 'filerev', 'userev']);
 };
 

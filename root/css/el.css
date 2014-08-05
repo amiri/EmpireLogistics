@@ -317,8 +317,7 @@ ul,ol
     text-transform:uppercase;
     color: #777;
     -webkit-text-fill-color: transparent;
-    background: -webkit-linear-gradient(transparent, transparent),
-                url(/images/containers2.png);
+    background: -webkit-linear-gradient(transparent, transparent),url(/images/containers2.png);
     background-size: contain;
     background: -o-linear-gradient(transparent, transparent);
     -webkit-background-clip: text;
