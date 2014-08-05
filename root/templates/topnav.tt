@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default navbar-static-top el-top-navbar navbar-inverse" role="navigation">
+<nav class="navbar navbar-default navbar-static-top el-top-navbar" role="navigation">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -8,7 +8,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand header-text" href="/">Empire Logistics</a>
+      <a class="navbar-brand" id="header-text" href="/">Empire Logistics</a>
     </div> <!-- navbar-header -->
 
     <!-- Collect the nav links, forms, and other content for toggling -->

@@ -5,15 +5,16 @@ html,body,#map
 	padding:0;
 	padding-bottom:40px;
 	width:100%;
+	font-family:'Roboto';
 }
 
 body
 {
 	background-color:#ddd;
-	font-family:Helvetica Neue, Helvetica, Arial, sans-serif;
 	font-size:12px;
 	margin:0;
 }
+
 path
 {
 	fill:none;
@@ -88,7 +89,7 @@ path
 .popover
 {
 	max-width:600px;
-    min-width:330px;
+	min-width:330px;
 }
 
 span.rail-line-bug
@@ -173,8 +174,9 @@ div#control-bar
 	box-shadow:0 3px 3px 3px rgba(0,0,0,0.2);
 }
 
-form.navbar-form .form-group .topnav-search {
-    width: 100%;
+form.navbar-form .form-group .topnav-search
+{
+	width:100%;
 }
 
 .container-fluid
@@ -183,101 +185,155 @@ form.navbar-form .form-group .topnav-search {
 	padding-right:15px;
 }
 
-.navbar .container-fluid {
-    padding-bottom: 15px;
-    padding-top: 15px;
+.navbar .container-fluid
+{
+	padding-bottom:15px;
+	padding-top:15px;
 }
 
-body.admin, body.blog, body.about {
+body.admin,body.blog,body.about
+{
 	background-color:#fff;
 }
-.checkbox-inline label {
-    font-weight: 400;
-}
-div.form-control.btn.btn-info.add_element {
-    width: auto;
-}
-.compact-field .form-group {
-    margin-bottom: 5px;
-}
-.compact-field > .form-group.bordered {
-    padding: 1em;
-    margin: 0.5em;
-    border: dotted 1px #cccccc;
+
+.checkbox-inline label
+{
+	font-weight:400;
 }
 
-.compact-field .form-group .form-control {
-    height: 30px;
-    line-height: 1;
-}
-.row .details {
-    font-size: 150%;
-}
-.modal-body .row .details {
-    font-size: 120%;
-}
-.modal-dialog {
-    width: 800px;
+div.form-control.btn.btn-info.add_element
+{
+	width:auto;
 }
 
-.row .img-preview {
-    width: 345px;
-    height: 194px;
-    overflow: hidden;
+.compact-field .form-group
+{
+	margin-bottom:5px;
+}
 
+.compact-field > .form-group.bordered
+{
+	padding:1em;
+	margin:.5em;
+	border:dotted 1px #CCC;
 }
-.img-container.preview {
-    max-width: 545px;
-    max-height: 326px;
-    overflow: hidden;
+
+.compact-field .form-group .form-control
+{
+	height:30px;
+	line-height:1;
 }
-.img-container.preview img {
-    width: 490px;
-    height: 276px;
+
+.row .details
+{
+	font-size:150%;
 }
-.media-image img {
-    max-width: 355px;
-    max-height: 200px;
+
+.modal-body .row .details
+{
+	font-size:120%;
 }
-.top-buffer {
-    margin-top: 1em;
+
+.modal-dialog
+{
+	width:800px;
 }
-.bottom-buffer {
-    margin-bottom: 1em;
+
+.row .img-preview
+{
+	width:345px;
+	height:194px;
+	overflow:hidden;
 }
-.buffer {
-    margin-top: 1em;
-    margin-bottom: 1em;
+
+.img-container.preview
+{
+	max-width:545px;
+	max-height:326px;
+	overflow:hidden;
 }
-.select2-results {
-    max-height: 500px;
+
+.img-container.preview img
+{
+	width:490px;
+	height:276px;
 }
-ul, ol {
-    list-style-type: none;
+
+.media-image img
+{
+	max-width:355px;
+	max-height:200px;
 }
-.blog-summary {
-    border-bottom: dotted 1px #cccccc;
+
+.top-buffer
+{
+	margin-top:1em;
 }
-.nested {
-    margin-left: 1em;
+
+.bottom-buffer
+{
+	margin-bottom:1em;
 }
-.add-node {
-    position: absolute;
-    left: 0;
-    bottom: -39px;
+
+.buffer
+{
+	margin-top:1em;
+	margin-bottom:1em;
 }
-.header-text {
-	font-size:48px;
-    font-weight: 700;
+
+.select2-results
+{
+	max-height:500px;
 }
-.background-image {
-    padding: 0;
-    margin-top:0;
-    margin-bottom: 1em;
-    width: 330px;
-    height: calc(330px * 9/16);
-    -moz-background-clip: padding;
-    -webkit-background-clip: padding-box;
-    background-clip: padding-box;
+
+ul,ol
+{
+	list-style-type:none;
+}
+
+.blog-summary
+{
+	border-bottom:dotted 1px #CCC;
+}
+
+.nested
+{
+	margin-left:1em;
+}
+
+.add-node
+{
+	position:absolute;
+	left:0;
+	bottom:-39px;
+}
+
+#header-text
+{
+    font-family:'Roboto';
+    font-weight:900;
+    font-size:60px;
+    text-transform:uppercase;
+    color: #777;
+    -webkit-text-fill-color: transparent;
+    background: -webkit-linear-gradient(transparent, transparent),url(/images/containers2.png);
     background-size: contain;
+    background: -o-linear-gradient(transparent, transparent);
+    -webkit-background-clip: text;
+}
+#header-text:hover {
+    color: #aaa;
+}
+
+.background-image
+{
+	padding:0;
+	margin-top:0;
+	margin-bottom:1em;
+	width:330px;
+	height:calc(330px*9/16);
+	-moz-background-clip:padding;
+	-webkit-background-clip:padding-box;
+	background-clip:padding-box;
+	background-size:contain;
 }
