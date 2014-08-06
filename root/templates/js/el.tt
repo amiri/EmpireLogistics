@@ -565,7 +565,7 @@
         var div = L.DomUtil.create('div', 'info legend'),
         elType = ["Rail Line", "Rail Node", "Rail Interline", "Port", "Costco", "Target", "Walmart", "Krogers", "Walgreens", "Amazon", "Home Depot", "Ikea"],
         color = ["black", "red", "goldenrod", "dodgerblue", "blueviolet", "fuchsia", "darkorange", "mediumslateblue", "limegreen", "forestgreen", "maroon", "navy"];
-        div.innerHTML += '<h4>Legend</h4>';
+        div.innerHTML += '<h5>Node Legend</h5>';
 
         for (var i = 0; i < color.length; i++) {
             div.innerHTML += '<i style="background:' + color[i] + '"></i> ' + elType[i] + '<br>';
@@ -581,6 +581,6 @@
         "autoZIndex": true
     }).addTo(map);
     $(document).ready(function(){
-        $("div.leaflet-control-layers.leaflet-control-layers-expanded.leaflet-control").prepend('<h4>Filter Layers</h4>');
+        $("div.leaflet-control-layers.leaflet-control-layers-expanded.leaflet-control").prepend('<h5>Infrastructure Layers</h5>');
     });
 </script>

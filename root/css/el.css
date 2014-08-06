@@ -322,6 +322,9 @@ ul,ol
     background: -o-linear-gradient(transparent, transparent);
     -webkit-background-clip: text;
 }
+#header-text:hover {
+    color: #aaa;
+}
 
 .background-image
 {
@@ -334,4 +337,26 @@ ul,ol
     -webkit-background-clip:padding-box;
     background-clip:padding-box;
     background-size:contain;
+}
+
+p.subhed {
+   margin: 0;
+   color: #777;
+}
+.navbar .divider-vertical {
+    height: 48px;
+    margin: 0 1em;
+    border-right: 1px solid #ffffff;
+    border-left: 1px solid #ddd;
+}
+
+.navbar-inverse .divider-vertical {
+    border-right-color: #222222;
+    border-left-color: #111111;
+}
+
+@media (max-width: 767px) {
+.navbar-collapse .nav > .divider-vertical {
+    display: none;
+  }
 }

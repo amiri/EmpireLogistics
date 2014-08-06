@@ -9,6 +9,7 @@
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" id="header-text" href="/">Empire Logistics</a>
+      <p class="subhed">Mapping Supply Chain Infrastructure Since 2009</p>
     </div> <!-- navbar-header -->
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -34,6 +35,23 @@
         [% ELSE %]
         <li><a href="/login" data-toggle="modal" data-target="#login-modal">Login</a></li>
         [% END %]
+        <li class="divider-vertical"></li>
+        <li class="supernodes">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Supernodes<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li><a href="/#11/33.7436/-118.2399">San Pedro Bay</a></li>
+                <li><a href="/#11/41.8506/-87.5744">Chicago</a></li>
+                <li><a href="/#11/35.0676/-90.1706">Memphis</a></li>
+                <li><a href="/#11/47.5626/-122.3613">Puget Sound</a></li>
+                <li><a href="/#11/29.7456/-95.2841">Houston</a></li>
+                <li><a href="/#9/39.9076/-75.1067">Northeastern Seaboard</a></li>
+                <li><a href="/#7/33.312/-79.557">Southeastern Seaboard</a></li>
+                <li><a href="/#8/27.279/-81.181">Southern Florida</a></li>
+                <li><a href="/#6/24.827/-89.154">Gulf Coast</a></li>
+                <li><a href="/#6/24.687/-107.941">Pacific Mexican Coast</a></li>
+                <li><a href="/#10/37.7783/-122.2703">San Francisco Bay Area</a></li>
+            </ul>
+        </li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
