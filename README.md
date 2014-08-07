@@ -65,9 +65,6 @@ This installation is more complicated. Here is the Mac installation:
 
     * Run the following command in the Terminal:
 
-                vagrant box add base http://cloud-images.ubuntu.com/vagrant/saucy/current/saucy-server-cloudimg-amd64-vagrant-disk1.box
-                vagrant up
-
 5. SSH to the Virtual Machine
 
             vagrant ssh -- -A
