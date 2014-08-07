@@ -64,6 +64,7 @@ This installation is more complicated. Here is the Mac installation:
 
                 vagrant box add base http://cloud-images.ubuntu.com/vagrant/saucy/current/saucy-server-cloudimg-amd64-vagrant-disk1.box
                 vagrant up
+You should see some setup information as this is working. You may have to answer some questions. The defaults should be fine. Once the setup is done, you can ssh to the machine.
 
 5. SSH to the Virtual Machine
 
