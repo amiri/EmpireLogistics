@@ -35,9 +35,7 @@ This installation is more complicated. Here is the Mac installation:
     * Go to https://mac.github.com and download https://central.github.com/mac/latest
     * Install it.
     * Clone the repository to your Desktop, e.g., /Users/You/Desktop
-
             OR
-
     * Open a Terminal: /Applications/Utilities/Terminal.app
     * Type the following commands:
 
