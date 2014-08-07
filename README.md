@@ -59,14 +59,14 @@ This installation is more complicated. Here is the Mac installation:
 4. Install a base box for Virtualbox.
     * Leave the Terminal where it is, open a web browser and go to:
 
-        https://cloud-images.ubuntu.com/vagrant/saucy/current/
+            https://cloud-images.ubuntu.com/vagrant/saucy/current/
 
     * Choose a vagrant base box image. I have chosen the amd64-vagrant image in the
       command below. Your Mac is most likely a 64-bit machine, so that's the one you
       probably want, too. Run the following command in the Terminal:
 
-            vagrant box add base http://cloud-images.ubuntu.com/vagrant/saucy/current/saucy-server-cloudimg-amd64-vagrant-disk1.box
-            vagrant up
+                vagrant box add base http://cloud-images.ubuntu.com/vagrant/saucy/current/saucy-server-cloudimg-amd64-vagrant-disk1.box
+                vagrant up
 
       You should see some setup information as this is working. You may
       have to answer some questions. The defaults should be fine. Once
@@ -78,22 +78,25 @@ This installation is more complicated. Here is the Mac installation:
       folders. You will probably need to use the NFS filesystem. See this page
       for details on how to edit your Vagrantfile in this directory.
 
-          https://docs.vagrantup.com/v2/synced-folders/nfs.html
+              https://docs.vagrantup.com/v2/synced-folders/nfs.html
 
       There may also be some complications with the size of your vagrant virtual machine's
       hard drive size. See this page for details on how to convert the VMDK to a VDI and
       resize that VDI.
 
-          http://www.ifusio.com/blog/resize-your-sda1-disk-of-your-vagrant-virtualbox-vm
+              http://www.ifusio.com/blog/resize-your-sda1-disk-of-your-vagrant-virtualbox-vm
 
 5. SSH to the Virtual Machine
-        vagrant ssh -- -A
+
+            vagrant ssh -- -A
+
 6. cd to the shared folder
     Now you are inside the virtual machine. Run the following commands:
         cd /vagrant
     Now you are in a shared directory, the directory of the repository.
         ls
     These are the files in the repository.
+
 7. Install the application
     * Run the installation commands:
             make prereqs && make all
