@@ -23,7 +23,6 @@ Here are the layers of the application, from bottom to top:
     * /details
 
     et cetera.
-
 3. [TileStache](http://tilestache.org/)
 
     Backend Application, serving such URLs as
