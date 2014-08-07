@@ -11,18 +11,17 @@ There's a lot going on here.
 Here are the layers of the application, from bottom to top:
 
 1. [PostgreSQL](http://www.postgresql.org/)
-
     Database
 
 2. [Catalyst](https://metacpan.org/pod/Catalyst)
 
-Backend Application, serving such URLs as
+    Backend Application, serving such URLs as
 
-* /admin
-* /blog
-* /details
+    * /admin
+    * /blog
+    * /details
 
-et cetera.
+    et cetera.
 
 3. [TileStache](http://tilestache.org/)
 
