@@ -73,9 +73,11 @@ You should see some setup information as this is working. You may have to answer
 6. cd to the shared folder
 
     Now you are inside the virtual machine. Run the following commands:
+
         cd /vagrant
 
     Now you are in a shared directory, the directory of the repository.
+
         ls
 
     These are the files in the repository.
