@@ -49,6 +49,7 @@ This installation is more complicated. Here is the Mac installation:
     * Open the application and leave it running.
 
 
+
 3. Install VirtualBox
     * Download https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3.dmg
     * Install it.
