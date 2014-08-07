@@ -57,6 +57,7 @@ This installation is more complicated. Here is the Mac installation:
             cd ~/Desktop/EmpireLogistics
 
 4. Install a base box for Virtualbox.
+
     * Leave the Terminal where it is, open a web browser and go to:
 
             https://cloud-images.ubuntu.com/vagrant/saucy/current/
