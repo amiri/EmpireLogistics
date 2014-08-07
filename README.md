@@ -83,13 +83,11 @@ You should see some setup information as this is working. You may have to answer
     These are the files in the repository.
 
 7. Install the application
-
     * Run the installation commands:
 
             make prereqs && make all
 
 8. Install a browser to the VM
-
     * Open up another Terminal: /Applications/Utilities/Terminal.app
     * Run the following commands:
 
