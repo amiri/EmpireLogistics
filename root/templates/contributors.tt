@@ -1,0 +1,14 @@
+[% body_class = 'about' %]
+<div class="row">
+<div class="col-lg-6 col-lg-offset-2">
+<h1>Contributors</h1>
+
+<ul>
+<li><a href="http://intermedia135.ning.com/">University of California-Riverside students</a></li>
+<li><a href="http://classes.mwwilson.net/video-production/">Pitzer College students</a></li>
+<li>Art Institute of California students</li>
+<li>California Polytechnic State University students</li>
+<li><a href="http://kenrogers.org/">Kenneth Rogers</a></li>
+<li><a href="http://cla.calpoly.edu/es_valle.html">Victor Valle</a></li>
+<li><a href="http://mwwilson.net/">Michael W. Wilson</a></li>
+</ul>

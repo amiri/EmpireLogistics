@@ -39,9 +39,19 @@ sub default : Path {
     $c->response->status(404);
 }
 
-sub about :Chained('/') PathPart('about') Args(0) GET {
+sub history :Chained('/') PathPart('our-history') Args(0) GET {
     my ($self,$c) = @_;
-    $c->stash->{template} = 'about.tt';
+    $c->stash->{template} = 'our-history.tt';
+}
+
+sub contributors :Chained('/') PathPart('contributors') Args(0) GET {
+    my ($self,$c) = @_;
+    $c->stash->{template} = 'contributors.tt';
+}
+
+sub reference_materials :Chained('/') PathPart('reference-materials') Args(0) GET {
+    my ($self,$c) = @_;
+    $c->stash->{template} = 'reference-materials.tt';
 }
 
 sub access_denied : Private {
