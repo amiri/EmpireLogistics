@@ -167,6 +167,19 @@ This installation is more complicated. Here is the Mac installation:
                 vagrant box add base http://cloud-images.ubuntu.com/vagrant/saucy/current/saucy-server-cloudimg-amd64-vagrant-disk1.box
                 vagrant up
 You should see some setup information as this is working. You may have to answer some questions. The defaults should be fine. Once the setup is done, you can ssh to the machine.
+    * _Complications & Troubleshooting_
+
+      There may be some complications here with the filesystem for the Vagrant shared
+      folders. You will probably need to use the NFS filesystem. See this page
+      for details on how to edit your Vagrantfile in this directory.
+
+              https://docs.vagrantup.com/v2/synced-folders/nfs.html
+
+      There may also be some complications with the size of your vagrant virtual machine's
+      hard drive size. See this page for details on how to convert the VMDK to a VDI and
+      resize that VDI.
+
+              http://www.ifusio.com/blog/resize-your-sda1-disk-of-your-vagrant-virtualbox-vm
 
 5. SSH to the Virtual Machine
 
