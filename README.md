@@ -58,7 +58,6 @@ This installation is more complicated. Here is the Mac installation:
 
 4. Install a base box for Virtualbox.
     * Leave the Terminal where it is, open a web browser and go to:
-
             https://cloud-images.ubuntu.com/vagrant/saucy/current/
 
     * Choose a vagrant base box image. I have chosen the amd64-vagrant image in the command below. Your Mac is most likely a 64-bit machine, so that's the one you probably want, too.
