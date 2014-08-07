@@ -58,7 +58,6 @@ Here is how the code is laid out in this directory.
     When you run make chef, or some other Makefile targets, data gets downloaded from various sources and it is stored here for use by the scripts.
 
 4. etc/
-    
     * Our [chef](http://docs.getchef.com/) configuration lives here
     * As does some static, unchanging data in etc/data.
     * And our database changes are managed out of etc/schema by a tool call [sqitch](http://sqitch.org/). This is for when we need to add a new column to a PostgreSQL table or add a new table entirely.
