@@ -86,7 +86,6 @@ This installation is more complicated. Here is the Mac installation:
       resize that VDI.
 
               http://www.ifusio.com/blog/resize-your-sda1-disk-of-your-vagrant-virtualbox-vm
-
 5. SSH to the Virtual Machine
 
             vagrant ssh -- -A
