@@ -79,13 +79,13 @@ Here is how the code is laid out in this directory.
 
 7. root/
 
-    * css
+    * CSS
 
         Our static javascript and css assets live here. The main css file for the site is
 
             root/css/el.css
 
-    * js
+    * Javascript
 
         The main js file for the site is
 
@@ -93,7 +93,7 @@ Here is how the code is laid out in this directory.
          
         The main javascript file is, you will notice, a template. That is because we need to interpolate some variables, depending on what environment the application is running in. Namely, the tile server runs on a different port on a sandbox versus the real webserver.
 
-    * templates
+    * Templates
 
         We use [Template::Toolkit](https://metacpan.org/pod/Template) for templating. These file are in
 
