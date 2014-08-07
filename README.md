@@ -16,13 +16,14 @@ Here are the layers of the application, from bottom to top:
 
 2. [Catalyst](https://metacpan.org/pod/Catalyst)
 
-    Backend Application, serving such URLs as
+Backend Application, serving such URLs as
 
-    * /admin
-    * /blog
-    * /details
+* /admin
+* /blog
+* /details
 
-    et cetera.
+et cetera.
+
 3. [TileStache](http://tilestache.org/)
 
     Backend Application, serving such URLs as
