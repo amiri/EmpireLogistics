@@ -1,8 +1,10 @@
-DEMO: http://50.116.5.25/
+# DEMO
 
-INSTALLATION
+    http://50.116.5.25/
 
-BARE METAL
+# INSTALLATION
+
+## BARE METAL
 
 If you are running a Debian-derived distribution, preferably Ubuntu 13.10,
 Saucy Salamander, you can run the following on the command line:
@@ -25,7 +27,7 @@ Now you should have a populated PostgreSQL database with
 a lot of data in place. You also have nginx, PostgreSQL, and uwsgi
 installed and everything running.
 
-VAGRANT/VIRTUALBOX
+## VAGRANT/VIRTUALBOX
 
 This installation is more complicated. Here is the Mac installation:
 
@@ -53,21 +55,21 @@ This installation is more complicated. Here is the Mac installation:
 
     3. Install VirtualBox
 
-        - Download https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3.dmg
-        - Install it.
+        * Download https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3.dmg
+        * Install it.
 
-        - Open a Terminal: /Applications/Utilities/Terminal.app
-        - Type the following commands:
+        * Open a Terminal: /Applications/Utilities/Terminal.app
+        * Type the following commands:
 
             cd ~/Desktop/EmpireLogistics
 
     4. Install a base box for Virtualbox.
 
-        - Leave the Terminal where it is, open a web browser and go to:
+        * Leave the Terminal where it is, open a web browser and go to:
 
             https://cloud-images.ubuntu.com/vagrant/saucy/current/
 
-        - Choose a vagrant base box image. I have chosen the amd64-vagrant image in the
+        * Choose a vagrant base box image. I have chosen the amd64-vagrant image in the
           command below. Your Mac is most likely a 64-bit machine, so that's the one you
           probably want, too. Run the following command in the Terminal:
 
@@ -110,14 +112,14 @@ This installation is more complicated. Here is the Mac installation:
 
     7. Install the application
 
-        - Now run the installation commands:
+        * Now run the installation commands:
 
             make prereqs && make all
 
     8. Install a browser to the VM
 
-        - Open up another Terminal: /Applications/Utilities/Terminal.app
-        - Run the following commands:
+        * Open up another Terminal: /Applications/Utilities/Terminal.app
+        * Run the following commands:
 
             cd ~/Desktop/EmpireLogistics
             vagrant ssh -- -A
@@ -142,7 +144,7 @@ This installation is more complicated. Here is the Mac installation:
         first Terminal window. It takes a much shorter time each time after
         the first.
 
-OVERVIEW
+# OVERVIEW
 
 We have all the rail, warehouse, and port data importing now. Remaining
 is original data from the current site, which must be imported
@@ -150,32 +152,32 @@ manually.
 
 We have three major data layers:
 
-    - rail
-    - ports
-    - warehouses
+    * rail
+    * ports
+    * warehouses
 
 In North America:
 
-    - USA
-    - Mexico
-    - Canada
+    * USA
+    * Mexico
+    * Canada
 
 North American port data comes from:
 
-    - http://msi.nga.mil/MSISiteContent/StaticFiles/NAV_PUBS/WPI/WPI_Shapefile.zip
+    * http://msi.nga.mil/MSISiteContent/StaticFiles/NAV_PUBS/WPI/WPI_Shapefile.zip
 
 North American rail data comes from:
 
-    - http://cta.ornl.gov/transnet/qc28R.zip
-    - http://cta.ornl.gov/transnet/qn28V.zip
-    - http://cta.ornl.gov/transnet/wconv.txt
-    - http://cta.ornl.gov/transnet/QNdata.zip
+    * http://cta.ornl.gov/transnet/qc28R.zip
+    * http://cta.ornl.gov/transnet/qn28V.zip
+    * http://cta.ornl.gov/transnet/wconv.txt
+    * http://cta.ornl.gov/transnet/QNdata.zip
 
 North American warehouse data comes from:
 
-    - http://www.mwpvl.com/html/walmart.html
-    - https://corporate.target.com/_ui/js/main.comb.xml
-    - a lot of legwork and research for Costco, Amazon,
+    * http://www.mwpvl.com/html/walmart.html
+    * https://corporate.target.com/_ui/js/main.comb.xml
+    * a lot of legwork and research for Costco, Amazon,
       Home Depot, Ikea, Krogers, and Walgreens.
 
 The shapefiles are imported directly into a PostGIS-enabled
@@ -192,9 +194,9 @@ ARCHITECTURE
 
 We run two uwsgi app servers behind nginx:
 
-    - TileStache (http://tilestache.org/)
+    * TileStache (http://tilestache.org/)
         uwsgi serves a TileStache app for the vector tiles.
-    - EmpireLogistics
+    * EmpireLogistics
         uwsgi serves a PSGI app for the main application.
 
 The database server is PostgreSQL 9.3 with PostGIS extensions.
