@@ -62,7 +62,6 @@ This installation is more complicated. Here is the Mac installation:
             https://cloud-images.ubuntu.com/vagrant/saucy/current/
 
     * Choose a vagrant base box image. I have chosen the amd64-vagrant image in the command below. Your Mac is most likely a 64-bit machine, so that's the one you probably want, too.
-
     * Run the following command in the Terminal:
 
 5. SSH to the Virtual Machine
