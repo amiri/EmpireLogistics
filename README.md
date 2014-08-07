@@ -1,6 +1,109 @@
 # DEMO
 
-    http://50.116.5.25/
+    [http://50.116.5.25/](http://50.116.5.25/)
+
+# CONTRIBUTOR OVERVIEW
+
+There's a lot going on here.
+
+## Application
+
+Here are the layers of the application, from bottom to top:
+
+1. [PostgreSQL](http://www.postgresql.org/)
+
+    Database
+
+2. [Catalyst](https://metacpan.org/pod/Catalyst)
+
+    Backend Application, serving such URLs as
+
+    * /admin
+    * /blog
+    * /details
+
+    et cetera.
+
+3. [TileStache](http://tilestache.org/)
+
+    Backend Application, serving such URLs as
+
+    * /tiles/ports/16/15401/27089.json
+    * /tiles/warehouses/15/15021/89.json
+
+    et cetera.
+
+4. [uwsgi](https://uwsgi-docs.readthedocs.org/en/latest/)
+
+    Backend Application Server, serving the above 2 backend applications at specified ports.
+
+5. [nginx](http://nginx.org/)
+
+    Frontend Web Server, serving the two uwsgi applications from their specified ports to the internet.
+
+## Code
+
+Here is how the code is laid out in this directory.
+
+1. lib/
+
+    The Catalyst application lives here.
+
+2. bin/
+
+    Lots of data-mangling scripts live here.
+
+3. data/
+
+    When you run make chef, or some other Makefile targets, data gets downloaded from various sources and it is stored here for use by the scripts.
+
+4. etc/
+    
+    * Our [chef](http://docs.getchef.com/) configuration lives here
+    * As does some static, unchanging data in etc/data.
+    * And our database changes are managed out of etc/schema by a tool call [sqitch](http://sqitch.org/). This is for when we need to add a new column to a PostgreSQL table or add a new table entirely.
+    * There are also some configuration files in here. That's a traditional use of the etc/ directory.
+
+5. local/
+
+    "Sandboxed" versions of perl and python libraries, custom to this application, live here.
+
+6. node_modules
+
+   We use a tool called [Grunt](http://gruntjs.com/) to manage css and javascript assets, namely to combine and compress them. The [node package manager](https://www.npmjs.org/) downloads the plugins we use and stores them here. Grunt's configuration file is
+
+        Gruntfile.js 
+
+    The npm configuration is
+
+        package.json
+
+7. root/
+
+    * css
+
+        Our static javascript and css assets live here. The main css file for the site is
+
+            root/css/el.css
+
+    * js
+
+        The main js file for the site is
+
+            root/templates/js/el.tt
+         
+        The main javascript file is, you will notice, a template. That is because we need to interpolate some variables, depending on what environment the application is running in. Namely, the tile server runs on a different port on a sandbox versus the real webserver.
+
+    * templates
+
+        We use [Template::Toolkit](https://metacpan.org/pod/Template) for templating. These file are in
+
+            root/templates
+
+        The main template for the site is
+
+            root/templates/wrapper.tt
+    
 
 # INSTALLATION
 
@@ -114,7 +217,7 @@ You should see some setup information as this is working. You may have to answer
     first Terminal window. It takes a much shorter time each time after
     the first.
 
-# OVERVIEW
+# DATA OVERVIEW
 
 We have all the rail, warehouse, and port data importing now. Remaining
 is original data from the current site, which must be imported
