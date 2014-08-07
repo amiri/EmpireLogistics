@@ -38,8 +38,10 @@ This installation is more complicated. Here is the Mac installation:
     OR
     * Open a Terminal: /Applications/Utilities/Terminal.app
     * Type the following commands:
+
             cd ~/Desktop
             git clone https://github.com/amiri/EmpireLogistics.git
+
 2. Install X11
     * Go to http://xquartz.macosforge.org/landing/
     * Download XQuartz from http://xquartz.macosforge.org/downloads/SL/XQuartz-2.7.6.dmg
