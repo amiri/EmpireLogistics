@@ -32,7 +32,6 @@ installed and everything running.
 This installation is more complicated. Here is the Mac installation:
 
 1. Clone the repository.
-
     * Go to https://mac.github.com and download https://central.github.com/mac/latest
     * Install it.
     * Clone the repository to your Desktop, e.g., /Users/You/Desktop
@@ -44,37 +43,27 @@ This installation is more complicated. Here is the Mac installation:
 
             cd ~/Desktop
             git clone https://github.com/amiri/EmpireLogistics.git
-
 2. Install X11
-
     * Go to http://xquartz.macosforge.org/landing/
     * Download XQuartz from http://xquartz.macosforge.org/downloads/SL/XQuartz-2.7.6.dmg
     * Install it.
     * Open the application and leave it running.
-
 3. Install VirtualBox
-
     * Download https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3.dmg
     * Install it.
-
     * Open a Terminal: /Applications/Utilities/Terminal.app
     * Type the following commands:
 
             cd ~/Desktop/EmpireLogistics
-
 4. Install a base box for Virtualbox.
-
     * Leave the Terminal where it is, open a web browser and go to:
 
         https://cloud-images.ubuntu.com/vagrant/saucy/current/
-
     * Choose a vagrant base box image. I have chosen the amd64-vagrant image in the
       command below. Your Mac is most likely a 64-bit machine, so that's the one you
       probably want, too. Run the following command in the Terminal:
-
             vagrant box add base http://cloud-images.ubuntu.com/vagrant/saucy/current/saucy-server-cloudimg-amd64-vagrant-disk1.box
             vagrant up
-
       You should see some setup information as this is working. You may
       have to answer some questions. The defaults should be fine. Once
       the setup is done, you can ssh to the machine.
@@ -84,47 +73,30 @@ This installation is more complicated. Here is the Mac installation:
       There may be some complications here with the filesystem for the Vagrant shared
       folders. You will probably need to use the NFS filesystem. See this page
       for details on how to edit your Vagrantfile in this directory.
-
           https://docs.vagrantup.com/v2/synced-folders/nfs.html
-
       There may also be some complications with the size of your vagrant virtual machine's
       hard drive size. See this page for details on how to convert the VMDK to a VDI and
       resize that VDI.
-
           http://www.ifusio.com/blog/resize-your-sda1-disk-of-your-vagrant-virtualbox-vm
-
 5. SSH to the Virtual Machine
-
         vagrant ssh -- -A
-
 6. cd to the shared folder
     Now you are inside the virtual machine. Run the following commands:
-
         cd /vagrant
-
     Now you are in a shared directory, the directory of the repository.
-
         ls
-
     These are the files in the repository.
-
 7. Install the application
-
-    * Now run the installation commands:
-
+    * Run the installation commands:
             make prereqs && make all
-
 8. Install a browser to the VM
-
     * Open up another Terminal: /Applications/Utilities/Terminal.app
     * Run the following commands:
-
             cd ~/Desktop/EmpireLogistics
             vagrant ssh -- -A
             cd /vagrant
             sudo apt-get install chromium-browser
             chromium-browser --disable-accelerated-compositing --blacklist-accelerated-compositing
-
 9. Test your installation
 
     At the last command of the step above, you should now have a Chromium browser window
@@ -132,12 +104,13 @@ This installation is more complicated. Here is the Mac installation:
 
     Now you are running a browser inside the virtual machine. Visit
     http://localhost and you will see the application running.
-
+    
     The idea here is that now you have 2 Terminal windows open. One
     is running chromium, and the other is sitting at the /vagrant
     directory inside the virtual machine. You can open up a text
     editor on your Mac and edit files inside the repo directory. When you
     are done editing, you can reinstall the application and check it.
+
     Reinstallation, again, is make all, which you will run inside the
     first Terminal window. It takes a much shorter time each time after
     the first.
