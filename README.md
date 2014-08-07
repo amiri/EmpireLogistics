@@ -64,6 +64,7 @@ Here is how the code is laid out in this directory.
     * There are also some configuration files in here. That's a traditional use of the etc/ directory.
 
 5. local/
+
     "Sandboxed" versions of perl and python libraries, custom to this application, live here.
 
 6. node_modules
