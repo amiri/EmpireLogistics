@@ -35,7 +35,7 @@ This installation is more complicated. Here is the Mac installation:
     * Go to https://mac.github.com and download https://central.github.com/mac/latest
     * Install it.
     * Clone the repository to your Desktop, e.g., /Users/You/Desktop
-            OR
+            *OR*
     * Open a Terminal: /Applications/Utilities/Terminal.app
     * Type the following commands:
 
@@ -47,6 +47,7 @@ This installation is more complicated. Here is the Mac installation:
     * Download XQuartz from http://xquartz.macosforge.org/downloads/SL/XQuartz-2.7.6.dmg
     * Install it.
     * Open the application and leave it running.
+
 3. Install VirtualBox
     * Download https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3.dmg
     * Install it.
@@ -58,11 +59,14 @@ This installation is more complicated. Here is the Mac installation:
     * Leave the Terminal where it is, open a web browser and go to:
 
         https://cloud-images.ubuntu.com/vagrant/saucy/current/
+
     * Choose a vagrant base box image. I have chosen the amd64-vagrant image in the
       command below. Your Mac is most likely a 64-bit machine, so that's the one you
       probably want, too. Run the following command in the Terminal:
+
             vagrant box add base http://cloud-images.ubuntu.com/vagrant/saucy/current/saucy-server-cloudimg-amd64-vagrant-disk1.box
             vagrant up
+
       You should see some setup information as this is working. You may
       have to answer some questions. The defaults should be fine. Once
       the setup is done, you can ssh to the machine.
