@@ -56,6 +56,7 @@ This installation is more complicated. Here is the Mac installation:
     * Type the following commands:
 
             cd ~/Desktop/EmpireLogistics
+
 4. Install a base box for Virtualbox.
     * Leave the Terminal where it is, open a web browser and go to:
 
@@ -72,7 +73,7 @@ This installation is more complicated. Here is the Mac installation:
       have to answer some questions. The defaults should be fine. Once
       the setup is done, you can ssh to the machine.
 
-    * Complications & Troubleshooting
+    * _Complications & Troubleshooting_
 
       There may be some complications here with the filesystem for the Vagrant shared
       folders. You will probably need to use the NFS filesystem. See this page
