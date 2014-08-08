@@ -2,6 +2,7 @@ package EmpireLogistics::Web::Controller::Root;
 
 use Moose;
 use EmpireLogistics::Config;
+use List::AllUtils qw/any/;
 use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller' }
@@ -16,6 +17,9 @@ sub auto : Private {
     my $locale = $c->req->param('locale');
     $c->response->headers->push_header( 'Vary' => 'Accept-Language' );
     $c->language( $locale ? [$locale] : undef );
+    if (any {/dir-item/} keys %{$c->req->params}) {
+        $c->detach('default');
+    }
     $c->forward('check_authentication');
 }
 
@@ -33,7 +37,7 @@ sub post_update_map_location :Chained('/') PathPart('update_map_location') Args(
     return 1;
 }
 
-sub default : Path {
+sub default : Chained('/') PathPart('404') Args() {
     my ( $self, $c ) = @_;
     $c->stash->{template} = 'error_404.tt';
     $c->response->status(404);
