@@ -6,6 +6,8 @@
 #
 # All rights reserved - Do Not Redistribute
 
+is_production = node["linode"]["public_ip"].defined? 1 : 0
+
 if ::Dir.exists?("/home/el/")
     node.default['env']['user'] = 'el'
 else
@@ -253,6 +255,7 @@ include_recipe "nodejs"
 include_recipe "npm"
 include_recipe "sudo"
 include_recipe "perl"
+include_recipe "hostname::default" if is_production
 
 cookbook_file "uwsgi.conf" do
   source "/etc/init/uwsgi.conf"

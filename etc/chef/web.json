@@ -304,5 +304,6 @@
       "mydestination": null,
       "relay_domains": null
     }
-  }
+  },
+  "set_fqdn": "*.empirelogistics.com"
 }
