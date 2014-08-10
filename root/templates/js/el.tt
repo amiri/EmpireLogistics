@@ -449,7 +449,7 @@
         "type": "LineString",
         "coordinates": [[0, 0], [0, 0]]
     }).addTo(map);
-    var geojsonURL = "http://[% tiles_url %]/rail_lines/{z}/{x}/{y}.json";
+    var geojsonURL = "//[% tiles_url %]/rail_lines/{z}/{x}/{y}.json";
     var lineLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
         class: railLineClass,
         type: "path",
