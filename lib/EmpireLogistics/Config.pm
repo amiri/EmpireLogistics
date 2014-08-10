@@ -107,7 +107,7 @@ $PARAMETERS{default} = {
     is_production => 0,
 };
 
-$PARAMETERS{"localhost"} = {
+$PARAMETERS{"empirelogistics.com"} = {
     %{ clone $PARAMETERS{'default'} },
     is_production => 1,
 };
