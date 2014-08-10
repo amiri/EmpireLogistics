@@ -28,3 +28,4 @@ cookbook "openssh"
 cookbook "postfix"
 cookbook "grunt_cookbook",
     :git => "https://github.com/MattSurabian/grunt_cookbook"
+cookbook "hostname"
