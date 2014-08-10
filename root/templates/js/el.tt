@@ -14,7 +14,7 @@
             map.setView([29.7628, - 95.3831], 16);
         }
     }
-    var openStreet = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    var openStreet = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 16,
         attribution: "© <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap contributors</a>"
     }).addTo(map);
@@ -472,7 +472,7 @@
         "type": "LineString",
         "coordinates": [[0, 0], [0, 0]]
     }).addTo(map);
-    var geojsonURL = "http://[% tiles_url %]/rail_interlines/{z}/{x}/{y}.json";
+    var geojsonURL = "//[% tiles_url %]/rail_interlines/{z}/{x}/{y}.json";
     var interlinesLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
         class: "rail-interline",
         type: "path",
@@ -493,7 +493,7 @@
         "type": "Point",
         "coordinates": [0, 0]
     }).addTo(map);
-    var geojsonURL = "http://[% tiles_url %]/ports/{z}/{x}/{y}.json";
+    var geojsonURL = "//[% tiles_url %]/ports/{z}/{x}/{y}.json";
     var portLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
         class: "port",
         type: "circle",
@@ -516,7 +516,7 @@
         "type": "Point",
         "coordinates": [0, 0]
     }).addTo(map);
-    var geojsonURL = "http://[% tiles_url %]/warehouses/{z}/{x}/{y}.json";
+    var geojsonURL = "//[% tiles_url %]/warehouses/{z}/{x}/{y}.json";
     var warehouseLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
         class: "warehouse",
         type: "circle",
@@ -538,7 +538,7 @@
         "type": "Point",
         "coordinates": [0, 0]
     }).addTo(map);
-    var geojsonURL = "http://[% tiles_url %]/rail_nodes/{z}/{x}/{y}.json";
+    var geojsonURL = "//[% tiles_url %]/rail_nodes/{z}/{x}/{y}.json";
     var nodesLayer = new L.TileLayer.custom_d3_geoJSON(geojsonURL, {
         class: "rail-node",
         type: "circle",
