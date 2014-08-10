@@ -413,6 +413,13 @@ end
 cookbook_file "nginx.conf" do
   path "#{node["nginx"]["dir"]}/sites-enabled/empirelogistics"
   action :create
+  not_if { is_production }
+end
+
+cookbook_file "nginx-prod.conf" do
+  path "#{node["nginx"]["dir"]}/sites-enabled/empirelogistics"
+  action :create
+  only_if { is_production }
 end
 
 service "nginx" do
