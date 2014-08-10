@@ -11,7 +11,7 @@ BEGIN { extends qw/EmpireLogistics::Web::Controller::Admin/; }
 with 'EmpireLogistics::Role::Controller::CRUD';
 
 __PACKAGE__->config(
-    model_name => 'DB::WorkStoppageType',
+    model_name => 'DB::LaborOrganizationType',
     class      => 'LaborOrganizationType',
     item_name  => 'labor-organization-type',
     form       => 'EmpireLogistics::Form::Admin::LaborOrganizationType',
