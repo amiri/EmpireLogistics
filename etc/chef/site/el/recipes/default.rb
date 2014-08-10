@@ -6,7 +6,7 @@
 #
 # All rights reserved - Do Not Redistribute
 
-is_production = node["linode"]["public_ip"].defined? 1 : 0
+is_production = (defined? node["linode"]["public_ip"]) ? true : false
 
 if ::Dir.exists?("/home/el/")
     node.default['env']['user'] = 'el'
