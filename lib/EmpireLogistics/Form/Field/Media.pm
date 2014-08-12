@@ -54,7 +54,6 @@ has_field 'uuid' => (
     type     => 'Text',
     label    => 'UUID',
     apply    => [NoSpaces, PrintableAndNewline],
-    required => 1,
     unique   => 1,
 );
 
@@ -120,6 +119,10 @@ sub validate {
             && $self->item
             && $self->item->in_storage;
     }
+    my $uuid_required = 0;
+    $uuid_required = 1 if any { defined $_->value } @{$self->sorted_fields};
+    $self->field('uuid')->add_error("UUID required")
+        if $uuid_required and not $self->field("uuid")->value;
 }
 
 no HTML::FormHandler::Moose;

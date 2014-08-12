@@ -235,6 +235,7 @@ sub invalidate_cache {
         "--bbox",
         $minlat, $minlon, $maxlat, $maxlon,
         "--ignore-cached",
+        (EmpireLogistics::Config->is_production ? () : ("--output-directory", EmpireLogistics::Config->srcroot . '/shared/tiles')),
         "--extension",
         'json',
         (1 .. 16),
