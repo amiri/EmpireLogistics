@@ -360,3 +360,7 @@ p.subhed {
     display: none;
   }
 }
+
+.leaflet-top, .leaflet-bottom {
+    z-index: 999;
+}
