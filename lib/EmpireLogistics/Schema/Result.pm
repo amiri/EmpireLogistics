@@ -226,14 +226,19 @@ sub invalidate_cache {
         ( $self->geometry )
     );
     my ($minlat, $minlon, $maxlat, $maxlon) = @$coordinates;
-    warn "Minlat: $minlat; minlon: $minlon; maxlat: $maxlat; maxlon: $maxlon";
+    #North: 30.0166666666667; west: -90.8333333333333; south: 30.0166666666667; east: -90.8333333333333
+    my $north = $minlat + 0.02;
+    my $west = $minlon + 0.02;
+    my $south = $maxlat - 0.02;
+    my $east = $maxlon - 0.02;
+    warn "North: $north; west: $west; south: $south; east: $east";
     my @args = (
         "--config",
         EmpireLogistics::Config->srcroot . '/etc/empirelogistics_tiles.cfg',
         "--layer",
         $layer_for_rs->{$self->result_source->source_name},
         "--bbox",
-        $minlat, $minlon, $maxlat, $maxlon,
+        $north,$west,$south,$east,
         "--ignore-cached",
         (EmpireLogistics::Config->is_production ? () : ("--output-directory", EmpireLogistics::Config->srcroot . '/shared/tiles')),
         "--extension",
