@@ -300,6 +300,7 @@ ul,ol
 .nested
 {
     margin-left:1em;
+    margin-right:0;
 }
 
 .add-node
