@@ -240,7 +240,7 @@ sub invalidate_cache {
         "--bbox",
         $north,$west,$south,$east,
         "--ignore-cached",
-        (EmpireLogistics::Config->is_production ? () : ("--output-directory", EmpireLogistics::Config->srcroot . '/shared/tiles')),
+        (EmpireLogistics::Config->is_production ? () : ("--output-directory", EmpireLogistics::Config->srcroot . '/tiles')),
         "--extension",
         'json',
         (1 .. 16),
