@@ -44,5 +44,5 @@ CKEDITOR.editorConfig = function( config ) {
     config.entities_additional = '';
     config.allowedContent = true;
     config.extraAllowedContent = 'iframe[*]';
-
+    config.removePlugins = 'image';
 };
