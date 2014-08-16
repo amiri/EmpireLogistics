@@ -255,7 +255,6 @@
     "worker_rlimit_nofile": 12500,
     "keep_alive_timeout": 10,
     "client_max_body_size": "6M",
-    "etag": "on",
     "gzip": "on",
     "gzip_comp_level": 6,
     "gzip_types": ["text/plain", "text/css", "application/x-javascript", "text/xml","application/xml","application/rss+xml","application/atom+xml","text/javascript","application/javascript", "application/json","text/mathml","text/json"],
