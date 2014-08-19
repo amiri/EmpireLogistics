@@ -1,7 +1,7 @@
 package EmpireLogistics::Form::Admin::CompanyType;
 
 use HTML::FormHandler::Moose;
-use HTML::FormHandler::Types ( 'PrintableAndNewline', 'NotAllDigits' );
+use HTML::FormHandler::Types ( 'PrintableAndNewline', 'NotAllDigits', 'NoSpaces' );
 use namespace::autoclean;
 extends 'EmpireLogistics::Form::BaseDB';
 with 'EmpireLogistics::Role::Form::Util';
@@ -40,8 +40,11 @@ has_field 'name' => (
     type     => 'Text',
     label    => 'Name',
     required => 1,
-    apply    => [ PrintableAndNewline, NotAllDigits ],
+    apply    => [ NoSpaces, PrintableAndNewline, NotAllDigits, { transform => \&lowercase, } ],
 );
+
+
+
 has_field 'submit' => (
     type          => 'Submit',
     widget        => 'ButtonTag',

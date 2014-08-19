@@ -59,8 +59,8 @@ has_block 'address_block' => (
 );
 
 has_field 'id' => (
-    type     => 'Integer',
-    #disabled => 1,
+    type     => 'Hidden',
+    disabled => 1,
     readonly => 1,
     label    => 'Company ID',
 );

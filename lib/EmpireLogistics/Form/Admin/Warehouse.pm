@@ -88,6 +88,8 @@ has_block 'location_block' => (
 
 has_field 'id' => (
     type  => 'Hidden',
+    disabled => 1,
+    readonly => 1,
     label => 'Warehouse ID',
 );
 has_field 'create_time' => (
@@ -131,10 +133,7 @@ has_field 'status' => (
 sub options_status {
     my $self = shift;
     return [
-        map { {label => $_, value => $_,} } @{
-            $self->schema->resultset($self->item_class)
-                ->result_source->column_info('status')->{extra}{list}
-        }
+        map { {label => $_->name, value => $_->id,} } $self->schema->resultset("WarehouseStatus")->all
     ];
 }
 has_field 'owner' => (type => 'Select',);

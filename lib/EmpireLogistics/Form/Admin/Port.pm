@@ -283,6 +283,8 @@ has_block 'misc_block' => (
 );
 has_field 'id' => (
     type  => 'Hidden',
+    disabled => 1,
+    readonly => 1,
     label => 'Port ID',
 );
 has_field 'create_time' => (

@@ -55,6 +55,11 @@ sub url_friendly {
     return $text;
 }
 
+sub lowercase {
+    my ($value, $field) = @_;
+    return lc($value);
+}
+
 sub media_links {
     my ($value, $field) = @_;
     my $new_value = youtube_video_links($value, $field);

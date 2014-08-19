@@ -66,6 +66,8 @@ has_block 'description_block' => (
 
 has_field 'id' => (
     type  => 'Hidden',
+    disabled => 1,
+    readonly => 1,
     label => 'User ID',
 );
 has_field 'create_time' => (

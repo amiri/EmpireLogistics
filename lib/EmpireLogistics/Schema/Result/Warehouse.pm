@@ -36,8 +36,7 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "status",
   {
-    data_type => "enum",
-    extra => { custom_type_name => "warehouse_status", list => ["open", "closed"] },
+    data_type => "integer",
     is_nullable => 1,
   },
   "area",
@@ -58,6 +57,13 @@ __PACKAGE__->add_columns(
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("warehouse_name_lat_lon", ["name", "latitude", "longitude"]);
+
+__PACKAGE__->belongs_to(
+    "warehouse_status",
+    "EmpireLogistics::Schema::Result::WarehouseStatus",
+    {"foreign.id" => "self.status"},
+);
+
 __PACKAGE__->has_many(
   "company_warehouses",
   "EmpireLogistics::Schema::Result::CompanyWarehouse",
