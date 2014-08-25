@@ -57,6 +57,12 @@ copy-root:
 	sudo rsync -uav root/ /var/local/EmpireLogistics/current/root
 	sudo chown -Rf el:el /var/local/EmpireLogistics/current/root
 
+tail-app-prod:
+	ssh empirelogistics.org "tail -f /var/local/EmpireLogistics/current/logs/empirelogistics.log"
+
+tail-tiles-prod:
+	ssh empirelogistics.org "tail -f /var/local/EmpireLogistics/current/logs/empirelogistics_tiles.log"
+
 ########## Download data
 
 make-data-directories:

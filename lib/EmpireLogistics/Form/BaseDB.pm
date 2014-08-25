@@ -153,8 +153,6 @@ around 'update_model', sub {
 
     $self->save_edit_history;
 
-    my $return = $self->$orig(@args);
-
     if (defined($media) && ref($media) eq 'ARRAY') {
         my $i = 0;
         for my $media_upload (@{$media}) {
@@ -175,6 +173,8 @@ around 'update_model', sub {
             $i++;
         }
     }
+
+    my $return = $self->$orig(@args);
 
     return $return;
 };
@@ -201,6 +201,7 @@ sub process_media {
     my $new_media;
     my @wanted_keys = qw/caption alt_text author author_url/;
     if ( !$original_media || !$original_media->in_storage ) {
+        warn "I have no original media or original media is not in storage";
         die "You did not upload a file for this new media"
             unless $new_file_data;
         $new_media = $self->schema->resultset('Media')->update_or_create_from_raw_data(
@@ -210,7 +211,9 @@ sub process_media {
         );
     }
     else {
+        warn "I have original media or original media is in storage";
         if ($new_file_data) {
+            warn "I have new file data";
             $new_media = $self->schema->resultset('Media')->update_or_create_from_raw_data(
                 ( map { $_ => $params->{$_} } @wanted_keys ),
                 media => $original_media,
@@ -218,6 +221,7 @@ sub process_media {
             );
         }
         else {
+            warn "I do not have new file data";
             $new_media = $original_media->update($params);
         }
     }

@@ -455,7 +455,7 @@ our $args as args.
 sub add_or_update_media : Private {
     my ($self, $c, $args) = @_;
 
-    my $file = $args->{file};
+    my $file = delete $args->{file};
     if ($file) {
         my @pieces = split(",", $file);
         $file = MIME::Base64::decode_base64($pieces[1]);
