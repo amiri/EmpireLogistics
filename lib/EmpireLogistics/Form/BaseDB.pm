@@ -1,6 +1,7 @@
 package EmpireLogistics::Form::BaseDB;
 
 use HTML::FormHandler::Moose;
+use Data::Printer;
 use namespace::autoclean;
 extends 'HTML::FormHandler::Model::DBIC';
 with 'EmpireLogistics::Role::Form::Util';
@@ -197,6 +198,7 @@ sub process_media {
         ( $params->{file} ) ? $params->{file}->slurp :
         undef;
     delete $params->{file};
+    warn "Params in form process_media: ", p $params;
 
     my $new_media;
     my @wanted_keys = qw/caption alt_text author author_url/;
@@ -205,7 +207,7 @@ sub process_media {
         die "You did not upload a file for this new media"
             unless $new_file_data;
         $new_media = $self->schema->resultset('Media')->update_or_create_from_raw_data(
-            ( map { $_ => $params->{$_} } @wanted_keys ),
+            ( map { $_ => $params->{$_} } keys %$params),
             ( $original_media ? ( media => $original_media ) : () ),
             ( $new_file_data  ? ( data  => $new_file_data )  : () ),
         );
@@ -215,7 +217,7 @@ sub process_media {
         if ($new_file_data) {
             warn "I have new file data";
             $new_media = $self->schema->resultset('Media')->update_or_create_from_raw_data(
-                ( map { $_ => $params->{$_} } @wanted_keys ),
+                ( map { $_ => $params->{$_} } keys %$params ),
                 media => $original_media,
                 ( $new_file_data ? ( data => $new_file_data ) : () ),
             );

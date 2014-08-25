@@ -6,6 +6,7 @@ use MooseX::NonMoose;
 use Data::UUID;
 use Imager;
 use DateTime;
+use Data::Printer;
 
 extends 'EmpireLogistics::Schema::ResultSet';
 
@@ -49,6 +50,7 @@ Creates or update the Media object from the raw data and stores.
 
 sub update_or_create_from_raw_data {
     my ($class, %args) = @_;
+    warn p %args;
     my $alt         = $args{alt};
     my $caption     = $args{caption};
     my $crop_height = $args{crop_height};
@@ -83,6 +85,7 @@ sub update_or_create_from_raw_data {
     my $height = $image->getheight;
 
     if ($media) {
+        warn "I have media and I am giving it a new uuid";
         $media->mime_type($mime_type);
         $media->width($width);
         $media->height($height);
@@ -91,6 +94,7 @@ sub update_or_create_from_raw_data {
         $media->alt($alt)                 if ($alt);
         $media->uuid($uuid)               if ($uuid);
     } else {
+        warn "I am creating new media";
         $media = $class->create({
             mime_type   => $mime_type,
             width       => $width,

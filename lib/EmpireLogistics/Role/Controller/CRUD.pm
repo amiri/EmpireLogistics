@@ -2,6 +2,7 @@ package EmpireLogistics::Role::Controller::CRUD;
 
 use MooseX::MethodAttributes::Role;
 use namespace::autoclean;
+use Data::Printer;
 
 has 'form' => (
     is       => 'ro',
@@ -486,6 +487,8 @@ sub add_or_update_media : Private {
         data-height
         data-width
     /};
+    $c->log->warn(p $c->req->params);
+    $c->log->warn(p %media_info);
 
     my ($original_media, $new_media);
 

@@ -110,6 +110,15 @@ __PACKAGE__->has_many(
     { order_by => { -desc => "create_time" } },
 );
 
+after 'update' => sub {
+    my $self = shift;
+    for my $rel (qw/ports warehouses rail_nodes/) {
+        for my $item ($self->$rel->all) {
+            $item->invalidate_cache;
+        }
+    }
+};
+
 sub _build_edit_url {
     my $self = shift;
     return '/admin/media/'.$self->id.'/edit';

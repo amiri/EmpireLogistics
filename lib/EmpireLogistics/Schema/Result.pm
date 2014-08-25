@@ -227,10 +227,10 @@ sub invalidate_cache {
     );
     my ($minlat, $minlon, $maxlat, $maxlon) = @$coordinates;
     #North: 30.0166666666667; west: -90.8333333333333; south: 30.0166666666667; east: -90.8333333333333
-    my $north = $minlat + 0.02;
-    my $west = $minlon + 0.02;
-    my $south = $maxlat - 0.02;
-    my $east = $maxlon - 0.02;
+    my $north = $minlat + 0.01;
+    my $west = $minlon + 0.01;
+    my $south = $maxlat - 0.01;
+    my $east = $maxlon - 0.01;
     warn "North: $north; west: $west; south: $south; east: $east";
     my @args = (
         "--config",
