@@ -77,7 +77,7 @@ sub get_index : Chained('base') PathPart('') Args(0) GET {
         columns   => $columns,
         template  => 'admin/list.tt',
         item_name => $self->item_name,
-        (($rs->count) > 100 ? (large_dataset => 1) : ()),
+        (($rs->count) > 10 ? (large_dataset => 1) : ()),
     );
 }
 
