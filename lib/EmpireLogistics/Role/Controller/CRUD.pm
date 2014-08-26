@@ -92,6 +92,8 @@ sub post_index : Chained('base') PathPart('') Args(0) POST {
     my $sort_column_name = $c->req->param('mDataProp_' . $sort_column);
     my $sort_order       = $c->req->param('sSortDir_0');
     my %order_by    = (order_by => {"-$sort_order" => [$sort_column_name]});
+    #my %order_by    = (order_by => \qq|substring($sort_column_name, '^[0-9]+')::int $sort_order, substring($sort_column_name, '[^0-9]*\$') $sort_order|);
+
     my %search_attr = ();
     my $search_text = $c->req->param('sSearch');
     my @search_params =
@@ -169,6 +171,9 @@ sub column_definitions : Chained('base') PathPart('column-definitions') Args(0) 
                         |track_type
                         |line_class
                         |density
+                        |number
+                        |local
+                        |abbreviation
                     )/x
                     ) ? 'true' : 'false'
                 ),
