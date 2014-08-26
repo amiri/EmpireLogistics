@@ -55,13 +55,17 @@ has_field 'year'   => (type => 'Year', empty_select => '-- Select One --',);
 has_field 'disbursement_date'   => (type => 'Date',);
 has_field 'amount' => (type => 'Integer',);
 has_field 'purpose' => (type => 'TextArea',);
-has_field 'payee' => (type => 'Select', empty_select => '-- Select One --', options_method => \&options_payee, );
+has_field 'payee' => (
+    type => 'Select',
+    empty_select => '-- Select One --',
+    options_method => \&options_payee,
+);
 sub options_payee {
     my $self = shift;
     return [
         map {{
             label => $_->name.' (USDOL Payee #'.$_->usdol_payee_id.')',
-            id => $_->id,
+            value => $_->id,
         }} ($self->form->item ? $self->form->item->labor_organization_payees->all : $self->form->schema->resultset('LaborOrganizationPayee')->active->all)
     ];
 }

@@ -91,7 +91,7 @@ __PACKAGE__->has_many(
 __PACKAGE__->has_many(
   "labor_organization_affiliation_children",
   "EmpireLogistics::Schema::Result::LaborOrganizationAffiliation",
-  { "foreign.child" => "self.id" },
+  { "foreign.parent" => "self.id" },
   {
 	where => { "me.delete_time" => undef },
 	cascade_copy => 0, cascade_delete => 0
@@ -100,11 +100,19 @@ __PACKAGE__->has_many(
 __PACKAGE__->has_many(
   "labor_organization_affiliation_parents",
   "EmpireLogistics::Schema::Result::LaborOrganizationAffiliation",
-  { "foreign.parent" => "self.id" },
+  { "foreign.child" => "self.id" },
   {
 	where => { "me.delete_time" => undef },
 	cascade_copy => 0, cascade_delete => 0
   },
+);
+__PACKAGE__->many_to_many(
+    'affiliates' => 'labor_organization_affiliation_children', 'child',
+    {where => {'me.delete_time' => undef}},
+);
+__PACKAGE__->many_to_many(
+    'affiliations' => 'labor_organization_affiliation_parents', 'parent',
+    {where => {'me.delete_time' => undef}},
 );
 # Accounts
 __PACKAGE__->has_many(
@@ -378,14 +386,6 @@ __PACKAGE__->has_many(
 
 
 
-__PACKAGE__->many_to_many(
-    'affiliates' => 'labor_organization_affiliation_children', 'child',
-    {where => {'me.delete_time' => undef}},
-);
-__PACKAGE__->many_to_many(
-    'affiliations' => 'labor_organization_affiliation_parents', 'parent',
-    {where => {'me.delete_time' => undef}},
-);
 __PACKAGE__->many_to_many(
     'addresses' => 'labor_organization_addresses', 'address',
     {where => {'me.delete_time' => undef}},

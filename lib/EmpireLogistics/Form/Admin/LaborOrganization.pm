@@ -296,7 +296,7 @@ has_block 'financials_block' => (
         'loans_block',
         'liabilities_block',
         'receipts_block',
-        'payees_block',
+        #'payees_block',
     ],
 );
 
@@ -877,20 +877,20 @@ has_field 'add_labor_organization_other_receipts' => (
     element_class => ['btn btn-info'],
 );
 
-has_block 'payees_block' => (
-    tag         => 'fieldset',
-    label       => 'Payees',
-    render_list => [
-        'labor_organization_payees',
-    ],
-);
+#has_block 'payees_block' => (
+    #tag         => 'fieldset',
+    #label       => 'Payees',
+    #render_list => [
+        #'labor_organization_payees',
+    #],
+#);
 
-has_field 'labor_organization_payees' => (
-    type         => '+LaborOrganizationPayee',
-    id           => 'labor-organization-payees',
-    label        => 'Payees',
-    element_attr => {'data-placeholder' => 'Enter Payees'},
-);
+#has_field 'labor_organization_payees' => (
+    #type         => '+LaborOrganizationPayee',
+    #id           => 'labor-organization-payees',
+    #label        => 'Payees',
+    #element_attr => {'data-placeholder' => 'Enter Payees'},
+#);
 
 has_field 'ports'          => (type => '+Port',);
 has_field 'rail_nodes'     => (type => '+RailNode',);

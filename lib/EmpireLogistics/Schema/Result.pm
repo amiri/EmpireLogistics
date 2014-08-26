@@ -4,7 +4,6 @@ use Moose;
 use MooseX::Types::URI qw/Uri/;
 use MooseX::MarkAsMethods autoclean => 1;
 use MooseX::NonMoose;
-use Data::Printer;
 use IPC::System::Simple qw/capturex/;
 
 extends 'DBIx::Class::Core';

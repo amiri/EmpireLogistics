@@ -176,7 +176,7 @@ sub get_edit_history {
                 = $edit_field->get_column('original_value');
             if ( lc $row->{field_name} eq 'description' || lc $row->{field_name} eq 'body' ) {
                 $row->{original_value} =
-                    length($row->{original_value}) > 50
+                    ($row->{original_value} && length($row->{original_value}) > 50)
                     ? substr($row->{original_value}, 0, 50) . "..."
                     : $row->{original_value};
             }

@@ -51,6 +51,10 @@ has_field 'delete_time' => (
     deflate_method => \&deflate_delete_time,
     inflate_method => \&inflate_delete_time,
 );
+has_field 'year' => (
+    type         => 'Year',
+    empty_select => '-- Select One --',
+);
 has_field 'first_name'   => (type => 'Text',);
 has_field 'middle_name'   => (type => 'Text',);
 has_field 'last_name'   => (type => 'Text',);
