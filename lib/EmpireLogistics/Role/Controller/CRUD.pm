@@ -1,6 +1,8 @@
 package EmpireLogistics::Role::Controller::CRUD;
 
 use MooseX::MethodAttributes::Role;
+use Data::Printer;
+use feature qw/switch/;
 use namespace::autoclean;
 
 has 'form' => (
@@ -83,18 +85,34 @@ sub get_index : Chained('base') PathPart('') Args(0) GET {
 sub post_index : Chained('base') PathPart('') Args(0) POST {
     my ($self, $c) = @_;
     return unless $c->req->is_xhr;
-    $c->stash->{current_view} = 'JSON';
-    my $rows        = $c->req->param('iDisplayLength') // 10;
-    my $start_index = $c->req->param('iDisplayStart')  // 0;
-    my $page             = $start_index == 0 ? 1 : $start_index / $rows + 1;
-    my $sort_column      = $c->req->param('iSortCol_0');
-    my $sort_column_name = $c->req->param('mDataProp_' . $sort_column);
-    my $sort_order       = $c->req->param('sSortDir_0');
-    my %order_by    = (order_by => {"-$sort_order" => [$sort_column_name]});
-    #my %order_by    = (order_by => \qq|substring($sort_column_name, '^[0-9]+')::int $sort_order, substring($sort_column_name, '[^0-9]*\$') $sort_order|);
+    my $rs                            = $self->model;
+    $c->stash->{current_view}         = 'JSON';
+    my $rows                          = $c->req->param('iDisplayLength') // 10;
+    my $start_index                   = $c->req->param('iDisplayStart')  // 0;
+    my $page                          = $start_index == 0 ? 1 : $start_index / $rows + 1;
+    my $sort_column                   = $c->req->param('iSortCol_0');
+    my $sort_column_name              = $c->req->param('mDataProp_' . $sort_column);
+    my $sort_column_type              = $rs->result_source->column_info($sort_column_name)->{data_type};
+    $c->log->warn($sort_column_type);
+    my $sort_order                    = $c->req->param('sSortDir_0');
+    my %order_by                      = ();
+    given ($sort_column_type) {
+        when ('integer') {
+            %order_by = (order_by => {"-$sort_order" => [$sort_column_name]})
+        }
+        when ('text') {
+            %order_by =
+                (order_by => \
+                    qq|substring($sort_column_name, '^[0-9]+')::int $sort_order, substring($sort_column_name, '[^0-9]*\$') $sort_order|
+                )
+        }
+        default {
+            %order_by = (order_by => {"-$sort_order" => [$sort_column_name]})
+        }
+    }
 
-    my %search_attr = ();
-    my $search_text = $c->req->param('sSearch');
+    my %search_attr   = ();
+    my $search_text   = $c->req->param('sSearch');
     my @search_params =
         map  { $c->req->param('mDataProp_' . $_) }
         map  { /\w+_(\d+)/; $1 }
@@ -113,7 +131,6 @@ sub post_index : Chained('base') PathPart('') Args(0) POST {
         $search_attr{$search_params[0]} = {-ilike => qq|%$search_text%|}
             if $search_params[0] && $search_text;
     }
-    my $rs    = $self->model;
     my $filtered_rs = $rs->search(
         \%search_attr
     );
