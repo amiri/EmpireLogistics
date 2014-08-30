@@ -280,6 +280,12 @@ sub TO_JSON {
             create_time => $self->create_time->strftime('%Y-%m-%d %r %z'),
         };
     }
+    if ( $self->can('publish_time') and $self->publish_time ) {
+        $ret = {
+            %{$ret},
+            publish_time => $self->publish_time->strftime('%Y-%m-%d %r %z'),
+        };
+    }
     if ( $self->can('delete_time') and $self->delete_time ) {
         $ret = {
             %{$ret},

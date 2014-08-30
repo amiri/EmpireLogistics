@@ -202,7 +202,7 @@ sub column_definitions : Chained('base') PathPart('column-definitions') Args(0) 
         }
         grep {
             $rs->result_source->column_info($_)->{data_type} ne 'boolean'
-                or $_ eq 'delete_time'
+                or $_ =~ /delete_time|publish_time/
         } $rs->result_source->columns
     ];
     unshift @$columns, {

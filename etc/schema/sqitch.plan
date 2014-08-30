@@ -54,3 +54,5 @@ blog_tables 2014-07-17T15:54:59Z Amiri Barksdale <amiribarksdale@gmail.com> # Ad
 
 unique_blog_title 2014-07-17T16:09:49Z Amiri Barksdale <amiribarksdale@gmail.com> # Add unique blog title
 @unique_blog_url_title 2014-07-17T16:11:48Z Amiri Barksdale <amiribarksdale@gmail.com># Make blog title urls unique
+
+blog_publish_time 2014-08-30T16:24:41Z Amiri Barksdale <amiribarksdale@gmail.com> # Add publish time to blog

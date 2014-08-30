@@ -42,6 +42,8 @@ __PACKAGE__->add_columns(
   },
   "delete_time",
   { data_type => "timestamp with time zone", is_nullable => 1 },
+  "publish_time",
+  { data_type => "timestamp with time zone", is_nullable => 1 },
   "title",
   { data_type => "text", is_nullable => 0 },
   "url_title",

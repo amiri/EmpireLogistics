@@ -18,19 +18,23 @@ has 'labels' => (
 sub _build_labels {
     my $self = shift;
     return {
-        id              => "ID",
-        create_time     => "Create Time",
-        update_time     => "Update Time",
-        delete_time     => "Deleted",
-        title           => "Title",
-        url_title       => "URL Title",
-        body            => "Body",
-        author          => "Author",
+        id          => "ID",
+        create_time => "Create Time",
+        update_time => "Update Time",
+        delete_time => "Deleted",
+        title       => "Title",
+        url_title   => "URL Title",
+        body        => "Body",
+        author      => "Author",
     };
+}
+
+sub published {
+    my $self = shift;
+    return $self->search({"me.publish_time" => {"!=" => undef}});
 }
 
 __PACKAGE__->meta->make_immutable;
 
 1;
-
 

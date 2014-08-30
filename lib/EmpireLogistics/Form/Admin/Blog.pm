@@ -35,7 +35,7 @@ has_block 'metadata_block' => (
     tag         => 'fieldset',
     label       => 'Metadata',
     render_list => [
-        'id', 'create_time', 'update_time', 'delete_time',
+        'id', 'create_time', 'update_time', 'delete_time', 'publish_time'
     ],
 );
 
@@ -72,7 +72,12 @@ has_field 'update_time' => (
 has_field 'delete_time' => (
     type           => 'Checkbox',
     label          => 'Deleted',
-    deflate_method => \&deflate_delete_time,
+    deflate_method => \&deflate_time,
+);
+has_field 'publish_time' => (
+    type           => 'Checkbox',
+    label          => 'Published',
+    deflate_method => \&deflate_time,
 );
 
 has_field 'title' => (

@@ -129,17 +129,19 @@ around 'update_model', sub {
     my ($orig, $self, @args) = @_;
     my $item = $self->item;
 
-    # Transform delete_time into datetime, if needed
-    if (    $self->values->{delete_time}
-        and $self->item
-        and not $self->item->delete_time) {
-        $self->values->{delete_time} = DateTime->now;    # set
-    } elsif (!$self->values->{delete_time}
-        and $self->item
-        and $self->item->delete_time) {
-        $self->values->{delete_time} = undef;            # unset
-    } else {
-        delete $self->values->{delete_time};             # don't touch
+    # Transform publish_time and delete_time into datetime, if needed
+    for my $time (qw/delete_time publish_time/) {
+        if (    $self->values->{$time}
+            and $self->item
+            and not $self->item->$time) {
+            $self->values->{$time} = DateTime->now;    # set
+        } elsif (!$self->values->{$time}
+            and $self->item
+            and $self->item->$time) {
+            $self->values->{$time} = undef;            # unset
+        } else {
+            delete $self->values->{$time};             # don't touch
+        }
     }
 
     # Handle blog titles
