@@ -4,9 +4,9 @@ use HTML::FormHandler::Moose;
 extends 'EmpireLogistics::Form::Field::BaseSelect2';
 with 'EmpireLogistics::Role::Form::Util';
 
-sub build_label { 'Associated RailNodes' }
+sub build_label { 'Associated Rail Intersections' }
 sub build_id { 'rail-nodes' }
-sub build_element_attr { { 'data-placeholder'  => 'Enter Associated RailNodes' } }
+sub build_element_attr { { 'data-placeholder'  => 'Enter Associated Rail Intersections' } }
 
 no HTML::FormHandler::Moose;
 

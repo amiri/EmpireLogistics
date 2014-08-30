@@ -14,7 +14,7 @@ has_field 'id' => (
 );
 has_field 'delete_time' => (
     type           => 'Hidden',
-    deflate_method => \&deflate_delete_time,
+    deflate_method => \&deflate_time,
     value => 0,
 );
 has_field 'submit' => (

@@ -49,8 +49,8 @@ has_field 'update_time' => (
 has_field 'delete_time' => (
     type           => 'Checkbox',
     label          => 'Deleted',
-    deflate_method => \&deflate_delete_time,
-    inflate_method => \&inflate_delete_time,
+    deflate_method => \&deflate_time,
+    #inflate_method => \&inflate_time,
 );
 has_field 'year'   => (type => 'Year', empty_select => '-- Select One --',);
 has_field 'amount' => (type => 'Integer',);

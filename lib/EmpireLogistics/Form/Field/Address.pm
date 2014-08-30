@@ -44,8 +44,8 @@ has_field 'update_time' => (
 has_field 'delete_time' => (
     type           => 'Checkbox',
     label          => 'Deleted',
-    deflate_method => \&deflate_delete_time,
-    inflate_method => \&inflate_delete_time,
+    deflate_method => \&deflate_time,
+    #inflate_method => \&inflate_time,
 );
 has_field 'street_address' => (type => 'Text',);
 has_field 'country'        => (type => '+Country',);

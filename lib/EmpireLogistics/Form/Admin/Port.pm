@@ -306,7 +306,7 @@ has_field 'update_time' => (
 has_field 'delete_time' => (
     type           => 'Checkbox',
     label          => 'Deleted',
-    deflate_method => \&deflate_delete_time,
+    deflate_method => \&deflate_time,
 );
 
 # Basic
