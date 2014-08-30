@@ -105,11 +105,13 @@ $PARAMETERS{default} = {
         },
     },
     is_production => 0,
+    google_analytics_id => undef,
 };
 
 $PARAMETERS{"empirelogistics.org"} = {
     %{ clone $PARAMETERS{'default'} },
     is_production => 1,
+    google_analytics_id => 'UA-54318181-1'
 };
 
 $PARAMETERS{development} = {

@@ -8,7 +8,7 @@
 
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900' rel='stylesheet' type='text/css'>
     [% IF is_production %]
-        <link rel="stylesheet" href="/css/site.min.a853d776.css" type="text/css" />
+        <link rel="stylesheet" href="/css/site.min.a853d776.css" type="text/css" media="screen,print" />
     [% ELSE %]
         <link rel="stylesheet" href="/css/lib/bootstrap.min.css" type="text/css" />
         <link rel="stylesheet" href="/css/lib/bootstrap-theme.min.css" type="text/css" />
@@ -16,7 +16,7 @@
         <link rel="stylesheet" href="/css/lib/select2-bootstrap.css" type="text/css" />
         <link rel="stylesheet" href="/css/lib/leaflet.css" type="text/css" />
         <link rel="stylesheet" href="/css/lib/dataTables.bootstrap.css" type="text/css" />
-        <link rel="stylesheet" href="/css/el.css" type="text/css" />
+        <link rel="stylesheet" href="/css/el.css" type="text/css" media="screen,print" />
     [% END %]
     [% stylesheets() %]
 
@@ -74,4 +74,7 @@
 [% END %]
 [% c.add_jsfile('/js/refresh-modals.js') %]
 </body>
+[% IF google_analytics_id %]
+[%     PROCESS 'ga.tt' %]
+[% END %]
 </html>

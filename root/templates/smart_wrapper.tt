@@ -4,3 +4,6 @@
     [% content; END %]
 [%  ELSE %]
     [% content ; END %]
+[% IF google_analytics_id %]
+[%     PROCESS 'ga.tt' %]
+[% END %]
