@@ -2,7 +2,8 @@ package EmpireLogistics::Web::Controller::Root;
 
 use Moose;
 use EmpireLogistics::Config;
-use List::AllUtils qw/any/;
+use JSON::XS;
+use List::AllUtils qw/any zip/;
 use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller' }
@@ -85,6 +86,45 @@ sub check_authentication :Private {
         $c->authenticate({ id => $id }, 'no_password')
             if ($id);
     }
+    return 1;
+}
+
+sub dc_colors :Chained('/') PathPart('js/dc-colors') Args {
+    my ($self,$c) = @_;
+    $c->stash->{current_view} = "Plain";
+    $c->response->content_type('application/x-javascript');
+    my @colors = (
+        '#1f77b4',
+        '#aec7e8',
+        '#ff7f0e',
+        '#ffbb78',
+        '#2ca02c',
+        '#98df8a',
+        '#d62728',
+        '#ff9896',
+        '#9467bd',
+        '#c5b0d5',
+        '#8c564b',
+        '#c49c94',
+        '#e377c2',
+        '#f7b6d2',
+        '#7f7f7f',
+        '#c7c7c7',
+        '#bcbd22',
+        '#dbdb8d',
+        '#17becf',
+        '#9edae5',
+    );
+    my @dc_owners = map {
+        join(" ", map { ucfirst(lc) } split(/[\s.,-]+/))
+    } $c->model('DB::WarehouseOwner')->active->get_column('name')->all;
+    my @used_colors = @colors[0 .. $#dc_owners];
+    my %color_for_dc_owner = zip @dc_owners, @used_colors;
+    my $json = JSON::XS->new->utf8->pretty(1)->convert_blessed(1)->allow_nonref(1)->encode(\%color_for_dc_owner);
+    my $js_text   = <<"EOM";
+var dcColors = $json;
+EOM
+    $c->res->body($js_text);
     return 1;
 }
 

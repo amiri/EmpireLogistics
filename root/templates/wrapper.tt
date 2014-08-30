@@ -23,6 +23,7 @@
     <script type="text/javascript">
         window.CKEDITOR_BASEPATH = '/js/lib/ckeditor/';
     </script>
+    <script type="text/javascript" src="/js/dc-colors"></script>
     [% IF is_production %]
         <script type="text/javascript" src="/js/site.min.4fd0d2f1.js"></script>
     [% ELSE %]

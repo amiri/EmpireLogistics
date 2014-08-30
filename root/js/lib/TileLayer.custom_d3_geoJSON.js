@@ -148,36 +148,7 @@ L.TileLayer.custom_d3_geoJSON = L.TileLayer.extend({
                         .attr("r", self.options.radius)
                         .attr("fill", function(d) {
                             if (self.options.class === "warehouse") {
-                                var colorFill;
-                                switch ("" + d.properties.owner) {
-                                case "Costco":
-                                    colorFill = "blueviolet";
-                                    break;
-                                case "Target":
-                                    colorFill = "fuchsia";
-                                    break;
-                                case "Walmart":
-                                    colorFill = "darkorange";
-                                    break;
-                                case "Krogers":
-                                    colorFill = "mediumslateblue";
-                                    break;
-                                case "Walgreens":
-                                    colorFill = "limegreen";
-                                    break;
-                                case "Amazon":
-                                    colorFill = "forestgreen";
-                                    break;
-                                case "Home Depot":
-                                    colorFill = "maroon";
-                                    break;
-                                case "Ikea":
-                                    colorFill = "navy";
-                                    break;
-                                default:
-                                    colorFill = "darkorange";
-                                    break;
-                                }
+                                var colorFill = dcColors[d.properties.owner];
                                 return colorFill;
                             } else {
                                 return self.options.fill;
