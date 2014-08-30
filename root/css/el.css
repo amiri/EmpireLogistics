@@ -365,3 +365,15 @@ p.subhed {
 .leaflet-top, .leaflet-bottom {
     z-index: 999;
 }
+
+@media print{
+    @page {
+        size: landscape;
+    }
+    .leaflet-top,.leaflet-bottom {
+        display: none;
+    }
+    .popover.top.in, .popover.top.in *, .popover.top.in > * {
+        display:none;
+    }
+}
