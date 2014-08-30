@@ -1,0 +1,44 @@
+[% body_class = 'about' %]
+<div class="row">
+<div class="col-lg-6 col-lg-offset-2">
+<h1>How to Use the Site</h1>
+
+<h2>Navigation</h2>
+    <h3>Zoom</h3>
+        <h4>In</h4>
+        <dl class="dl-horizontal">
+            <dt>Mouse</dt> <dd>Scroll up</dd>
+            <dt>Windows</dt> <dd><kbd>Ctrl</kbd> + <kbd>+</kbd></dd>
+            <dt>Linux</dt> <dd><kbd>Ctrl</kbd> + <kbd>+</kbd></dd>
+            <dt>Mac</dt> <dd><kbd>Cmd</kbd> + <kbd>+</kbd></dd>
+        </dl>
+
+        <h4>Out</h4>
+            <dl class="dl-horizontal">
+                <dt>Mouse</dt> <dd>Scroll down</dd>
+                <dt>Windows</dt> <dd><kbd>Ctrl</kbd> + <kbd>+</kbd></dd>
+                <dt>Linux</dt> <dd><kbd>Ctrl</kbd> + <kbd>+</kbd></dd>
+                <dt>Mac</dt> <dd><kbd>Cmd</kbd> + <kbd>+</kbd></dd>
+            </dl>
+
+    <h3>Pan</h3>
+        <dl class="dl-horizontal">
+            <dt>Mouse</dt> <dd>Click, hold, drag, release</dd>
+            <dt>Windows</dt> <dd><kbd>Ctrl</kbd> + <kbd>&larr;, &rarr;, &darr;, &uarr;</kbd></dd>
+            <dt>Linux</dt> <dd><kbd>Ctrl</kbd> + <kbd>&larr;, &rarr;, &darr;, &uarr;</kbd></dd>
+            <dt>Linux</dt> <dd><kbd>Cmd</kbd> + <kbd>&larr;, &rarr;, &darr;, &uarr;</kbd></dd>
+        </dl>
+
+    <h3>Overview of Map Item</h3>
+        <dl class="dl-horizontal">
+            <dt>Mouse</dt> <dd>Hover</dd>
+        </dl>
+
+
+    <h3>Details of Map Item</h3>
+        <dl class="dl-horizontal">
+            <dt>Mouse</dt> <dd>Click</dd>
+            <dt>Mouse</dt> <dd>Right-Click</dd>
+            <dt>Mac Mouse Right Click</dt> <dd><kbd>Ctrl</kbd> + Click</dd>
+        </dl>
+

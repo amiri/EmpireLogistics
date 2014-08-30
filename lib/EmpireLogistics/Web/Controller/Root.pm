@@ -14,6 +14,7 @@ sub auto : Private {
     $c->stash(use_wrapper => 1)
         unless $c->req->is_xhr and not $c->req->param('wrapper');
     $c->stash->{is_production} = 1 if EmpireLogistics::Config->is_production;
+    $c->stash->{google_analytics_id} = EmpireLogistics::Config->google_analytics_id;
     my $locale = $c->req->param('locale');
     $c->response->headers->push_header( 'Vary' => 'Accept-Language' );
     $c->language( $locale ? [$locale] : undef );
@@ -56,6 +57,16 @@ sub contributors :Chained('/') PathPart('contributors') Args(0) GET {
 sub reference_materials :Chained('/') PathPart('reference-materials') Args(0) GET {
     my ($self,$c) = @_;
     $c->stash->{template} = 'reference-materials.tt';
+}
+
+sub howto :Chained('/') PathPart('how-to') Args(0) GET {
+    my ($self,$c) = @_;
+    $c->stash->{template} = 'how-to.tt';
+}
+
+sub glossary :Chained('/') PathPart('glossary') Args(0) GET {
+    my ($self,$c) = @_;
+    $c->stash->{template} = 'glossary.tt';
 }
 
 sub access_denied : Private {

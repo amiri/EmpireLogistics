@@ -1,0 +1,9 @@
+[% body_class = 'about' %]
+<div class="row">
+<div class="col-lg-6 col-lg-offset-2">
+<h1>Glossary</h1>
+
+<h2>Terms and Jargon</h2>
+<dl class="dl-horizontal">
+<dt>rail interline</dt> <dd>Sometimes a car needs to switch railroads during transit. Rail interlines are places where this switch occurs. Railroads charge one another a fee for the use of their lines. Most US interlines are in and around Chicago, where there is a lot of this type of switching. For more details, see the "<a href="http://cta.ornl.gov/transnet/rrdescr.txt">Description of the CTA Railroad Network</a>," "The Data Model," part 5.</dt>
+</dl>

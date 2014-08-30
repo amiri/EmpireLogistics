@@ -41,7 +41,7 @@ var portsOptions = {
 var railNodesOptions = {
     "multiple": true,
     "minimumInputLength": 3,
-    "placeholder": 'Enter RailNodes Associated With Company',
+    "placeholder": 'Enter Rail Intersections Associated With Company',
     "ajax": {
         "url": '/autocomplete/rail-nodes/',
         "dataType": 'json',

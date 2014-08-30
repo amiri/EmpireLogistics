@@ -883,7 +883,7 @@ sub search : Chained('base') PathPart('search') Args(0) POST {
 
     } if scalar(@rail_line_options);
     push @{$results->{results}}, {
-        text     => "Railyards",
+        text     => "Rail Intersections",
         children => \@rail_node_options,
 
     } if scalar(@rail_node_options);

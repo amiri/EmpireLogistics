@@ -14,7 +14,7 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <form class="navbar-form navbar-right" style="width:30%;" role="search">
+      <form class="navbar-form navbar-right" style="width:20%;" role="search">
         <div class="form-group col-lg-12">
           <input type="text" id="topnav-search" class="form-control topnav-search" placeholder="Search">
         </div>
@@ -25,10 +25,12 @@
             <ul class="dropdown-menu">
               <li><a href="/our-history/">Our History</a></li>
               <li><a href="/contributors/">Contributors</a></li>
+              <li><a href="/glossary/">Glossary</a></li>
               <li><a href="/reference-materials/">Reference Materials</a></li>
             </ul>
         </li>
         <li><a href="/blog/">Blog</a></li>
+        <li><a href="/how-to/">How To</a></li>
         <li><a href="mailto:info@empire-logistics.org">Contact</a></li>
         [% IF c.user_exists %]
         <li class="dropdown">

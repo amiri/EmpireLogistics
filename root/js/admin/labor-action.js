@@ -83,7 +83,7 @@ var railLinesOptions = {
 var railNodesOptions = {
     "multiple": true,
     "minimumInputLength": 3,
-    "placeholder": 'Enter RailNodes Associated With Labor Action',
+    "placeholder": 'Enter Rail Intersections Associated With Labor Action',
     "ajax": {
         "url": '/autocomplete/rail-nodes/',
         "dataType": 'json',

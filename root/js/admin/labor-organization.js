@@ -122,7 +122,7 @@ var railLinesOptions = {
 var railNodesOptions = {
     "multiple": true,
     "minimumInputLength": 3,
-    "placeholder": 'Enter RailNodes Associated With Organization',
+    "placeholder": 'Enter Rail Intersections Associated With Organization',
     "ajax": {
         "url": '/autocomplete/rail-nodes/',
         "dataType": 'json',
