@@ -134,10 +134,12 @@ around 'update_model', sub {
     for my $time (qw/delete_time publish_time/) {
         if (    $self->values->{$time}
             and $self->item
+            and $self->item->can($time)
             and not $self->item->$time) {
             $self->values->{$time} = DateTime->now;    # set
         } elsif (!$self->values->{$time}
             and $self->item
+            and $self->item->can($time)
             and $self->item->$time) {
             $self->values->{$time} = undef;            # unset
         } else {
