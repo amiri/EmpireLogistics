@@ -2,6 +2,7 @@ package EmpireLogistics::Form::BaseDB;
 
 use HTML::FormHandler::Moose;
 use Data::Printer;
+use DateTime;
 use namespace::autoclean;
 extends 'HTML::FormHandler::Model::DBIC';
 with 'EmpireLogistics::Role::Form::Util';
@@ -188,7 +189,7 @@ sub process_media {
     # Handle delete time
     if ( defined( $params->{delete_time} ) ) {
         if ( $params->{delete_time} ) {
-            $params->{delete_time} = CE::DateTime->now;
+            $params->{delete_time} = DateTime->now;
         }
         else {
             $params->{delete_time} = undef;

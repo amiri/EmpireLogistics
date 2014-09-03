@@ -565,13 +565,13 @@
         var div = L.DomUtil.create('div', 'info legend'),
         elType = ["Rail Line", "Rail Intersection", "Rail Interline", "Port"],
         color = ["black", "red", "goldenrod", "dodgerblue"];
-        div.innerHTML += '<h5>Node Types</h5>';
+        div.innerHTML += '<h5>Map Elements</h5>';
 
         for (var i = 0; i < color.length; i++) {
             div.innerHTML += '<i style="background:' + color[i] + '"></i> ' + elType[i] + '<br>';
         }
 
-        div.innerHTML += '<h5>Distribution Centers</h5>';
+        div.innerHTML += '<h6>Distribution Centers</h6>';
 
         var dcTypes = Object.keys(dcColors).sort();
 
