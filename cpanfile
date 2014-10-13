@@ -49,7 +49,7 @@ requires "Digest::PBKDF2", ">= 0.010";
 requires "Email::Valid";
 requires "Encode";
 requires "Encode::Guess";
-requires "ExtUtils::MakeMaker", ">= 6.96";
+requires "ExtUtils::MakeMaker", ">= 6.98";
 requires "Geo::Coder::Google";
 requires "HTML::FormHandler";
 requires "HTML::FormHandler::Model::DBIC";

@@ -179,13 +179,13 @@ has_field 'add_address' => (
     element_class => ['btn btn-info']
 );
 
-sub options_addresses {
-    my $self = shift;
-    my $options =
-        [map { {label => $_->addresses->street_address, value => $_->id,} }
-            $self->item->addresses->active->all];
-    return $options;
-}
+#sub options_addresses {
+    #my $self = shift;
+    #my $options =
+        #[map { {label => $_->addresses->street_address, value => $_->id,} }
+            #$self->item->addresses->active->all];
+    #return $options;
+#}
 
 __PACKAGE__->meta->make_immutable;
 

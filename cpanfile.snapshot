@@ -3320,40 +3320,40 @@ DISTRIBUTIONS
       File::Spec 0
       strict 0
       warnings 0
-  ExtUtils-MakeMaker-6.96
-    pathname: B/BI/BINGOS/ExtUtils-MakeMaker-6.96.tar.gz
+  ExtUtils-MakeMaker-6.98
+    pathname: B/BI/BINGOS/ExtUtils-MakeMaker-6.98.tar.gz
     provides:
-      DynaLoader 6.96
-      ExtUtils::Command::MM 6.96
-      ExtUtils::Liblist 6.96
-      ExtUtils::Liblist::Kid 6.96
-      ExtUtils::MM 6.96
-      ExtUtils::MM_AIX 6.96
-      ExtUtils::MM_Any 6.96
-      ExtUtils::MM_BeOS 6.96
-      ExtUtils::MM_Cygwin 6.96
-      ExtUtils::MM_DOS 6.96
-      ExtUtils::MM_Darwin 6.96
-      ExtUtils::MM_MacOS 6.96
-      ExtUtils::MM_NW5 6.96
-      ExtUtils::MM_OS2 6.96
-      ExtUtils::MM_QNX 6.96
-      ExtUtils::MM_UWIN 6.96
-      ExtUtils::MM_Unix 6.96
-      ExtUtils::MM_VMS 6.96
-      ExtUtils::MM_VOS 6.96
-      ExtUtils::MM_Win32 6.96
-      ExtUtils::MM_Win95 6.96
-      ExtUtils::MY 6.96
-      ExtUtils::MakeMaker 6.96
-      ExtUtils::MakeMaker::Config 6.96
-      ExtUtils::MakeMaker::_version 6.96
-      ExtUtils::Mkbootstrap 6.96
-      ExtUtils::Mksymlists 6.96
-      ExtUtils::testlib 6.96
-      MM 6.96
-      MY 6.96
-      in 6.96
+      DynaLoader 6.98
+      ExtUtils::Command::MM 6.98
+      ExtUtils::Liblist 6.98
+      ExtUtils::Liblist::Kid 6.98
+      ExtUtils::MM 6.98
+      ExtUtils::MM_AIX 6.98
+      ExtUtils::MM_Any 6.98
+      ExtUtils::MM_BeOS 6.98
+      ExtUtils::MM_Cygwin 6.98
+      ExtUtils::MM_DOS 6.98
+      ExtUtils::MM_Darwin 6.98
+      ExtUtils::MM_MacOS 6.98
+      ExtUtils::MM_NW5 6.98
+      ExtUtils::MM_OS2 6.98
+      ExtUtils::MM_QNX 6.98
+      ExtUtils::MM_UWIN 6.98
+      ExtUtils::MM_Unix 6.98
+      ExtUtils::MM_VMS 6.98
+      ExtUtils::MM_VOS 6.98
+      ExtUtils::MM_Win32 6.98
+      ExtUtils::MM_Win95 6.98
+      ExtUtils::MY 6.98
+      ExtUtils::MakeMaker 6.98
+      ExtUtils::MakeMaker::Config 6.98
+      ExtUtils::MakeMaker::_version 6.98
+      ExtUtils::Mkbootstrap 6.98
+      ExtUtils::Mksymlists 6.98
+      ExtUtils::testlib 6.98
+      MM 6.98
+      MY 6.98
+      in 6.98
     requirements:
       Data::Dumper 0
       DirHandle 0

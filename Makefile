@@ -150,6 +150,8 @@ import-labor: labor $(labor_dir)/labor-organizations.json
 	bin/clean-labor-data
 	bin/import-labor-data
 
+import-geonames:
+	bin/import-geonames
 
 ########## Rail data download pieces
 

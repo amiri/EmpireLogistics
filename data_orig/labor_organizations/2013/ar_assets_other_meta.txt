@@ -1,0 +1,6 @@
+ Name                                                  Null?    Type                                
+ ----------------------------------------------------- -------- ------------------------------------
+ OID                                                   NOT NULL INTEGER                             
+ DESCRIPTION                                           NULL     VARCHAR                             
+ BOOK_VALUE                                            NULL     INTEGER                             
+ RPT_ID                                                NULL     INTEGER                             

@@ -1,0 +1,10 @@
+ Name                                                  Null?    Type                                
+ ----------------------------------------------------- -------- ------------------------------------
+ OID                                                   NOT NULL INTEGER                             
+ DESCRIPTION                                           NULL     VARCHAR                             
+ COST_BASIS                                            NULL     INTEGER                             
+ DEPRECIATION                                          NULL     INTEGER                             
+ BOOK_VALUE                                            NULL     INTEGER                             
+ VALUE                                                 NULL     INTEGER                             
+ ASSET_TYPE                                            NOT NULL INTEGER                             
+ RPT_ID                                                NULL     INTEGER                             

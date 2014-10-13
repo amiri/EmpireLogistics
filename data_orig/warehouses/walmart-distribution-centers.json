@@ -1,0 +1,1502 @@
+{
+   "ClosedWalmartDistributionCenters" : [
+      {
+         "square_feet" : "236,800",
+         "date_opened" : "1970",
+         "descriptions" : [
+            "Walmart's first ever distribution center opened in 1970 as a General Merchandise & Fashion facility",
+            "Originally 60,000 sq ft; expanded to 124,800 in 1971; expanded again to 236,800 sq ft in 1972",
+            "Closed and converted into head office space in 1986."
+         ],
+         "address" : "702 Southwest 8th Street, Bentonville, AR, 72712, USA",
+         "walmart_id" : "6000"
+      },
+      {
+         "square_feet" : "397,630",
+         "date_opened" : "Aug, 1999",
+         "descriptions" : [
+            "Import Center that was vacated around or before 2009."
+         ],
+         "address" : "12400 Riverside Drive, Mira Loma, CA, 91752, USA",
+         "walmart_id" : "NA"
+      },
+      {
+         "square_feet" : "656,000",
+         "date_opened" : "Jun 2001",
+         "descriptions" : [
+            "Import Center that was vacated around or before 2009."
+         ],
+         "address" : "11850 Riverside Drive, Mira Loma, CA, 91752, USA",
+         "walmart_id" : "NA"
+      },
+      {
+         "square_feet" : "253,000",
+         "date_opened" : "2001",
+         "descriptions" : [
+            "Castle & Cook Cold Storage facility"
+         ],
+         "address" : "2356 Fleetwood Drive, Riverside, CA, 92509, USA",
+         "walmart_id" : "7025"
+      },
+      {
+         "square_feet" : "800,000",
+         "date_opened" : "2001",
+         "descriptions" : [
+            "Import Center that was closed in 2008 and consolidated into the Statesboro, GA facility."
+         ],
+         "address" : "163 Portside Court, Savannah, GA, 31407, USA",
+         "walmart_id" : "7086"
+      },
+      {
+         "square_feet" : "560,000",
+         "date_opened" : "2002",
+         "descriptions" : [
+            "Import Center constructed for Walmart in a FTZ Zone in 2001-2002 and closed in 2006."
+         ],
+         "address" : "1080 North Regional Parkway North, Charleston, SC, 29492, USA",
+         "walmart_id" : "4894"
+      },
+      {
+         "square_feet" : "414,000",
+         "date_opened" : "2001",
+         "descriptions" : [
+            "Optical Lab closed in Mar 2009"
+         ],
+         "address" : "2525 Rohr Road, Lockbourne, OH, 43137-9296, USA",
+         "walmart_id" : "7054/7081"
+      },
+      {
+         "square_feet" : "1,087,500",
+         "date_opened" : "est. 1994",
+         "descriptions" : [
+            "Import Center that was associated to the McLane's acquisition."
+         ],
+         "address" : "19688 Van Ness, Torrance, CA, 90501, USA",
+         "walmart_id" : "6052"
+      }
+   ],
+   "SpecialtyWalmartDistributionCenters" : [
+      {
+         "square_feet" : "191,700",
+         "date_opened" : "1992 est.",
+         "descriptions" : [
+            "Export distribution center to distribute export merchandise for Walmart Mexico"
+         ],
+         "address" : "40781 Black Diamond, Laredo, TX, 78045, USA",
+         "walmart_id" : "6050"
+      },
+      {
+         "square_feet" : "31,400",
+         "date_opened" : "1993",
+         "descriptions" : [
+            "Optical Lab / Plant"
+         ],
+         "address" : "801 Corda Blvd., Crawfordsville, IN, 47933, USA",
+         "walmart_id" : "6028/6044"
+      },
+      {
+         "square_feet" : "64,500",
+         "date_opened" : "Mar 1987",
+         "descriptions" : [
+            "Optical Lab / Plant"
+         ],
+         "address" : "2314 W 6th St, Fayetteville, AR, 72701-6219, USA",
+         "walmart_id" : "9149"
+      },
+      {
+         "square_feet" : "38,918",
+         "date_opened" : "Jun 2003",
+         "descriptions" : [
+            "Optical Lab / Plant"
+         ],
+         "address" : "9029 Directors Row, Dallas, TX, 75247, USA",
+         "walmart_id" : "NA"
+      },
+      {
+         "square_feet" : "150,000",
+         "date_opened" : "Nov 1976",
+         "descriptions" : [
+            "Started as a Redistribution DC in 1976 and converted into a VAWD accredited Pharmacy Distribution Center"
+         ],
+         "address" : "2252 North 8th Street, Rogers, AR, 72756, USA",
+         "walmart_id" : "6001"
+      },
+      {
+         "square_feet" : "40,000",
+         "date_opened" : "2001",
+         "descriptions" : [
+            "Pharmacy Distribution Center",
+            "Pharmacy Returns DC"
+         ],
+         "address" : "1201 Moberly Lane, Bentonville, AR, 72716, USA",
+         "walmart_id" : "6045"
+      },
+      {
+         "square_feet" : "70,900",
+         "date_opened" : "Mar 1994",
+         "descriptions" : [
+            "Pharmacy Distribution Center"
+         ],
+         "address" : "13231 11th Ave, Hanford, CA, 93230, USA",
+         "walmart_id" : "6032"
+      },
+      {
+         "square_feet" : "86,500",
+         "date_opened" : "1988",
+         "descriptions" : [
+            "Pharmacy Distribution Center"
+         ],
+         "address" : "4501 Wal-Mart Way, Tifton, GA, 31794, USA",
+         "walmart_id" : "6013"
+      },
+      {
+         "square_feet" : "66,300",
+         "date_opened" : "1997 est.",
+         "descriptions" : [
+            "Converted a Photo lab into a Pharmaceutical Distribution Center"
+         ],
+         "address" : "11121 Elliot Place, Williamsport, MD, 21795, USA",
+         "walmart_id" : "6046"
+      },
+      {
+         "square_feet" : "390,000",
+         "date_opened" : "Mar 1997",
+         "descriptions" : [
+            "Print Solutions Distribution Center which is an In-house plant dedicated to printing materials such as signage, training manuals, labels, guides, forms, etc.",
+            "Originally constructed to 198,000 sf and expanded in 2007"
+         ],
+         "address" : "1108 S.E. 10TH Street, Bentonville, AR, 72712, USA",
+         "walmart_id" : "6058"
+      },
+      {
+         "square_feet" : "225,000",
+         "date_opened" : "Jan 1975",
+         "descriptions" : [
+            "Originally constructed to 150,000 sq ft to serve as a redistribution center. Later expanded in 1981.",
+            "This was the 2nd DC in the network.",
+            "Currently serves as a Walmart Return Center with 400 associates."
+         ],
+         "address" : "1102 SE 5th St, Bentonville, AR, 72712, USA",
+         "walmart_id" : "6002"
+      },
+      {
+         "square_feet" : "675,000",
+         "date_opened" : "May 2008 est.",
+         "descriptions" : [
+            "Walmart & Sams Club Return Distribution Center"
+         ],
+         "address" : "1901 SE 10th St, Bentonville, AR, 72716, USA",
+         "walmart_id" : "4287/8098"
+      },
+      {
+         "square_feet" : "72,000",
+         "date_opened" : "Sep 2005",
+         "descriptions" : [
+            "Walmart Reclamation Center"
+         ],
+         "address" : "601 N Walton Blvd, Bentonville, AR, 72712, USA",
+         "walmart_id" : "9398"
+      },
+      {
+         "square_feet" : "266,400",
+         "date_opened" : "Mar 2000 est.",
+         "descriptions" : [
+            "Outsourced to 3PL Exel Logistics",
+            "Walmart Return Distribution Center"
+         ],
+         "address" : "3333 N Franklin Rd, Indianapolis, IN, 46226-6314, USA",
+         "walmart_id" : "9193"
+      },
+      {
+         "square_feet" : "106,700",
+         "date_opened" : "Mar 2000 est.",
+         "descriptions" : [
+            "Outsourced to 3PL Exel Logistics",
+            "Walmart Return Distribution Center"
+         ],
+         "address" : "1900 Aerojet Way, North Las Vegas NV, 89030, USA",
+         "walmart_id" : "9195"
+      },
+      {
+         "square_feet" : "207,600",
+         "date_opened" : "1996",
+         "descriptions" : [
+            "Outsourced to 3PL Power Logistics of Exel North American Logistics, Inc",
+            "Walmart Return Distribution Center"
+         ],
+         "address" : "161 Enterprise Road, Johnstown, NY, 12095, USA",
+         "walmart_id" : "9196"
+      },
+      {
+         "square_feet" : "266,400",
+         "date_opened" : "Apr 2009",
+         "descriptions" : [
+            "Outsourced to 3PL Exel Logistics",
+            "Walmart Return Distribution Center that replaced a Return center in Macon GA which was closed Sep 2009"
+         ],
+         "address" : "5795 North Blackstock Road, Spartanburg, SC, 29303, USA",
+         "walmart_id" : "9194"
+      },
+      {
+         "square_feet" : "220,000",
+         "date_opened" : "2004",
+         "descriptions" : [
+            "Walmart Return Distribution Center"
+         ],
+         "address" : "2301 Corporation Parkway, Woodway (Waco), TX, 76712-6952, USA",
+         "walmart_id" : "9153"
+      },
+      {
+         "square_feet" : "",
+         "date_opened" : "Apr 2013",
+         "descriptions" : [
+            "Walmart Refurb Center",
+            "Refurb & certify smartphones, tablets and computer returns"
+         ],
+         "address" : "Rogers, AR",
+         "walmart_id" : ""
+      },
+      {
+         "square_feet" : "",
+         "date_opened" : "2013",
+         "descriptions" : [
+            "Walmart Refurb Center run by the Cherokee Nation",
+            "Refurb & certify smartphones, tablets and computer returns"
+         ],
+         "address" : "Tahlequah, Oklahoma",
+         "walmart_id" : ""
+      },
+      {
+         "square_feet" : "357,120",
+         "date_opened" : "Nov 2001",
+         "descriptions" : [
+            "Outsourced to 3PL Exel Logistics",
+            "Tire Distribution Center that ships tires to over 700 Walmart and Sam's Club stores in the Southeast"
+         ],
+         "address" : "200 Interstate South Dr & 210 Interstate South Dr, McDonough, GA, 30253, USA",
+         "walmart_id" : "6033"
+      },
+      {
+         "square_feet" : "420,000",
+         "date_opened" : "Apr 2002",
+         "descriptions" : [
+            "Outsourced to 3PL Exel Logistics",
+            "Tire Distribution Center"
+         ],
+         "address" : "4130 Port Blvd, Dallas, TX, 75241, USA",
+         "walmart_id" : "6067"
+      },
+      {
+         "square_feet" : "355,000",
+         "date_opened" : "",
+         "descriptions" : [
+            "RDC to service GM and Food to Puerto Rico for all Walmart and Sam's Club stores"
+         ],
+         "address" : "Royal Properties, Inc., Royal Industrial Park #869, Puerto Rico 00968",
+         "walmart_id" : "4841/6076/6087/6271"
+      },
+      {
+         "square_feet" : "1,000,000",
+         "date_opened" : "2002",
+         "descriptions" : [
+            "Dedicated Walmart.com distribution center"
+         ],
+         "address" : "3101 N. Highway 27, Carrollton, GA, 30117, USA",
+         "walmart_id" : "7005"
+      },
+      {
+         "square_feet" : "788,160",
+         "date_opened" : "Oct 2013",
+         "descriptions" : [
+            "Dedicated Walmart.com distribution center",
+            "Outsourced to 3PL Ozburn-Hessey Logistics, LLC"
+         ],
+         "address" : "5300 Westport Parkway, Fort Worth, TX,76177",
+         "walmart_id" : ""
+      },
+      {
+         "square_feet" : "1,200,000",
+         "date_opened" : "Q1 2014",
+         "descriptions" : [
+            "Dedicated Walmart.com distribution center"
+         ],
+         "address" : "2785 Commerce Center Boulevard, Bethlehem, PA, 18015",
+         "walmart_id" : ""
+      }
+   ],
+   "Sam's ClubDistributionCenter" : [
+      {
+         "square_feet" : "682,700",
+         "date_opened" : "Jul 1978",
+         "descriptions" : [
+            "Owned and Operated",
+            "Originally constructed as a 390,000 sq ft",
+            "Walmart's first DC outside of Bentonville and 4th DC.",
+            "Expanded by 142,000 sq ft in 1981 and again in 1990 and then converted into a Sams Collectables DC in 1994"
+         ],
+         "address" : "3301 East Park Avenue, Searcy, AR, 72143-9027, USA",
+         "walmart_id" : "4803/6699"
+      },
+      {
+         "square_feet" : "252,000",
+         "date_opened" : "2000",
+         "descriptions" : [
+            "Owned and Operated",
+            "This facility is on the same site as DC#6031"
+         ],
+         "address" : "23701 West Southern Avenue, Buckeye, AZ, 85326-4928, USA",
+         "walmart_id" : "6299"
+      },
+      {
+         "square_feet" : "65,200",
+         "date_opened" : "Aug. 2004",
+         "descriptions" : [
+            "Sam's Crossdock facility run by 3PL Exel Logistics"
+         ],
+         "address" : "1600 Tide Court, Woodland, CA, 95776-6210, USA",
+         "walmart_id" : "8230"
+      },
+      {
+         "square_feet" : "60,000",
+         "date_opened" : "<1994 est.",
+         "descriptions" : [
+            "Sam's Crossdock facility run by 3PL Vitran Logistics Inc."
+         ],
+         "address" : "1000 S. Cucamonga Ave, Ontario, CA, 91761, USA",
+         "walmart_id" : "6493"
+      },
+      {
+         "square_feet" : "42,600",
+         "date_opened" : "Sep 1990",
+         "descriptions" : [
+            "Owned and Operated"
+         ],
+         "address" : "7500 East Crossroads Blvd, Loveland, CO, 80538, USA",
+         "walmart_id" : "6494"
+      },
+      {
+         "square_feet" : "129,665",
+         "date_opened" : "Feb. 2013",
+         "descriptions" : [],
+         "address" : "2562 Cabot Commerce Circle, Building 1, Alta Lakes Commerce Center, Jacksonville, FL, 32226, USA",
+         "walmart_id" : "6275"
+      },
+      {
+         "square_feet" : "66,400",
+         "date_opened" : "1991",
+         "descriptions" : [
+            "Sam's Crossdock facility run by 3PL SaddleCreek Logistics"
+         ],
+         "address" : "3010 Saddlecreek Rd. Bldg. 19, Lakeland, FL, 33801, USA",
+         "walmart_id" : "8229"
+      },
+      {
+         "square_feet" : "60,000",
+         "date_opened" : "1995",
+         "descriptions" : [
+            "Sam's Crossdock facility run by 3PL SaddleCreek Logistics"
+         ],
+         "address" : "140 Fleet Drive, Villa Rica, GA, 30180-1090, USA",
+         "walmart_id" : "6499"
+      },
+      {
+         "square_feet" : "49,200",
+         "date_opened" : "Jun 2005",
+         "descriptions" : [
+            "Sam's Crossdock facility run by 3PL Vitran Logistics"
+         ],
+         "address" : "1325 Central Ave., University Park, IL, 60484, USA",
+         "walmart_id" : "6598"
+      },
+      {
+         "square_feet" : "85,200",
+         "date_opened" : "<1994 est.",
+         "descriptions" : [
+            "Owned and Operated"
+         ],
+         "address" : "488 West Muskegon Drive, Greenfield, IN, 46140-3057, USA",
+         "walmart_id" : "8232"
+      },
+      {
+         "square_feet" : "40,000",
+         "date_opened" : "1994",
+         "descriptions" : [
+            "Sam's Crossdock facility run by Kane is Able"
+         ],
+         "address" : "14557 Industry Dr., Hagerstown, MD, 21742, USA",
+         "walmart_id" : "6495"
+      },
+      {
+         "square_feet" : "60,000",
+         "date_opened" : "1992 est.",
+         "descriptions" : [
+            "Sam's Crossdock facility run by ASW Global, LLC"
+         ],
+         "address" : "18650 Dix-Toledo Rd., Brownstown Township, MI, 48193, USA",
+         "walmart_id" : "6596"
+      },
+      {
+         "square_feet" : "180,300",
+         "date_opened" : "Feb 1995",
+         "descriptions" : [
+            "Owned and Operated"
+         ],
+         "address" : "6301 W. Old Shakopee Rd., Bloomington, MN, 55438, USA",
+         "walmart_id" : "6697"
+      },
+      {
+         "square_feet" : "81,080",
+         "date_opened" : "1988",
+         "descriptions" : [
+            "Sam's Crossdock facility formerly run by Wagner Industries up to May 2012."
+         ],
+         "address" : "233 S 42nd Street, Kansas City, KS, 66106",
+         "walmart_id" : "6496"
+      },
+      {
+         "square_feet" : "60,000",
+         "date_opened" : "May 2008",
+         "descriptions" : [
+            "Sam's Crossdock facility run by 3PL SaddleCreek Logistics"
+         ],
+         "address" : "185 J M Tatum Industrial Dr , Hattiesburg, MS, 39401, USA",
+         "walmart_id" : "4792"
+      },
+      {
+         "square_feet" : "63,400",
+         "date_opened" : "1991",
+         "descriptions" : [
+            "Sam's Crossdock facility run by 3PL Distribution Technology Inc."
+         ],
+         "address" : "1911 Continental Blvd., Charlotte, NC, 28273, USA",
+         "walmart_id" : "8206"
+      },
+      {
+         "square_feet" : "26,200",
+         "date_opened" : "2005",
+         "descriptions" : [
+            "Sam's Crossdock facility formerly run by PSI - Puget Sound International which went out of business in Sep, 2012."
+         ],
+         "address" : "40 Londonderry Turnpike, Building 3PSI, Hooksett, NH, 03106-2038, USA",
+         "walmart_id" : "6597"
+      },
+      {
+         "square_feet" : "75,000",
+         "date_opened" : "<1994 est.",
+         "descriptions" : [
+            "Sam's Crossdock facility run by ASW Global, LLC"
+         ],
+         "address" : "2150 International Pkwy., N. Canton, OH, 44720, USA",
+         "walmart_id" : "6492"
+      },
+      {
+         "square_feet" : "70,000",
+         "date_opened" : "1990",
+         "descriptions" : [
+            "Sam's Crossdock facility run by Kane is Able"
+         ],
+         "address" : "26 Stauffer Industrial Park, Taylor, PA, 18517, USA",
+         "walmart_id" : "8231"
+      },
+      {
+         "square_feet" : "60,000",
+         "date_opened" : "1998",
+         "descriptions" : [
+            "Owned and Operated",
+            "Located on the same site as Walmart DC#6016"
+         ],
+         "address" : "3900 North Ih 35, New Braunfels, TX, 78130, USA",
+         "walmart_id" : "6016"
+      },
+      {
+         "square_feet" : "92,800",
+         "date_opened" : "<1994 est.",
+         "descriptions" : [
+            "Owned and Operated"
+         ],
+         "address" : "830 East Centre Park Blvd., Desoto, TX, 75115, USA",
+         "walmart_id" : "6903/8235"
+      },
+      {
+         "square_feet" : "100,000",
+         "date_opened" : "Apr 1995",
+         "descriptions" : [
+            "Owned and Operated"
+         ],
+         "address" : "451 Farm to Market 686, Dayton, TX, 77535, USA",
+         "walmart_id" : "6698"
+      },
+      {
+         "square_feet" : "103,200",
+         "date_opened" : "<1994 est.",
+         "descriptions" : [
+            "Sam's Crossdock facility formerly run by PSI - Puget Sound International which went out of business in Sep, 2012.",
+            "Vitran Logistics is now the 3PL operator"
+         ],
+         "address" : "2810 E Marshall Ave Ste A, Tacoma, WA, 98421, USA",
+         "walmart_id" : "6289"
+      }
+   ],
+   "GMDCDistributionCenter" : [
+      {
+         "square_feet" : "1,200,000",
+         "date_opened" : "Jan 1983",
+         "descriptions" : [
+            "Originally constructed to 900,000 sq ft and expanded to 1.2M sq ft in 1988.",
+            "11 miles of conveyors"
+         ],
+         "address" : "2200 7th Avenue SW, Cullman, AL, 35055, USA",
+         "walmart_id" : "6006"
+      },
+      {
+         "square_feet" : "1,200,000",
+         "date_opened" : "Aug 1998(est.)",
+         "descriptions" : [
+            "12 miles of conveyors"
+         ],
+         "address" : "5841 Southwest Regional Airport Boulevard, Bentonville, AR, 72712-9431, USA",
+         "walmart_id" : "6094"
+      },
+      {
+         "square_feet" : "1,100,000",
+         "date_opened" : "May 1990",
+         "descriptions" : [],
+         "address" : "405 E Booth Rd, Searcy, AR, 72143-8854, USA",
+         "walmart_id" : "6018"
+      },
+      {
+         "square_feet" : "1,550,000",
+         "date_opened" : "Mar 1993",
+         "descriptions" : [
+            "Originally constructed to 1.2 M sq ft, this facility was expanded by 352,000 sq ft in 1999 to add a Sam's cross dock facility on the same site.",
+            "This is a free trade zone (FTZ) facility that can process import merchandise."
+         ],
+         "address" : "23701 West Southern Avenue, Buckeye, AZ, 85326-4928, USA",
+         "walmart_id" : "6031"
+      },
+      {
+         "square_feet" : "1,340,000",
+         "date_opened" : "Mar 2004",
+         "descriptions" : [],
+         "address" : "21101 Johnson Road, Apple Valley, CA, 92307, USA",
+         "walmart_id" : "7033"
+      },
+      {
+         "square_feet" : "1,200,000",
+         "date_opened" : "Sep 1991",
+         "descriptions" : [],
+         "address" : "1300 South F Street, Porterville, CA, 93257-5968, USA",
+         "walmart_id" : "6021"
+      },
+      {
+         "square_feet" : "1,170,000",
+         "date_opened" : "Jan 1994",
+         "descriptions" : [
+            "11 Miles of conveyor"
+         ],
+         "address" : "10815 State Highway 99W, Red Bluff, CA, 96080, USA",
+         "walmart_id" : "6026"
+      },
+      {
+         "square_feet" : "1,078,500",
+         "date_opened" : "Sep 1990",
+         "descriptions" : [],
+         "address" : "7500 East Crossroads Blvd, Loveland, CO, 80538, USA",
+         "walmart_id" : "6019"
+      },
+      {
+         "square_feet" : "1,200,000",
+         "date_opened" : "Jan 2004",
+         "descriptions" : [
+            "General Merchandise RDC"
+         ],
+         "address" : "4860 Wheatley's Pond Rd, Smyrna, DE, 19977, USA",
+         "walmart_id" : "7034"
+      },
+      {
+         "square_feet" : "1,200,000",
+         "date_opened" : "Sep 2006",
+         "descriptions" : [
+            "General Merchandise RDC built for $55M"
+         ],
+         "address" : "18815 NW 115th Ave, Alachua, FL, 32615-6056, USA",
+         "walmart_id" : "7035"
+      },
+      {
+         "square_feet" : "1,600,000",
+         "date_opened" : "1992",
+         "descriptions" : [
+            "Originally built to 1.1 Million sq ft and later expanded in 1996 and 1999"
+         ],
+         "address" : "5100 Kettering Road, Brooksville, FL, 34602-8311, USA",
+         "walmart_id" : "6020"
+      },
+      {
+         "square_feet" : "1,200,000",
+         "date_opened" : "Aug 2004",
+         "descriptions" : [],
+         "address" : "4001 S Jenkins Rd, Fort Pierce (St Lucie County), FL, 34981-4620, USA",
+         "walmart_id" : "7038"
+      },
+      {
+         "square_feet" : "994,000",
+         "date_opened" : "Jan 1986",
+         "descriptions" : [
+            "Walmart's 8th distribution center was originally built to 700,000 sq ft"
+         ],
+         "address" : "1401 Baker Hwy W ((or 690 Highway 206), Douglas, GA, 31533, USA",
+         "walmart_id" : "6010"
+      },
+      {
+         "square_feet" : "1,130,000",
+         "date_opened" : "Mar 2000",
+         "descriptions" : [
+            "General Merchandise RDC built for $55 Million"
+         ],
+         "address" : "385 Callaway Church Rd, LaGrange, GA, 30241, USA",
+         "walmart_id" : "6054"
+      },
+      {
+         "square_feet" : "1,244,000",
+         "date_opened" : "Jan 1985",
+         "descriptions" : [
+            "Walmart's 8th distribution center was originally built to 650,000 sq ft and was later expanded in 1987"
+         ],
+         "address" : "1501 E Mapleleaf Dr (or 1100 North Iris Street), Mt Pleasant, IA, 52641, USA",
+         "walmart_id" : "6009"
+      },
+      {
+         "square_feet" : "1,200,000",
+         "date_opened" : "Mar 2001",
+         "descriptions" : [],
+         "address" : "3100 Illinois Highway 89, Spring Valley, IL, 61362, USA",
+         "walmart_id" : "6092"
+      },
+      {
+         "square_feet" : "1,100,000",
+         "date_opened" : "March 1990",
+         "descriptions" : [],
+         "address" : "2100 East Tipton Street, Seymour, IN, 47274, USA",
+         "walmart_id" : "6017"
+      },
+      {
+         "square_feet" : "1,200,000",
+         "date_opened" : "Sep 1995",
+         "descriptions" : [],
+         "address" : "3300 Highway K 68 (or 3270 Nevada Terrace), Ottawa, KS, 66067, USA",
+         "walmart_id" : "6035"
+      },
+      {
+         "square_feet" : "1,200,000",
+         "date_opened" : "2002",
+         "descriptions" : [
+            "15 Miles of conveyor"
+         ],
+         "address" : "690 Crenshaw Blvd, Hopkinsville, KY, 42240, USA",
+         "walmart_id" : "6066"
+      },
+      {
+         "square_feet" : "1,200,000",
+         "date_opened" : "Sep 1999",
+         "descriptions" : [],
+         "address" : "3160 Highway 743, Opelousas, LA, 70570, USA",
+         "walmart_id" : "6048"
+      },
+      {
+         "square_feet" : "1,100,000",
+         "date_opened" : "Jun 2001",
+         "descriptions" : [],
+         "address" : "510 Jonesville Rd, Coldwater, MI, 49036, USA",
+         "walmart_id" : "6043"
+      },
+      {
+         "square_feet" : "1,200,000",
+         "date_opened" : "Sep 2001",
+         "descriptions" : [],
+         "address" : "1100 Matlock Dr., St. James, MO, 65559, USA",
+         "walmart_id" : "6069"
+      },
+      {
+         "square_feet" : "1,000,000",
+         "date_opened" : "Aug 1986",
+         "descriptions" : [
+            "Walmart's 9th distribution center was originally built to 700,000 sq ft"
+         ],
+         "address" : "2200 & 2210 Manufacturers Blvd., Brookhaven, MS, 39601, USA",
+         "walmart_id" : "6011"
+      },
+      {
+         "square_feet" : "1,200,000",
+         "date_opened" : "Sep 1997",
+         "descriptions" : [],
+         "address" : "1057 Sand Hill Road, Hope Mills, NC, 28348-9467, USA",
+         "walmart_id" : "6040"
+      },
+      {
+         "square_feet" : "1,200,000",
+         "date_opened" : "Sep 2002",
+         "descriptions" : [],
+         "address" : "220 Wal-Mart Drive, Shelby, NC, 28150, USA",
+         "walmart_id" : "6070"
+      },
+      {
+         "square_feet" : "1,100,000",
+         "date_opened" : "Sep 1996",
+         "descriptions" : [],
+         "address" : "42 Freetown Road, Raymond, NH, 03077-2385, USA",
+         "walmart_id" : "6030"
+      },
+      {
+         "square_feet" : "1,200,000",
+         "date_opened" : "Mar 1994",
+         "descriptions" : [],
+         "address" : "8827 Old River Rd, Marcy, NY, 13403, USA",
+         "walmart_id" : "6038/7052"
+      },
+      {
+         "square_feet" : "1,100,000",
+         "date_opened" : "Mar 1992",
+         "descriptions" : [],
+         "address" : "3880 Southwest Blvd, Grove City, OH, 43123, USA",
+         "walmart_id" : "6024"
+      },
+      {
+         "square_feet" : "1,175,000",
+         "date_opened" : "1997",
+         "descriptions" : [],
+         "address" : "2650 Highway 395 South, Hermiston, OR, 97838, USA",
+         "walmart_id" : "6037"
+      },
+      {
+         "square_feet" : "1,119,245",
+         "date_opened" : "Feb 2002",
+         "descriptions" : [],
+         "address" : "300 Veterans Dr., Tobyhanna, PA, 18466, USA",
+         "walmart_id" : "6080/7041"
+      },
+      {
+         "square_feet" : "1,190,000",
+         "date_opened" : "Sep 1993",
+         "descriptions" : [],
+         "address" : "100 Wal-Mart Dr. State Rte 970, Woodland, PA, 16881, USA",
+         "walmart_id" : "6027"
+      },
+      {
+         "square_feet" : "1,200,000",
+         "date_opened" : "Apr, 1997",
+         "descriptions" : [],
+         "address" : "1655 Pottertown Rd (1655 Bobwhite Trl), Midway (Bulls Gap), TN, 37809, USA",
+         "walmart_id" : "6039"
+      },
+      {
+         "square_feet" : "1,204,000",
+         "date_opened" : "Aug, 1988",
+         "descriptions" : [
+            "Originally built to 984,000 sq ft in 1988 and later expanded in 1998",
+            "Also services as an electronics repairs DC"
+         ],
+         "address" : "3900 North Ih 35, New Braunfels, TX, 78130, USA",
+         "walmart_id" : "6016/6139"
+      },
+      {
+         "square_feet" : "1,200,000",
+         "date_opened" : "1996",
+         "descriptions" : [],
+         "address" : "14863 FM 645 (or 8660 South US Hwy 79), Palestine, TX, 75803, USA",
+         "walmart_id" : "6036/7027"
+      },
+      {
+         "square_feet" : "1,200,000",
+         "date_opened" : "Sep 1986",
+         "descriptions" : [
+            "Originally built to 700,000 sq ft and later expanded in 1998"
+         ],
+         "address" : "3100 North-I 27, Plainview, TX, 79072, USA",
+         "walmart_id" : "6012"
+      },
+      {
+         "square_feet" : "1,200,000",
+         "date_opened" : "Aug 2001",
+         "descriptions" : [],
+         "address" : "2120 N Stemmons St., Sanger, TX, 76266, USA",
+         "walmart_id" : "6068"
+      },
+      {
+         "square_feet" : "1,200,000",
+         "date_opened" : "Jan 2005",
+         "descriptions" : [],
+         "address" : "3162 Brast Rd., Sealy, TX, 77474, USA",
+         "walmart_id" : "7036"
+      },
+      {
+         "square_feet" : "1,250,000",
+         "date_opened" : "Jul, 2005",
+         "descriptions" : [],
+         "address" : "929 North State Rd. 138, Grantsville, UT, 84029, USA",
+         "walmart_id" : "7026"
+      },
+      {
+         "square_feet" : "1,200,000",
+         "date_opened" : "2005",
+         "descriptions" : [],
+         "address" : "6000 Walton Way, Mount Crawford, VA, 22841, USA",
+         "walmart_id" : "7045"
+      },
+      {
+         "square_feet" : "1,200,000",
+         "date_opened" : "Dec 1991",
+         "descriptions" : [],
+         "address" : "21504 Cox Rd, Sutherland, VA, 23885, USA",
+         "walmart_id" : "6023"
+      },
+      {
+         "square_feet" : "1,200,000",
+         "date_opened" : "Mar 2007",
+         "descriptions" : [],
+         "address" : "115 Distribution Way, Beaver Dam, WI, 53916, USA",
+         "walmart_id" : "7039"
+      },
+      {
+         "square_feet" : "1,170,000",
+         "date_opened" : "Apr 1993",
+         "descriptions" : [],
+         "address" : "6100 3M Dr, Menomonie, WI, 54751, USA",
+         "walmart_id" : "6025"
+      },
+      {
+         "square_feet" : "1,200,000",
+         "date_opened" : "Planned for 2013",
+         "descriptions" : [
+            "Walmart first sought approval for this facility in 2002 and public resistance delayed the controversial approval which was finally received in Nov 2012."
+         ],
+         "address" : "Childs Avenue, Merced, CA",
+         "walmart_id" : "TBD"
+      }
+   ],
+   "FashionDistributionCenter" : [
+      {
+         "square_feet" : "640,000",
+         "date_opened" : "1986",
+         "descriptions" : [
+            "Walmart's 11th distribution center which also serves as a returns center, a jewelry distribution center, and a jewelry repair location for Sam's"
+         ],
+         "address" : "1110 S.E. 10th, Bentonville, AR, 72716, USA",
+         "walmart_id" : "6051/4751"
+      },
+      {
+         "square_feet" : "705,600",
+         "date_opened" : "Feb 1980",
+         "descriptions" : [
+            "Originally constructed to 390,000 sq ft and later expanded in 1981"
+         ],
+         "address" : "2100 Southeast 5th Street, Bentonville, AR, 72712-6128, USA",
+         "walmart_id" : "6008"
+      },
+      {
+         "square_feet" : "1,515,000",
+         "date_opened" : "Dec 1991",
+         "descriptions" : [
+            "Originally constructed to 937,000 sq ft. Expanded twice since 1991.",
+            "15 miles of conveyor."
+         ],
+         "address" : "333 S. 10th St., Greencastle, IN, 46135, USA",
+         "walmart_id" : "6022/7040"
+      },
+      {
+         "square_feet" : "800,000",
+         "date_opened" : "Aug 1995",
+         "descriptions" : [
+            "Distributes Apparel and shoes"
+         ],
+         "address" : "100 High St (721 Hwy Rte 20), Sharon Springs, NY, 13459-9510, USA",
+         "walmart_id" : "6041"
+      },
+      {
+         "square_feet" : "1,630,860",
+         "date_opened" : "Jan 1988",
+         "descriptions" : [
+            "Originally constructed to 583,000 sq ft;",
+            "Expanded in 1992",
+            "Facility converted into a Fashion DC in 2002"
+         ],
+         "address" : "1050 Vern Cora Rd, Laurens, SC, 29360, USA",
+         "walmart_id" : "6014/7031"
+      },
+      {
+         "square_feet" : "893,700",
+         "date_opened" : "Mar 1981",
+         "descriptions" : [
+            "Walmart's 5th DC. was originally built to 510,000 sq ft",
+            "Expanded in 1986.",
+            "Converted into a Fashion DC in May 1994."
+         ],
+         "address" : "201 Old Elkhart Road, Palestine, TX, 75801, USA",
+         "walmart_id" : "6005"
+      },
+      {
+         "square_feet" : "1,170,000",
+         "date_opened" : "Dec 1993",
+         "descriptions" : [],
+         "address" : "152 North Highway 91, Hurricane, UT, 84737, USA",
+         "walmart_id" : "6029"
+      },
+      {
+         "square_feet" : "SquareFeet",
+         "date_opened" : "YearOpened",
+         "descriptions" : [],
+         "address" : "Location",
+         "walmart_id" : "Footwear Distribution Centers"
+      },
+      {
+         "square_feet" : "236,100",
+         "date_opened" : "1990",
+         "descriptions" : [
+            "Footwear distribution center"
+         ],
+         "address" : "8100 S Zero Street, Fort Smith, AR, 72903-6600, USA",
+         "walmart_id" : "6007"
+      }
+   ],
+   "Full-Line GroceryDistributionCenter" : [
+      {
+         "square_feet" : "890,000",
+         "date_opened" : "Oct 2003",
+         "descriptions" : [
+            "Swisslog automation in the Perishables complex"
+         ],
+         "address" : "1005 Sara G Lott Blvd, Brundidge, AL, 36010, USA",
+         "walmart_id" : "7019"
+      },
+      {
+         "square_feet" : "880,000",
+         "date_opened" : "Jun 2000",
+         "descriptions" : [
+            "Originally constructed to 450,000 sq ft"
+         ],
+         "address" : "2701 Andrews Road, Opelika (Lee County), AL, 36801-9543, USA",
+         "walmart_id" : "6095"
+      },
+      {
+         "square_feet" : "850,000",
+         "date_opened" : "Apr 1993",
+         "descriptions" : [
+            "Originally a McLane's distribution center constructed to 750,000 sq ft"
+         ],
+         "address" : "3300 Sterlin Hurley Ind Highway, Clarksville, AR, 72830-1200, USA",
+         "walmart_id" : "6082"
+      },
+      {
+         "square_feet" : "875,100",
+         "date_opened" : "Sep 2003",
+         "descriptions" : [],
+         "address" : "868 W Peters Rd, Casa Grande, AZ, 85122, USA",
+         "walmart_id" : "7013"
+      },
+      {
+         "square_feet" : "940,000",
+         "date_opened" : "Feb 2005",
+         "descriptions" : [
+            "Swisslog automation in the Perishables complex"
+         ],
+         "address" : "6785 SW Enterprize Blvd, Arcadia, FL, 34269-6701, USA",
+         "walmart_id" : "7023"
+      },
+      {
+         "square_feet" : "880,000",
+         "date_opened" : "Apr 2002",
+         "descriptions" : [],
+         "address" : "2686 Commerce Rd., MacClenny, FL, 32063, USA",
+         "walmart_id" : "6099"
+      },
+      {
+         "square_feet" : "1,000,000",
+         "date_opened" : "Mar 1996",
+         "descriptions" : [],
+         "address" : "5600 State Rd. 544, Winter Haven, FL, 33881, USA",
+         "walmart_id" : "6071"
+      },
+      {
+         "square_feet" : "880,000",
+         "date_opened" : "Jul 2000",
+         "descriptions" : [
+            "Originally constructed as a Perishables DC at 480,000 sq ft . Added 400,000 sq ft of Dry Grocery space in 2006."
+         ],
+         "address" : "655 Unisia Dr., Monroe, GA, 30656, USA",
+         "walmart_id" : "6055"
+      },
+      {
+         "square_feet" : "933,100",
+         "date_opened" : "Apr 1997",
+         "descriptions" : [
+            "Originally constructed as a Perishables DC at 480,000 sq ft . Expanded in 2003"
+         ],
+         "address" : "3801 US Highway 50 E, Olney, IL, 62450, USA",
+         "walmart_id" : "6059"
+      },
+      {
+         "square_feet" : "1,000,000",
+         "date_opened" : "Apr 2006",
+         "descriptions" : [
+            "Swisslog automation in the Perishables complex"
+         ],
+         "address" : "23769 Mathew Rd, Sterling, IL, 61081, USA",
+         "walmart_id" : "7024"
+      },
+      {
+         "square_feet" : "990,000",
+         "date_opened" : "Apr 2007",
+         "descriptions" : [
+            "Swisslog automation in the Perishables complex"
+         ],
+         "address" : "100 Fischer Pkwy., Gas City, IN, 46933, USA",
+         "walmart_id" : "7055"
+      },
+      {
+         "square_feet" : "867,000",
+         "date_opened" : "Sep 1995",
+         "descriptions" : [
+            "Walmart's 3rd Grocery distribution center"
+         ],
+         "address" : "3701 Russell Dyche Memorial Hwy, London, KY, 40741, USA",
+         "walmart_id" : "6097"
+      },
+      {
+         "square_feet" : "850,000",
+         "date_opened" : "Feb 2001",
+         "descriptions" : [
+            "General Merchandise RDC built for $55 Million"
+         ],
+         "address" : "45346 Parkway Blvd, Robert, LA, 70455, USA",
+         "walmart_id" : "6057"
+      },
+      {
+         "square_feet" : "892,700",
+         "date_opened" : "2005",
+         "descriptions" : [
+            "Originally constructed to 447,055 sq ft for Dry Grocery; Expanded to include Perishables in Apr 2007.",
+            "Swisslog Automation in Perishables"
+         ],
+         "address" : "31 Alfred A Plourde Pkwy, Lewiston, ME, 04240, USA",
+         "walmart_id" : "7014"
+      },
+      {
+         "square_feet" : "850,000",
+         "date_opened" : "Jul 2001",
+         "descriptions" : [],
+         "address" : "5100 Brookhart Dr., Suite 100, Harrisonville, MO, 64701, USA",
+         "walmart_id" : "6065"
+      },
+      {
+         "square_feet" : "867,000",
+         "date_opened" : "Jun 1996",
+         "descriptions" : [],
+         "address" : "973 State Highway 30 W, New Albany, MS, 38652, USA",
+         "walmart_id" : "6072"
+      },
+      {
+         "square_feet" : "880,000",
+         "date_opened" : "Jun 2003",
+         "descriptions" : [],
+         "address" : "3001 E. State Farm Rd., North Platte, NE, 69101, USA",
+         "walmart_id" : "7018"
+      },
+      {
+         "square_feet" : "750,000",
+         "date_opened" : "Feb 1999",
+         "descriptions" : [],
+         "address" : "670 Los Morros Rd NW, Los Lunas, NM, 87031, USA",
+         "walmart_id" : "6084"
+      },
+      {
+         "square_feet" : "890,000",
+         "date_opened" : "Aug 2006",
+         "descriptions" : [],
+         "address" : "2155 USA Pkwy, Sparks (MacCarran), NV, 89434, USA",
+         "walmart_id" : "7048"
+      },
+      {
+         "square_feet" : "868,000",
+         "date_opened" : "2000",
+         "descriptions" : [],
+         "address" : "300 Enterprise Rd, Johnstown, NY, 12095-3345, USA",
+         "walmart_id" : "6096"
+      },
+      {
+         "square_feet" : "880,000",
+         "date_opened" : "Jul 2002",
+         "descriptions" : [],
+         "address" : "1400 Old Chillicothe Rd S, Washington Court House, OH, 43160, USA",
+         "walmart_id" : "7012"
+      },
+      {
+         "square_feet" : "880,000",
+         "date_opened" : "Jun 2003",
+         "descriptions" : [],
+         "address" : "843 State Route 43, Wintersville (Steubenville), OH, 43952, USA",
+         "walmart_id" : "7017"
+      },
+      {
+         "square_feet" : "893,900",
+         "date_opened" : "Apr 2005",
+         "descriptions" : [
+            "Swisslog automation in the Perishables complex"
+         ],
+         "address" : "397319 West 3000 Rd., Ochelata (Bartlesville/Ramona), OK, 74051, USA",
+         "walmart_id" : "7015"
+      },
+      {
+         "square_feet" : "860,000",
+         "date_opened" : "2000",
+         "descriptions" : [],
+         "address" : "2601 South Indian Meridian Rd, Pauls Valley, OK, 73075, USA",
+         "walmart_id" : "6042"
+      },
+      {
+         "square_feet" : "830,000",
+         "date_opened" : "May 1998",
+         "descriptions" : [],
+         "address" : "181 Walmart Road, Bedford (Cessna), PA, 15522, USA",
+         "walmart_id" : "6047"
+      },
+      {
+         "square_feet" : "900,000",
+         "date_opened" : "Aug 2006",
+         "descriptions" : [
+            "Swisslog automation in the Perishables complex"
+         ],
+         "address" : "390 Highridge Park Rd., Pottsville, PA, 17901, USA",
+         "walmart_id" : "7030"
+      },
+      {
+         "square_feet" : "830,000",
+         "date_opened" : "Apr 1997",
+         "descriptions" : [
+            "Facility was expanded in 2003"
+         ],
+         "address" : "160 Dove Sutton Road, Pageland, SC, 29728-1556, USA",
+         "walmart_id" : "6073"
+      },
+      {
+         "square_feet" : "850,000",
+         "date_opened" : "Feb 2001",
+         "descriptions" : [
+            "Originally constructed as a Perishables facility of 370,000 sq ft. Facility was expanded in Nov 2005."
+         ],
+         "address" : "285 Frank Martin Rd, Shelbyville, TN, 37160, USA",
+         "walmart_id" : "6062"
+      },
+      {
+         "square_feet" : "888,000",
+         "date_opened" : "Apr 2002",
+         "descriptions" : [],
+         "address" : "3470 Windmill Rd., Cleburne, TX, 76033, USA",
+         "walmart_id" : "6064"
+      },
+      {
+         "square_feet" : "901,000",
+         "date_opened" : "May 2003",
+         "descriptions" : [
+            "Swisslog automation in the Perishables complex which has 75' High ceilings."
+         ],
+         "address" : "20131 Gene Campbell Rd, New Caney, TX, 77357, USA",
+         "walmart_id" : "7010"
+      },
+      {
+         "square_feet" : "850,000",
+         "date_opened" : "Sep 1993",
+         "descriptions" : [
+            "Perishables facility was expanded by 94,000 sq ft in 2001"
+         ],
+         "address" : "9605 MW HK Dodgen Loop, Temple, TX, 76504, USA",
+         "walmart_id" : "6083"
+      },
+      {
+         "square_feet" : "875,000",
+         "date_opened" : "Jun 2000",
+         "descriptions" : [
+            "Originally built to 984,000 sq ft in 1988 and later expanded in 1998"
+         ],
+         "address" : "5400 W. Highway 83, Corinne, UT, 84307, USA",
+         "walmart_id" : "6090"
+      },
+      {
+         "square_feet" : "880,000",
+         "date_opened" : "Apr 2003",
+         "descriptions" : [
+            "Facility expanded in 2009"
+         ],
+         "address" : "10695 Freedom Trail, Gordonsville, VA, 22942-6938, USA",
+         "walmart_id" : "7016"
+      },
+      {
+         "square_feet" : "880,000",
+         "date_opened" : "Apr 2004",
+         "descriptions" : [
+            "Originally built to 700,000 sq ft and later expanded in 1998"
+         ],
+         "address" : "546 Woodall Rd., Grandview, WA, 98930, USA",
+         "walmart_id" : "7021"
+      },
+      {
+         "square_feet" : "880,000",
+         "date_opened" : "Mar 2000",
+         "descriptions" : [],
+         "address" : "525 Industrial Dr, Tomah, WI, 54660, USA",
+         "walmart_id" : "6085"
+      },
+      {
+         "square_feet" : "890,000",
+         "date_opened" : "Mar 2007",
+         "descriptions" : [
+            "Swisslog automation in the Perishables complex"
+         ],
+         "address" : "426 Logistics Dr, Cheyenne, WY, 82009, USA",
+         "walmart_id" : "7077"
+      },
+      {
+         "square_feet" : "SquareFeet",
+         "date_opened" : "YearOpened",
+         "descriptions" : [],
+         "address" : "Location",
+         "walmart_id" : "Perishables Distribution Centers"
+      },
+      {
+         "square_feet" : "520,000",
+         "date_opened" : "Apr 2011",
+         "descriptions" : [
+            "Freezer complex with 60,000 pallet positions that was leased in 2011 for 15 years"
+         ],
+         "address" : "1001 Columbia Ave., Riverside, CA, 92507, USA",
+         "walmart_id" : "7084"
+      },
+      {
+         "square_feet" : "400,000",
+         "date_opened" : "Jan 2001",
+         "descriptions" : [],
+         "address" : "1729 State Road 8, Auburn (Garrett), IN, 46706, USA",
+         "walmart_id" : "6074"
+      },
+      {
+         "square_feet" : "450,000",
+         "date_opened" : "May 2002",
+         "descriptions" : [],
+         "address" : "1309 Highway 24 East, Moberly, MO, 65270, USA",
+         "walmart_id" : "6077"
+      },
+      {
+         "square_feet" : "400,000",
+         "date_opened" : "Apr 2002",
+         "descriptions" : [],
+         "address" : "680 Vanco Mill Rd., Henderson, NC, 27537, USA",
+         "walmart_id" : "6091"
+      },
+      {
+         "square_feet" : "420,000",
+         "date_opened" : "May 2000",
+         "descriptions" : [],
+         "address" : "591 Apache Trail, Terrell, TX, 75160, USA",
+         "walmart_id" : "6056"
+      },
+      {
+         "square_feet" : "420,000",
+         "date_opened" : "2015",
+         "descriptions" : [
+            "Perishables distribution center with construction set to begin in 2014 and anticipated go-live in 2015."
+         ],
+         "address" : "County Road 12 and Highway 14, Mankato, MN, 56001, USA",
+         "walmart_id" : "TBD"
+      },
+      {
+         "square_feet" : "450,000",
+         "date_opened" : "Planned for Summer 2016",
+         "descriptions" : [
+            "Perishables distribution center with construction set to begin in 2015. Anticipated go-live in mid-2016. 450 jobs."
+         ],
+         "address" : "South of Cherry Lane along Interstates 40/85, Mebane, NC, 27302, USA",
+         "walmart_id" : "TBD"
+      },
+      {
+         "square_feet" : "SquareFeet",
+         "date_opened" : "YearOpened",
+         "descriptions" : [],
+         "address" : "Location",
+         "walmart_id" : "Dry Distribution Centers"
+      },
+      {
+         "square_feet" : "758,000",
+         "date_opened" : "Jun 2004",
+         "descriptions" : [
+            "3PL Inland Cold Storage Owned and Operated"
+         ],
+         "address" : "13550 Valley Blvd, Fontana, CA, 92335, USA",
+         "walmart_id" : "7047"
+      }
+   ],
+   "ImportDistributionCenter" : [
+      {
+         "square_feet" : "448,000",
+         "date_opened" : "2000",
+         "descriptions" : [
+            "Sam's Club Import Center run by 3PL DAMCO"
+         ],
+         "address" : "4155 Wineville Avenue, Mira Loma, CA, 91752, USA",
+         "walmart_id" : "4895"
+      },
+      {
+         "square_feet" : "755,100",
+         "date_opened" : "Aug 1999",
+         "descriptions" : [
+            "Walmart Import Center run by 3PL Schneider Logistics"
+         ],
+         "address" : "4250 Hamner Ave. , Mira Loma, CA, 91752, USA",
+         "walmart_id" : "6060"
+      },
+      {
+         "square_feet" : "901,662",
+         "date_opened" : "2000",
+         "descriptions" : [
+            "Walmart Import Center run by 3PL Schneider Logistics"
+         ],
+         "address" : "4100 Hamner Ave., Mira Loma, CA, 91752, USA",
+         "walmart_id" : "6060"
+      },
+      {
+         "square_feet" : "2,200,000",
+         "date_opened" : "Jan 1995",
+         "descriptions" : [
+            "Started as a 1,700,000 sq ft DC and later expanded by 500,000 in 1999."
+         ],
+         "address" : "299 A J Riggs Rd, Statesboro, GA, 30458, USA",
+         "walmart_id" : "6061"
+      },
+      {
+         "square_feet" : "3,400,000",
+         "date_opened" : "Jun 2006",
+         "descriptions" : [
+            "Walmart Import Center run by 3PL Schneider Logistics",
+            "Campus of 2 buildings 1.4 & 1.8 M sq ft"
+         ],
+         "address" : "26453 Center Point Dr, Elwood, IL, 60421, USA",
+         "walmart_id" : "7074/7078"
+      },
+      {
+         "square_feet" : "4,200,000",
+         "date_opened" : "Jun 2005",
+         "descriptions" : [
+            "Walmart Import Center run by 3PL UTi Logistics",
+            "Campus of 2 buildings"
+         ],
+         "address" : "4554 Oscar Nelson Jr Dr, Baytown, TX, 77520, USA",
+         "walmart_id" : "7622"
+      },
+      {
+         "square_feet" : "3,000,000",
+         "date_opened" : "Oct 2000",
+         "descriptions" : [
+            "Originally constructed to 1,000,000 sq ft and later expanded to 2,000,000 sq ft in Nov 2001 and again expanded by 1,000,000 sq ft in 2004-2005.",
+            "Campus of 2 buildings"
+         ],
+         "address" : "9305 Pocahontas Trail, Williamsburg (James City), VA, 23185, USA",
+         "walmart_id" : "6088/4896"
+      }
+   ],
+   "Center PointDistributionCenters" : [
+      {
+         "square_feet" : "18,700",
+         "date_opened" : "1994 est.",
+         "descriptions" : [],
+         "address" : "509 SE Martin Luther King Jr Pkwy, Bentonville, AR, 72712, USA",
+         "walmart_id" : "6901"
+      },
+      {
+         "square_feet" : "125,800",
+         "date_opened" : "Oct, 2006",
+         "descriptions" : [
+            "Lineage Logistics operates this facility which is a public cold storage for local Southern California frozen food manufacturers."
+         ],
+         "address" : "280 De Berry St, Colton, CA, 92324, USA",
+         "walmart_id" : "6907"
+      },
+      {
+         "square_feet" : "599,340",
+         "date_opened" : "May 2009",
+         "descriptions" : [
+            "3PL is The Gilbert Company"
+         ],
+         "address" : "11888 Mission Blvd, Mira Loma, CA, 91752, USA",
+         "walmart_id" : "6909"
+      },
+      {
+         "square_feet" : "108,850",
+         "date_opened" : "May 2009",
+         "descriptions" : [
+            "3PL is MIQ Logistics"
+         ],
+         "address" : "600 Live Oak Ave, Irwindale, CA, 91706, USA",
+         "walmart_id" : "6912"
+      },
+      {
+         "square_feet" : "53,360",
+         "date_opened" : "Sep 2011",
+         "descriptions" : [
+            "3PL is Exel Logistics"
+         ],
+         "address" : "1200 Mason Dixon Line, Conley, GA, 30288, USA",
+         "walmart_id" : "7101"
+      },
+      {
+         "square_feet" : "177,800",
+         "date_opened" : "2011 est.",
+         "descriptions" : [
+            "Americold operates this facility which is a public cold storage facility"
+         ],
+         "address" : "6765 Imron Dr, Belvidere, IL, 61008, USA",
+         "walmart_id" : "6974"
+      },
+      {
+         "square_feet" : "150,720",
+         "date_opened" : "July 2011",
+         "descriptions" : [
+            "3PL is Linc Logistics Insight Corp."
+         ],
+         "address" : "1340 141st Street, Hammond, IN, 46327, USA",
+         "walmart_id" : "7100"
+      },
+      {
+         "square_feet" : "104,380",
+         "date_opened" : "June, 2011",
+         "descriptions" : [
+            "3PL is Distribution Technology Inc."
+         ],
+         "address" : "423 Pitts School Rd , Concord, NC, 28027, USA",
+         "walmart_id" : "7976"
+      },
+      {
+         "square_feet" : "103,700",
+         "date_opened" : "Jan 2012",
+         "descriptions" : [
+            "3PL is MIQ Logistics Inc."
+         ],
+         "address" : "121 Powerline Road, Tannersville, PA, 18372, USA",
+         "walmart_id" : "7837"
+      },
+      {
+         "square_feet" : "93,100",
+         "date_opened" : "Apr 2011",
+         "descriptions" : [
+            "3PL is Linc Logistics Insight Corp."
+         ],
+         "address" : "1980 Getwell Road, Memphis, TN, 38111, USA",
+         "walmart_id" : "7840"
+      },
+      {
+         "square_feet" : "77,000",
+         "date_opened" : "2010 est.",
+         "descriptions" : [
+            "Americold operates this facility which is a public cold storage facility"
+         ],
+         "address" : "5210 Catron Dr, Dallas, TX, 75227, USA",
+         "walmart_id" : "6956"
+      }
+   ]
+}

@@ -1,0 +1,10 @@
+ Name                                                  Null?    Type                                
+ ----------------------------------------------------- -------- ------------------------------------
+ OID                                                   NOT NULL INTEGER                             
+ ACCT_TYPE                                             NOT NULL INTEGER                             
+ NAME                                                  NULL     VARCHAR                             
+ TOTAL                                                 NULL     INTEGER                             
+ PAST_DUE_90                                           NULL     INTEGER                             
+ PAST_DUE_180                                          NULL     INTEGER                             
+ LIQUIDATED                                            NULL     INTEGER                             
+ RPT_ID                                                NULL     INTEGER                             

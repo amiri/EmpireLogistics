@@ -1,0 +1,16 @@
+ Name                                                  Null?    Type                                
+ ----------------------------------------------------- -------- ------------------------------------
+ PAYER_PAYEE_ID                                        NOT NULL INTEGER                             
+ PAYER_PAYEE_TYPE                                      NOT NULL INTEGER                             
+ RCPT_DISB_TYPE                                        NOT NULL INTEGER                             
+ NAME                                                  NULL     VARCHAR                             
+ PO_BOX                                                NULL     VARCHAR                             
+ STREET                                                NULL     VARCHAR                             
+ CITY                                                  NULL     VARCHAR                             
+ STATE                                                 NULL     CHAR                                
+ ZIP                                                   NULL     VARCHAR                             
+ TYPE_OR_CLASS                                         NULL     VARCHAR                             
+ ITEMIZED                                              NULL     INTEGER                             
+ NON_ITEMIZED                                          NULL     INTEGER                             
+ TOTAL                                                 NULL     INTEGER                             
+ RPT_ID                                                NULL     INTEGER                             

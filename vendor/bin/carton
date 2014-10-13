@@ -22,7 +22,7 @@ $fatpacked{"App/FatPacker.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'A
   use File::Path qw(mkpath rmtree);
   use B qw(perlstring);
   
-  our $VERSION = '0.010001'; # 0.10.1
+  our $VERSION = '0.010002'; # 0.10.2
   
   $VERSION = eval $VERSION;
   
@@ -23687,7 +23687,7 @@ $fatpacked{"CPAN/Meta.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'CPAN_
   use strict;
   use warnings;
   package CPAN::Meta;
-  our $VERSION = '2.141520'; # VERSION
+  our $VERSION = '2.142060'; # VERSION
   
   #pod =head1 SYNOPSIS
   #pod
@@ -24326,7 +24326,7 @@ $fatpacked{"CPAN/Meta.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'CPAN_
   
   =head1 VERSION
   
-  version 2.141520
+  version 2.142060
   
   =head1 SYNOPSIS
   
@@ -24804,7 +24804,7 @@ $fatpacked{"CPAN/Meta/Converter.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n
   use strict;
   use warnings;
   package CPAN::Meta::Converter;
-  our $VERSION = '2.141520'; # VERSION
+  our $VERSION = '2.142060'; # VERSION
   
   #pod =head1 SYNOPSIS
   #pod
@@ -25543,12 +25543,15 @@ $fatpacked{"CPAN/Meta/Converter.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n
   }
   
   sub _convert {
-    my ($data, $spec, $to_version) = @_;
+    my ($data, $spec, $to_version, $is_fragment) = @_;
   
     my $new_data = {};
     for my $key ( keys %$spec ) {
       next if $key eq ':custom' || $key eq ':drop';
       next unless my $fcn = $spec->{$key};
+      if ( $is_fragment && $key eq 'generated_by' ) {
+        $fcn = \&_keep;
+      }
       die "spec for '$key' is not a coderef"
         unless ref $fcn && ref $fcn eq 'CODE';
       my $new_value = $fcn->($data->{$key}, $key, $data, $to_version);
@@ -26186,13 +26189,14 @@ $fatpacked{"CPAN/Meta/Converter.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n
     my $args = { %args };
   
     my $new_version = $args->{version} || $HIGHEST;
+    my $is_fragment = $args->{is_fragment};
   
     my ($old_version) = $self->{spec};
     my $converted = _dclone($self->{data});
   
     if ( $old_version == $new_version ) {
-      $converted = _convert( $converted, $cleanup{$old_version}, $old_version );
-      unless ( $args->{no_validation} ) {
+      $converted = _convert( $converted, $cleanup{$old_version}, $old_version, $is_fragment );
+      unless ( $args->{is_fragment} ) {
         my $cmv = CPAN::Meta::Validator->new( $converted );
         unless ( $cmv->is_valid ) {
           my $errs = join("\n", $cmv->errors);
@@ -26207,8 +26211,8 @@ $fatpacked{"CPAN/Meta/Converter.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n
         next if $vers[$i] > $old_version;
         last if $vers[$i+1] < $new_version;
         my $spec_string = "$vers[$i+1]-from-$vers[$i]";
-        $converted = _convert( $converted, $down_convert{$spec_string}, $vers[$i+1] );
-        unless ( $args->{no_validation} ) {
+        $converted = _convert( $converted, $down_convert{$spec_string}, $vers[$i+1], $is_fragment );
+        unless ( $args->{is_fragment} ) {
           my $cmv = CPAN::Meta::Validator->new( $converted );
           unless ( $cmv->is_valid ) {
             my $errs = join("\n", $cmv->errors);
@@ -26224,8 +26228,8 @@ $fatpacked{"CPAN/Meta/Converter.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n
         next if $vers[$i] < $old_version;
         last if $vers[$i+1] > $new_version;
         my $spec_string = "$vers[$i+1]-from-$vers[$i]";
-        $converted = _convert( $converted, $up_convert{$spec_string}, $vers[$i+1] );
-        unless ( $args->{no_validation} ) {
+        $converted = _convert( $converted, $up_convert{$spec_string}, $vers[$i+1], $is_fragment );
+        unless ( $args->{is_fragment} ) {
           my $cmv = CPAN::Meta::Validator->new( $converted );
           unless ( $cmv->is_valid ) {
             my $errs = join("\n", $cmv->errors);
@@ -26255,7 +26259,7 @@ $fatpacked{"CPAN/Meta/Converter.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n
       grep { defined }
       map { $fragments_generate{$old_version}{$_} }
       keys %{ $self->{data} };
-    my $converted = $self->convert( version => $HIGHEST, no_validation => 1 );
+    my $converted = $self->convert( version => $HIGHEST, is_fragment => 1 );
     for my $key ( keys %$converted ) {
       next if $key =~ /^x_/i || $key eq 'meta-spec';
       delete $converted->{$key} unless $expected{$key};
@@ -26277,7 +26281,7 @@ $fatpacked{"CPAN/Meta/Converter.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n
   
   =head1 VERSION
   
-  version 2.141520
+  version 2.142060
   
   =head1 SYNOPSIS
   
@@ -26420,7 +26424,7 @@ $fatpacked{"CPAN/Meta/Feature.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".
   use strict;
   use warnings;
   package CPAN::Meta::Feature;
-  our $VERSION = '2.141520'; # VERSION
+  our $VERSION = '2.142060'; # VERSION
   
   use CPAN::Meta::Prereqs;
   
@@ -26496,7 +26500,7 @@ $fatpacked{"CPAN/Meta/Feature.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".
   
   =head1 VERSION
   
-  version 2.141520
+  version 2.142060
   
   =head1 DESCRIPTION
   
@@ -26569,7 +26573,7 @@ $fatpacked{"CPAN/Meta/History.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".
   use strict;
   use warnings;
   package CPAN::Meta::History;
-  our $VERSION = '2.141520'; # VERSION
+  our $VERSION = '2.142060'; # VERSION
   
   1;
   
@@ -26587,7 +26591,7 @@ $fatpacked{"CPAN/Meta/History.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".
   
   =head1 VERSION
   
-  version 2.141520
+  version 2.142060
   
   =head1 DESCRIPTION
   
@@ -26881,12 +26885,263 @@ $fatpacked{"CPAN/Meta/History.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".
   =cut
 CPAN_META_HISTORY
 
+$fatpacked{"CPAN/Meta/Merge.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'CPAN_META_MERGE';
+  package CPAN::Meta::Merge;
+  
+  use strict;
+  use warnings;
+  
+  our $VERSION = '2.142060'; # VERSION
+  
+  use Carp qw/croak/;
+  use Scalar::Util qw/blessed/;
+  use CPAN::Meta::Converter;
+  
+  sub _identical {
+    my ($left, $right, $path) = @_;
+    croak "Can't merge attribute " . join '.', @{$path} unless $left eq $right;
+    return $left;
+  }
+  
+  sub _merge {
+    my ($current, $next, $mergers, $path) = @_;
+    for my $key (keys %{$next}) {
+      if (not exists $current->{$key}) {
+        $current->{$key} = $next->{$key};
+      }
+      elsif (my $merger = $mergers->{$key}) {
+        $current->{$key} = $merger->($current->{$key}, $next->{$key}, [ @{$path}, $key ]);
+      }
+      elsif ($merger = $mergers->{':default'}) {
+        $current->{$key} = $merger->($current->{$key}, $next->{$key}, [ @{$path}, $key ]);
+      }
+      else {
+        croak sprintf "Can't merge unknown attribute '%s'", join '.', @{$path}, $key;
+      }
+    }
+    return $current;
+  }
+  
+  sub _uniq {
+    my %seen = ();
+    return grep { not $seen{$_}++ } @_;
+  }
+  
+  sub _set_addition {
+    my ($left, $right) = @_;
+    return [ +_uniq(@{$left}, @{$right}) ];
+  }
+  
+  sub _uniq_map {
+    my ($left, $right, $path) = @_;
+    for my $key (keys %{$right}) {
+      if (not exists $left->{$key}) {
+        $left->{$key} = $right->{$key};
+      }
+      else {
+        croak 'Duplication of element ' . join '.', @{$path}, $key;
+      }
+    }
+    return $left;
+  }
+  
+  sub _improvize {
+    my ($left, $right, $path) = @_;
+    my ($name) = reverse @{$path};
+    if ($name =~ /^x_/) {
+      if (ref($left) eq 'ARRAY') {
+        return _set_addition($left, $right, $path);
+      }
+      elsif (ref($left) eq 'HASH') {
+        return _uniq_map($left, $right, $path);
+      }
+      else {
+        return _identical($left, $right, $path);
+      }
+    }
+    croak sprintf "Can't merge '%s'", join '.', @{$path};
+  }
+  
+  my %default = (
+    abstract       => \&_identical,
+    author         => \&_set_addition,
+    dynamic_config => sub {
+      my ($left, $right) = @_;
+      return $left || $right;
+    },
+    generated_by => sub {
+      my ($left, $right) = @_;
+      return join ', ', _uniq(split(/, /, $left), split(/, /, $right));
+    },
+    license     => \&_set_addition,
+    'meta-spec' => {
+      version => \&_identical,
+      url     => \&_identical
+    },
+    name              => \&_identical,
+    release_status    => \&_identical,
+    version           => \&_identical,
+    description       => \&_identical,
+    keywords          => \&_set_addition,
+    no_index          => { map { ($_ => \&_set_addition) } qw/file directory package namespace/ },
+    optional_features => \&_uniq_map,
+    prereqs           => sub {
+      require CPAN::Meta::Prereqs;
+      my ($left, $right) = map { CPAN::Meta::Prereqs->new($_) } @_[0,1];
+      return $left->with_merged_prereqs($right)->as_string_hash;
+    },
+    provides  => \&_uniq_map,
+    resources => {
+      license    => \&_set_addition,
+      homepage   => \&_identical,
+      bugtracker => \&_uniq_map,
+      repository => \&_uniq_map,
+      ':default' => \&_improvize,
+    },
+    ':default' => \&_improvize,
+  );
+  
+  sub new {
+    my ($class, %arguments) = @_;
+    croak 'default version required' if not exists $arguments{default_version};
+    my %mapping = %default;
+    my %extra = %{ $arguments{extra_mappings} || {} };
+    for my $key (keys %extra) {
+      if (ref($mapping{$key}) eq 'HASH') {
+        $mapping{$key} = { %{ $mapping{$key} }, %{ $extra{$key} } };
+      }
+      else {
+        $mapping{$key} = $extra{$key};
+      }
+    }
+    return bless {
+      default_version => $arguments{default_version},
+      mapping => _coerce_mapping(\%mapping, []),
+    }, $class;
+  }
+  
+  my %coderef_for = (
+    set_addition => \&_set_addition,
+    uniq_map     => \&_uniq_map,
+    identical    => \&_identical,
+    improvize    => \&_improvize,
+  );
+  
+  sub _coerce_mapping {
+    my ($orig, $map_path) = @_;
+    my %ret;
+    for my $key (keys %{$orig}) {
+      my $value = $orig->{$key};
+      if (ref($orig->{$key}) eq 'CODE') {
+        $ret{$key} = $value;
+      }
+      elsif (ref($value) eq 'HASH') {
+        my $mapping = _coerce_mapping($value, [ @{$map_path}, $key ]);
+        $ret{$key} = sub {
+          my ($left, $right, $path) = @_;
+          return _merge($left, $right, $mapping, [ @{$path}, $key ]);
+        };
+      }
+      elsif ($coderef_for{$value}) {
+        $ret{$key} = $coderef_for{$value};
+      }
+      else {
+        croak "Don't know what to do with " . join '.', @{$map_path}, $key;
+      }
+    }
+    return \%ret;
+  }
+  
+  sub merge {
+    my ($self, @items) = @_;
+    my $current = {};
+    for my $next (@items) {
+      if ( blessed($next) && $next->isa('CPAN::Meta') ) {
+        $next = $next->as_string_hash;
+      }
+      elsif ( ref($next) eq 'HASH' ) {
+        my $cmc = CPAN::Meta::Converter->new(
+          $next, default_version => $self->{default_version}
+        );
+        $next = $cmc->upgrade_fragment;
+      }
+      else {
+        croak "Don't know how to merge '$next'";
+      }
+      $current = _merge($current, $next, $self->{mapping}, []);
+    }
+    return $current;
+  }
+  
+  1;
+  
+  # ABSTRACT: Merging CPAN Meta fragments
+  
+  __END__
+  
+  =pod
+  
+  =encoding UTF-8
+  
+  =head1 NAME
+  
+  CPAN::Meta::Merge - Merging CPAN Meta fragments
+  
+  =head1 VERSION
+  
+  version 2.142060
+  
+  =head1 SYNOPSIS
+  
+   my $merger = CPAN::Meta::Merge->new(default_version => "2");
+   my $meta = $merger->merge($base, @additional);
+  
+  =head1 DESCRIPTION
+  
+  =head1 METHODS
+  
+  =head2 new
+  
+  This creates a CPAN::Meta::Merge object. It takes one mandatory named
+  argument, C<version>, declaring the version of the meta-spec that must be
+  used for the merge. It can optionally take an C<extra_mappings> argument
+  that allows one to add additional merging functions for specific elements.
+  
+  =head2 merge(@fragments)
+  
+  Merge all C<@fragments> together. It will accept both CPAN::Meta objects and
+  (possibly incomplete) hashrefs of metadata.
+  
+  =head1 AUTHORS
+  
+  =over 4
+  
+  =item *
+  
+  David Golden <dagolden@cpan.org>
+  
+  =item *
+  
+  Ricardo Signes <rjbs@cpan.org>
+  
+  =back
+  
+  =head1 COPYRIGHT AND LICENSE
+  
+  This software is copyright (c) 2010 by David Golden and Ricardo Signes.
+  
+  This is free software; you can redistribute it and/or modify it under
+  the same terms as the Perl 5 programming language system itself.
+  
+  =cut
+CPAN_META_MERGE
+
 $fatpacked{"CPAN/Meta/Prereqs.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'CPAN_META_PREREQS';
   use 5.006;
   use strict;
   use warnings;
   package CPAN::Meta::Prereqs;
-  our $VERSION = '2.141520'; # VERSION
+  our $VERSION = '2.142060'; # VERSION
   
   #pod =head1 DESCRIPTION
   #pod
@@ -27170,7 +27425,7 @@ $fatpacked{"CPAN/Meta/Prereqs.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".
   
   =head1 VERSION
   
-  version 2.141520
+  version 2.142060
   
   =head1 DESCRIPTION
   
@@ -27306,14 +27561,55 @@ $fatpacked{"CPAN/Meta/Requirements.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\
   use strict;
   use warnings;
   package CPAN::Meta::Requirements;
-  our $VERSION = '2.125'; # VERSION
+  our $VERSION = '2.126'; # VERSION
   # ABSTRACT: a set of version requirements for a CPAN dist
   
+  #pod =head1 SYNOPSIS
+  #pod
+  #pod   use CPAN::Meta::Requirements;
+  #pod
+  #pod   my $build_requires = CPAN::Meta::Requirements->new;
+  #pod
+  #pod   $build_requires->add_minimum('Library::Foo' => 1.208);
+  #pod
+  #pod   $build_requires->add_minimum('Library::Foo' => 2.602);
+  #pod
+  #pod   $build_requires->add_minimum('Module::Bar'  => 'v1.2.3');
+  #pod
+  #pod   $METAyml->{build_requires} = $build_requires->as_string_hash;
+  #pod
+  #pod =head1 DESCRIPTION
+  #pod
+  #pod A CPAN::Meta::Requirements object models a set of version constraints like
+  #pod those specified in the F<META.yml> or F<META.json> files in CPAN distributions,
+  #pod and as defined by L<CPAN::Meta::Spec>;
+  #pod It can be built up by adding more and more constraints, and it will reduce them
+  #pod to the simplest representation.
+  #pod
+  #pod Logically impossible constraints will be identified immediately by thrown
+  #pod exceptions.
+  #pod
+  #pod =cut
   
   use Carp ();
   use Scalar::Util ();
   use version 0.77 (); # the ->parse method
   
+  #pod =method new
+  #pod
+  #pod   my $req = CPAN::Meta::Requirements->new;
+  #pod
+  #pod This returns a new CPAN::Meta::Requirements object.  It takes an optional
+  #pod hash reference argument.  Currently, only one key is supported:
+  #pod
+  #pod =for :list
+  #pod * C<bad_version_hook> -- if provided, when a version cannot be parsed into
+  #pod   a version object, this code reference will be called with the invalid version
+  #pod   string as an argument.  It must return a valid version object.
+  #pod
+  #pod All other keys are ignored.
+  #pod
+  #pod =cut
   
   my @valid_options = qw( bad_version_hook );
   
@@ -27333,6 +27629,7 @@ $fatpacked{"CPAN/Meta/Requirements.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\
     my $vobj;
   
     eval {
+      local $SIG{__WARN__} = sub { die "Invalid version: $_[0]" };
       $vobj  = (! defined $version)                ? version->parse(0)
              : (! Scalar::Util::blessed($version)) ? version->parse($version)
              :                                       $version;
@@ -27361,6 +27658,57 @@ $fatpacked{"CPAN/Meta/Requirements.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\
     return $vobj;
   }
   
+  #pod =method add_minimum
+  #pod
+  #pod   $req->add_minimum( $module => $version );
+  #pod
+  #pod This adds a new minimum version requirement.  If the new requirement is
+  #pod redundant to the existing specification, this has no effect.
+  #pod
+  #pod Minimum requirements are inclusive.  C<$version> is required, along with any
+  #pod greater version number.
+  #pod
+  #pod This method returns the requirements object.
+  #pod
+  #pod =method add_maximum
+  #pod
+  #pod   $req->add_maximum( $module => $version );
+  #pod
+  #pod This adds a new maximum version requirement.  If the new requirement is
+  #pod redundant to the existing specification, this has no effect.
+  #pod
+  #pod Maximum requirements are inclusive.  No version strictly greater than the given
+  #pod version is allowed.
+  #pod
+  #pod This method returns the requirements object.
+  #pod
+  #pod =method add_exclusion
+  #pod
+  #pod   $req->add_exclusion( $module => $version );
+  #pod
+  #pod This adds a new excluded version.  For example, you might use these three
+  #pod method calls:
+  #pod
+  #pod   $req->add_minimum( $module => '1.00' );
+  #pod   $req->add_maximum( $module => '1.82' );
+  #pod
+  #pod   $req->add_exclusion( $module => '1.75' );
+  #pod
+  #pod Any version between 1.00 and 1.82 inclusive would be acceptable, except for
+  #pod 1.75.
+  #pod
+  #pod This method returns the requirements object.
+  #pod
+  #pod =method exact_version
+  #pod
+  #pod   $req->exact_version( $module => $version );
+  #pod
+  #pod This sets the version required for the given module to I<exactly> the given
+  #pod version.  No other version would be considered acceptable.
+  #pod
+  #pod This method returns the requirements object.
+  #pod
+  #pod =cut
   
   BEGIN {
     for my $type (qw(minimum maximum exclusion exact_version)) {
@@ -27382,6 +27730,17 @@ $fatpacked{"CPAN/Meta/Requirements.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\
     }
   }
   
+  #pod =method add_requirements
+  #pod
+  #pod   $req->add_requirements( $another_req_object );
+  #pod
+  #pod This method adds all the requirements in the given CPAN::Meta::Requirements object
+  #pod to the requirements object on which it was called.  If there are any conflicts,
+  #pod an exception is thrown.
+  #pod
+  #pod This method returns the requirements object.
+  #pod
+  #pod =cut
   
   sub add_requirements {
     my ($self, $req) = @_;
@@ -27397,6 +27756,22 @@ $fatpacked{"CPAN/Meta/Requirements.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\
     return $self;
   }
   
+  #pod =method accepts_module
+  #pod
+  #pod   my $bool = $req->accepts_module($module => $version);
+  #pod
+  #pod Given an module and version, this method returns true if the version
+  #pod specification for the module accepts the provided version.  In other words,
+  #pod given:
+  #pod
+  #pod   Module => '>= 1.00, < 2.00'
+  #pod
+  #pod We will accept 1.00 and 1.75 but not 0.50 or 2.00.
+  #pod
+  #pod For modules that do not appear in the requirements, this method will return
+  #pod true.
+  #pod
+  #pod =cut
   
   sub accepts_module {
     my ($self, $module, $version) = @_;
@@ -27407,6 +27782,15 @@ $fatpacked{"CPAN/Meta/Requirements.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\
     return $range->_accepts($version);
   }
   
+  #pod =method clear_requirement
+  #pod
+  #pod   $req->clear_requirement( $module );
+  #pod
+  #pod This removes the requirement for a given module from the object.
+  #pod
+  #pod This method returns the requirements object.
+  #pod
+  #pod =cut
   
   sub clear_requirement {
     my ($self, $module) = @_;
@@ -27421,6 +27805,17 @@ $fatpacked{"CPAN/Meta/Requirements.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\
     return $self;
   }
   
+  #pod =method requirements_for_module
+  #pod
+  #pod   $req->requirements_for_module( $module );
+  #pod
+  #pod This returns a string containing the version requirements for a given module in
+  #pod the format described in L<CPAN::Meta::Spec> or undef if the given module has no
+  #pod requirements. This should only be used for informational purposes such as error
+  #pod messages and should not be interpreted or used for comparison (see
+  #pod L</accepts_module> instead.)
+  #pod
+  #pod =cut
   
   sub requirements_for_module {
     my ($self, $module) = @_;
@@ -27429,9 +27824,23 @@ $fatpacked{"CPAN/Meta/Requirements.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\
     return $entry->as_string;
   }
   
+  #pod =method required_modules
+  #pod
+  #pod This method returns a list of all the modules for which requirements have been
+  #pod specified.
+  #pod
+  #pod =cut
   
   sub required_modules { keys %{ $_[0]{requirements} } }
   
+  #pod =method clone
+  #pod
+  #pod   $req->clone;
+  #pod
+  #pod This method returns a clone of the invocant.  The clone and the original object
+  #pod can then be changed independent of one another.
+  #pod
+  #pod =cut
   
   sub clone {
     my ($self) = @_;
@@ -27460,6 +27869,12 @@ $fatpacked{"CPAN/Meta/Requirements.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\
     $self->{requirements}{ $name } = $new;
   }
   
+  #pod =method is_simple
+  #pod
+  #pod This method returns true if and only if all requirements are inclusive minimums
+  #pod -- that is, if their string expression is just the version number.
+  #pod
+  #pod =cut
   
   sub is_simple {
     my ($self) = @_;
@@ -27471,12 +27886,61 @@ $fatpacked{"CPAN/Meta/Requirements.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\
     return 1;
   }
   
+  #pod =method is_finalized
+  #pod
+  #pod This method returns true if the requirements have been finalized by having the
+  #pod C<finalize> method called on them.
+  #pod
+  #pod =cut
   
   sub is_finalized { $_[0]{finalized} }
   
+  #pod =method finalize
+  #pod
+  #pod This method marks the requirements finalized.  Subsequent attempts to change
+  #pod the requirements will be fatal, I<if> they would result in a change.  If they
+  #pod would not alter the requirements, they have no effect.
+  #pod
+  #pod If a finalized set of requirements is cloned, the cloned requirements are not
+  #pod also finalized.
+  #pod
+  #pod =cut
   
   sub finalize { $_[0]{finalized} = 1 }
   
+  #pod =method as_string_hash
+  #pod
+  #pod This returns a reference to a hash describing the requirements using the
+  #pod strings in the L<CPAN::Meta::Spec> specification.
+  #pod
+  #pod For example after the following program:
+  #pod
+  #pod   my $req = CPAN::Meta::Requirements->new;
+  #pod
+  #pod   $req->add_minimum('CPAN::Meta::Requirements' => 0.102);
+  #pod
+  #pod   $req->add_minimum('Library::Foo' => 1.208);
+  #pod
+  #pod   $req->add_maximum('Library::Foo' => 2.602);
+  #pod
+  #pod   $req->add_minimum('Module::Bar'  => 'v1.2.3');
+  #pod
+  #pod   $req->add_exclusion('Module::Bar'  => 'v1.2.8');
+  #pod
+  #pod   $req->exact_version('Xyzzy'  => '6.01');
+  #pod
+  #pod   my $hashref = $req->as_string_hash;
+  #pod
+  #pod C<$hashref> would contain:
+  #pod
+  #pod   {
+  #pod     'CPAN::Meta::Requirements' => '0.102',
+  #pod     'Library::Foo' => '>= 1.208, <= 2.206',
+  #pod     'Module::Bar'  => '>= v1.2.3, != v1.2.8',
+  #pod     'Xyzzy'        => '== 6.01',
+  #pod   }
+  #pod
+  #pod =cut
   
   sub as_string_hash {
     my ($self) = @_;
@@ -27487,6 +27951,38 @@ $fatpacked{"CPAN/Meta/Requirements.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\
     return \%hash;
   }
   
+  #pod =method add_string_requirement
+  #pod
+  #pod   $req->add_string_requirement('Library::Foo' => '>= 1.208, <= 2.206');
+  #pod
+  #pod This method parses the passed in string and adds the appropriate requirement
+  #pod for the given module.  It understands version ranges as described in the
+  #pod L<CPAN::Meta::Spec/Version Ranges>. For example:
+  #pod
+  #pod =over 4
+  #pod
+  #pod =item 1.3
+  #pod
+  #pod =item >= 1.3
+  #pod
+  #pod =item <= 1.3
+  #pod
+  #pod =item == 1.3
+  #pod
+  #pod =item != 1.3
+  #pod
+  #pod =item > 1.3
+  #pod
+  #pod =item < 1.3
+  #pod
+  #pod =item >= 1.3, != 1.5, <= 2.0
+  #pod
+  #pod A version number without an operator is equivalent to specifying a minimum
+  #pod (C<E<gt>=>).  Extra whitespace is allowed.
+  #pod
+  #pod =back
+  #pod
+  #pod =cut
   
   my %methods_for_op = (
     '==' => [ qw(exact_version) ],
@@ -27520,6 +28016,15 @@ $fatpacked{"CPAN/Meta/Requirements.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\
     }
   }
   
+  #pod =method from_string_hash
+  #pod
+  #pod   my $req = CPAN::Meta::Requirements->from_string_hash( \%hash );
+  #pod
+  #pod This is an alternate constructor for a CPAN::Meta::Requirements object.  It takes
+  #pod a hash of module names and version requirement strings and returns a new
+  #pod CPAN::Meta::Requirements object.
+  #pod
+  #pod =cut
   
   sub from_string_hash {
     my ($class, $hash) = @_;
@@ -27741,7 +28246,7 @@ $fatpacked{"CPAN/Meta/Requirements.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\
   
   =pod
   
-  =encoding utf-8
+  =encoding UTF-8
   
   =head1 NAME
   
@@ -27749,7 +28254,7 @@ $fatpacked{"CPAN/Meta/Requirements.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\
   
   =head1 VERSION
   
-  version 2.125
+  version 2.126
   
   =head1 SYNOPSIS
   
@@ -27768,7 +28273,8 @@ $fatpacked{"CPAN/Meta/Requirements.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\
   =head1 DESCRIPTION
   
   A CPAN::Meta::Requirements object models a set of version constraints like
-  those specified in the F<META.yml> or F<META.json> files in CPAN distributions.
+  those specified in the F<META.yml> or F<META.json> files in CPAN distributions,
+  and as defined by L<CPAN::Meta::Spec>;
   It can be built up by adding more and more constraints, and it will reduce them
   to the simplest representation.
   
@@ -27782,16 +28288,13 @@ $fatpacked{"CPAN/Meta/Requirements.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\
     my $req = CPAN::Meta::Requirements->new;
   
   This returns a new CPAN::Meta::Requirements object.  It takes an optional
-  hash reference argument.  The following keys are supported:
+  hash reference argument.  Currently, only one key is supported:
   
   =over 4
   
   =item *
   
-  <bad_version_hook> -- if provided, when a version cannot be parsed into
-  
-  a version object, this code reference will be called with the invalid version
-  string as an argument.  It must return a valid version object.
+  C<bad_version_hook> -- if provided, when a version cannot be parsed into a version object, this code reference will be called with the invalid version string as an argument.  It must return a valid version object.
   
   =back
   
@@ -27859,7 +28362,7 @@ $fatpacked{"CPAN/Meta/Requirements.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\
   
   =head2 accepts_module
   
-    my $bool = $req->accepts_modules($module => $version);
+    my $bool = $req->accepts_module($module => $version);
   
   Given an module and version, this method returns true if the version
   specification for the module accepts the provided version.  In other words,
@@ -27924,7 +28427,7 @@ $fatpacked{"CPAN/Meta/Requirements.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\
   =head2 as_string_hash
   
   This returns a reference to a hash describing the requirements using the
-  strings in the F<META.yml> specification.
+  strings in the L<CPAN::Meta::Spec> specification.
   
   For example after the following program:
   
@@ -28025,6 +28528,20 @@ $fatpacked{"CPAN/Meta/Requirements.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\
   
   =back
   
+  =head1 CONTRIBUTORS
+  
+  =over 4
+  
+  =item *
+  
+  Karen Etheridge <ether@cpan.org>
+  
+  =item *
+  
+  robario <webmaster@robario.com>
+  
+  =back
+  
   =head1 COPYRIGHT AND LICENSE
   
   This software is copyright (c) 2010 by David Golden and Ricardo Signes.
@@ -28045,7 +28562,7 @@ $fatpacked{"CPAN/Meta/Spec.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'
   use strict;
   use warnings;
   package CPAN::Meta::Spec;
-  our $VERSION = '2.141520'; # VERSION
+  our $VERSION = '2.142060'; # VERSION
   
   1;
   
@@ -28066,7 +28583,7 @@ $fatpacked{"CPAN/Meta/Spec.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'
   
   =head1 VERSION
   
-  version 2.141520
+  version 2.142060
   
   =head1 SYNOPSIS
   
@@ -29256,7 +29773,7 @@ $fatpacked{"CPAN/Meta/Validator.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n
   use strict;
   use warnings;
   package CPAN::Meta::Validator;
-  our $VERSION = '2.141520'; # VERSION
+  our $VERSION = '2.142060'; # VERSION
   
   #pod =head1 SYNOPSIS
   #pod
@@ -30251,7 +30768,7 @@ $fatpacked{"CPAN/Meta/Validator.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n
   
   =head1 VERSION
   
-  version 2.141520
+  version 2.142060
   
   =head1 SYNOPSIS
   
@@ -33113,7 +33630,7 @@ $fatpacked{"Devel/GlobalDestruction.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."
   use strict;
   use warnings;
   
-  our $VERSION = '0.12';
+  our $VERSION = '0.13';
   
   use Sub::Exporter::Progressive -setup => {
     exports => [ qw(in_global_destruction) ],
@@ -41517,8 +42034,9 @@ $fatpacked{"Import/Into.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'IMP
   
   use strict;
   use warnings FATAL => 'all';
+  use Module::Runtime;
   
-  our $VERSION = '1.002002'; # 1.2.2
+  our $VERSION = '1.002004';
   
   sub _prelude {
     my $target = shift;
@@ -41539,8 +42057,9 @@ $fatpacked{"Import/Into.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'IMP
   sub _make_action {
     my ($action, $target) = @_;
     my $version = ref $target && $target->{version};
-    my $ver_check = $version ? '$_[0]->VERSION($version);' : '';
-    eval _prelude($target).qq{sub { $ver_check shift->$action(\@_) }}
+    my $ver_check = $version ? ', $version' : '';
+    eval _prelude($target)
+      . qq{sub { Module::Runtime::use_module( shift$ver_check )->$action(\@_) }}
       or die "Failed to build action sub to ${action} for ${target}: $@";
   }
   
@@ -41560,16 +42079,13 @@ $fatpacked{"Import/Into.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'IMP
   
   =head1 NAME
   
-  Import::Into - import packages into other packages
+  Import::Into - Import packages into other packages
   
   =head1 SYNOPSIS
   
     package My::MultiExporter;
   
     use Import::Into;
-  
-    use Thing1 ();
-    use Thing2 ();
   
     # simple
     sub import {
@@ -41624,8 +42140,8 @@ $fatpacked{"Import/Into.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'IMP
   
   =head2 $package->import::into( $target, @arguments );
   
-  A global method, callable on any package.  Imports the given package into
-  C<$target>.  C<@arguments> are passed along to the package's import method.
+  A global method, callable on any package.  Loads and imports the given package
+  into C<$target>.  C<@arguments> are passed along to the package's import method.
   
   C<$target> can be an package name to export to, an integer for the
   caller level to export to, or a hashref with the following options:
@@ -41707,7 +42223,8 @@ $fatpacked{"Import/Into.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'IMP
   
   So, a solution for that is:
   
-    my $sub = eval "package $target; sub { shift->import(\@_) }";
+    use Module::Runtime;
+    my $sub = eval "package $target; sub { use_module(shift)->import(\@_) }";
     $sub->($thing, @import_args);
   
   which means that import is called from the right place for pragmas to take
@@ -41724,7 +42241,7 @@ $fatpacked{"Import/Into.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'IMP
     my $sub = eval qq{
       package $target;
     #line $line "$file"
-      sub { shift->import(\@_) }
+      sub { use_module(shift)->import(\@_) }
     };
     $sub->($thing, @import_args);
   
@@ -41767,14 +42284,6 @@ $fatpacked{"Import/Into.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'IMP
   L<http://shadow.cat/blog/matt-s-trout/madness-with-methods> which covers
   coderef abuse and the C<${\...}> syntax.
   
-  Final note: You do still need to ensure that you already loaded C<$thing> - if
-  you're receiving this from a parameter, I recommend using L<Module::Runtime>:
-  
-    use Import::Into;
-    use Module::Runtime qw(use_module);
-  
-    use_module($thing)->import::into($target, @import_args);
-  
   And that's it.
   
   =head1 SEE ALSO
@@ -41795,6 +42304,8 @@ $fatpacked{"Import/Into.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'IMP
   =head1 CONTRIBUTORS
   
   haarg - Graham Knop (cpan:HAARG) <haarg@haarg.org>
+  
+  Mithaldu - Christian Walde (cpan:MITHALDU) <walde.christian@gmail.com>
   
   =head1 COPYRIGHT
   
@@ -47304,19 +47815,6 @@ $fatpacked{"Method/Generate/Accessor.pm"} = '#line '.(1+__LINE__).' "'.__FILE__.
   
   my $module_name_only = qr/\A$Module::Runtime::module_name_rx\z/;
   
-  sub _SIGDIE
-  {
-    our ($CurrentAttribute, $OrigSigDie);
-    my $sigdie = $OrigSigDie && $OrigSigDie != \&_SIGDIE
-      ? $OrigSigDie
-      : sub { die $_[0] };
-  
-    return $sigdie->(@_) if ref($_[0]);
-  
-    my $attr_desc = _attr_desc(@$CurrentAttribute{qw(name init_arg)});
-    $sigdie->("$CurrentAttribute->{step} for $attr_desc failed: $_[0]");
-  }
-  
   sub _die_overwrite
   {
     my ($pkg, $method, $type) = @_;
@@ -47362,6 +47860,16 @@ $fatpacked{"Method/Generate/Accessor.pm"} = '#line '.(1+__LINE__).' "'.__FILE__.
     }
     if (($spec->{trigger}||0) eq 1) {
       $spec->{trigger} = quote_sub('shift->_trigger_'.$name.'(@_)');
+    }
+    if (($spec->{coerce}||0) eq 1) {
+      my $isa = $spec->{isa};
+      if (blessed $isa and $isa->can('coercion')) {
+        $spec->{coerce} = $isa->coercion;
+      } elsif (blessed $isa and $isa->can('coerce')) {
+        $spec->{coerce} = sub { $isa->coerce(@_) };
+      } else {
+        die "Invalid coercion for $into->$name - no appropriate type constraint";
+      }
     }
   
     for my $setting (qw( isa coerce )) {
@@ -47668,11 +48176,12 @@ $fatpacked{"Method/Generate/Accessor.pm"} = '#line '.(1+__LINE__).' "'.__FILE__.
   
   sub _generate_coerce {
     my ($self, $name, $value, $coerce, $init_arg) = @_;
-    $self->_generate_die_prefix(
+    $self->_wrap_attr_exception(
       $name,
       "coercion",
       $init_arg,
-      $self->_generate_call_code($name, 'coerce', "${value}", $coerce)
+      $self->_generate_call_code($name, 'coerce', "${value}", $coerce),
+      1,
     );
   }
   
@@ -47695,23 +48204,40 @@ $fatpacked{"Method/Generate/Accessor.pm"} = '#line '.(1+__LINE__).' "'.__FILE__.
     ($code, delete $self->{captures});
   }
   
-  sub _generate_die_prefix {
-    my ($self, $name, $prefix, $arg, $inside) = @_;
+  sub _wrap_attr_exception {
+    my ($self, $name, $step, $arg, $code, $want_return) = @_;
+    my $prefix = quotify("${step} for "._attr_desc($name, $arg).' failed: ');
     "do {\n"
-    .'  local $Method::Generate::Accessor::CurrentAttribute = {'
-    .'    init_arg => '.(defined $arg ? quotify($arg) : 'undef') . ",\n"
+    .'  local $Method::Generate::Accessor::CurrentAttribute = {'."\n"
+    .'    init_arg => '.quotify($arg).",\n"
     .'    name     => '.quotify($name).",\n"
-    .'    step     => '.quotify($prefix).",\n"
+    .'    step     => '.quotify($step).",\n"
     ."  };\n"
-    .'  local $Method::Generate::Accessor::OrigSigDie = $SIG{__DIE__};'."\n"
-    .'  local $SIG{__DIE__} = \&Method::Generate::Accessor::_SIGDIE;'."\n"
-    .$inside
+    .($want_return ? '  my $_return;'."\n" : '')
+    .'  my $_error;'."\n"
+    ."  {\n"
+    .'    my $_old_error = $@;'."\n"
+    ."    if (!eval {\n"
+    .'      $@ = $_old_error;'."\n"
+    .($want_return ? '      $_return ='."\n" : '')
+    .'      '.$code.";\n"
+    ."      1;\n"
+    ."    }) {\n"
+    .'      $_error = $@;'."\n"
+    .'      if (!ref $_error) {'."\n"
+    .'        $_error = '.$prefix.'.$_error;'."\n"
+    ."      }\n"
+    ."    }\n"
+    .'    $@ = $_old_error;'."\n"
+    ."  }\n"
+    .'  die $_error if $_error;'."\n"
+    .($want_return ? '  $_return;'."\n" : '')
     ."}\n"
   }
   
   sub _generate_isa_check {
     my ($self, $name, $value, $check, $init_arg) = @_;
-    $self->_generate_die_prefix(
+    $self->_wrap_attr_exception(
       $name,
       "isa check",
       $init_arg,
@@ -48307,9 +48833,9 @@ $fatpacked{"Module/CPANfile.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
   use Cwd;
   use Carp ();
   use Module::CPANfile::Environment;
-  use Module::CPANfile::Result;
+  use Module::CPANfile::Requirement;
   
-  our $VERSION = '1.0002';
+  our $VERSION = '1.1000';
   
   sub new {
       my($class, $file) = @_;
@@ -48340,42 +48866,46 @@ $fatpacked{"Module/CPANfile.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
       };
   
       my $env = Module::CPANfile::Environment->new($file);
-      $self->{result} = $env->parse($code) or die $@;
+      $env->parse($code) or die $@;
+  
+      $self->{_mirrors} = $env->mirrors;
+      $self->{_prereqs} = $env->prereqs;
   }
   
   sub from_prereqs {
       my($proto, $prereqs) = @_;
   
       my $self = $proto->new;
-      $self->{result} = Module::CPANfile::Result->from_prereqs($prereqs);
+      $self->{_prereqs} = Module::CPANfile::Prereqs->from_cpan_meta($prereqs);
   
       $self;
   }
   
+  sub mirrors {
+      my $self = shift;
+      $self->{_mirrors} || [];
+  }
+  
   sub features {
       my $self = shift;
-      map $self->feature($_), keys %{$self->{result}{features}};
+      map $self->feature($_), $self->{_prereqs}->identifiers;
   }
   
   sub feature {
       my($self, $identifier) = @_;
-  
-      my $data = $self->{result}{features}{$identifier}
-        or Carp::croak("Unknown feature '$identifier'");
-  
-      require CPAN::Meta::Feature;
-      CPAN::Meta::Feature->new($data->{identifier}, {
-          description => $data->{description},
-          prereqs => $data->{spec},
-      });
+      $self->{_prereqs}->feature($identifier);
   }
   
   sub prereq { shift->prereqs }
   
   sub prereqs {
       my $self = shift;
-      require CPAN::Meta::Prereqs;
-      CPAN::Meta::Prereqs->new($self->prereq_specs);
+      $self->{_prereqs}->as_cpan_meta;
+  }
+  
+  sub merged_requirements {
+      my $self = shift;
+      $self->{_prereqs}->merged_requirements;
   }
   
   sub effective_prereqs {
@@ -48394,7 +48924,18 @@ $fatpacked{"Module/CPANfile.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
   
   sub prereq_specs {
       my $self = shift;
-      $self->{result}{spec};
+      $self->prereqs->as_string_hash;
+  }
+  
+  sub prereq_for_module {
+      my($self, $module) = @_;
+      $self->{_prereqs}->find($module);
+  }
+  
+  sub options_for_module {
+      my($self, $module) = @_;
+      my $prereq = $self->prereq_for_module($module) or return;
+      $prereq->requirement->options;
   }
   
   sub merge_meta {
@@ -48423,15 +48964,30 @@ $fatpacked{"Module/CPANfile.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
   sub to_string {
       my($self, $include_empty) = @_;
   
-      my $prereqs = $self->{result}{spec};
+      my $mirrors = $self->mirrors;
+      my $prereqs = $self->prereq_specs;
   
       my $code = '';
-      $code .= $self->_dump_prereqs($self->{result}{spec}, $include_empty);
+      $code .= $self->_dump_mirrors($mirrors);
+      $code .= $self->_dump_prereqs($prereqs, $include_empty);
   
-      for my $feature (values %{$self->{result}{features}}) {
+      for my $feature ($self->features) {
           $code .= sprintf "feature %s, %s => sub {\n", _dump($feature->{identifier}), _dump($feature->{description});
           $code .= $self->_dump_prereqs($feature->{spec}, $include_empty, 4);
           $code .= "}\n\n";
+      }
+  
+      $code =~ s/\n+$/\n/s;
+      $code;
+  }
+  
+  sub _dump_mirrors {
+      my($self, $mirrors) = @_;
+  
+      my $code = "";
+  
+      for my $url (@$mirrors) {
+          $code .= "mirror '$url';\n";
       }
   
       $code =~ s/\n+$/\n/s;
@@ -48553,7 +49109,7 @@ $fatpacked{"Module/CPANfile.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
     # read MYMETA's prereqs and print cpanfile representation of it
     my $meta = CPAN::Meta->load_file('MYMETA.json');
     my $file = Module::CPANfile->from_prereqs($meta->prereqs);
-    print $file->to_sring;
+    print $file->to_string;
   
   By default, it omits the phase where there're no modules
   registered. If you pass the argument of a true value, it will print
@@ -48600,13 +49156,14 @@ $fatpacked{"Module/CPANfile/Environment.pm"} = '#line '.(1+__LINE__).' "'.__FILE
   package Module::CPANfile::Environment;
   use strict;
   use warnings;
-  use Module::CPANfile::Result;
+  use Module::CPANfile::Prereqs;
   use Carp ();
   
   my @bindings = qw(
       on requires recommends suggests conflicts
       feature
       osname
+      mirror
       configure_requires build_requires test_requires author_requires
   );
   
@@ -48615,53 +49172,333 @@ $fatpacked{"Module/CPANfile/Environment.pm"} = '#line '.(1+__LINE__).' "'.__FILE
   sub new {
       my($class, $file) = @_;
       bless {
-          file => $file,
+          file     => $file,
+          phase    => 'runtime', # default phase
+          feature  => undef,
+          features => {},
+          prereqs  => Module::CPANfile::Prereqs->new,
+          mirrors  => [],
       }, $class;
   }
   
   sub bind {
-      my $class = shift;
+      my $self = shift;
       my $pkg = caller;
   
-      my $result = Module::CPANfile::Result->new;
       for my $binding (@bindings) {
           no strict 'refs';
-          *{"$pkg\::$binding"} = sub { $result->$binding(@_) };
+          *{"$pkg\::$binding"} = sub { $self->$binding(@_) };
       }
-  
-      return $result;
   }
   
   sub parse {
       my($self, $code) = @_;
   
-      my($res, $err);
-  
+      my $err;
       {
           local $@;
           $file_id++;
-          $res = eval <<EVAL;
+          $self->_evaluate(<<EVAL);
   package Module::CPANfile::Sandbox$file_id;
   no warnings;
-  my \$_result;
-  BEGIN { \$_result = Module::CPANfile::Environment->bind }
+  BEGIN { \$_environment->bind }
   
   # line 1 "$self->{file}"
   $code;
-  
-  \$_result;
   EVAL
           $err = $@;
       }
   
       if ($err) { die "Parsing $self->{file} failed: $err" };
   
-      return $res;
+      return 1;
+  }
+  
+  sub _evaluate {
+      my $_environment = $_[0];
+      eval $_[1];
+  }
+  
+  sub prereqs { $_[0]->{prereqs} }
+  
+  sub mirrors { $_[0]->{mirrors} }
+  
+  # DSL goes from here
+  
+  sub on {
+      my($self, $phase, $code) = @_;
+      local $self->{phase} = $phase;
+      $code->();
+  }
+  
+  sub feature {
+      my($self, $identifier, $description, $code) = @_;
+  
+      # shortcut: feature identifier => sub { ... }
+      if (@_ == 3 && ref($description) eq 'CODE') {
+          $code = $description;
+          $description = $identifier;
+      }
+  
+      unless (ref $description eq '' && ref $code eq 'CODE') {
+          Carp::croak("Usage: feature 'identifier', 'Description' => sub { ... }");
+      }
+  
+      local $self->{feature} = $identifier;
+      $self->prereqs->add_feature($identifier, $description);
+  
+      $code->();
+  }
+  
+  sub osname { die "TODO" }
+  
+  sub mirror {
+      my($self, $url) = @_;
+      push @{$self->{mirrors}}, $url;
+  }
+  
+  sub requirement_for {
+      my($self, $module, @args) = @_;
+  
+      my $requirement = 0;
+      $requirement = shift @args if @args % 2;
+  
+      return Module::CPANfile::Requirement->new(
+          name    => $module,
+          version => $requirement,
+          @args,
+      );
+  }
+  
+  sub requires {
+      my $self = shift;
+      $self->add_prereq(requires => @_);
+  }
+  
+  sub recommends {
+      my $self = shift;
+      $self->add_prereq(recommends => @_);
+  }
+  
+  sub suggests {
+      my $self = shift;
+      $self->add_prereq(suggests => @_);
+  }
+  
+  sub conflicts {
+      my $self = shift;
+      $self->add_prereq(conflicts => @_);
+  }
+  
+  sub add_prereq {
+      my($self, $type, $module, @args) = @_;
+  
+      $self->prereqs->add_prereq(
+          feature => $self->{feature},
+          phase   => $self->{phase},
+          type    => $type,
+          module  => $module,
+          requirement => $self->requirement_for($module, @args),
+      );
+  }
+  
+  # Module::Install compatible shortcuts
+  
+  sub configure_requires {
+      my($self, @args) = @_;
+      $self->on(configure => sub { $self->requires(@args) });
+  }
+  
+  sub build_requires {
+      my($self, @args) = @_;
+      $self->on(build => sub { $self->requires(@args) });
+  }
+  
+  sub test_requires {
+      my($self, @args) = @_;
+      $self->on(test => sub { $self->requires(@args) });
+  }
+  
+  sub author_requires {
+      my($self, @args) = @_;
+      $self->on(develop => sub { $self->requires(@args) });
   }
   
   1;
   
 MODULE_CPANFILE_ENVIRONMENT
+
+$fatpacked{"Module/CPANfile/Prereq.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MODULE_CPANFILE_PREREQ';
+  package Module::CPANfile::Prereq;
+  use strict;
+  
+  sub new {
+      my($class, %options) = @_;
+      bless \%options, $class;
+  }
+  
+  sub feature { $_[0]->{feature} }
+  sub phase   { $_[0]->{phase} }
+  sub type    { $_[0]->{type} }
+  sub module  { $_[0]->{module} }
+  sub requirement { $_[0]->{requirement} }
+  
+  sub match_feature {
+      my($self, $identifier) = @_;
+      no warnings 'uninitialized';
+      $self->feature eq $identifier;
+  }
+  
+  1;
+MODULE_CPANFILE_PREREQ
+
+$fatpacked{"Module/CPANfile/Prereqs.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MODULE_CPANFILE_PREREQS';
+  package Module::CPANfile::Prereqs;
+  use strict;
+  use Carp ();
+  use CPAN::Meta::Feature;
+  use Module::CPANfile::Prereq;
+  
+  sub from_cpan_meta {
+      my($class, $prereqs) = @_;
+  
+      my $self = $class->new;
+  
+      for my $phase (keys %$prereqs) {
+          for my $type (keys %{ $prereqs->{$phase} }) {
+              while (my($module, $requirement) = each %{ $prereqs->{$phase}{$type} }) {
+                  $self->add_prereq(
+                      phase => $phase,
+                      type  => $type,
+                      module => $module,
+                      requirement => Module::CPANfile::Requirement->new(name => $module, version => $requirement),
+                  );
+              }
+          }
+      }
+  
+      $self;
+  }
+  
+  sub new {
+      my $class = shift;
+      bless {
+          prereqs => [],
+          features => {},
+      }, $class;
+  }
+  
+  sub add_feature {
+      my($self, $identifier, $description) = @_;
+      $self->{features}{$identifier} = { description => $description };
+  }
+  
+  sub add_prereq {
+      my($self, %args) = @_;
+      $self->add( Module::CPANfile::Prereq->new(%args) );
+  }
+  
+  sub add {
+      my($self, $prereq) = @_;
+      push @{$self->{prereqs}}, $prereq;
+  }
+  
+  sub as_cpan_meta {
+      my $self = shift;
+      $self->{cpanmeta} ||= $self->build_cpan_meta;
+  }
+  
+  sub build_cpan_meta {
+      my($self, $identifier) = @_;
+  
+      my $prereq_spec = {};
+      $self->prereq_each($identifier, sub {
+          my $prereq = shift;
+          $prereq_spec->{$prereq->phase}{$prereq->type}{$prereq->module} = $prereq->requirement->version;
+      });
+  
+      CPAN::Meta::Prereqs->new($prereq_spec);
+  }
+  
+  sub prereq_each {
+      my($self, $identifier, $code) = @_;
+  
+      for my $prereq (@{$self->{prereqs}}) {
+          next unless $prereq->match_feature($identifier);
+          $code->($prereq);
+      }
+  }
+  
+  sub merged_requirements {
+      my $self = shift;
+  
+      my $reqs = CPAN::Meta::Requirements->new;
+      for my $prereq (@{$self->{prereqs}}) {
+          $reqs->add_string_requirement($prereq->module, $prereq->requirement->version);
+      }
+  
+      $reqs;
+  }
+  
+  sub find {
+      my($self, $module) = @_;
+  
+      for my $prereq (@{$self->{prereqs}}) {
+          return $prereq if $prereq->module eq $module;
+      }
+  
+      return;
+  }
+  
+  sub identifiers {
+      my $self = shift;
+      keys %{$self->{features}};
+  }
+  
+  sub feature {
+      my($self, $identifier) = @_;
+  
+      my $data = $self->{features}{$identifier}
+        or Carp::croak("Unknown feature '$identifier'");
+  
+      my $prereqs = $self->build_cpan_meta($identifier);
+  
+      CPAN::Meta::Feature->new($identifier, {
+          description => $data->{description},
+          prereqs => $prereqs->as_string_hash,
+      });
+  }
+  
+  1;
+MODULE_CPANFILE_PREREQS
+
+$fatpacked{"Module/CPANfile/Requirement.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MODULE_CPANFILE_REQUIREMENT';
+  package Module::CPANfile::Requirement;
+  use strict;
+  
+  sub new {
+      my ($class, %args) = @_;
+  
+      $args{version} ||= 0;
+  
+      bless +{
+          name    => delete $args{name},
+          version => delete $args{version},
+          options => \%args,
+      }, $class;
+  }
+  
+  sub name    { $_[0]->{name} }
+  sub version { $_[0]->{version} }
+  
+  sub options { $_[0]->{options} }
+  
+  sub has_options {
+      keys %{$_[0]->{options}} > 0;
+  }
+  
+  1;
+MODULE_CPANFILE_REQUIREMENT
 
 $fatpacked{"Module/CPANfile/Result.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MODULE_CPANFILE_RESULT';
   package Module::CPANfile::Result;
@@ -48766,7 +49603,7 @@ $fatpacked{"Module/CoreList.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
   	    %bug_tracker %deprecated %delta/;
   use Module::CoreList::TieHashDelta;
   use version;
-  $VERSION = '5.021001';
+  $VERSION = '5.021003';
   
   my $dumpinc = 0;
   sub import {
@@ -49013,6 +49850,8 @@ $fatpacked{"Module/CoreList.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
       5.020000 => '2014-05-27',
       5.021000 => '2014-05-27',
       5.021001 => '2014-06-20',
+      5.021002 => '2014-07-20',
+      5.021003 => '2014-08-20',
     );
   
   for my $version ( sort { $a <=> $b } keys %released ) {
@@ -58802,6 +59641,94 @@ $fatpacked{"Module/CoreList.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
           removed => {
           }
       },
+      5.021002 => {
+          delta_from => 5.021001,
+          changed => {
+              'B'                     => '1.50',
+              'Config'                => '5.021002',
+              'Cwd'                   => '3.49',
+              'Devel::Peek'           => '1.18',
+              'ExtUtils::Manifest'    => '1.64',
+              'File::Copy'            => '2.30',
+              'File::Spec'            => '3.49',
+              'File::Spec::Cygwin'    => '3.49',
+              'File::Spec::Epoc'      => '3.49',
+              'File::Spec::Functions' => '3.49',
+              'File::Spec::Mac'       => '3.49',
+              'File::Spec::OS2'       => '3.49',
+              'File::Spec::Unix'      => '3.49',
+              'File::Spec::VMS'       => '3.49',
+              'File::Spec::Win32'     => '3.49',
+              'Filter::Simple'        => '0.92',
+              'Hash::Util'            => '0.18',
+              'IO'                    => '1.33',
+              'IO::Socket::IP'        => '0.31',
+              'IPC::Open3'            => '1.17',
+              'Math::BigFloat'        => '1.9996',
+              'Math::BigInt'          => '1.9996',
+              'Math::BigInt::Calc'    => '1.9996',
+              'Math::BigInt::CalcEmu' => '1.9996',
+              'Module::CoreList'      => '5.021002',
+              'Module::CoreList::TieHashDelta'=> '5.021002',
+              'Module::CoreList::Utils'=> '5.021002',
+              'POSIX'                 => '1.41',
+              'Pod::Usage'            => '1.64',
+              'XS::APItest'           => '0.62',
+              'arybase'               => '0.08',
+              'experimental'          => '0.008',
+              'threads'               => '1.95',
+              'warnings'              => '1.26',
+          },
+          removed => {
+          }
+      },
+      5.021003 => {
+          delta_from => 5.021002,
+          changed => {
+              'B::Debug'              => '1.21',
+              'CPAN::Meta'            => '2.142060',
+              'CPAN::Meta::Converter' => '2.142060',
+              'CPAN::Meta::Feature'   => '2.142060',
+              'CPAN::Meta::History'   => '2.142060',
+              'CPAN::Meta::Merge'     => '2.142060',
+              'CPAN::Meta::Prereqs'   => '2.142060',
+              'CPAN::Meta::Requirements'=> '2.126',
+              'CPAN::Meta::Spec'      => '2.142060',
+              'CPAN::Meta::Validator' => '2.142060',
+              'Config'                => '5.021003',
+              'Config::Perl::V'       => '0.22',
+              'ExtUtils::CBuilder'    => '0.280217',
+              'ExtUtils::CBuilder::Base'=> '0.280217',
+              'ExtUtils::CBuilder::Platform::Unix'=> '0.280217',
+              'ExtUtils::CBuilder::Platform::VMS'=> '0.280217',
+              'ExtUtils::CBuilder::Platform::Windows'=> '0.280217',
+              'ExtUtils::CBuilder::Platform::Windows::BCC'=> '0.280217',
+              'ExtUtils::CBuilder::Platform::Windows::GCC'=> '0.280217',
+              'ExtUtils::CBuilder::Platform::Windows::MSVC'=> '0.280217',
+              'ExtUtils::CBuilder::Platform::aix'=> '0.280217',
+              'ExtUtils::CBuilder::Platform::android'=> '0.280217',
+              'ExtUtils::CBuilder::Platform::cygwin'=> '0.280217',
+              'ExtUtils::CBuilder::Platform::darwin'=> '0.280217',
+              'ExtUtils::CBuilder::Platform::dec_osf'=> '0.280217',
+              'ExtUtils::CBuilder::Platform::os2'=> '0.280217',
+              'ExtUtils::Manifest'    => '1.65',
+              'HTTP::Tiny'            => '0.047',
+              'IPC::Open3'            => '1.18',
+              'Module::CoreList'      => '5.021003',
+              'Module::CoreList::TieHashDelta'=> '5.021003',
+              'Module::CoreList::Utils'=> '5.021003',
+              'Opcode'                => '1.28',
+              'POSIX'                 => '1.42',
+              'Safe'                  => '2.38',
+              'Socket'                => '2.015',
+              'Sys::Hostname'         => '1.19',
+              'UNIVERSAL'             => '1.12',
+              'XS::APItest'           => '0.63',
+              'perlfaq'               => '5.0150045',
+          },
+          removed => {
+          }
+      },
   );
   
   sub is_core
@@ -59217,6 +60144,20 @@ $fatpacked{"Module/CoreList.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
           removed => {
           }
       },
+      5.021002 => {
+          delta_from => 5.021001,
+          changed => {
+          },
+          removed => {
+          }
+      },
+      5.021003 => {
+          delta_from => 5.021002,
+          changed => {
+          },
+          removed => {
+          }
+      },
   );
   
   for my $version (sort { $a <=> $b } keys %deprecated) {
@@ -59267,6 +60208,7 @@ $fatpacked{"Module/CoreList.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
       'CPAN::Meta::Converter' => 'cpan',
       'CPAN::Meta::Feature'   => 'cpan',
       'CPAN::Meta::History'   => 'cpan',
+      'CPAN::Meta::Merge'     => 'cpan',
       'CPAN::Meta::Prereqs'   => 'cpan',
       'CPAN::Meta::Requirements'=> 'cpan',
       'CPAN::Meta::Spec'      => 'cpan',
@@ -59316,12 +60258,15 @@ $fatpacked{"Module/CoreList.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
       'Encode::TW'            => 'cpan',
       'Encode::Unicode'       => 'cpan',
       'Encode::Unicode::UTF7' => 'cpan',
+      'ExtUtils::Command'     => 'cpan',
       'ExtUtils::Command::MM' => 'cpan',
       'ExtUtils::Constant'    => 'cpan',
       'ExtUtils::Constant::Base'=> 'cpan',
       'ExtUtils::Constant::ProxySubs'=> 'cpan',
       'ExtUtils::Constant::Utils'=> 'cpan',
       'ExtUtils::Constant::XS'=> 'cpan',
+      'ExtUtils::Install'     => 'cpan',
+      'ExtUtils::Installed'   => 'cpan',
       'ExtUtils::Liblist'     => 'cpan',
       'ExtUtils::Liblist::Kid'=> 'cpan',
       'ExtUtils::MM'          => 'cpan',
@@ -59344,8 +60289,10 @@ $fatpacked{"Module/CoreList.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
       'ExtUtils::MY'          => 'cpan',
       'ExtUtils::MakeMaker'   => 'cpan',
       'ExtUtils::MakeMaker::Config'=> 'cpan',
+      'ExtUtils::Manifest'    => 'cpan',
       'ExtUtils::Mkbootstrap' => 'cpan',
       'ExtUtils::Mksymlists'  => 'cpan',
+      'ExtUtils::Packlist'    => 'cpan',
       'ExtUtils::testlib'     => 'cpan',
       'Fatal'                 => 'cpan',
       'File::Fetch'           => 'cpan',
@@ -59648,6 +60595,7 @@ $fatpacked{"Module/CoreList.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
       'CPAN::Meta::Converter' => 'https://github.com/Perl-Toolchain-Gang/CPAN-Meta/issues',
       'CPAN::Meta::Feature'   => 'https://github.com/Perl-Toolchain-Gang/CPAN-Meta/issues',
       'CPAN::Meta::History'   => 'https://github.com/Perl-Toolchain-Gang/CPAN-Meta/issues',
+      'CPAN::Meta::Merge'     => 'https://github.com/Perl-Toolchain-Gang/CPAN-Meta/issues',
       'CPAN::Meta::Prereqs'   => 'https://github.com/Perl-Toolchain-Gang/CPAN-Meta/issues',
       'CPAN::Meta::Requirements'=> 'https://github.com/dagolden/CPAN-Meta-Requirements/issues',
       'CPAN::Meta::Spec'      => 'https://github.com/Perl-Toolchain-Gang/CPAN-Meta/issues',
@@ -59697,12 +60645,15 @@ $fatpacked{"Module/CoreList.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
       'Encode::TW'            => undef,
       'Encode::Unicode'       => undef,
       'Encode::Unicode::UTF7' => undef,
+      'ExtUtils::Command'     => 'http://rt.perl.org/rt3/',
       'ExtUtils::Command::MM' => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=ExtUtils-MakeMaker',
       'ExtUtils::Constant'    => undef,
       'ExtUtils::Constant::Base'=> undef,
       'ExtUtils::Constant::ProxySubs'=> undef,
       'ExtUtils::Constant::Utils'=> undef,
       'ExtUtils::Constant::XS'=> undef,
+      'ExtUtils::Install'     => 'http://rt.perl.org/rt3/',
+      'ExtUtils::Installed'   => 'http://rt.perl.org/rt3/',
       'ExtUtils::Liblist'     => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=ExtUtils-MakeMaker',
       'ExtUtils::Liblist::Kid'=> 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=ExtUtils-MakeMaker',
       'ExtUtils::MM'          => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=ExtUtils-MakeMaker',
@@ -59725,8 +60676,10 @@ $fatpacked{"Module/CoreList.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<
       'ExtUtils::MY'          => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=ExtUtils-MakeMaker',
       'ExtUtils::MakeMaker'   => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=ExtUtils-MakeMaker',
       'ExtUtils::MakeMaker::Config'=> 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=ExtUtils-MakeMaker',
+      'ExtUtils::Manifest'    => 'http://rt.perl.org/rt3/',
       'ExtUtils::Mkbootstrap' => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=ExtUtils-MakeMaker',
       'ExtUtils::Mksymlists'  => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=ExtUtils-MakeMaker',
+      'ExtUtils::Packlist'    => 'http://rt.perl.org/rt3/',
       'ExtUtils::testlib'     => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=ExtUtils-MakeMaker',
       'Fatal'                 => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=autodie',
       'File::Fetch'           => undef,
@@ -60027,7 +60980,7 @@ $fatpacked{"Module/CoreList/TieHashDelta.pm"} = '#line '.(1+__LINE__).' "'.__FIL
   use strict;
   use vars qw($VERSION);
   
-  $VERSION = '5.021001';
+  $VERSION = '5.021003';
   
   sub TIEHASH {
       my ($class, $changed, $removed, $parent) = @_;
@@ -60056,12 +61009,14 @@ $fatpacked{"Module/CoreList/TieHashDelta.pm"} = '#line '.(1+__LINE__).' "'.__FIL
   sub EXISTS {
       my ($self, $key) = @_;
   
+      restart:
       if (exists $self->{changed}{$key}) {
           return 1;
       } elsif (exists $self->{removed}{$key}) {
           return '';
       } elsif (defined $self->{parent}) {
-          return exists $self->{parent}{$key};
+          $self = tied %{$self->{parent}}; #avoid extreme magic/tie recursion
+          goto restart;
       }
       return '';
   }
@@ -60107,7 +61062,7 @@ $fatpacked{"Module/CoreList/Utils.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"
   use Module::CoreList;
   use Module::CoreList::TieHashDelta;
   
-  $VERSION = '5.021001';
+  $VERSION = '5.021003';
   
   sub utilities {
       my $perl = shift;
@@ -61035,6 +61990,20 @@ $fatpacked{"Module/CoreList/Utils.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"
               'find2perl'             => 1,
               'psed'                  => 1,
               's2p'                   => 1,
+          }
+      },
+      5.021002 => {
+          delta_from => 5.021001,
+          changed => {
+          },
+          removed => {
+          }
+      },
+      5.021003 => {
+          delta_from => 5.021002,
+          changed => {
+          },
+          removed => {
           }
       },
   );
@@ -62220,7 +63189,7 @@ $fatpacked{"Module/Reader.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'M
   use strict;
   use warnings;
   
-  our $VERSION = '0.002001';
+  our $VERSION = '0.002003';
   $VERSION = eval $VERSION;
   
   use base 'Exporter';
@@ -62906,7 +63875,7 @@ $fatpacked{"Moo.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO';
   use Moo::_Utils;
   use Import::Into;
   
-  our $VERSION = '1.005000';
+  our $VERSION = '1.006000';
   $VERSION = eval $VERSION;
   
   require Moo::sification;
@@ -63222,8 +64191,8 @@ $fatpacked{"Moo.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO';
   L<Moose> everywhere.
   
   L<Moo> will also create L<Moose type constraints|Moose::Manual::Types> for
-  classes and roles, so that C<< isa => 'MyClass' >> and C<< isa => 'MyRole' >>
-  work the same as for L<Moose> classes and roles.
+  L<Moo> classes and roles, so that in Moose classes C<< isa => 'MyMooClass' >>
+  and C<< isa => 'MyMooRole' >> work the same as for L<Moose> classes and roles.
   
   Extending a L<Moose> class or consuming a L<Moose::Role> will also work.
   
@@ -63397,7 +64366,7 @@ $fatpacked{"Moo.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO';
   
   =over 2
   
-  =item * is
+  =item * C<is>
   
   B<required>, may be C<ro>, C<lazy>, C<rwp> or C<rw>.
   
@@ -63420,7 +64389,7 @@ $fatpacked{"Moo.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO';
   C<rw> generates a normal getter/setter by defaulting C<accessor> to the
   name of the attribute.
   
-  =item * isa
+  =item * C<isa>
   
   Takes a coderef which is meant to validate the attribute.  Unlike L<Moose>, Moo
   does not include a basic type system, so instead of doing C<< isa => 'Num' >>,
@@ -63457,7 +64426,7 @@ $fatpacked{"Moo.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO';
   L<Moose::Meta::TypeConstraint> object or something similar enough to it to
   make L<Moose> happy is fine.
   
-  =item * coerce
+  =item * C<coerce>
   
   Takes a coderef which is meant to coerce the attribute.  The basic idea is to
   do something like the following:
@@ -63473,7 +64442,10 @@ $fatpacked{"Moo.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO';
   
   L<Sub::Quote aware|/SUB QUOTE AWARE>
   
-  =item * handles
+  If the C<isa> option is a blessed object providing a C<coerce> or
+  C<coercion> method, then the C<coerce> option may be set to just C<1>.
+  
+  =item * C<handles>
   
   Takes a string
   
@@ -64325,7 +65297,7 @@ $fatpacked{"Moo/Role.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'MOO_RO
   use base qw(Role::Tiny);
   use Import::Into;
   
-  our $VERSION = '1.005000';
+  our $VERSION = '1.006000';
   $VERSION = eval $VERSION;
   
   require Moo::sification;
@@ -65314,7 +66286,7 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   
   package Path::Tiny;
   # ABSTRACT: File path utility
-  our $VERSION = '0.055'; # VERSION
+  our $VERSION = '0.056'; # VERSION
   
   # Dependencies
   use Config;
@@ -65635,7 +66607,7 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
       my $temp = File::Temp->new( TMPDIR => 1, %$args );
       close $temp;
       my $self = path($temp)->absolute;
-      $self->[TEMP] = $temp;          # keep object alive while we are
+      $self->[TEMP] = $temp;                # keep object alive while we are
       return $self;
   }
   
@@ -65647,7 +66619,7 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
       require File::Temp;
       my $temp = File::Temp->newdir( @$maybe_template, TMPDIR => 1, %$args );
       my $self = path($temp)->absolute;
-      $self->[TEMP] = $temp;          # keep object alive while we are
+      $self->[TEMP] = $temp;                # keep object alive while we are
       return $self;
   }
   
@@ -65914,28 +66886,48 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   #pod
   #pod     $obj = path("/tmp/foo.txt")->digest;        # SHA-256
   #pod     $obj = path("/tmp/foo.txt")->digest("MD5"); # user-selected
+  #pod     $obj = path("/tmp/foo.txt")->digest( { chunk_size => 1e6 }, "MD5" );
   #pod
-  #pod Returns a hexadecimal digest for a file.  Any arguments are passed to the
-  #pod constructor for L<Digest> to select an algorithm.  If no arguments are given,
-  #pod the default is SHA-256.
+  #pod Returns a hexadecimal digest for a file.  An optional hash reference of options may
+  #pod be given.  The only option is C<chunk_size>.  If C<chunk_size> is given, that many
+  #pod bytes will be read at a time.  If not provided, the entire file will be slurped
+  #pod into memory to compute the digest.
+  #pod
+  #pod Any subsequent arguments are passed to the constructor for L<Digest> to select
+  #pod an algorithm.  If no arguments are given, the default is SHA-256.
   #pod
   #pod =cut
   
   sub digest {
-      my ( $self, $alg, @args ) = @_;
-      $alg = 'SHA-256' unless defined $alg;
+      my ( $self, @opts ) = @_;
+      my $args = ( @opts && ref $opts[0] eq 'HASH' ) ? shift @opts : {};
+      $args = _get_args( $args, qw/chunk_size/ );
+      unshift @opts, 'SHA-256' unless @opts;
       require Digest;
-      return Digest->new( $alg, @args )->add( $self->slurp_raw )->hexdigest;
+      my $digest = Digest->new(@opts);
+      if ( $args->{chunk_size} ) {
+          my $fh = $self->filehandle( { locked => 1 }, "<", ":unix" );
+          my $buf;
+          $digest->add($buf) while read $fh, $buf, $args->{chunk_size};
+      }
+      else {
+          $digest->add( $self->slurp_raw );
+      }
+      return $digest->hexdigest;
   }
   
-  #pod =method dirname
+  #pod =method dirname (deprecated)
   #pod
   #pod     $name = path("/tmp/foo.txt")->dirname; # "/tmp/"
   #pod
-  #pod Returns the directory name portion of the path.  This is roughly
-  #pod equivalent to what L<File::Spec> would give from C<splitpath> and thus
-  #pod usually has the trailing slash. If that's not desired, stringify directories
-  #pod or call C<parent> on files.
+  #pod Returns the directory portion you would get from calling
+  #pod C<< File::Spec->splitpath( $path->stringify ) >> or C<"."> for a path without a
+  #pod parent directory portion.  Because L<File::Spec> is inconsistent, the result
+  #pod might or might not have a trailing slash.  Because of this, this method is
+  #pod B<deprecated>.
+  #pod
+  #pod A better, more consistently approach is likely C<< $path->parent->stringify >>,
+  #pod which will not have a trailing slash except for a root directory.
   #pod
   #pod =cut
   
@@ -66459,8 +67451,9 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   #pod
   #pod B<Note: as of 0.012, remove only works on files>.
   #pod
-  #pod This is just like C<unlink>, except if the path does not exist, it returns
-  #pod false rather than throwing an exception.
+  #pod This is just like C<unlink>, except for its error handling: if the path does
+  #pod not exist, it returns false; if deleting the file fails, it throws an
+  #pod exception.
   #pod
   #pod =cut
   
@@ -66469,7 +67462,7 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   
       return 0 if !-e $self->[PATH] && !-l $self->[PATH];
   
-      return unlink $self->[PATH] || $self->_throw('unlink');
+      return unlink( $self->[PATH] ) || $self->_throw('unlink');
   }
   
   #pod =method remove_tree
@@ -66798,7 +67791,7 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   
   =head1 VERSION
   
-  version 0.055
+  version 0.056
   
   =head1 SYNOPSIS
   
@@ -67073,19 +68066,28 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   
       $obj = path("/tmp/foo.txt")->digest;        # SHA-256
       $obj = path("/tmp/foo.txt")->digest("MD5"); # user-selected
+      $obj = path("/tmp/foo.txt")->digest( { chunk_size => 1e6 }, "MD5" );
   
-  Returns a hexadecimal digest for a file.  Any arguments are passed to the
-  constructor for L<Digest> to select an algorithm.  If no arguments are given,
-  the default is SHA-256.
+  Returns a hexadecimal digest for a file.  An optional hash reference of options may
+  be given.  The only option is C<chunk_size>.  If C<chunk_size> is given, that many
+  bytes will be read at a time.  If not provided, the entire file will be slurped
+  into memory to compute the digest.
   
-  =head2 dirname
+  Any subsequent arguments are passed to the constructor for L<Digest> to select
+  an algorithm.  If no arguments are given, the default is SHA-256.
+  
+  =head2 dirname (deprecated)
   
       $name = path("/tmp/foo.txt")->dirname; # "/tmp/"
   
-  Returns the directory name portion of the path.  This is roughly
-  equivalent to what L<File::Spec> would give from C<splitpath> and thus
-  usually has the trailing slash. If that's not desired, stringify directories
-  or call C<parent> on files.
+  Returns the directory portion you would get from calling
+  C<< File::Spec->splitpath( $path->stringify ) >> or C<"."> for a path without a
+  parent directory portion.  Because L<File::Spec> is inconsistent, the result
+  might or might not have a trailing slash.  Because of this, this method is
+  B<deprecated>.
+  
+  A better, more consistently approach is likely C<< $path->parent->stringify >>,
+  which will not have a trailing slash except for a root directory.
   
   =head2 exists, is_file, is_dir
   
@@ -67290,8 +68292,9 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   
   B<Note: as of 0.012, remove only works on files>.
   
-  This is just like C<unlink>, except if the path does not exist, it returns
-  false rather than throwing an exception.
+  This is just like C<unlink>, except for its error handling: if the path does
+  not exist, it returns false; if deleting the file fails, it throws an
+  exception.
   
   =head2 remove_tree
   
@@ -67584,6 +68587,8 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   
   =head1 CONTRIBUTORS
   
+  =for stopwords Chris Williams David Steinbrunner Doug Bell Gabor Szabo Gabriel Andrade George Hartzell Geraud Continsouzas Goro Fuji Karen Etheridge Martin Kjeldsen Michael G. Schwern Smylers Toby Inkster 김도형 - Keedi Kim
+  
   =over 4
   
   =item *
@@ -67632,6 +68637,10 @@ $fatpacked{"Path/Tiny.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'PATH_
   
   =item *
   
+  Smylers <Smylers@stripey.com>
+  
+  =item *
+  
   Toby Inkster <tobyink@cpan.org>
   
   =item *
@@ -67659,7 +68668,7 @@ $fatpacked{"Sub/Defer.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'SUB_D
   use Moo::_Utils;
   use Scalar::Util qw(weaken);
   
-  our $VERSION = '1.005000';
+  our $VERSION = '1.006000';
   $VERSION = eval $VERSION;
   
   our @EXPORT = qw(defer_sub undefer_sub undefer_all);
@@ -67971,7 +68980,7 @@ $fatpacked{"Sub/Quote.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'SUB_Q
     *_HAVE_PERLSTRING = defined &B::perlstring ? sub(){1} : sub(){0};
   }
   
-  our $VERSION = '1.005000';
+  our $VERSION = '1.006000';
   $VERSION = eval $VERSION;
   
   our @EXPORT = qw(quote_sub unquote_sub quoted_from_sub qsub);
@@ -69511,7 +70520,7 @@ $fatpacked{"strictures.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'STRI
     *_PERL_LT_5_8_4 = ($] < 5.008004) ? sub(){1} : sub(){0};
   }
   
-  our $VERSION = '1.005004'; # 1.5.4
+  our $VERSION = '1.005005';
   
   sub VERSION {
     my ($class, $version) = @_;
@@ -76645,7 +77654,7 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "
     all any first min max minstr maxstr none notall product reduce sum sum0 shuffle
     pairmap pairgrep pairfirst pairs pairkeys pairvalues
   );
-  our $VERSION    = "1.39";
+  our $VERSION    = "1.41";
   our $XS_VERSION = $VERSION;
   $VERSION    = eval $VERSION;
   
@@ -76741,7 +77750,9 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "
   The remaining list-reduction functions are all specialisations of this generic
   idea.
   
-  =head2 $b = any { BLOCK } @list
+  =head2 any
+  
+      my $bool = any { BLOCK } @list;
   
   I<Since version 1.33.>
   
@@ -76757,26 +77768,34 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "
           # at least one string has more than 10 characters
       }
   
-  =head2 $b = all { BLOCK } @list
+  =head2 all
+  
+      my $bool = all { BLOCK } @list;
   
   I<Since version 1.33.>
   
-  Similar to C<any>, except that it requires all elements of the C<@list> to make
-  the C<BLOCK> return true. If any element returns false, then it returns false.
-  If the C<BLOCK> never returns false or the C<@list> was empty then it returns
-  true.
+  Similar to L</any>, except that it requires all elements of the C<@list> to
+  make the C<BLOCK> return true. If any element returns false, then it returns
+  false. If the C<BLOCK> never returns false or the C<@list> was empty then it
+  returns true.
   
-  =head2 $b = none { BLOCK } @list
+  =head2 none
   
-  =head2 $b = notall { BLOCK } @list
+  =head2 notall
+  
+      my $bool = none { BLOCK } @list;
+  
+      my $bool = notall { BLOCK } @list;
   
   I<Since version 1.33.>
   
-  Similar to C<any> and C<all>, but with the return sense inverted. C<none>
-  returns true only if no value in the LIST causes the BLOCK to return true, and
-  C<notall> returns true only if not all of the values do.
+  Similar to L</any> and L</all>, but with the return sense inverted. C<none>
+  returns true only if no value in the C<@list> causes the C<BLOCK> to return
+  true, and C<notall> returns true only if not all of the values do.
   
-  =head2 $val = first { BLOCK } @list
+  =head2 first
+  
+      my $val = first { BLOCK } @list;
   
   Similar to C<grep> in that it evaluates C<BLOCK> setting C<$_> to each element
   of C<@list> in turn. C<first> returns the first element where the result from
@@ -76787,7 +77806,9 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "
       $foo = first { $_ > $value } @list    # first value in @list which
                                             # is greater than $value
   
-  =head2 $num = max @list
+  =head2 max
+  
+      my $num = max @list;
   
   Returns the entry in the list with the highest numerical value. If the list is
   empty then C<undef> is returned.
@@ -76796,9 +77817,11 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "
       $foo = max 3,9,12               # 12
       $foo = max @bar, @baz           # whatever
   
-  =head2 $str = maxstr @list
+  =head2 maxstr
   
-  Similar to C<max>, but treats all the entries in the list as strings and
+      my $str = maxstr @list;
+  
+  Similar to L</max>, but treats all the entries in the list as strings and
   returns the highest string as defined by the C<gt> operator. If the list is
   empty then C<undef> is returned.
   
@@ -76806,18 +77829,22 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "
       $foo = maxstr "hello","world"   # "world"
       $foo = maxstr @bar, @baz        # whatever
   
-  =head2 $num = min @list
+  =head2 min
   
-  Similar to C<max> but returns the entry in the list with the lowest numerical
+      my $num = min @list;
+  
+  Similar to L</max> but returns the entry in the list with the lowest numerical
   value. If the list is empty then C<undef> is returned.
   
       $foo = min 1..10                # 1
       $foo = min 3,9,12               # 3
       $foo = min @bar, @baz           # whatever
   
-  =head2 $str = minstr @list
+  =head2 minstr
   
-  Similar to C<min>, but treats all the entries in the list as strings and
+      my $str = minstr @list;
+  
+  Similar to L</min>, but treats all the entries in the list as strings and
   returns the lowest string as defined by the C<lt> operator. If the list is
   empty then C<undef> is returned.
   
@@ -76825,7 +77852,9 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "
       $foo = minstr "hello","world"   # "hello"
       $foo = minstr @bar, @baz        # whatever
   
-  =head2 $num = product @list
+  =head2 product
+  
+      my $num = product @list;
   
   I<Since version 1.35.>
   
@@ -76835,7 +77864,9 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "
       $foo = product 1..10            # 3628800
       $foo = product 3,9,12           # 324
   
-  =head2 $num_or_undef = sum @list
+  =head2 sum
+  
+      my $num_or_undef = sum @list;
   
   Returns the numerical sum of all the elements in C<@list>. For backwards
   compatibility, if C<@list> is empty then C<undef> is returned.
@@ -76844,12 +77875,14 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "
       $foo = sum 3,9,12               # 24
       $foo = sum @bar, @baz           # whatever
   
-  =head2 $num = sum0 @list
+  =head2 sum0
+  
+      my $num = sum0 @list;
   
   I<Since version 1.26.>
   
-  Similar to C<sum>, except this returns 0 when given an empty list, rather than
-  C<undef>.
+  Similar to L</sum>, except this returns 0 when given an empty list, rather
+  than C<undef>.
   
   =cut
   
@@ -76863,9 +77896,11 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "
   
   =cut
   
-  =head2 @kvlist = pairgrep { BLOCK } @kvlist
+  =head2 pairgrep
   
-  =head2 $count = pairgrep { BLOCK } @kvlist
+      my @kvlist = pairgrep { BLOCK } @kvlist;
+  
+      my $count = pairgrep { BLOCK } @kvlist;
   
   I<Since version 1.29.>
   
@@ -76885,13 +77920,15 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "
   C<$b> to elements of the given list. Any modifications of it by the code block
   will be visible to the caller.
   
-  =head2 ( $key, $val ) = pairfirst { BLOCK } @kvlist
+  =head2 pairfirst
   
-  =head2 $found = pairfirst { BLOCK } @kvlist
+      my ( $key, $val ) = pairfirst { BLOCK } @kvlist;
+  
+      my $found = pairfirst { BLOCK } @kvlist;
   
   I<Since version 1.30.>
   
-  Similar to the C<first> function, but interprets the given list as an
+  Similar to the L</first> function, but interprets the given list as an
   even-sized list of pairs. It invokes the C<BLOCK> multiple times, in scalar
   context, with C<$a> and C<$b> set to successive pairs of values from the
   C<@kvlist>.
@@ -76907,9 +77944,11 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "
   C<$b> to elements of the given list. Any modifications of it by the code block
   will be visible to the caller.
   
-  =head2 @list = pairmap { BLOCK } @kvlist
+  =head2 pairmap
   
-  =head2 $count = pairmap { BLOCK } @kvlist
+      my @list = pairmap { BLOCK } @kvlist;
+  
+      my $count = pairmap { BLOCK } @kvlist;
   
   I<Since version 1.29.>
   
@@ -76930,7 +77969,9 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "
   
   See L</KNOWN BUGS> for a known-bug with C<pairmap>, and a workaround.
   
-  =head2 @pairs = pairs @kvlist
+  =head2 pairs
+  
+      my @pairs = pairs @kvlist;
   
   I<Since version 1.29.>
   
@@ -76956,7 +77997,9 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "
          ...
       }
   
-  =head2 @keys = pairkeys @kvlist
+  =head2 pairkeys
+  
+      my @keys = pairkeys @kvlist;
   
   I<Since version 1.29.>
   
@@ -76966,7 +78009,9 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "
   
       @keys = pairmap { $a } @kvlist
   
-  =head2 @values = pairvalues @kvlist
+  =head2 pairvalues
+  
+      my @values = pairvalues @kvlist;
   
   I<Since version 1.29.>
   
@@ -76982,7 +78027,9 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "
   
   =cut
   
-  =head2 @values = shuffle @values
+  =head2 shuffle
+  
+      my @values = shuffle @values;
   
   Returns the values of the input in a random order
   
@@ -76996,7 +78043,7 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util.pm"} = '#line '.(1+__LINE__).' "
   
   L<https://rt.cpan.org/Ticket/Display.html?id=95409>
   
-  If the block of code given to C<pairmap> contains lexical variables that are
+  If the block of code given to L</pairmap> contains lexical variables that are
   captured by a returned closure, and the closure is executed after the block
   has been re-used for the next iteration, these lexicals will not see the
   correct values. For example:
@@ -77069,7 +78116,7 @@ $fatpacked{"x86_64-linux-thread-multi/List/Util/XS.pm"} = '#line '.(1+__LINE__).
   use strict;
   use List::Util;
   
-  our $VERSION = "1.39";       # FIXUP
+  our $VERSION = "1.41";       # FIXUP
   $VERSION = eval $VERSION;    # FIXUP
   
   1;
@@ -77433,9 +78480,10 @@ $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).'
   our @EXPORT_OK = qw(
     blessed refaddr reftype weaken unweaken isweak
   
-    dualvar isdual isvstring looks_like_number openhandle readonly set_prototype tainted
+    dualvar isdual isvstring looks_like_number openhandle readonly set_prototype
+    tainted
   );
-  our $VERSION    = "1.39";
+  our $VERSION    = "1.41";
   $VERSION   = eval $VERSION;
   
   our @EXPORT_FAIL;
@@ -77462,6 +78510,13 @@ $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).'
     }
   
     @_;
+  }
+  
+  # set_prototype has been moved to Sub::Util with a different interface
+  sub set_prototype(&$)
+  {
+    my ( $code, $proto ) = @_;
+    return Sub::Util::set_prototype( $proto, $code );
   }
   
   1;
@@ -77494,7 +78549,9 @@ $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).'
   
   The following functions all perform some useful activity on reference values.
   
-  =head2 $pkg = blessed( $ref )
+  =head2 blessed
+  
+      my $pkg = blessed( $ref );
   
   If C<$ref> is a blessed reference the name of the package that it is blessed
   into is returned. Otherwise C<undef> is returned.
@@ -77511,7 +78568,9 @@ $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).'
   Take care when using this function simply as a truth test (such as in
   C<if(blessed $ref)...>) because the package name C<"0"> is defined yet false.
   
-  =head2 $addr = refaddr( $ref )
+  =head2 refaddr
+  
+      my $addr = refaddr( $ref );
   
   If C<$ref> is reference the internal memory address of the referenced value is
   returned as a plain integer. Otherwise C<undef> is returned.
@@ -77523,7 +78582,9 @@ $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).'
       $obj  = bless {}, "Foo";
       $addr = refaddr $obj;               # eg 88123488
   
-  =head2 $type = reftype( $ref )
+  =head2 reftype
+  
+      my $type = reftype( $ref );
   
   If C<$ref> is a reference the basic Perl type of the variable referenced is
   returned as a plain string (such as C<ARRAY> or C<HASH>). Otherwise C<undef>
@@ -77536,9 +78597,11 @@ $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).'
       $obj  = bless {}, "Foo";
       $type = reftype $obj;               # HASH
   
-  =head2 weaken( REF )
+  =head2 weaken
   
-  The lvalue C<REF> will be turned into a weak reference. This means that it
+      weaken( $ref );
+  
+  The lvalue C<$ref> will be turned into a weak reference. This means that it
   will not hold a reference count on the object it references. Also when the
   reference count on that object reaches zero, the reference will be set to
   undef. This function mutates the lvalue passed as its argument and returns no
@@ -77573,14 +78636,16 @@ $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).'
   destroyed because there is now always a strong reference to them in the @object
   array.
   
-  =head2 unweaken( REF )
+  =head2 unweaken
+  
+      unweaken( $ref );
   
   I<Since version 1.36.>
   
   The lvalue C<REF> will be turned from a weak reference back into a normal
   (strong) reference again. This function mutates the lvalue passed as its
   argument and returns no value. This undoes the action performed by
-  C<weaken()>.
+  L</weaken>.
   
   This function is slightly neater and more convenient than the
   otherwise-equivalent code
@@ -77592,7 +78657,9 @@ $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).'
   (because in particular, simply assigning a weak reference back to itself does
   not work to unweaken it; C<$REF = $REF> does not work).
   
-  =head2 $weak = isweak( $ref )
+  =head2 isweak
+  
+      my $weak = isweak( $ref );
   
   Returns true if C<$ref> is a weak reference.
   
@@ -77608,7 +78675,9 @@ $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).'
   
   =head1 OTHER FUNCTIONS
   
-  =head2 $var = dualvar( $num, $string )
+  =head2 dualvar
+  
+      my $var = dualvar( $num, $string );
   
   Returns a scalar that has the value C<$num> in a numeric context and the value
   C<$string> in a string context.
@@ -77617,7 +78686,9 @@ $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).'
       $num = $foo + 2;                    # 12
       $str = $foo . " world";             # Hello world
   
-  =head2 $dual = isdual( $var )
+  =head2 isdual
+  
+      my $dual = isdual( $var );
   
   I<Since version 1.26.>
   
@@ -77647,7 +78718,9 @@ $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).'
       $err = dualvar $!, $!;
       $dual = isdual($err);               # true
   
-  =head2 $vstring = isvstring( $var )
+  =head2 isvstring
+  
+      my $vstring = isvstring( $var );
   
   If C<$var> is a scalar which was coded as a vstring the result is true.
   
@@ -77655,12 +78728,16 @@ $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).'
       $fmt  = isvstring($vs) ? "%vd" : "%s"; #true
       printf($fmt,$vs);
   
-  =head2 $isnum = looks_like_number( $var )
+  =head2 looks_like_number
+  
+      my $isnum = looks_like_number( $var );
   
   Returns true if perl thinks C<$var> is a number. See
   L<perlapi/looks_like_number>.
   
-  =head2 $fh = openhandle( $fh )
+  =head2 openhandle
+  
+      my $fh = openhandle( $fh );
   
   Returns C<$fh> itself if C<$fh> may be used as a filehandle and is open, or is
   is a tied handle. Otherwise C<undef> is returned.
@@ -77670,7 +78747,9 @@ $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).'
       $fh = openhandle(*NOTOPEN);         # undef
       $fh = openhandle("scalar");         # undef
   
-  =head2 $ro = readonly( $var )
+  =head2 readonly
+  
+      my $ro = readonly( $var );
   
   Returns true if C<$var> is readonly.
   
@@ -77679,14 +78758,18 @@ $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).'
       $readonly = foo($bar);              # false
       $readonly = foo(0);                 # true
   
-  =head2 $code = set_prototype( $code, $prototype )
+  =head2 set_prototype
+  
+      my $code = set_prototype( $code, $prototype );
   
   Sets the prototype of the function given by the C<$code> reference, or deletes
   it if C<$prototype> is C<undef>. Returns the C<$code> reference itself.
   
       set_prototype \&foo, '$$';
   
-  =head2 $t = tainted( $var )
+  =head2 tainted
+  
+      my $t = tainted( $var );
   
   Return true if C<$var> is tainted.
   
@@ -77702,12 +78785,12 @@ $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).'
   =item Weak references are not implemented in the version of perl
   
   The version of perl that you are using does not implement weak references, to
-  use C<isweak> or C<weaken> you will need to use a newer release of perl.
+  use L</isweak> or L</weaken> you will need to use a newer release of perl.
   
   =item Vstrings are not implemented in the version of perl
   
   The version of perl that you are using does not implement Vstrings, to use
-  C<isvstring> you will need to use a newer release of perl.
+  L</isvstring> you will need to use a newer release of perl.
   
   =item C<NAME> is only available with the XS version of Scalar::Util
   
@@ -77735,11 +78818,16 @@ $fatpacked{"x86_64-linux-thread-multi/Scalar/Util.pm"} = '#line '.(1+__LINE__).'
   This program is free software; you can redistribute it and/or modify it
   under the same terms as Perl itself.
   
-  Except weaken and isweak which are
+  Additionally L</weaken> and L</isweak> which are
   
   Copyright (c) 1999 Tuomas J. Lukka <lukka@iki.fi>. All rights reserved.
   This program is free software; you can redistribute it and/or modify it
   under the same terms as perl itself.
+  
+  Copyright (C) 2004, 2008  Matthijs van Duin.  All rights reserved.
+  Copyright (C) 2014 cPanel Inc.  All rights reserved.
+  This program is free software; you can redistribute it and/or modify
+  it under the same terms as Perl itself.
   
   =cut
 X86_64-LINUX-THREAD-MULTI_SCALAR_UTIL
@@ -77765,23 +78853,33 @@ $fatpacked{"x86_64-linux-thread-multi/Sub/Name.pm"} = '#line '.(1+__LINE__).' "'
   
   =head2 subname NAME, CODEREF
   
-  Assigns a new name to referenced sub.  If package specification is omitted in 
+  Assigns a new name to referenced sub.  If package specification is omitted in
   the name, then the current package is used.  The return value is the sub.
   
-  The name is only used for informative routines (caller, Carp, etc).  You won't 
-  be able to actually invoke the sub by the given name.  To allow that, you need 
+  The name is only used for informative routines (caller, Carp, etc).  You won't
+  be able to actually invoke the sub by the given name.  To allow that, you need
   to do glob-assignment yourself.
   
-  Note that for anonymous closures (subs that reference lexicals declared outside 
-  the sub itself) you can name each instance of the closure differently, which 
+  Note that for anonymous closures (subs that reference lexicals declared outside
+  the sub itself) you can name each instance of the closure differently, which
   can be very useful for debugging.
+  
+  =head1 SEE ALSO
+  
+  =over 4
+  
+  =item *
+  L<Sub::Identify> - for getting information about subs
+  
+  =back
   
   =head1 AUTHOR
   
   Matthijs van Duin <xmath@cpan.org>
   
   Copyright (C) 2004, 2008  Matthijs van Duin.  All rights reserved.
-  This program is free software; you can redistribute it and/or modify 
+  Copyright (C) 2014 cPanel Inc.  All rights reserved.
+  This program is free software; you can redistribute it and/or modify
   it under the same terms as Perl itself.
   
   =cut
@@ -77791,7 +78889,7 @@ $fatpacked{"x86_64-linux-thread-multi/Sub/Name.pm"} = '#line '.(1+__LINE__).' "'
   use strict;
   use warnings;
   
-  our $VERSION = '0.05';
+  our $VERSION = '0.09';
   
   use base 'Exporter';
   use base 'DynaLoader';
@@ -77803,6 +78901,158 @@ $fatpacked{"x86_64-linux-thread-multi/Sub/Name.pm"} = '#line '.(1+__LINE__).' "'
   
   1;
 X86_64-LINUX-THREAD-MULTI_SUB_NAME
+
+$fatpacked{"x86_64-linux-thread-multi/Sub/Util.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'X86_64-LINUX-THREAD-MULTI_SUB_UTIL';
+  # Copyright (c) 2014 Paul Evans <leonerd@leonerd.org.uk>. All rights reserved.
+  # This program is free software; you can redistribute it and/or
+  # modify it under the same terms as Perl itself.
+  
+  package Sub::Util;
+  
+  use strict;
+  use warnings;
+  
+  require Exporter;
+  require List::Util; # as it has the XS
+  
+  our @ISA = qw( Exporter );
+  our @EXPORT_OK = qw(
+    prototype set_prototype
+    subname set_subname
+  );
+  
+  our $VERSION    = "1.41";
+  $VERSION   = eval $VERSION;
+  
+  =head1 NAME
+  
+  Sub::Util - A selection of utility subroutines for subs and CODE references
+  
+  =head1 SYNOPSIS
+  
+      use Sub::Util qw( prototype set_prototype subname set_subname );
+  
+  =head1 DESCRIPTION
+  
+  C<Sub::Util> contains a selection of utility subroutines that are useful for
+  operating on subs and CODE references.
+  
+  The rationale for inclusion in this module is that the function performs some
+  work for which an XS implementation is essential because it cannot be
+  implemented in Pure Perl, and which is sufficiently-widely used across CPAN
+  that its popularity warrants inclusion in a core module, which this is.
+  
+  =cut
+  
+  =head1 FUNCTIONS
+  
+  =cut
+  
+  =head2 prototype
+  
+      my $proto = prototype( $code )
+  
+  I<Since version 1.40.>
+  
+  Returns the prototype of the given C<$code> reference, if it has one, as a
+  string. This is the same as the C<CORE::prototype> operator; it is included
+  here simply for symmetry and completeness with the other functions.
+  
+  =cut
+  
+  sub prototype
+  {
+    my ( $code ) = @_;
+    return CORE::prototype( $code );
+  }
+  
+  =head2 set_prototype
+  
+      my $code = set_prototype $prototype, $code;
+  
+  I<Since version 1.40.>
+  
+  Sets the prototype of the function given by the C<$code> reference, or deletes
+  it if C<$prototype> is C<undef>. Returns the C<$code> reference itself.
+  
+  I<Caution>: This function takes arguments in a different order to the previous
+  copy of the code from C<Scalar::Util>. This is to match the order of
+  C<set_subname>, and other potential additions in this file. This order has
+  been chosen as it allows a neat and simple chaining of other
+  C<Sub::Util::set_*> functions as might become available, such as:
+  
+   my $code =
+      set_subname   name_here =>
+      set_prototype '&@'      =>
+      set_attribute ':lvalue' =>
+         sub { ...... };
+  
+  =cut
+  
+  =head2 subname
+  
+      my $name = subname( $code )
+  
+  I<Since version 1.40.>
+  
+  Returns the name of the given C<$code> reference, if it has one. Normal named
+  subs will give a fully-qualified name consisting of the package and the
+  localname separated by C<::>. Anonymous code references will give C<__ANON__>
+  as the localname. If a name has been set using L</set_subname>, this name will
+  be returned instead.
+  
+  This function was inspired by C<sub_fullname> from L<Sub::Identify>. The
+  remaining functions that C<Sub::Identify> implements can easily be emulated
+  using regexp operations, such as
+  
+   sub get_code_info { return (subname $_[0]) =~ m/^(.+)::(.+?)$/ }
+   sub sub_name      { return (get_code_info $_[0])[0] }
+   sub stash_name    { return (get_code_info $_[0])[1] }
+  
+  I<Users of Sub::Name beware>: This function is B<not> the same as
+  C<Sub::Name::subname>; it returns the existing name of the sub rather than
+  changing it. To set or change a name, see instead L</set_subname>.
+  
+  =cut
+  
+  =head2 set_subname
+  
+      my $code = set_subname $name, $code;
+  
+  I<Since version 1.40.>
+  
+  Sets the name of the function given by the C<$code> reference. Returns the
+  C<$code> reference itself. If the C<$name> is unqualified, the package of the
+  caller is used to qualify it.
+  
+  This is useful for applying names to anonymous CODE references so that stack
+  traces and similar situations, to give a useful name rather than having the
+  default of C<__ANON__>. Note that this name is only used for this situation;
+  the C<set_subname> will not install it into the symbol table; you will have to
+  do that yourself if required.
+  
+  However, since the name is not used by perl except as the return value of
+  C<caller>, for stack traces or similar, there is no actual requirement that
+  the name be syntactically valid as a perl function name. This could be used to
+  attach extra information that could be useful in debugging stack traces.
+  
+  This function was copied from C<Sub::Name::subname> and renamed to the naming
+  convention of this module.
+  
+  =cut
+  
+  =head1 AUTHOR
+  
+  The general structure of this module was written by Paul Evans
+  <leonerd@leonerd.org.uk>.
+  
+  The XS implementation of L</set_subname> was copied from L<Sub::Name> by
+  Matthijs van Duin <xmath@cpan.org>
+  
+  =cut
+  
+  1;
+X86_64-LINUX-THREAD-MULTI_SUB_UTIL
 
 $fatpacked{"x86_64-linux-thread-multi/Test/Harness/Assert.pm"} = '#line '.(1+__LINE__).' "'.__FILE__."\"\n".<<'X86_64-LINUX-THREAD-MULTI_TEST_HARNESS_ASSERT';
   # $Id: Assert.pm 250 2003-09-11 15:57:29Z andy $
@@ -82978,7 +84228,7 @@ $fatpacked{"x86_64-linux-thread-multi/version.pm"} = '#line '.(1+__LINE__).' "'.
   
   use vars qw(@ISA $VERSION $CLASS $STRICT $LAX *declare *qv);
   
-  $VERSION = 0.9908;
+  $VERSION = 0.9909;
   $CLASS = 'version';
   
   # !!!!Delete this next block completely when adding to Perl core!!!!
@@ -83097,7 +84347,7 @@ $fatpacked{"x86_64-linux-thread-multi/version/regex.pm"} = '#line '.(1+__LINE__)
   
   use vars qw($VERSION $CLASS $STRICT $LAX);
   
-  $VERSION = 0.9908;
+  $VERSION = 0.9909;
   
   #--------------------------------------------------------------------------#
   # Version regexp components
@@ -83335,7 +84585,7 @@ $fatpacked{"x86_64-linux-thread-multi/version/vpp.pm"} = '#line '.(1+__LINE__).'
   
   use Config;
   use vars qw($VERSION $CLASS @ISA $LAX $STRICT);
-  $VERSION = 0.9908;
+  $VERSION = 0.9909;
   $CLASS = 'version::vpp';
   
   require version::regex;
@@ -84244,7 +85494,7 @@ $fatpacked{"x86_64-linux-thread-multi/version/vxs.pm"} = '#line '.(1+__LINE__).'
   use strict;
   
   use vars qw(@ISA $VERSION $CLASS );
-  $VERSION = 0.9908;
+  $VERSION = 0.9909;
   $CLASS = 'version::vxs';
   
   eval {
