@@ -1,8 +1,0 @@
- Name                                                  Null?    Type                                
- ----------------------------------------------------- -------- ------------------------------------
- OID                                                   NOT NULL INTEGER                             
- MEMBERSHIP_TYPE                                       NULL     INTEGER                             
- CATEGORY                                              NULL     VARCHAR                             
- NUMBER                                                NULL     INTEGER                             
- VOTING_ELIGIBILITY                                    NULL     CHAR                                
- RPT_ID                                                NULL     INTEGER                             

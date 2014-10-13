@@ -1,7 +1,0 @@
- Name                                                  Null?    Type                                
- ----------------------------------------------------- -------- ------------------------------------
- OID                                                   NOT NULL INTEGER                             
- DESCRIPTION                                           NULL     VARCHAR                             
- PAID_TO                                               NULL     VARCHAR                             
- AMOUNT                                                NULL     INTEGER                             
- RPT_ID                                                NULL     INTEGER                             

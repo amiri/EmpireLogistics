@@ -1,6 +1,0 @@
- Name                                                  Null?    Type                                
- ----------------------------------------------------- -------- ------------------------------------
- CODE_TYPE                                             NOT NULL VARCHAR                             
- CODE                                                  NOT NULL INTEGER                             
- CODE_NAME                                             NULL     VARCHAR                             
- CODE_DESCRIPTION                                      NULL     VARCHAR                             

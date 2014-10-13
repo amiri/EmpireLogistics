@@ -1,9 +1,0 @@
- Name                                                  Null?    Type                                
- ----------------------------------------------------- -------- ------------------------------------
- OID                                                   NOT NULL INTEGER                             
- RECEIPT_TYPE                                          NOT NULL INTEGER                             
- PURPOSE                                               NULL     VARCHAR                             
- DATE                                                  NULL     DATE                                
- AMOUNT                                                NULL     INTEGER                             
- PAYER_PAYEE_ID                                        NULL     INTEGER                             
- RPT_ID                                                NULL     INTEGER                             

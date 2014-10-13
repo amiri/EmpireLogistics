@@ -1,9 +1,0 @@
- Name                                                  Null?    Type                                
- ----------------------------------------------------- -------- ------------------------------------
- OID                                                   NOT NULL INTEGER                             
- RATE_TYPE                                             NOT NULL INTEGER                             
- AMOUNT                                                NULL     VARCHAR                             
- UNIT                                                  NULL     VARCHAR                             
- MINIMUM                                               NULL     VARCHAR                             
- MAXIMUM                                               NULL     VARCHAR                             
- RPT_ID                                                NULL     INTEGER                             

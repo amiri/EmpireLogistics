@@ -1,7 +1,0 @@
- Name                                                  Null?    Type                                
- ----------------------------------------------------- -------- ------------------------------------
- OID                                                   NOT NULL INTEGER                             
- INV_TYPE                                              NOT NULL INTEGER                             
- NAME                                                  NULL     VARCHAR                             
- AMOUNT                                                NULL     INTEGER                             
- RPT_ID                                                NULL     INTEGER                             
